@@ -1,0 +1,15 @@
+name: Release
+description: Opinionated semantic-release action
+branding:
+  icon: arrow-up-circle
+  color: green
+runs:
+  using: node12
+  main: dist-ncc/index.js
+inputs:
+  dry:
+    description: Dry run
+    default: false
+  config:
+    description: Config file (JSON or JS module) or inline config to use on top of the defaults
+    required: false

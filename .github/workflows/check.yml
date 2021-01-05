@@ -1,0 +1,14 @@
+name: Check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  code: # test the code
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: yarn install --frozen-lockfile
+    - run: yarn lint
+    - run: yarn test

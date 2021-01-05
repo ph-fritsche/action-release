@@ -1,0 +1,25 @@
+name: Example repository_dispatch
+
+on:
+  repository_dispatch:
+    types: [Example repository_dispatch] # the name here is referred to by the dispatch
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo 'Hello ${{github.event.client_payload.name}}!'
+    - run: echo 'dispatched for ${{github.event.client_payload.ref}}'
+
+    - name: Complete check for the build
+      uses: actions/github-script@v3
+      with:
+        script: |
+          const [owner, repo] = "${{ github.repository }}".split('/')
+          await github.checks.update({
+            owner,
+            repo,
+            head_sha: "${{github.event.client_payload.ref}}",
+            check_run_id: "${{github.event.client_payload.check}}",
+            conclusion: "success"
+          })

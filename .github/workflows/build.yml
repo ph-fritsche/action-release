@@ -1,0 +1,130 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+
+  build: # to work as an action out of the box the ncc-build must be committed
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+    - run: yarn install --frozen-lockfile
+    - run: yarn build
+
+    - run: git add -f dist-ncc
+
+    - name: Commit build if it changed
+      run: >
+        git diff --staged --quiet
+        || (git config user.name "${GITHUB_ACTOR}"
+        && git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        && git commit -m "build: autoupdate"
+        && echo "buildCommit=$(git rev-parse HEAD)" >>$GITHUB_ENV)
+
+    - if: env.buildCommit # skip if the build adds nothing new
+      name: Push build branch
+      run: git push -f origin HEAD:build
+
+    outputs:
+      buildCommit: ${{ env.buildCommit }}
+
+  verify:
+    needs: build
+    runs-on: ubuntu-latest
+    if: needs.build.outputs.buildCommit
+    steps:
+    - id: check
+      name: Add pending checks to the build
+      uses: actions/github-script@v3
+      with:
+        script: |
+          const [owner, repo] = "${{ github.repository }}".split('/')
+          return {
+            workflow: (await github.checks.create({
+              owner,
+              repo,
+              head_sha: "${{needs.build.outputs.buildCommit}}",
+              name: "workflow_dispatch",
+              status: "in_progress",
+            })).data.id,
+            repository: (await github.checks.create({
+              owner,
+              repo,
+              head_sha: "${{needs.build.outputs.buildCommit}}",
+              name: "repository_dispatch",
+              status: "in_progress",
+            })).data.id,
+          }
+
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ needs.build.outputs.buildCommit }}
+    - name: Dispatch workflow_dispatch event on fresh build
+      uses: ./
+      with:
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        ident: example-workflow.yml # refer to the filename
+        payload: >
+          {
+            "name":"foo",
+            "ref":"${{ needs.build.outputs.buildCommit }}",
+            "check":"${{ fromJSON(steps.check.outputs.result).workflow }}"
+          }
+    - name: Dispatch repository_dispatch event on fresh build
+      uses: ./
+      with:
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        type: repository
+        ident: Example repository_dispatch # refer to on.repository_dispatch.types.*
+        payload: >
+          {
+            "name":"foo",
+            "ref":"${{ needs.build.outputs.buildCommit }}",
+            "check":"${{ fromJSON(steps.check.outputs.result).repository }}"
+          }
+
+    - name: Wait for dispatched workflows
+      timeout-minutes: 5
+      uses: actions/github-script@v3
+      with:
+        script: |
+          const [owner, repo] = "${{ github.repository }}".split('/')
+          while(true) {
+            await new Promise(r => setTimeout(r, 5000))
+            const checks = (await github.checks.listForRef({
+              owner,
+              repo,
+              ref: "${{ needs.build.outputs.buildCommit }}"
+            })).data
+            const completed = checks.check_runs.filter(c => c.status === 'completed')
+            const success = checks.check_runs.filter(c => c.conclusion === 'success')
+            core.info(JSON.stringify(checks.check_runs.map(c => [c.name, c.status, c.conclusion])))
+            if (checks.total_count === completed.length) {
+              if (success.length < checks.total_count) {
+                throw JSON.stringify(checks, null, 2)
+              } else {
+                return true
+              }
+            }
+          }
+    - id: helper
+      uses: ph-fritsche/action-helper@master
+    - name: Push back to original branch
+      run: |
+        git fetch --depth=2 origin ${{ needs.build.outputs.buildCommit }}
+        git log --format=oneline -n2 ${{ needs.build.outputs.buildCommit }}
+        git push -v origin ${{ needs.build.outputs.buildCommit }}:${{ steps.helper.outputs.branchName }}
+
+  release:
+    needs: verify
+    if: contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref)
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Semantic Release
+      uses: cycjimmy/semantic-release-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
