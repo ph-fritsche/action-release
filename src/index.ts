@@ -6,7 +6,7 @@ import debugLib from 'debug'
 
 export default async function run(): Promise<void> {
     try {
-        const packages: string[] = []
+        const packages: string[] = ['semantic-release'] // npm warns about missing peer dependency without this
 
         const config = getConfig(core.getInput('config', { required: false}), defaultConfig, packages)
         const dryRun = Boolean(safeParse(core.getInput('dry', { required: false })))
