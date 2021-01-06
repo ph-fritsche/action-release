@@ -60,8 +60,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ steps.helper.outputs.branchName }}
-    - run: | # make sure the ref points to the buildCommit
-        if [ $(git rev-parse HEAD) != "foo" ]; then
+    - name: Verify branch HEAD did not move away from buildCommit
+      run: |
+        if [ $(git rev-parse HEAD) != "${{ needs.build.outputs.buildCommit }}" ]; then
           echo "::error ::HEAD moved to $(git rev-parse HEAD) - expected ${{ needs.build.outputs.buildCommit }}"
           exit 1
         fi
