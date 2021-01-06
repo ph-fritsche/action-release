@@ -38,7 +38,8 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ needs.build.outputs.buildCommit }}
-    - uses: ./
+    - name: Dry-run
+      uses: ./
       with:
         dry: true
         debug: true
@@ -66,6 +67,7 @@ jobs:
           echo "::error ::HEAD moved to $(git rev-parse HEAD) - expected ${{ needs.build.outputs.buildCommit }}"
           exit 1
         fi
-    - uses: ./
+    - name: Dogfooding release
+      uses: ./
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

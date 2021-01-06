@@ -54,7 +54,7 @@ test('defer stdout to debug', () => {
     spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stdout.write('foo')`]))
 
     return spawn('foo', ['bar', 'baz'], { uid: 123456 }).finally(() => {
-        expect(coreDebug).toEqual(['foo'])
+        expect(coreDebug).toEqual(['foo\n'])
     })
 })
 
@@ -63,6 +63,6 @@ test('defer stderr to warning', () => {
     spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stderr.write('foo')`]))
 
     return spawn('foo', ['bar', 'baz'], { uid: 123456 }).finally(() => {
-        expect(coreWarning).toEqual(['foo'])
+        expect(coreWarning).toEqual(['foo\n'])
     })
 })
