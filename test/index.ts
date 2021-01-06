@@ -1,11 +1,14 @@
-import { run } from '../src/index'
+import type SemanticRelease from 'semantic-release'
+import run from '../src/index'
+import defaultResult from './_releaseResult'
+
+const releaseResult = defaultResult as SemanticRelease.Result
 
 let coreInput: {[k: string]: string | undefined} = {}
-
+let coreOutput: {[k: string]: string} = {}
+let coreDebug: string[] = []
+let coreInfo: string[] = []
 let setFailed: (msg: string) => void
-let debug: (msg: string) => void
-let info: (msg: string) => void
-
 jest.mock('@actions/core', () => ({
     getInput(k: string, {required}: {required: boolean}) {
         if (required && !coreInput[k]) {
@@ -13,32 +16,93 @@ jest.mock('@actions/core', () => ({
         }
         return coreInput[k] ?? ''
     },
-    debug: (msg: string) => debug(msg),
-    info: (msg: string) => info(msg),
+    setOutput(k: string, v: string) {
+        coreOutput[k] = v
+    },
+    debug: (msg: string) => { coreDebug.push(msg) },
+    info: (msg: string) => { coreInfo.push(msg) },
     setFailed: (msg: string) => setFailed(msg),
 }))
 
-function setup() {
-    setFailed = jest.fn()
-    debug = jest.fn()
-    info = jest.fn()
+let release: (options: SemanticRelease.Options, config: SemanticRelease.Config) => SemanticRelease.Result
+jest.mock('semantic-release', () => (options: SemanticRelease.Options, config: SemanticRelease.Config) => release(options, config))
 
-    const exec = (input = {}) => {
+let debugEnable: (ident: string) => void
+jest.mock('debug', () => ({
+    enable: (ident: string) => debugEnable(ident),
+}))
+
+jest.mock('../src/util/install', () => ({
+    install: () => Promise.resolve(),
+}))
+
+function setup() {
+    const exec = (input = {}, releaseResult: SemanticRelease.Result = false) => {
+        setFailed = jest.fn()
         coreInput = input
+        coreOutput = {}
+        coreDebug = []
+        coreInfo = []
+        debugEnable = jest.fn()
+
+        release = jest.fn(() => releaseResult)
+
         return run()
     }
 
     return { exec }
 }
 
-it('Execute (dryRun)', () => {
+it('run skipped release', () => {
     const { exec } = setup()
 
-    const run = exec({
-        dryRun: true,
-    })
+    const run = exec()
 
     return run.finally(() => {
         expect(setFailed).not.toHaveBeenCalled()
+        expect(coreInfo).toEqual([expect.stringMatching('skipped')])
+    })
+})
+
+it('run with dry run option', () => {
+    const { exec } = setup()
+
+    const run = exec({dry: 'true'})
+
+    return run.finally(() => {
+        expect(coreDebug).toEqual(expect.arrayContaining(['DRY RUN']))
+        expect(release).toBeCalledTimes(1)
+        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({dryRun: true})
+    })
+})
+
+it('run with debug option', () => {
+    const { exec } = setup()
+
+    const run = exec({debug: 'true'})
+
+    expect(debugEnable).toBeCalled()
+
+    return run.finally(() => {
+        expect(release).toBeCalled()
+    })
+})
+
+it('output release informations', () => {
+    const { exec } = setup()
+
+    const run = exec(undefined, releaseResult)
+
+    return run.finally(() => {
+        expect(coreOutput).toEqual({
+            type: 'minor',
+            lastVersion: '1.0.0',
+            version: '1.1.0',
+            major: '1',
+            minor: '1',
+            patch: '0',
+            revision: undefined,
+            notes: 'Release notes for version 1.1.0...',
+        })
     })
 })

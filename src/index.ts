@@ -1,14 +1,16 @@
 import * as core from '@actions/core'
-import semanticRelease from 'semantic-release'
+import semanticRelease, { Options } from 'semantic-release'
 import defaultConfig from './defaultConfig'
 import { install } from './util/install'
+import debugLib from 'debug'
 
-export async function run(): Promise<void> {
+export default async function run(): Promise<void> {
     try {
         const packages: string[] = []
 
-        const dryRun = Boolean(safeParse(core.getInput('dry', { required: false })))
         const config = getConfig(core.getInput('config', { required: false}), defaultConfig, packages)
+        const dryRun = Boolean(safeParse(core.getInput('dry', { required: false })) ?? config.dryRun)
+        const debug = Boolean(safeParse(core.getInput('debug', { required: false })) ?? config.debug)
 
         config.plugins?.forEach(p => {
             const pName = typeof(p) === 'string' ? p : p[0]
@@ -20,8 +22,14 @@ export async function run(): Promise<void> {
         if (dryRun) {
             core.debug('DRY RUN')
         }
+        if (debug) {
+            debugLib.enable('semantic-release:*')
+        }
 
-        const result = await semanticRelease({...config, dryRun})
+        const result = await semanticRelease({
+            ...config,
+            dryRun,
+        }, {})
 
         if (result === false) {
             core.info('Release skipped')
@@ -33,18 +41,22 @@ export async function run(): Promise<void> {
 
             releases.map(r => core.info(`-> Released ${r.name} by ${r.pluginName}: ${r.url}`))
 
-            core.setOutput('release_type', nextRelease.type)
+            core.setOutput('lastVersion', lastRelease.version)
+
+            core.setOutput('type', nextRelease.type)
+            core.setOutput('version', nextRelease.version)
 
             const parts = ['major', 'minor', 'patch', 'revision']
             const v = nextRelease.version.split(/\D/, 4)
-            parts.forEach((k, i) => core.setOutput(`release_${k}`, v[i]))
+            parts.forEach((k, i) => core.setOutput(k, v[i]))
 
-            core.setOutput('release_notes', nextRelease.notes)
+            core.setOutput('notes', nextRelease.notes)
         }
     } catch(e) {
         core.setFailed(e?.message ?? e)
     }
 }
+run.config = {} as Partial<Options>
 
 function safeParse(val: string) {
     try {

@@ -2,10 +2,11 @@
 let run: () => Promise<void>
 
 jest.mock('../src/index', () => ({
-    run: () => run(),
+    __esModule: true,
+    default: () => run(),
 }))
 
-it('side-effect run', async () => {
+it('import with side-effect', async () => {
     run = jest.fn(() => Promise.resolve())
 
     return import('../src/action').then(() => {
