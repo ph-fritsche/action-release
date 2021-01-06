@@ -9,6 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: yarn install --frozen-lockfile
+    - uses: bahmutov/npm-install@v1
     - run: yarn lint
     - run: yarn test
