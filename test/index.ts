@@ -82,9 +82,8 @@ it('run with debug option', () => {
 
     const run = exec({debug: 'true'})
 
-    expect(debugEnable).toBeCalled()
-
     return run.finally(() => {
+        expect(debugEnable).toBeCalled()
         expect(release).toBeCalled()
     })
 })

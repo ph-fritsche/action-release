@@ -19,7 +19,11 @@ export default async function run(): Promise<void> {
             packages.push(pName)
         })
 
-        install(packages, log)
+        if (config.preset) {
+            packages.push('conventional-changelog-' + config.preset)
+        }
+
+        await install(packages, log)
 
         if (dryRun) {
             log('DRY RUN')
