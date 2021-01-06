@@ -19,6 +19,7 @@ jest.mock('@actions/core', () => ({
     setOutput(k: string, v: string) {
         coreOutput[k] = v
     },
+    isDebug: () => false,
     debug: (msg: string) => { coreDebug.push(msg) },
     info: (msg: string) => { coreInfo.push(msg) },
     setFailed: (msg: string) => setFailed(msg),

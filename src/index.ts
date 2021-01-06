@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import semanticRelease, { Options } from 'semantic-release'
+import semanticRelease from 'semantic-release'
 import defaultConfig from './defaultConfig'
 import { install } from './util/install'
 import debugLib from 'debug'
@@ -9,18 +9,20 @@ export default async function run(): Promise<void> {
         const packages: string[] = []
 
         const config = getConfig(core.getInput('config', { required: false}), defaultConfig, packages)
-        const dryRun = Boolean(safeParse(core.getInput('dry', { required: false })) ?? config.dryRun)
-        const debug = Boolean(safeParse(core.getInput('debug', { required: false })) ?? config.debug)
+        const dryRun = Boolean(safeParse(core.getInput('dry', { required: false })))
+        const debug = Boolean(safeParse(core.getInput('debug', { required: false }))) || core.isDebug()
+
+        const log = debug ? core.info : core.debug
 
         config.plugins?.forEach(p => {
             const pName = typeof(p) === 'string' ? p : p[0]
             packages.push(pName)
         })
 
-        install(packages)
+        install(packages, log)
 
         if (dryRun) {
-            core.debug('DRY RUN')
+            log('DRY RUN')
         }
         if (debug) {
             debugLib.enable('semantic-release:*')
@@ -36,6 +38,7 @@ export default async function run(): Promise<void> {
         } else {
             const { lastRelease, nextRelease, commits, releases } = result
 
+            core.info('\n')
             core.info(`${nextRelease.type} release: ${lastRelease.version} -> ${nextRelease.version}`)
             core.info(` including ${commits.length} commits`)
 
@@ -56,7 +59,6 @@ export default async function run(): Promise<void> {
         core.setFailed(e?.message ?? e)
     }
 }
-run.config = {} as Partial<Options>
 
 function safeParse(val: string) {
     try {

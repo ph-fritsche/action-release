@@ -1,10 +1,5 @@
 import { install } from '../../src/util/install'
 
-let coreDebug: string[] = []
-jest.mock('@actions/core', () => ({
-    debug: (msg: string) => { coreDebug.push(msg) },
-}))
-
 let resolveMock: (name: string) => unknown
 jest.mock('../../src/util/resolve', () => ({
     resolve: (name: string) => resolveMock(name),
@@ -16,27 +11,27 @@ jest.mock('../../src/util/spawn', () => ({
 }))
 
 test('skip present modules', () => {
-    coreDebug = []
+    const log: string[] = []
     spawnMock = jest.fn()
     resolveMock = jest.fn(() => 'existingPath')
 
-    install(['foo', 'bar'])
+    install(['foo', 'bar'], (m) => log.push(m))
 
     expect(resolveMock).toHaveBeenNthCalledWith(1, 'foo')
     expect(resolveMock).toHaveBeenNthCalledWith(2, 'bar')
     expect(spawnMock).not.toBeCalled()
-    expect(coreDebug).toEqual(expect.arrayContaining([
+    expect(log).toEqual(expect.arrayContaining([
         expect.stringMatching('"foo" resolved'),
         expect.stringMatching('"bar" resolved'),
     ]))
 })
 
 test('install missing modules', () => {
-    coreDebug = []
+    const log: string[] = []
     spawnMock = jest.fn()
     resolveMock = jest.fn(() => { throw 'doesNotExist' })
 
-    install(['foo', 'bar'])
+    install(['foo', 'bar'], (m) => log.push(m))
 
     expect(resolveMock).toHaveBeenNthCalledWith(1, 'foo')
     expect(resolveMock).toHaveBeenNthCalledWith(2, 'bar')
@@ -45,5 +40,5 @@ test('install missing modules', () => {
     expect((spawnMock as jest.Mock).mock.calls[0][1][0]).toBe('install')
     expect((spawnMock as jest.Mock).mock.calls[0][1]).toContain('foo')
     expect((spawnMock as jest.Mock).mock.calls[0][1]).toContain('bar')
-    expect(coreDebug).toEqual([expect.stringContaining('Install ["foo","bar"]')])
+    expect(log).toEqual([expect.stringContaining('Install ["foo","bar"]')])
 })
