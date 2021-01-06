@@ -17,7 +17,7 @@ export function install(packages: string[], log: (msg: string) => void): Promise
         log(`Install ${JSON.stringify(missing)}`)
 
         const options = ['--no-save']
-        if (log === info) { // if logging function is not core.info, we're in debug/test
+        if (log !== info) { // if logging function is core.info, we're in debug/test
             options.push('--silent')
         }
 

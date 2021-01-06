@@ -57,7 +57,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: | # make sure the ref points to the buildCommit
-        if [ $(git rev-parse HEAD) -eq "foo" ]; then
+        if [ $(git rev-parse HEAD) != "foo" ]; then
           echo "::error ::HEAD moved to $(git rev-parse HEAD) - expected ${{ needs.build.outputs.buildCommit }}"
           exit 1
         fi
