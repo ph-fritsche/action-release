@@ -51,11 +51,16 @@ jobs:
         git push -v origin ${{ needs.build.outputs.buildCommit }}:${{ steps.helper.outputs.branchName }}
 
   release:
-    needs: verify
+    needs: [build, verify]
     if: contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref)
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - run: | # make sure the ref points to the buildCommit
+        if [ $(git rev-parse HEAD) -eq "foo" ]; then
+          echo "::error ::HEAD moved to $(git rev-parse HEAD) - expected ${{ needs.build.outputs.buildCommit }}"
+          exit 1
+        fi
     - uses: ./
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

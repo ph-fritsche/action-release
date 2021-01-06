@@ -7,6 +7,9 @@ runs:
   using: node12
   main: dist-ncc/index.js
 inputs:
+  debug:
+    description: debug
+    default: false
   dry:
     description: Dry run
     default: false
