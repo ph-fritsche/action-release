@@ -97,6 +97,7 @@ it('output release informations', () => {
         expect(coreOutput).toEqual({
             type: 'minor',
             lastVersion: '1.0.0',
+            gitTag: 'v1.1.0',
             version: '1.1.0',
             major: '1',
             minor: '1',

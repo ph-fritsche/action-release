@@ -52,6 +52,7 @@ export default async function run(): Promise<void> {
 
             core.setOutput('type', nextRelease.type)
             core.setOutput('version', nextRelease.version)
+            core.setOutput('gitTag', nextRelease.gitTag)
 
             const parts = ['major', 'minor', 'patch', 'revision']
             const v = nextRelease.version.split(/\D/, 4)

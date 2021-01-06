@@ -67,7 +67,25 @@ jobs:
           echo "::error ::HEAD moved to $(git rev-parse HEAD) - expected ${{ needs.build.outputs.buildCommit }}"
           exit 1
         fi
-    - name: Dogfooding release
+    - id: release
+      name: Dogfooding release
       uses: ./
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Add check to the build
+      uses: actions/github-script@v3
+      with:
+        script: |
+          const [owner, repo] = "${{ github.repository }}".split('/')
+          const outcome = "${{ steps.release.outcome }}"
+          const type = "${{ steps.release.outputs.type }}"
+          const version = "${{ steps.release.outputs.version }}"
+          const gitTag = "${{ steps.release.outputs.gitTag }}"
+          await github.checks.create({
+            owner,
+            repo,
+            head_sha: "${{needs.build.outputs.buildCommit}}",
+            name: type ? "released as " + version : "release",
+            conclusion: (outcome === 'success' && !type) ? "skipped" : outcome,
+            details_url: gitTag ? "https://github.com/${{ github.repository }}/releases/tag/" + gitTag : undefined,
+          })
