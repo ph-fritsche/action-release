@@ -55,7 +55,11 @@ jobs:
     if: contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref)
     runs-on: ubuntu-latest
     steps:
+    - id: helper
+      uses: ph-fritsche/action-helper@master
     - uses: actions/checkout@v2
+      with:
+        ref: ${{ steps.helper.outputs.branchName }}
     - run: | # make sure the ref points to the buildCommit
         if [ $(git rev-parse HEAD) != "foo" ]; then
           echo "::error ::HEAD moved to $(git rev-parse HEAD) - expected ${{ needs.build.outputs.buildCommit }}"
