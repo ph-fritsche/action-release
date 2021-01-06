@@ -78,14 +78,22 @@ jobs:
         script: |
           const [owner, repo] = "${{ github.repository }}".split('/')
           const outcome = "${{ steps.release.outcome }}"
-          const type = "${{ steps.release.outputs.type }}"
           const version = "${{ steps.release.outputs.version }}"
           const gitTag = "${{ steps.release.outputs.gitTag }}"
+          const releaseUrl = version ? "https://github.com/${{ github.repository }}/releases/tag/" + gitTag : undefined
+          const runUrl = "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           await github.checks.create({
             owner,
             repo,
             head_sha: "${{needs.build.outputs.buildCommit}}",
-            name: type ? "released as " + version : "release",
-            conclusion: (outcome === 'success' && !type) ? "skipped" : outcome,
-            details_url: "https://github.com/${{ github.repository }}/" + (gitTag ? "releases/tag/" + gitTag : "actions/runs/${{ github.run_id }}"),
+            name: version ? "release " + version : "release",
+            conclusion: (outcome === 'success' && !version) ? "skipped" : outcome,
+            details_url: releaseUrl || runUrl,
+            output: {
+              title: "release",
+              summary: version
+                ? `Released as [${version}](${releaseUrl})`
+                : "Release skipped",
+              text: `see ${runUrl}`,
+            }
           })
