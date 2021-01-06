@@ -87,5 +87,5 @@ jobs:
             head_sha: "${{needs.build.outputs.buildCommit}}",
             name: type ? "released as " + version : "release",
             conclusion: (outcome === 'success' && !type) ? "skipped" : outcome,
-            details_url: gitTag ? "https://github.com/${{ github.repository }}/releases/tag/" + gitTag : undefined,
+            details_url: "https://github.com/${{ github.repository }}/" + (gitTag ? "releases/tag/" + gitTag : "actions/runs/${{ github.run_id }}"),
           })
