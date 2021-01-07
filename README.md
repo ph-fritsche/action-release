@@ -65,6 +65,21 @@ You can extend your shareable configuration and override settings:
         config: '{"extends":"@mynamespace/my-shareable-semantic-release-configuration","preset":"angular"}'
 ```
 
+### Force release
+
+If you want to force a release in one of your workflows, you can do so:
+
+```yml
+      uses: ph-fritsche/action-release@v1
+      with:
+        force: minor # forces at least a feature release
+```
+
+### Initial release
+
+When run without a previous release this action releases an initial release,
+even if the branch contains no commit that usually would trigger one with `semantic-release` (e.g. a branch only containing `wip:` commits).
+
 ### Other options
 
 ```yml
