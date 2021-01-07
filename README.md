@@ -75,7 +75,7 @@ You can extend your shareable configuration and override settings:
 
 ### Defaults
 
-This action defaults to [Conventional Commits](@mynamespace/my-shareable-semantic-release-configuration) preset.
+This action defaults to [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) preset.
 
 ---
 
