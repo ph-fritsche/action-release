@@ -34,8 +34,9 @@ jest.mock('debug', () => ({
     enable: (ident: string) => debugEnable(ident),
 }))
 
+let install: (packages: string[]) => Promise<string>
 jest.mock('../src/util/install', () => ({
-    install: () => Promise.resolve(),
+    install: (packages: string[]) => install(packages),
 }))
 
 function setup() {
@@ -47,6 +48,7 @@ function setup() {
         coreInfo = []
         debugEnable = jest.fn()
 
+        install = jest.fn(() => Promise.resolve(''))
         release = jest.fn(() => releaseResult)
 
         return run(env)
@@ -136,6 +138,45 @@ it('setup initialRelease plugin', () => {
         expect(release).toBeCalledTimes(1)
         expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
             plugins: expect.arrayContaining([initialRelease]),
+        })
+    })
+})
+
+it('run with extended config', () => {
+    const { exec } = setup()
+
+    const run = exec({config: '@my-namespace/my-shared-config'})
+
+    return run.finally(() => {
+        expect(install).toHaveBeenCalledWith(expect.arrayContaining(['@my-namespace/my-shared-config']))
+        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+            extends: '@my-namespace/my-shared-config',
+        })
+    })
+})
+
+it('run with local extended config', () => {
+    const { exec } = setup()
+
+    const run = exec({ config: './my-local-config' })
+
+    return run.finally(() => {
+        expect(install).toHaveBeenCalledWith(expect.not.arrayContaining(['./my-local-config']))
+        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+            extends: './my-local-config',
+        })
+    })
+})
+
+it('run with inline config', () => {
+    const { exec } = setup()
+
+    const run = exec({ config: '{"preset":"angular"}' })
+
+    return run.finally(() => {
+        expect(install).toHaveBeenCalledWith(expect.arrayContaining(['conventional-changelog-angular']))
+        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+            preset: 'angular',
         })
     })
 })
