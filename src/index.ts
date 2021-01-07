@@ -3,20 +3,29 @@ import semanticRelease from 'semantic-release'
 import defaultConfig from './defaultConfig'
 import { install } from './util/install'
 import debugLib from 'debug'
+import { forceRelease, initialRelease } from './plugin'
+import { PluginSpec } from './semantic-release'
 
-export default async function run(): Promise<void> {
+export default async function run(env = process.env): Promise<void> {
     try {
         const packages: string[] = ['semantic-release'] // npm warns about missing peer dependency without this
 
         const config = getConfig(core.getInput('config', { required: false}), defaultConfig, packages)
+        const plugins: PluginSpec[] = Array.from(config.plugins ?? [])
+
         const dryRun = Boolean(safeParse(core.getInput('dry', { required: false })))
         const debug = Boolean(safeParse(core.getInput('debug', { required: false }))) || core.isDebug()
+        const force = core.getInput('force', { required: false })
 
         const log = debug ? core.info : core.debug
 
-        config.plugins?.forEach(p => {
-            const pName = typeof(p) === 'string' ? p : p[0]
-            packages.push(pName)
+        plugins.forEach(p => {
+            const pName = typeof(p) === 'string'
+                ? p
+                : Array.isArray(p)
+                    ? p[0]
+                    : p.path
+            pName && packages.push(pName)
         })
 
         if (config.preset) {
@@ -32,10 +41,18 @@ export default async function run(): Promise<void> {
             debugLib.enable('semantic-release:*')
         }
 
+        plugins.push(forceRelease, initialRelease)
+
         const result = await semanticRelease({
             ...config,
+            plugins: plugins as semanticRelease.PluginSpec[],
             dryRun,
-        }, {})
+        }, {
+            env: {
+                ...env,
+                RELEASE_FORCE: force || env.force || '',
+            },
+        })
 
         if (result === false) {
             core.info('Release skipped')

@@ -1,5 +1,6 @@
 import type SemanticRelease from 'semantic-release'
 import run from '../src/index'
+import { forceRelease, initialRelease } from '../src/plugin'
 import defaultResult from './_releaseResult'
 
 const releaseResult = defaultResult as SemanticRelease.Result
@@ -38,7 +39,7 @@ jest.mock('../src/util/install', () => ({
 }))
 
 function setup() {
-    const exec = (input = {}, releaseResult: SemanticRelease.Result = false) => {
+    const exec = (input = {}, releaseResult: SemanticRelease.Result = false, env = {}) => {
         setFailed = jest.fn()
         coreInput = input
         coreOutput = {}
@@ -48,7 +49,7 @@ function setup() {
 
         release = jest.fn(() => releaseResult)
 
-        return run()
+        return run(env)
     }
 
     return { exec }
@@ -104,6 +105,37 @@ it('output release informations', () => {
             patch: '0',
             revision: undefined,
             notes: 'Release notes for version 1.1.0...',
+        })
+    })
+})
+
+it('setup forceRelease plugin', () => {
+    const { exec } = setup()
+
+    const run = exec({force: 'foobar'})
+
+    return run.finally(() => {
+        expect(release).toBeCalledTimes(1)
+        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+            plugins: expect.arrayContaining([forceRelease]),
+        })
+        expect((release as jest.Mock).mock.calls[0][1]).toMatchObject({
+            env: expect.objectContaining({
+                RELEASE_FORCE: 'foobar',
+            }),
+        })
+    })
+})
+
+it('setup initialRelease plugin', () => {
+    const { exec } = setup()
+
+    const run = exec()
+
+    return run.finally(() => {
+        expect(release).toBeCalledTimes(1)
+        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+            plugins: expect.arrayContaining([initialRelease]),
         })
     })
 })
