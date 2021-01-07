@@ -16,3 +16,5 @@ inputs:
   config:
     description: Config file (JSON or JS module) or inline config to use on top of the defaults
     required: false
+  force:
+    description: Force a release
