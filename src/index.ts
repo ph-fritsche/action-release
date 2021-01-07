@@ -56,27 +56,28 @@ export default async function run(env = process.env): Promise<void> {
 
         if (result === false) {
             core.info('Release skipped')
-        } else {
-            const { lastRelease, nextRelease, commits, releases } = result
-
-            core.info('\n')
-            core.info(`${nextRelease.type} release: ${lastRelease.version} -> ${nextRelease.version}`)
-            core.info(` including ${commits.length} commits`)
-
-            releases.map(r => core.info(`-> Released ${r.name} by ${r.pluginName}: ${r.url}`))
-
-            core.setOutput('lastVersion', lastRelease.version)
-
-            core.setOutput('type', nextRelease.type)
-            core.setOutput('version', nextRelease.version)
-            core.setOutput('gitTag', nextRelease.gitTag)
-
-            const parts = ['major', 'minor', 'patch', 'revision']
-            const v = nextRelease.version.split(/\D/, 4)
-            parts.forEach((k, i) => core.setOutput(k, v[i]))
-
-            core.setOutput('notes', nextRelease.notes)
+            return
         }
+
+        const { lastRelease, nextRelease, commits, releases } = result
+
+        core.info('\n')
+        core.info(`${nextRelease.type} release: ${lastRelease.version} -> ${nextRelease.version}`)
+        core.info(` including ${commits.length} commits`)
+
+        releases.map(r => core.info(`-> Released ${r.name} by ${r.pluginName}: ${r.url}`))
+
+        core.setOutput('lastVersion', lastRelease.version)
+
+        core.setOutput('type', nextRelease.type)
+        core.setOutput('version', nextRelease.version)
+        core.setOutput('gitTag', nextRelease.gitTag)
+
+        const parts = ['major', 'minor', 'patch', 'revision']
+        const v = nextRelease.version.split(/\D/, 4)
+        parts.forEach((k, i) => core.setOutput(k, v[i]))
+
+        core.setOutput('notes', nextRelease.notes)
     } catch(e) {
         core.setFailed(e?.message ?? e)
     }
