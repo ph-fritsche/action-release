@@ -1,12 +1,16 @@
 import * as core from '@actions/core'
 import * as child_process from 'child_process'
 
-export function spawn(cmd: string, args: string[] = [], options: child_process.SpawnOptions = {}): Promise<void> {
-    return new Promise<void>((res, rej) => {
+export function spawn(cmd: string, args: string[] = [], options: child_process.SpawnOptions = {}): Promise<string> {
+    return new Promise((res, rej) => {
         const child = child_process.spawn(cmd, args, options)
 
+        let output = ''
         const buffer = {out: '', err: ''}
         function addBuffered(type: keyof typeof buffer, data: Buffer) {
+            if (type === 'out') {
+                output += data
+            }
             buffer[type] += data
             sendBuffered(type)
         }
@@ -33,7 +37,7 @@ export function spawn(cmd: string, args: string[] = [], options: child_process.S
             sendBuffered('out', true)
             sendBuffered('err', true)
             if (code === 0) {
-                res()
+                res(output)
             } else {
                 rej(`${cmd} ${JSON.stringify(args)} failed: ${signal ?? code}`)
             }

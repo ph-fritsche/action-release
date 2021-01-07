@@ -2,7 +2,7 @@ import { info } from '@actions/core'
 import { spawn } from './spawn'
 import { resolve } from './resolve'
 
-export function install(packages: string[], log: (msg: string) => void): Promise<void> {
+export function install(packages: string[], log: (msg: string) => void): Promise<string> {
     const missing = packages.filter(resolvableName => {
         try {
             const module = resolve(resolvableName)
@@ -25,5 +25,5 @@ export function install(packages: string[], log: (msg: string) => void): Promise
         return spawn('npm', args, {})
     }
 
-    return Promise.resolve()
+    return Promise.resolve('')
 }

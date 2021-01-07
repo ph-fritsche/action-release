@@ -23,7 +23,7 @@ test('defer args and options', () => {
 
     expect(spawnMock).toBeCalledWith('foo', ['bar', 'baz'], {uid: 123456})
 
-    return expect(child).resolves.toBe(undefined)
+    return expect(child).resolves.toBe('')
 })
 
 test('reject on spawn error', () => {
@@ -56,6 +56,15 @@ test('defer stdout to debug', () => {
     return spawn('foo', ['bar', 'baz'], { uid: 123456 }).finally(() => {
         expect(coreDebug).toEqual(['foo\n'])
     })
+})
+
+test('resolve to stdout', () => {
+    coreDebug = []
+    spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stdout.write('some output')`]))
+
+    const child = spawn('foo', ['bar', 'baz'], { uid: 123456 })
+
+    return expect(child).resolves.toBe('some output')
 })
 
 test('defer stderr to warning', () => {

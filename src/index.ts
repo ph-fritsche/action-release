@@ -5,6 +5,8 @@ import { install } from './util/install'
 import debugLib from 'debug'
 import { forceRelease, initialRelease } from './plugin'
 import { PluginSpec } from './semantic-release'
+import { updateTags } from './util/updateTags'
+import { gitConfig } from './util/gitConfig'
 
 export default async function run(env = process.env): Promise<void> {
     try {
@@ -73,11 +75,27 @@ export default async function run(env = process.env): Promise<void> {
         core.setOutput('version', nextRelease.version)
         core.setOutput('gitTag', nextRelease.gitTag)
 
-        const parts = ['major', 'minor', 'patch', 'revision']
-        const v = nextRelease.version.split(/\D/, 4)
-        parts.forEach((k, i) => core.setOutput(k, v[i]))
+        const versionRegExp = /^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:[-](?<revision>(?:(?<revisionType>\w+)\.)?\d+))?/
+        const version = nextRelease.version.match(versionRegExp)?.groups as {
+            major: string,
+            minor: string,
+            patch: string,
+            revision: string | undefined,
+            revisionType: string | undefined
+        }
+        Object.entries(version).forEach(([k, v]) => core.setOutput(k, v ?? ''))
 
         core.setOutput('notes', nextRelease.notes)
+
+        if (!dryRun) {
+            const [tagPrefix] = nextRelease.gitTag.split(nextRelease.version)
+            await gitConfig(env)
+            const updatedTags = await updateTags('HEAD', nextRelease.version, version, tagPrefix)
+            if (updatedTags.length) {
+                core.info(`Updated tags: ${updatedTags.join(', ')}`)
+            }
+        }
+
     } catch(e) {
         core.setFailed(e?.message ?? e)
     }
