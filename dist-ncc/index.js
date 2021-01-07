@@ -83,18 +83,25 @@ const semantic_release_1 = __importDefault(__webpack_require__(9017));
 const defaultConfig_1 = __importDefault(__webpack_require__(5357));
 const install_1 = __webpack_require__(4622);
 const debug_1 = __importDefault(__webpack_require__(8237));
-function run() {
+const plugin_1 = __webpack_require__(4490);
+function run(env = process.env) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const packages = ['semantic-release']; // npm warns about missing peer dependency without this
             const config = getConfig(core.getInput('config', { required: false }), defaultConfig_1.default, packages);
+            const plugins = Array.from((_a = config.plugins) !== null && _a !== void 0 ? _a : []);
             const dryRun = Boolean(safeParse(core.getInput('dry', { required: false })));
             const debug = Boolean(safeParse(core.getInput('debug', { required: false }))) || core.isDebug();
+            const force = core.getInput('force', { required: false });
             const log = debug ? core.info : core.debug;
-            (_a = config.plugins) === null || _a === void 0 ? void 0 : _a.forEach(p => {
-                const pName = typeof (p) === 'string' ? p : p[0];
-                packages.push(pName);
+            plugins.forEach(p => {
+                const pName = typeof (p) === 'string'
+                    ? p
+                    : Array.isArray(p)
+                        ? p[0]
+                        : p.path;
+                pName && packages.push(pName);
             });
             if (config.preset) {
                 packages.push('conventional-changelog-' + config.preset);
@@ -106,7 +113,10 @@ function run() {
             if (debug) {
                 debug_1.default.enable('semantic-release:*');
             }
-            const result = yield semantic_release_1.default(Object.assign(Object.assign({}, config), { dryRun }), {});
+            plugins.push(plugin_1.forceRelease, plugin_1.initialRelease);
+            const result = yield semantic_release_1.default(Object.assign(Object.assign({}, config), { plugins: plugins, dryRun }), {
+                env: Object.assign(Object.assign({}, env), { RELEASE_FORCE: force || env.force || '' }),
+            });
             if (result === false) {
                 core.info('Release skipped');
             }
@@ -158,6 +168,134 @@ function getConfig(configInput, defaultConfig, packages) {
     }
     return defaultConfig;
 }
+
+
+/***/ }),
+
+/***/ 2366:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.analyzeCommits = void 0;
+const releaseTypes_1 = __webpack_require__(7855);
+/**
+ * Force release per environment variable
+ */
+function analyzeCommits(config, context) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!context.env.RELEASE_FORCE) {
+            return null;
+        }
+        const type = (_a = releaseTypes_1.getReleaseType(context.env.RELEASE_FORCE)) !== null && _a !== void 0 ? _a : releaseTypes_1.releaseTypes.patch;
+        context.logger.log('Force release: %s', type);
+        return type;
+    });
+}
+exports.analyzeCommits = analyzeCommits;
+
+
+/***/ }),
+
+/***/ 4490:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.initialRelease = exports.forceRelease = void 0;
+exports.forceRelease = __importStar(__webpack_require__(2366));
+exports.initialRelease = __importStar(__webpack_require__(4922));
+
+
+/***/ }),
+
+/***/ 4922:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.analyzeCommits = void 0;
+const releaseTypes_1 = __webpack_require__(7855);
+/**
+ * Trigger initial release
+ */
+function analyzeCommits(config, context) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!((_a = context.lastRelease) === null || _a === void 0 ? void 0 : _a.gitHead)) {
+            context.logger.log('Initial release');
+            return releaseTypes_1.releaseTypes.patch;
+        }
+        return null;
+    });
+}
+exports.analyzeCommits = analyzeCommits;
+
+
+/***/ }),
+
+/***/ 7855:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getReleaseType = exports.releaseTypes = void 0;
+var releaseTypes;
+(function (releaseTypes) {
+    releaseTypes["major"] = "major";
+    releaseTypes["premajor"] = "premajor";
+    releaseTypes["minor"] = "minor";
+    releaseTypes["preminor"] = "preminor";
+    releaseTypes["patch"] = "patch";
+    releaseTypes["prepatch"] = "prepatch";
+    releaseTypes["prerelease"] = "prerelease";
+})(releaseTypes = exports.releaseTypes || (exports.releaseTypes = {}));
+function getReleaseType(k) {
+    return Object.keys(releaseTypes).includes(k) ? releaseTypes[k] : undefined;
+}
+exports.getReleaseType = getReleaseType;
 
 
 /***/ }),
