@@ -2,6 +2,7 @@ import type SemanticRelease from 'semantic-release'
 import run from '../src/index'
 import { forceRelease, initialRelease } from '../src/plugin'
 import defaultResult from './_releaseResult'
+import type { updateTags as realUpdateTags } from '../src/util/updateTags'
 
 const releaseResult = defaultResult as SemanticRelease.Result
 
@@ -39,6 +40,20 @@ jest.mock('../src/util/install', () => ({
     install: (packages: string[]) => install(packages),
 }))
 
+let gitConfig: () => Promise<string>
+jest.mock('../src/util/gitConfig', () => ({
+    gitConfig: () => gitConfig(),
+}))
+
+let updateTags: typeof realUpdateTags
+jest.mock('../src/util/updateTags', () => ({
+    updateTags: (...a: Parameters<typeof realUpdateTags>) => updateTags(...a),
+}))
+
+jest.mock('../src/util/spawn', () => ({
+    spawn: () => { throw 'this should not have been called - every helper should be mocked' },
+}))
+
 function setup() {
     const exec = (input = {}, releaseResult: SemanticRelease.Result = false, env = {}) => {
         setFailed = jest.fn()
@@ -50,6 +65,8 @@ function setup() {
 
         install = jest.fn(() => Promise.resolve(''))
         release = jest.fn(() => releaseResult)
+        gitConfig = jest.fn(() => Promise.resolve(''))
+        updateTags = jest.fn(() => Promise.resolve([]))
 
         return run(env)
     }
@@ -105,7 +122,8 @@ it('output release informations', () => {
             major: '1',
             minor: '1',
             patch: '0',
-            revision: undefined,
+            revision: '',
+            revisionType: '',
             notes: 'Release notes for version 1.1.0...',
         })
     })
@@ -178,5 +196,28 @@ it('run with inline config', () => {
         expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
             preset: 'angular',
         })
+    })
+})
+
+it('call updateTag', () => {
+    const { exec } = setup()
+
+    const run = exec(undefined, {...defaultResult, nextRelease: {
+        gitHead: 'abc',
+        gitTag: 'v1.2.3-foo.1',
+        notes: 'some notes...',
+        type: 'major',
+        version: '1.2.3-foo.1',
+    }})
+
+    return run.finally(() => {
+        expect(gitConfig).toBeCalled()
+        expect(updateTags).toBeCalledWith('HEAD', '1.2.3-foo.1', {
+            major: '1',
+            minor: '2',
+            patch: '3',
+            revision: 'foo.1',
+            revisionType: 'foo',
+        }, 'v')
     })
 })

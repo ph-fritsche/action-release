@@ -5,7 +5,7 @@ jest.mock('../../src/util/resolve', () => ({
     resolve: (name: string) => resolveMock(name),
 }))
 
-let spawnMock: (...a: unknown[]) => Promise<void>
+let spawnMock: (...a: unknown[]) => Promise<string>
 jest.mock('../../src/util/spawn', () => ({
     spawn: (...a: unknown[]) => spawnMock(...a),
 }))

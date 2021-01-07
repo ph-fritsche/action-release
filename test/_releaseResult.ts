@@ -68,4 +68,4 @@ export default {
         },
     ],
 // typing does not match documented output
-} as unknown as SemanticRelease.Result
+} as unknown as Extract<SemanticRelease.Result, {[k: string]: unknown }>
