@@ -33,19 +33,22 @@ jobs:
   verify:
     needs: build
     runs-on: ubuntu-latest
-    if: needs.build.outputs.buildCommit
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: ${{ needs.build.outputs.buildCommit }}
+        ref: ${{ needs.build.outputs.buildCommit }} # if there is no buildCommit, checkout HEAD
     - name: Dry-run
       uses: ./
       with:
         dry: true
         debug: true
-    - id: helper
+
+    # if there is a buildCommit, push it back onto the branch that triggered the workflow
+    - if: needs.build.outputs.buildCommit
+      id: helper
       uses: ph-fritsche/action-helper@master
-    - name: Push back to original branch
+    - if: needs.build.outputs.buildCommit
+      name: Push back to original branch
       run: |
         git fetch --depth=2 origin ${{ needs.build.outputs.buildCommit }}
         git log --format=oneline -n2 ${{ needs.build.outputs.buildCommit }}
@@ -61,10 +64,12 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ steps.helper.outputs.branchName }}
-    - name: Verify branch HEAD did not move away from buildCommit
+    - name: Ensure branch HEAD did not move
       run: |
-        if [ $(git rev-parse HEAD) != "${{ needs.build.outputs.buildCommit }}" ]; then
-          echo "::error ::HEAD moved to $(git rev-parse HEAD) - expected ${{ needs.build.outputs.buildCommit }}"
+        EXPECTED="${{ needs.build.outputs.buildCommit || github.sha }}"
+        ACTUAL="$(git rev-parse HEAD)"
+        if [ $ACTUAL != $EXPECTED ]; then
+          echo "::error ::HEAD moved to ${ACTUAL} - expected ${EXPECTED}"
           exit 1
         fi
     - id: release
@@ -85,7 +90,7 @@ jobs:
           await github.checks.create({
             owner,
             repo,
-            head_sha: "${{needs.build.outputs.buildCommit}}",
+            head_sha: "${{ needs.build.outputs.buildCommit || github.sha }}",
             name: version ? "release " + version : "release",
             conclusion: (outcome === 'success' && !version) ? "skipped" : outcome,
             details_url: releaseUrl || runUrl,
