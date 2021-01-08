@@ -84,8 +84,10 @@ const defaultConfig_1 = __importDefault(__webpack_require__(5357));
 const install_1 = __webpack_require__(4622);
 const debug_1 = __importDefault(__webpack_require__(8237));
 const plugin_1 = __webpack_require__(4490);
+const updateTags_1 = __webpack_require__(4976);
+const gitConfig_1 = __webpack_require__(4757);
 function run(env = process.env) {
-    var _a, _b;
+    var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const packages = ['semantic-release']; // npm warns about missing peer dependency without this
@@ -119,25 +121,32 @@ function run(env = process.env) {
             });
             if (result === false) {
                 core.info('Release skipped');
+                return;
             }
-            else {
-                const { lastRelease, nextRelease, commits, releases } = result;
-                core.info('\n');
-                core.info(`${nextRelease.type} release: ${lastRelease.version} -> ${nextRelease.version}`);
-                core.info(` including ${commits.length} commits`);
-                releases.map(r => core.info(`-> Released ${r.name} by ${r.pluginName}: ${r.url}`));
-                core.setOutput('lastVersion', lastRelease.version);
-                core.setOutput('type', nextRelease.type);
-                core.setOutput('version', nextRelease.version);
-                core.setOutput('gitTag', nextRelease.gitTag);
-                const parts = ['major', 'minor', 'patch', 'revision'];
-                const v = nextRelease.version.split(/\D/, 4);
-                parts.forEach((k, i) => core.setOutput(k, v[i]));
-                core.setOutput('notes', nextRelease.notes);
+            const { lastRelease, nextRelease, commits, releases } = result;
+            core.info('\n');
+            core.info(`${nextRelease.type} release: ${lastRelease.version} -> ${nextRelease.version}`);
+            core.info(` including ${commits.length} commits`);
+            releases.map(r => core.info(`-> Released ${r.name} by ${r.pluginName}: ${r.url}`));
+            core.setOutput('lastVersion', lastRelease.version);
+            core.setOutput('type', nextRelease.type);
+            core.setOutput('version', nextRelease.version);
+            core.setOutput('gitTag', nextRelease.gitTag);
+            const versionRegExp = /^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:[-](?<revision>(?:(?<revisionType>\w+)\.)?\d+))?/;
+            const version = (_b = nextRelease.version.match(versionRegExp)) === null || _b === void 0 ? void 0 : _b.groups;
+            Object.entries(version).forEach(([k, v]) => core.setOutput(k, v !== null && v !== void 0 ? v : ''));
+            core.setOutput('notes', nextRelease.notes);
+            if (!dryRun) {
+                const [tagPrefix] = nextRelease.gitTag.split(nextRelease.version);
+                yield gitConfig_1.gitConfig(env);
+                const updatedTags = yield updateTags_1.updateTags('HEAD', nextRelease.version, version, tagPrefix);
+                if (updatedTags.length) {
+                    core.info(`Updated tags: ${updatedTags.join(', ')}`);
+                }
             }
         }
         catch (e) {
-            core.setFailed((_b = e === null || e === void 0 ? void 0 : e.message) !== null && _b !== void 0 ? _b : e);
+            core.setFailed((_c = e === null || e === void 0 ? void 0 : e.message) !== null && _c !== void 0 ? _c : e);
         }
     });
 }
@@ -300,6 +309,38 @@ exports.getReleaseType = getReleaseType;
 
 /***/ }),
 
+/***/ 4757:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.gitConfig = void 0;
+const spawn_1 = __webpack_require__(8219);
+function gitConfig(env) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const name = env.GITHUB_ACTOR || 'github-actions[bot]';
+        const email = env.GITHUB_ACTOR
+            ? `${env.GITHUB_ACTOR}@users.noreply.github.com`
+            : '41898282+github-actions[bot]@users.noreply.github.com';
+        yield spawn_1.spawn('git', ['config', '--global', 'user.name', name]);
+        yield spawn_1.spawn('git', ['config', '--global', 'user.email', email]);
+    });
+}
+exports.gitConfig = gitConfig;
+
+
+/***/ }),
+
 /***/ 4622:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -330,7 +371,7 @@ function install(packages, log) {
         args.push('--', ...missing);
         return spawn_1.spawn('npm', args, {});
     }
-    return Promise.resolve();
+    return Promise.resolve('');
 }
 exports.install = install;
 
@@ -381,8 +422,12 @@ function spawn(cmd, args = [], options = {}) {
     return new Promise((res, rej) => {
         var _a, _b;
         const child = child_process.spawn(cmd, args, options);
+        let output = '';
         const buffer = { out: '', err: '' };
         function addBuffered(type, data) {
+            if (type === 'out') {
+                output += data;
+            }
             buffer[type] += data;
             sendBuffered(type);
         }
@@ -410,7 +455,7 @@ function spawn(cmd, args = [], options = {}) {
             sendBuffered('out', true);
             sendBuffered('err', true);
             if (code === 0) {
-                res();
+                res(output);
             }
             else {
                 rej(`${cmd} ${JSON.stringify(args)} failed: ${signal !== null && signal !== void 0 ? signal : code}`);
@@ -421,6 +466,56 @@ function spawn(cmd, args = [], options = {}) {
     });
 }
 exports.spawn = spawn;
+
+
+/***/ }),
+
+/***/ 4976:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.updateTags = void 0;
+const spawn_1 = __webpack_require__(8219);
+function updateTags(ref, versionString, version, tagPrefix = '') {
+    return __awaiter(this, void 0, void 0, function* () {
+        const tags = [];
+        if (!version.revision) {
+            const minorTag = `${tagPrefix}${version.major}.${version.minor}`;
+            tags.push(minorTag);
+            const nextMinor = `${tagPrefix}${version.major}.${Number(version.minor) + 1}.0`;
+            const hasNextMinor = yield spawn_1.spawn('git', ['ls-remote', 'origin', `refs/tags/${nextMinor}`]);
+            if (!hasNextMinor) {
+                const majorTag = `${tagPrefix}${version.major}`;
+                tags.push(majorTag);
+            }
+        }
+        else if (version.revisionType) {
+            const revisionTag = `${tagPrefix}${version.major}.${version.minor}.${version.patch}-${version.revisionType}`;
+            tags.push(revisionTag);
+        }
+        if (tags.length) {
+            for (const tag of tags) {
+                yield spawn_1.spawn('git', ['tag', '-fam', versionString, tag, ref]);
+            }
+            yield spawn_1.spawn('git', ['push', '-f', 'origin',
+                ...tags.map(t => `refs/tags/${t}:refs/tags/${t}`),
+            ]);
+        }
+        return tags;
+    });
+}
+exports.updateTags = updateTags;
 
 
 /***/ }),
