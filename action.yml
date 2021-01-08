@@ -1,5 +1,5 @@
-name: Release
-description: Opinionated semantic-release action
+name: Run release!
+description: Easily create releases per semantic-release
 branding:
   icon: arrow-up-circle
   color: green
