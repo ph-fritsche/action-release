@@ -9,7 +9,6 @@ interface pluginFunc {
 }
 
 export type Plugin = {
-    path?: string,
     verifyConditions?: pluginFunc,
     analyzeCommits?: (config: PluginConfig, context: SemanticRelease.Context) => Promise<string | null>,
     verifyRelease?: pluginFunc,
@@ -22,4 +21,8 @@ export type Plugin = {
     [k: string]: unknown
 }
 
-export type PluginSpec = SemanticRelease.PluginSpec | Plugin
+// see https://github.com/semantic-release/semantic-release/blob/master/lib/plugins/utils.js#L54
+export type PluginSpec = [PluginDef, PluginConfig] | ({path: PluginDef} & PluginConfig) | PluginDef
+
+// see https://github.com/semantic-release/semantic-release/blob/master/lib/plugins/index.js#L17
+export type PluginDef = string | Plugin

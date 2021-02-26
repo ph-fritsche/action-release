@@ -22,12 +22,15 @@ export default async function run(env = process.env): Promise<void> {
         const log = debug ? core.info : core.debug
 
         plugins.forEach(p => {
-            const pName = typeof(p) === 'string'
-                ? p
-                : Array.isArray(p)
-                    ? p[0]
-                    : p.path
-            pName && packages.push(pName)
+            const pDef = Array.isArray(p)
+                ? p[0]
+                : typeof p === 'object'
+                    ? p.path
+                    : p
+
+            if (typeof pDef === 'string' && pDef !== '') {
+                packages.push(pDef)
+            }
         })
 
         if (config.preset) {
