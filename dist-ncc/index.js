@@ -98,12 +98,14 @@ function run(env = process.env) {
             const force = core.getInput('force', { required: false });
             const log = debug ? core.info : core.debug;
             plugins.forEach(p => {
-                const pName = typeof (p) === 'string'
-                    ? p
-                    : Array.isArray(p)
-                        ? p[0]
-                        : p.path;
-                pName && packages.push(pName);
+                const pDef = Array.isArray(p)
+                    ? p[0]
+                    : typeof p === 'object'
+                        ? p.path
+                        : p;
+                if (typeof pDef === 'string' && pDef !== '') {
+                    packages.push(pDef);
+                }
             });
             if (config.preset) {
                 packages.push('conventional-changelog-' + config.preset);
