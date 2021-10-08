@@ -1,9 +1,8 @@
-require('./sourcemap-register.js');module.exports =
-/******/ (() => { // webpackBootstrap
+require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 9957:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -11,8 +10,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const index_1 = __importDefault(__webpack_require__(9283));
-index_1.default();
+const index_1 = __importDefault(__nccwpck_require__(9283));
+(0, index_1.default)();
 
 
 /***/ }),
@@ -42,7 +41,7 @@ exports.default = {
 /***/ }),
 
 /***/ 9283:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -78,14 +77,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__webpack_require__(2186));
-const semantic_release_1 = __importDefault(__webpack_require__(9017));
-const defaultConfig_1 = __importDefault(__webpack_require__(5357));
-const install_1 = __webpack_require__(4622);
-const debug_1 = __importDefault(__webpack_require__(8237));
-const plugin_1 = __webpack_require__(4490);
-const updateTags_1 = __webpack_require__(4976);
-const gitConfig_1 = __webpack_require__(4757);
+const core = __importStar(__nccwpck_require__(2186));
+const semantic_release_1 = __importDefault(__nccwpck_require__(9017));
+const defaultConfig_1 = __importDefault(__nccwpck_require__(5357));
+const install_1 = __nccwpck_require__(4622);
+const debug_1 = __importDefault(__nccwpck_require__(8237));
+const plugin_1 = __nccwpck_require__(4490);
+const updateTags_1 = __nccwpck_require__(4976);
+const gitConfig_1 = __nccwpck_require__(4757);
 function run(env = process.env) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
@@ -110,7 +109,7 @@ function run(env = process.env) {
             if (config.preset) {
                 packages.push('conventional-changelog-' + config.preset);
             }
-            yield install_1.install(packages, log);
+            yield (0, install_1.install)(packages, log);
             if (dryRun) {
                 log('DRY RUN');
             }
@@ -118,7 +117,7 @@ function run(env = process.env) {
                 debug_1.default.enable('semantic-release:*');
             }
             plugins.push(plugin_1.forceRelease, plugin_1.initialRelease);
-            const result = yield semantic_release_1.default(Object.assign(Object.assign({}, config), { plugins: plugins, dryRun }), {
+            const result = yield (0, semantic_release_1.default)(Object.assign(Object.assign({}, config), { plugins: plugins, dryRun }), {
                 env: Object.assign(Object.assign({}, env), { RELEASE_FORCE: force || env.force || '' }),
             });
             if (result === false) {
@@ -140,19 +139,22 @@ function run(env = process.env) {
             core.setOutput('notes', nextRelease.notes);
             if (!dryRun) {
                 const [tagPrefix] = nextRelease.gitTag.split(nextRelease.version);
-                yield gitConfig_1.gitConfig(env);
-                const updatedTags = yield updateTags_1.updateTags('HEAD', nextRelease.version, version, tagPrefix);
+                yield (0, gitConfig_1.gitConfig)(env);
+                const updatedTags = yield (0, updateTags_1.updateTags)('HEAD', nextRelease.version, version, tagPrefix);
                 if (updatedTags.length) {
                     core.info(`Updated tags: ${updatedTags.join(', ')}`);
                 }
             }
         }
         catch (e) {
-            core.setFailed((_c = e === null || e === void 0 ? void 0 : e.message) !== null && _c !== void 0 ? _c : e);
+            core.setFailed(((_c = (hasProp(e, 'message') ? e.message : undefined)) !== null && _c !== void 0 ? _c : e));
         }
     });
 }
 exports.default = run;
+function hasProp(obj, key) {
+    return Boolean(obj && typeof obj === 'object' && key in obj);
+}
 function safeParse(val) {
     try {
         return JSON.parse(val);
@@ -184,7 +186,7 @@ function getConfig(configInput, defaultConfig, packages) {
 /***/ }),
 
 /***/ 2366:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -199,7 +201,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.analyzeCommits = void 0;
-const releaseTypes_1 = __webpack_require__(7855);
+const releaseTypes_1 = __nccwpck_require__(7855);
 /**
  * Force release per environment variable
  */
@@ -209,7 +211,7 @@ function analyzeCommits(config, context) {
         if (!context.env.RELEASE_FORCE) {
             return null;
         }
-        const type = (_a = releaseTypes_1.getReleaseType(context.env.RELEASE_FORCE)) !== null && _a !== void 0 ? _a : releaseTypes_1.releaseTypes.patch;
+        const type = (_a = (0, releaseTypes_1.getReleaseType)(context.env.RELEASE_FORCE)) !== null && _a !== void 0 ? _a : releaseTypes_1.releaseTypes.patch;
         context.logger.log('Force release: %s', type);
         return type;
     });
@@ -220,7 +222,7 @@ exports.analyzeCommits = analyzeCommits;
 /***/ }),
 
 /***/ 4490:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -245,14 +247,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.initialRelease = exports.forceRelease = void 0;
-exports.forceRelease = __importStar(__webpack_require__(2366));
-exports.initialRelease = __importStar(__webpack_require__(4922));
+exports.forceRelease = __importStar(__nccwpck_require__(2366));
+exports.initialRelease = __importStar(__nccwpck_require__(4922));
 
 
 /***/ }),
 
 /***/ 4922:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -267,7 +269,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.analyzeCommits = void 0;
-const releaseTypes_1 = __webpack_require__(7855);
+const releaseTypes_1 = __nccwpck_require__(7855);
 /**
  * Trigger initial release
  */
@@ -312,7 +314,7 @@ exports.getReleaseType = getReleaseType;
 /***/ }),
 
 /***/ 4757:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -327,15 +329,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.gitConfig = void 0;
-const spawn_1 = __webpack_require__(8219);
+const spawn_1 = __nccwpck_require__(8219);
 function gitConfig(env) {
     return __awaiter(this, void 0, void 0, function* () {
         const name = env.GITHUB_ACTOR || 'github-actions[bot]';
         const email = env.GITHUB_ACTOR
             ? `${env.GITHUB_ACTOR}@users.noreply.github.com`
             : '41898282+github-actions[bot]@users.noreply.github.com';
-        yield spawn_1.spawn('git', ['config', '--global', 'user.name', name]);
-        yield spawn_1.spawn('git', ['config', '--global', 'user.email', email]);
+        yield (0, spawn_1.spawn)('git', ['config', '--global', 'user.name', name]);
+        yield (0, spawn_1.spawn)('git', ['config', '--global', 'user.email', email]);
     });
 }
 exports.gitConfig = gitConfig;
@@ -344,19 +346,19 @@ exports.gitConfig = gitConfig;
 /***/ }),
 
 /***/ 4622:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = void 0;
-const core_1 = __webpack_require__(2186);
-const spawn_1 = __webpack_require__(8219);
-const resolve_1 = __webpack_require__(7384);
+const core_1 = __nccwpck_require__(2186);
+const spawn_1 = __nccwpck_require__(8219);
+const resolve_1 = __nccwpck_require__(7384);
 function install(packages, log) {
     const missing = packages.filter(resolvableName => {
         try {
-            const module = resolve_1.resolve(resolvableName);
+            const module = (0, resolve_1.resolve)(resolvableName);
             log(`"${resolvableName}" resolved to "${module}"`);
             return false;
         }
@@ -371,7 +373,7 @@ function install(packages, log) {
             args.push('--silent');
         }
         args.push('--', ...missing);
-        return spawn_1.spawn('npm', args, {});
+        return (0, spawn_1.spawn)('npm', args, {});
     }
     return Promise.resolve('');
 }
@@ -393,7 +395,7 @@ exports.resolve = require.resolve;
 /***/ }),
 
 /***/ 8219:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -418,8 +420,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.spawn = void 0;
-const core = __importStar(__webpack_require__(2186));
-const child_process = __importStar(__webpack_require__(3129));
+const core = __importStar(__nccwpck_require__(2186));
+const child_process = __importStar(__nccwpck_require__(3129));
 function spawn(cmd, args = [], options = {}) {
     return new Promise((res, rej) => {
         var _a, _b;
@@ -473,7 +475,7 @@ exports.spawn = spawn;
 /***/ }),
 
 /***/ 4976:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -488,7 +490,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.updateTags = void 0;
-const spawn_1 = __webpack_require__(8219);
+const spawn_1 = __nccwpck_require__(8219);
 function updateTags(ref, versionString, version, tagPrefix = '') {
     return __awaiter(this, void 0, void 0, function* () {
         const tags = [];
@@ -496,7 +498,7 @@ function updateTags(ref, versionString, version, tagPrefix = '') {
             const minorTag = `${tagPrefix}${version.major}.${version.minor}`;
             tags.push(minorTag);
             const nextMinor = `${tagPrefix}${version.major}.${Number(version.minor) + 1}.0`;
-            const hasNextMinor = yield spawn_1.spawn('git', ['ls-remote', 'origin', `refs/tags/${nextMinor}`]);
+            const hasNextMinor = yield (0, spawn_1.spawn)('git', ['ls-remote', 'origin', `refs/tags/${nextMinor}`]);
             if (!hasNextMinor) {
                 const majorTag = `${tagPrefix}${version.major}`;
                 tags.push(majorTag);
@@ -508,9 +510,9 @@ function updateTags(ref, versionString, version, tagPrefix = '') {
         }
         if (tags.length) {
             for (const tag of tags) {
-                yield spawn_1.spawn('git', ['tag', '-fam', versionString, tag, ref]);
+                yield (0, spawn_1.spawn)('git', ['tag', '-fam', versionString, tag, ref]);
             }
-            yield spawn_1.spawn('git', ['push', '-f', 'origin',
+            yield (0, spawn_1.spawn)('git', ['push', '-f', 'origin',
                 ...tags.map(t => `refs/tags/${t}:refs/tags/${t}`),
             ]);
         }
@@ -523,20 +525,33 @@ exports.updateTags = updateTags;
 /***/ }),
 
 /***/ 7351:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__webpack_require__(2087));
-const utils_1 = __webpack_require__(5278);
+exports.issue = exports.issueCommand = void 0;
+const os = __importStar(__nccwpck_require__(2087));
+const utils_1 = __nccwpck_require__(5278);
 /**
  * Commands
  *
@@ -609,10 +624,29 @@ function escapeProperty(s) {
 /***/ }),
 
 /***/ 2186:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -622,19 +656,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const command_1 = __webpack_require__(7351);
-const file_command_1 = __webpack_require__(717);
-const utils_1 = __webpack_require__(5278);
-const os = __importStar(__webpack_require__(2087));
-const path = __importStar(__webpack_require__(5622));
+exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+const command_1 = __nccwpck_require__(7351);
+const file_command_1 = __nccwpck_require__(717);
+const utils_1 = __nccwpck_require__(5278);
+const os = __importStar(__nccwpck_require__(2087));
+const path = __importStar(__nccwpck_require__(5622));
+const oidc_utils_1 = __nccwpck_require__(8041);
 /**
  * The code to exit an action
  */
@@ -696,7 +725,9 @@ function addPath(inputPath) {
 }
 exports.addPath = addPath;
 /**
- * Gets the value of an input.  The value is also trimmed.
+ * Gets the value of an input.
+ * Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
+ * Returns an empty string if the value is not defined.
  *
  * @param     name     name of the input to get
  * @param     options  optional. See InputOptions.
@@ -707,9 +738,49 @@ function getInput(name, options) {
     if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
     }
+    if (options && options.trimWhitespace === false) {
+        return val;
+    }
     return val.trim();
 }
 exports.getInput = getInput;
+/**
+ * Gets the values of an multiline input.  Each value is also trimmed.
+ *
+ * @param     name     name of the input to get
+ * @param     options  optional. See InputOptions.
+ * @returns   string[]
+ *
+ */
+function getMultilineInput(name, options) {
+    const inputs = getInput(name, options)
+        .split('\n')
+        .filter(x => x !== '');
+    return inputs;
+}
+exports.getMultilineInput = getMultilineInput;
+/**
+ * Gets the input value of the boolean type in the YAML 1.2 "core schema" specification.
+ * Support boolean input list: `true | True | TRUE | false | False | FALSE` .
+ * The return value is also in boolean type.
+ * ref: https://yaml.org/spec/1.2/spec.html#id2804923
+ *
+ * @param     name     name of the input to get
+ * @param     options  optional. See InputOptions.
+ * @returns   boolean
+ */
+function getBooleanInput(name, options) {
+    const trueValue = ['true', 'True', 'TRUE'];
+    const falseValue = ['false', 'False', 'FALSE'];
+    const val = getInput(name, options);
+    if (trueValue.includes(val))
+        return true;
+    if (falseValue.includes(val))
+        return false;
+    throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}\n` +
+        `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
+}
+exports.getBooleanInput = getBooleanInput;
 /**
  * Sets the value of an output.
  *
@@ -718,6 +789,7 @@ exports.getInput = getInput;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setOutput(name, value) {
+    process.stdout.write(os.EOL);
     command_1.issueCommand('set-output', { name }, value);
 }
 exports.setOutput = setOutput;
@@ -764,19 +836,30 @@ exports.debug = debug;
 /**
  * Adds an error issue
  * @param message error issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
  */
-function error(message) {
-    command_1.issue('error', message instanceof Error ? message.toString() : message);
+function error(message, properties = {}) {
+    command_1.issueCommand('error', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.error = error;
 /**
- * Adds an warning issue
+ * Adds a warning issue
  * @param message warning issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
  */
-function warning(message) {
-    command_1.issue('warning', message instanceof Error ? message.toString() : message);
+function warning(message, properties = {}) {
+    command_1.issueCommand('warning', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.warning = warning;
+/**
+ * Adds a notice issue
+ * @param message notice issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
+ */
+function notice(message, properties = {}) {
+    command_1.issueCommand('notice', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+}
+exports.notice = notice;
 /**
  * Writes info to log with console.log.
  * @param message info message
@@ -849,29 +932,48 @@ function getState(name) {
     return process.env[`STATE_${name}`] || '';
 }
 exports.getState = getState;
+function getIDToken(aud) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield oidc_utils_1.OidcClient.getIDToken(aud);
+    });
+}
+exports.getIDToken = getIDToken;
 //# sourceMappingURL=core.js.map
 
 /***/ }),
 
 /***/ 717:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
 // For internal use, subject to change.
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.issueCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__webpack_require__(5747));
-const os = __importStar(__webpack_require__(2087));
-const utils_1 = __webpack_require__(5278);
+const fs = __importStar(__nccwpck_require__(5747));
+const os = __importStar(__nccwpck_require__(2087));
+const utils_1 = __nccwpck_require__(5278);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -889,6 +991,90 @@ exports.issueCommand = issueCommand;
 
 /***/ }),
 
+/***/ 8041:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OidcClient = void 0;
+const http_client_1 = __nccwpck_require__(9925);
+const auth_1 = __nccwpck_require__(3702);
+const core_1 = __nccwpck_require__(2186);
+class OidcClient {
+    static createHttpClient(allowRetry = true, maxRetry = 10) {
+        const requestOptions = {
+            allowRetries: allowRetry,
+            maxRetries: maxRetry
+        };
+        return new http_client_1.HttpClient('actions/oidc-client', [new auth_1.BearerCredentialHandler(OidcClient.getRequestToken())], requestOptions);
+    }
+    static getRequestToken() {
+        const token = process.env['ACTIONS_ID_TOKEN_REQUEST_TOKEN'];
+        if (!token) {
+            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_TOKEN env variable');
+        }
+        return token;
+    }
+    static getIDTokenUrl() {
+        const runtimeUrl = process.env['ACTIONS_ID_TOKEN_REQUEST_URL'];
+        if (!runtimeUrl) {
+            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable');
+        }
+        return runtimeUrl;
+    }
+    static getCall(id_token_url) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const httpclient = OidcClient.createHttpClient();
+            const res = yield httpclient
+                .getJson(id_token_url)
+                .catch(error => {
+                throw new Error(`Failed to get ID Token. \n 
+        Error Code : ${error.statusCode}\n 
+        Error Message: ${error.result.message}`);
+            });
+            const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
+            if (!id_token) {
+                throw new Error('Response json body do not have ID Token field');
+            }
+            return id_token;
+        });
+    }
+    static getIDToken(audience) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // New ID Token is requested from action service
+                let id_token_url = OidcClient.getIDTokenUrl();
+                if (audience) {
+                    const encodedAudience = encodeURIComponent(audience);
+                    id_token_url = `${id_token_url}&audience=${encodedAudience}`;
+                }
+                core_1.debug(`ID token url is ${id_token_url}`);
+                const id_token = yield OidcClient.getCall(id_token_url);
+                core_1.setSecret(id_token);
+                return id_token;
+            }
+            catch (error) {
+                throw new Error(`Error message: ${error.message}`);
+            }
+        });
+    }
+}
+exports.OidcClient = OidcClient;
+//# sourceMappingURL=oidc-utils.js.map
+
+/***/ }),
+
 /***/ 5278:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -897,6 +1083,7 @@ exports.issueCommand = issueCommand;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toCommandProperties = exports.toCommandValue = void 0;
 /**
  * Sanitizes an input into a string so it can be passed into issueCommand safely
  * @param input input to sanitize into a string
@@ -911,12 +1098,708 @@ function toCommandValue(input) {
     return JSON.stringify(input);
 }
 exports.toCommandValue = toCommandValue;
+/**
+ *
+ * @param annotationProperties
+ * @returns The command properties to send with the actual annotation command
+ * See IssueCommandProperties: https://github.com/actions/runner/blob/main/src/Runner.Worker/ActionCommandManager.cs#L646
+ */
+function toCommandProperties(annotationProperties) {
+    if (!Object.keys(annotationProperties).length) {
+        return {};
+    }
+    return {
+        title: annotationProperties.title,
+        file: annotationProperties.file,
+        line: annotationProperties.startLine,
+        endLine: annotationProperties.endLine,
+        col: annotationProperties.startColumn,
+        endColumn: annotationProperties.endColumn
+    };
+}
+exports.toCommandProperties = toCommandProperties;
 //# sourceMappingURL=utils.js.map
 
 /***/ }),
 
+/***/ 3702:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+class BasicCredentialHandler {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+    }
+    prepareRequest(options) {
+        options.headers['Authorization'] =
+            'Basic ' +
+                Buffer.from(this.username + ':' + this.password).toString('base64');
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication(response) {
+        return false;
+    }
+    handleAuthentication(httpClient, requestInfo, objs) {
+        return null;
+    }
+}
+exports.BasicCredentialHandler = BasicCredentialHandler;
+class BearerCredentialHandler {
+    constructor(token) {
+        this.token = token;
+    }
+    // currently implements pre-authorization
+    // TODO: support preAuth = false where it hooks on 401
+    prepareRequest(options) {
+        options.headers['Authorization'] = 'Bearer ' + this.token;
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication(response) {
+        return false;
+    }
+    handleAuthentication(httpClient, requestInfo, objs) {
+        return null;
+    }
+}
+exports.BearerCredentialHandler = BearerCredentialHandler;
+class PersonalAccessTokenCredentialHandler {
+    constructor(token) {
+        this.token = token;
+    }
+    // currently implements pre-authorization
+    // TODO: support preAuth = false where it hooks on 401
+    prepareRequest(options) {
+        options.headers['Authorization'] =
+            'Basic ' + Buffer.from('PAT:' + this.token).toString('base64');
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication(response) {
+        return false;
+    }
+    handleAuthentication(httpClient, requestInfo, objs) {
+        return null;
+    }
+}
+exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
+
+
+/***/ }),
+
+/***/ 9925:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const http = __nccwpck_require__(8605);
+const https = __nccwpck_require__(7211);
+const pm = __nccwpck_require__(6443);
+let tunnel;
+var HttpCodes;
+(function (HttpCodes) {
+    HttpCodes[HttpCodes["OK"] = 200] = "OK";
+    HttpCodes[HttpCodes["MultipleChoices"] = 300] = "MultipleChoices";
+    HttpCodes[HttpCodes["MovedPermanently"] = 301] = "MovedPermanently";
+    HttpCodes[HttpCodes["ResourceMoved"] = 302] = "ResourceMoved";
+    HttpCodes[HttpCodes["SeeOther"] = 303] = "SeeOther";
+    HttpCodes[HttpCodes["NotModified"] = 304] = "NotModified";
+    HttpCodes[HttpCodes["UseProxy"] = 305] = "UseProxy";
+    HttpCodes[HttpCodes["SwitchProxy"] = 306] = "SwitchProxy";
+    HttpCodes[HttpCodes["TemporaryRedirect"] = 307] = "TemporaryRedirect";
+    HttpCodes[HttpCodes["PermanentRedirect"] = 308] = "PermanentRedirect";
+    HttpCodes[HttpCodes["BadRequest"] = 400] = "BadRequest";
+    HttpCodes[HttpCodes["Unauthorized"] = 401] = "Unauthorized";
+    HttpCodes[HttpCodes["PaymentRequired"] = 402] = "PaymentRequired";
+    HttpCodes[HttpCodes["Forbidden"] = 403] = "Forbidden";
+    HttpCodes[HttpCodes["NotFound"] = 404] = "NotFound";
+    HttpCodes[HttpCodes["MethodNotAllowed"] = 405] = "MethodNotAllowed";
+    HttpCodes[HttpCodes["NotAcceptable"] = 406] = "NotAcceptable";
+    HttpCodes[HttpCodes["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
+    HttpCodes[HttpCodes["RequestTimeout"] = 408] = "RequestTimeout";
+    HttpCodes[HttpCodes["Conflict"] = 409] = "Conflict";
+    HttpCodes[HttpCodes["Gone"] = 410] = "Gone";
+    HttpCodes[HttpCodes["TooManyRequests"] = 429] = "TooManyRequests";
+    HttpCodes[HttpCodes["InternalServerError"] = 500] = "InternalServerError";
+    HttpCodes[HttpCodes["NotImplemented"] = 501] = "NotImplemented";
+    HttpCodes[HttpCodes["BadGateway"] = 502] = "BadGateway";
+    HttpCodes[HttpCodes["ServiceUnavailable"] = 503] = "ServiceUnavailable";
+    HttpCodes[HttpCodes["GatewayTimeout"] = 504] = "GatewayTimeout";
+})(HttpCodes = exports.HttpCodes || (exports.HttpCodes = {}));
+var Headers;
+(function (Headers) {
+    Headers["Accept"] = "accept";
+    Headers["ContentType"] = "content-type";
+})(Headers = exports.Headers || (exports.Headers = {}));
+var MediaTypes;
+(function (MediaTypes) {
+    MediaTypes["ApplicationJson"] = "application/json";
+})(MediaTypes = exports.MediaTypes || (exports.MediaTypes = {}));
+/**
+ * Returns the proxy URL, depending upon the supplied url and proxy environment variables.
+ * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
+ */
+function getProxyUrl(serverUrl) {
+    let proxyUrl = pm.getProxyUrl(new URL(serverUrl));
+    return proxyUrl ? proxyUrl.href : '';
+}
+exports.getProxyUrl = getProxyUrl;
+const HttpRedirectCodes = [
+    HttpCodes.MovedPermanently,
+    HttpCodes.ResourceMoved,
+    HttpCodes.SeeOther,
+    HttpCodes.TemporaryRedirect,
+    HttpCodes.PermanentRedirect
+];
+const HttpResponseRetryCodes = [
+    HttpCodes.BadGateway,
+    HttpCodes.ServiceUnavailable,
+    HttpCodes.GatewayTimeout
+];
+const RetryableHttpVerbs = ['OPTIONS', 'GET', 'DELETE', 'HEAD'];
+const ExponentialBackoffCeiling = 10;
+const ExponentialBackoffTimeSlice = 5;
+class HttpClientError extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.name = 'HttpClientError';
+        this.statusCode = statusCode;
+        Object.setPrototypeOf(this, HttpClientError.prototype);
+    }
+}
+exports.HttpClientError = HttpClientError;
+class HttpClientResponse {
+    constructor(message) {
+        this.message = message;
+    }
+    readBody() {
+        return new Promise(async (resolve, reject) => {
+            let output = Buffer.alloc(0);
+            this.message.on('data', (chunk) => {
+                output = Buffer.concat([output, chunk]);
+            });
+            this.message.on('end', () => {
+                resolve(output.toString());
+            });
+        });
+    }
+}
+exports.HttpClientResponse = HttpClientResponse;
+function isHttps(requestUrl) {
+    let parsedUrl = new URL(requestUrl);
+    return parsedUrl.protocol === 'https:';
+}
+exports.isHttps = isHttps;
+class HttpClient {
+    constructor(userAgent, handlers, requestOptions) {
+        this._ignoreSslError = false;
+        this._allowRedirects = true;
+        this._allowRedirectDowngrade = false;
+        this._maxRedirects = 50;
+        this._allowRetries = false;
+        this._maxRetries = 1;
+        this._keepAlive = false;
+        this._disposed = false;
+        this.userAgent = userAgent;
+        this.handlers = handlers || [];
+        this.requestOptions = requestOptions;
+        if (requestOptions) {
+            if (requestOptions.ignoreSslError != null) {
+                this._ignoreSslError = requestOptions.ignoreSslError;
+            }
+            this._socketTimeout = requestOptions.socketTimeout;
+            if (requestOptions.allowRedirects != null) {
+                this._allowRedirects = requestOptions.allowRedirects;
+            }
+            if (requestOptions.allowRedirectDowngrade != null) {
+                this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade;
+            }
+            if (requestOptions.maxRedirects != null) {
+                this._maxRedirects = Math.max(requestOptions.maxRedirects, 0);
+            }
+            if (requestOptions.keepAlive != null) {
+                this._keepAlive = requestOptions.keepAlive;
+            }
+            if (requestOptions.allowRetries != null) {
+                this._allowRetries = requestOptions.allowRetries;
+            }
+            if (requestOptions.maxRetries != null) {
+                this._maxRetries = requestOptions.maxRetries;
+            }
+        }
+    }
+    options(requestUrl, additionalHeaders) {
+        return this.request('OPTIONS', requestUrl, null, additionalHeaders || {});
+    }
+    get(requestUrl, additionalHeaders) {
+        return this.request('GET', requestUrl, null, additionalHeaders || {});
+    }
+    del(requestUrl, additionalHeaders) {
+        return this.request('DELETE', requestUrl, null, additionalHeaders || {});
+    }
+    post(requestUrl, data, additionalHeaders) {
+        return this.request('POST', requestUrl, data, additionalHeaders || {});
+    }
+    patch(requestUrl, data, additionalHeaders) {
+        return this.request('PATCH', requestUrl, data, additionalHeaders || {});
+    }
+    put(requestUrl, data, additionalHeaders) {
+        return this.request('PUT', requestUrl, data, additionalHeaders || {});
+    }
+    head(requestUrl, additionalHeaders) {
+        return this.request('HEAD', requestUrl, null, additionalHeaders || {});
+    }
+    sendStream(verb, requestUrl, stream, additionalHeaders) {
+        return this.request(verb, requestUrl, stream, additionalHeaders);
+    }
+    /**
+     * Gets a typed object from an endpoint
+     * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
+     */
+    async getJson(requestUrl, additionalHeaders = {}) {
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        let res = await this.get(requestUrl, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
+    }
+    async postJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.post(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
+    }
+    async putJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.put(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
+    }
+    async patchJson(requestUrl, obj, additionalHeaders = {}) {
+        let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+        let res = await this.patch(requestUrl, data, additionalHeaders);
+        return this._processResponse(res, this.requestOptions);
+    }
+    /**
+     * Makes a raw http request.
+     * All other methods such as get, post, patch, and request ultimately call this.
+     * Prefer get, del, post and patch
+     */
+    async request(verb, requestUrl, data, headers) {
+        if (this._disposed) {
+            throw new Error('Client has already been disposed.');
+        }
+        let parsedUrl = new URL(requestUrl);
+        let info = this._prepareRequest(verb, parsedUrl, headers);
+        // Only perform retries on reads since writes may not be idempotent.
+        let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1
+            ? this._maxRetries + 1
+            : 1;
+        let numTries = 0;
+        let response;
+        while (numTries < maxTries) {
+            response = await this.requestRaw(info, data);
+            // Check if it's an authentication challenge
+            if (response &&
+                response.message &&
+                response.message.statusCode === HttpCodes.Unauthorized) {
+                let authenticationHandler;
+                for (let i = 0; i < this.handlers.length; i++) {
+                    if (this.handlers[i].canHandleAuthentication(response)) {
+                        authenticationHandler = this.handlers[i];
+                        break;
+                    }
+                }
+                if (authenticationHandler) {
+                    return authenticationHandler.handleAuthentication(this, info, data);
+                }
+                else {
+                    // We have received an unauthorized response but have no handlers to handle it.
+                    // Let the response return to the caller.
+                    return response;
+                }
+            }
+            let redirectsRemaining = this._maxRedirects;
+            while (HttpRedirectCodes.indexOf(response.message.statusCode) != -1 &&
+                this._allowRedirects &&
+                redirectsRemaining > 0) {
+                const redirectUrl = response.message.headers['location'];
+                if (!redirectUrl) {
+                    // if there's no location to redirect to, we won't
+                    break;
+                }
+                let parsedRedirectUrl = new URL(redirectUrl);
+                if (parsedUrl.protocol == 'https:' &&
+                    parsedUrl.protocol != parsedRedirectUrl.protocol &&
+                    !this._allowRedirectDowngrade) {
+                    throw new Error('Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.');
+                }
+                // we need to finish reading the response before reassigning response
+                // which will leak the open socket.
+                await response.readBody();
+                // strip authorization header if redirected to a different hostname
+                if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
+                    for (let header in headers) {
+                        // header names are case insensitive
+                        if (header.toLowerCase() === 'authorization') {
+                            delete headers[header];
+                        }
+                    }
+                }
+                // let's make the request with the new redirectUrl
+                info = this._prepareRequest(verb, parsedRedirectUrl, headers);
+                response = await this.requestRaw(info, data);
+                redirectsRemaining--;
+            }
+            if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
+                // If not a retry code, return immediately instead of retrying
+                return response;
+            }
+            numTries += 1;
+            if (numTries < maxTries) {
+                await response.readBody();
+                await this._performExponentialBackoff(numTries);
+            }
+        }
+        return response;
+    }
+    /**
+     * Needs to be called if keepAlive is set to true in request options.
+     */
+    dispose() {
+        if (this._agent) {
+            this._agent.destroy();
+        }
+        this._disposed = true;
+    }
+    /**
+     * Raw request.
+     * @param info
+     * @param data
+     */
+    requestRaw(info, data) {
+        return new Promise((resolve, reject) => {
+            let callbackForResult = function (err, res) {
+                if (err) {
+                    reject(err);
+                }
+                resolve(res);
+            };
+            this.requestRawWithCallback(info, data, callbackForResult);
+        });
+    }
+    /**
+     * Raw request with callback.
+     * @param info
+     * @param data
+     * @param onResult
+     */
+    requestRawWithCallback(info, data, onResult) {
+        let socket;
+        if (typeof data === 'string') {
+            info.options.headers['Content-Length'] = Buffer.byteLength(data, 'utf8');
+        }
+        let callbackCalled = false;
+        let handleResult = (err, res) => {
+            if (!callbackCalled) {
+                callbackCalled = true;
+                onResult(err, res);
+            }
+        };
+        let req = info.httpModule.request(info.options, (msg) => {
+            let res = new HttpClientResponse(msg);
+            handleResult(null, res);
+        });
+        req.on('socket', sock => {
+            socket = sock;
+        });
+        // If we ever get disconnected, we want the socket to timeout eventually
+        req.setTimeout(this._socketTimeout || 3 * 60000, () => {
+            if (socket) {
+                socket.end();
+            }
+            handleResult(new Error('Request timeout: ' + info.options.path), null);
+        });
+        req.on('error', function (err) {
+            // err has statusCode property
+            // res should have headers
+            handleResult(err, null);
+        });
+        if (data && typeof data === 'string') {
+            req.write(data, 'utf8');
+        }
+        if (data && typeof data !== 'string') {
+            data.on('close', function () {
+                req.end();
+            });
+            data.pipe(req);
+        }
+        else {
+            req.end();
+        }
+    }
+    /**
+     * Gets an http agent. This function is useful when you need an http agent that handles
+     * routing through a proxy server - depending upon the url and proxy environment variables.
+     * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
+     */
+    getAgent(serverUrl) {
+        let parsedUrl = new URL(serverUrl);
+        return this._getAgent(parsedUrl);
+    }
+    _prepareRequest(method, requestUrl, headers) {
+        const info = {};
+        info.parsedUrl = requestUrl;
+        const usingSsl = info.parsedUrl.protocol === 'https:';
+        info.httpModule = usingSsl ? https : http;
+        const defaultPort = usingSsl ? 443 : 80;
+        info.options = {};
+        info.options.host = info.parsedUrl.hostname;
+        info.options.port = info.parsedUrl.port
+            ? parseInt(info.parsedUrl.port)
+            : defaultPort;
+        info.options.path =
+            (info.parsedUrl.pathname || '') + (info.parsedUrl.search || '');
+        info.options.method = method;
+        info.options.headers = this._mergeHeaders(headers);
+        if (this.userAgent != null) {
+            info.options.headers['user-agent'] = this.userAgent;
+        }
+        info.options.agent = this._getAgent(info.parsedUrl);
+        // gives handlers an opportunity to participate
+        if (this.handlers) {
+            this.handlers.forEach(handler => {
+                handler.prepareRequest(info.options);
+            });
+        }
+        return info;
+    }
+    _mergeHeaders(headers) {
+        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
+        if (this.requestOptions && this.requestOptions.headers) {
+            return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers));
+        }
+        return lowercaseKeys(headers || {});
+    }
+    _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
+        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
+        let clientHeader;
+        if (this.requestOptions && this.requestOptions.headers) {
+            clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
+        }
+        return additionalHeaders[header] || clientHeader || _default;
+    }
+    _getAgent(parsedUrl) {
+        let agent;
+        let proxyUrl = pm.getProxyUrl(parsedUrl);
+        let useProxy = proxyUrl && proxyUrl.hostname;
+        if (this._keepAlive && useProxy) {
+            agent = this._proxyAgent;
+        }
+        if (this._keepAlive && !useProxy) {
+            agent = this._agent;
+        }
+        // if agent is already assigned use that agent.
+        if (!!agent) {
+            return agent;
+        }
+        const usingSsl = parsedUrl.protocol === 'https:';
+        let maxSockets = 100;
+        if (!!this.requestOptions) {
+            maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
+        }
+        if (useProxy) {
+            // If using proxy, need tunnel
+            if (!tunnel) {
+                tunnel = __nccwpck_require__(4294);
+            }
+            const agentOptions = {
+                maxSockets: maxSockets,
+                keepAlive: this._keepAlive,
+                proxy: {
+                    ...((proxyUrl.username || proxyUrl.password) && {
+                        proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
+                    }),
+                    host: proxyUrl.hostname,
+                    port: proxyUrl.port
+                }
+            };
+            let tunnelAgent;
+            const overHttps = proxyUrl.protocol === 'https:';
+            if (usingSsl) {
+                tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp;
+            }
+            else {
+                tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp;
+            }
+            agent = tunnelAgent(agentOptions);
+            this._proxyAgent = agent;
+        }
+        // if reusing agent across request and tunneling agent isn't assigned create a new agent
+        if (this._keepAlive && !agent) {
+            const options = { keepAlive: this._keepAlive, maxSockets: maxSockets };
+            agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
+            this._agent = agent;
+        }
+        // if not using private agent and tunnel agent isn't setup then use global agent
+        if (!agent) {
+            agent = usingSsl ? https.globalAgent : http.globalAgent;
+        }
+        if (usingSsl && this._ignoreSslError) {
+            // we don't want to set NODE_TLS_REJECT_UNAUTHORIZED=0 since that will affect request for entire process
+            // http.RequestOptions doesn't expose a way to modify RequestOptions.agent.options
+            // we have to cast it to any and change it directly
+            agent.options = Object.assign(agent.options || {}, {
+                rejectUnauthorized: false
+            });
+        }
+        return agent;
+    }
+    _performExponentialBackoff(retryNumber) {
+        retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
+        const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
+        return new Promise(resolve => setTimeout(() => resolve(), ms));
+    }
+    static dateTimeDeserializer(key, value) {
+        if (typeof value === 'string') {
+            let a = new Date(value);
+            if (!isNaN(a.valueOf())) {
+                return a;
+            }
+        }
+        return value;
+    }
+    async _processResponse(res, options) {
+        return new Promise(async (resolve, reject) => {
+            const statusCode = res.message.statusCode;
+            const response = {
+                statusCode: statusCode,
+                result: null,
+                headers: {}
+            };
+            // not found leads to null obj returned
+            if (statusCode == HttpCodes.NotFound) {
+                resolve(response);
+            }
+            let obj;
+            let contents;
+            // get the result from the body
+            try {
+                contents = await res.readBody();
+                if (contents && contents.length > 0) {
+                    if (options && options.deserializeDates) {
+                        obj = JSON.parse(contents, HttpClient.dateTimeDeserializer);
+                    }
+                    else {
+                        obj = JSON.parse(contents);
+                    }
+                    response.result = obj;
+                }
+                response.headers = res.message.headers;
+            }
+            catch (err) {
+                // Invalid resource (contents not json);  leaving result obj null
+            }
+            // note that 3xx redirects are handled by the http layer.
+            if (statusCode > 299) {
+                let msg;
+                // if exception/error in body, attempt to get better error
+                if (obj && obj.message) {
+                    msg = obj.message;
+                }
+                else if (contents && contents.length > 0) {
+                    // it may be the case that the exception is in the body message as string
+                    msg = contents;
+                }
+                else {
+                    msg = 'Failed request: (' + statusCode + ')';
+                }
+                let err = new HttpClientError(msg, statusCode);
+                err.result = response.result;
+                reject(err);
+            }
+            else {
+                resolve(response);
+            }
+        });
+    }
+}
+exports.HttpClient = HttpClient;
+
+
+/***/ }),
+
+/***/ 6443:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+function getProxyUrl(reqUrl) {
+    let usingSsl = reqUrl.protocol === 'https:';
+    let proxyUrl;
+    if (checkBypass(reqUrl)) {
+        return proxyUrl;
+    }
+    let proxyVar;
+    if (usingSsl) {
+        proxyVar = process.env['https_proxy'] || process.env['HTTPS_PROXY'];
+    }
+    else {
+        proxyVar = process.env['http_proxy'] || process.env['HTTP_PROXY'];
+    }
+    if (proxyVar) {
+        proxyUrl = new URL(proxyVar);
+    }
+    return proxyUrl;
+}
+exports.getProxyUrl = getProxyUrl;
+function checkBypass(reqUrl) {
+    if (!reqUrl.hostname) {
+        return false;
+    }
+    let noProxy = process.env['no_proxy'] || process.env['NO_PROXY'] || '';
+    if (!noProxy) {
+        return false;
+    }
+    // Determine the request port
+    let reqPort;
+    if (reqUrl.port) {
+        reqPort = Number(reqUrl.port);
+    }
+    else if (reqUrl.protocol === 'http:') {
+        reqPort = 80;
+    }
+    else if (reqUrl.protocol === 'https:') {
+        reqPort = 443;
+    }
+    // Format the request hostname and hostname with port
+    let upperReqHosts = [reqUrl.hostname.toUpperCase()];
+    if (typeof reqPort === 'number') {
+        upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
+    }
+    // Compare request host against noproxy
+    for (let upperNoProxyItem of noProxy
+        .split(',')
+        .map(x => x.trim().toUpperCase())
+        .filter(x => x)) {
+        if (upperReqHosts.some(x => x === upperNoProxyItem)) {
+            return true;
+        }
+    }
+    return false;
+}
+exports.checkBypass = checkBypass;
+
+
+/***/ }),
+
 /***/ 5211:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -927,11 +1810,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.codeFrameColumns = codeFrameColumns;
 exports.default = _default;
 
-var _highlight = _interopRequireWildcard(__webpack_require__(6860));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+var _highlight = __nccwpck_require__(6860);
 
 let deprecationWarningShown = false;
 
@@ -1026,10 +1905,10 @@ function codeFrameColumns(rawLines, loc, opts = {}) {
   const hasColumns = loc.start && typeof loc.start.column === "number";
   const numberMaxWidth = String(end).length;
   const highlightedLines = highlighted ? (0, _highlight.default)(rawLines, opts) : rawLines;
-  let frame = highlightedLines.split(NEWLINE).slice(start, end).map((line, index) => {
+  let frame = highlightedLines.split(NEWLINE, end).slice(start, end).map((line, index) => {
     const number = start + 1 + index;
     const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
-    const gutter = ` ${paddedNumber} | `;
+    const gutter = ` ${paddedNumber} |`;
     const hasMarker = markerLines[number];
     const lastMarkerLine = !markerLines[number + 1];
 
@@ -1039,16 +1918,16 @@ function codeFrameColumns(rawLines, loc, opts = {}) {
       if (Array.isArray(hasMarker)) {
         const markerSpacing = line.slice(0, Math.max(hasMarker[0] - 1, 0)).replace(/[^\t]/g, " ");
         const numberOfMarkers = hasMarker[1] || 1;
-        markerLine = ["\n ", maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")), markerSpacing, maybeHighlight(defs.marker, "^").repeat(numberOfMarkers)].join("");
+        markerLine = ["\n ", maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")), " ", markerSpacing, maybeHighlight(defs.marker, "^").repeat(numberOfMarkers)].join("");
 
         if (lastMarkerLine && opts.message) {
           markerLine += " " + maybeHighlight(defs.message, opts.message);
         }
       }
 
-      return [maybeHighlight(defs.marker, ">"), maybeHighlight(defs.gutter, gutter), line, markerLine].join("");
+      return [maybeHighlight(defs.marker, ">"), maybeHighlight(defs.gutter, gutter), line.length > 0 ? ` ${line}` : "", markerLine].join("");
     } else {
-      return ` ${maybeHighlight(defs.gutter, gutter)}${line}`;
+      return ` ${maybeHighlight(defs.gutter, gutter)}${line.length > 0 ? ` ${line}` : ""}`;
     }
   }).join("\n");
 
@@ -1101,13 +1980,13 @@ Object.defineProperty(exports, "__esModule", ({
 exports.isIdentifierStart = isIdentifierStart;
 exports.isIdentifierChar = isIdentifierChar;
 exports.isIdentifierName = isIdentifierName;
-let nonASCIIidentifierStartChars = "\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u037f\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u052f\u0531-\u0556\u0559\u0560-\u0588\u05d0-\u05ea\u05ef-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u0860-\u086a\u08a0-\u08b4\u08b6-\u08c7\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0980\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u09fc\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0af9\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c39\u0c3d\u0c58-\u0c5a\u0c60\u0c61\u0c80\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d04-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d54-\u0d56\u0d5f-\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e86-\u0e8a\u0e8c-\u0ea3\u0ea5\u0ea7-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f5\u13f8-\u13fd\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f8\u1700-\u170c\u170e-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1878\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191e\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19b0-\u19c9\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4b\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1c80-\u1c88\u1c90-\u1cba\u1cbd-\u1cbf\u1ce9-\u1cec\u1cee-\u1cf3\u1cf5\u1cf6\u1cfa\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2118-\u211d\u2124\u2126\u2128\u212a-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309b-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312f\u3131-\u318e\u31a0-\u31bf\u31f0-\u31ff\u3400-\u4dbf\u4e00-\u9ffc\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua69d\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua7bf\ua7c2-\ua7ca\ua7f5-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua8fd\ua8fe\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\ua9e0-\ua9e4\ua9e6-\ua9ef\ua9fa-\ua9fe\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa7e-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uab30-\uab5a\uab5c-\uab69\uab70-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc";
-let nonASCIIidentifierChars = "\u200c\u200d\xb7\u0300-\u036f\u0387\u0483-\u0487\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7\u0610-\u061a\u064b-\u0669\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7\u06e8\u06ea-\u06ed\u06f0-\u06f9\u0711\u0730-\u074a\u07a6-\u07b0\u07c0-\u07c9\u07eb-\u07f3\u07fd\u0816-\u0819\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0859-\u085b\u08d3-\u08e1\u08e3-\u0903\u093a-\u093c\u093e-\u094f\u0951-\u0957\u0962\u0963\u0966-\u096f\u0981-\u0983\u09bc\u09be-\u09c4\u09c7\u09c8\u09cb-\u09cd\u09d7\u09e2\u09e3\u09e6-\u09ef\u09fe\u0a01-\u0a03\u0a3c\u0a3e-\u0a42\u0a47\u0a48\u0a4b-\u0a4d\u0a51\u0a66-\u0a71\u0a75\u0a81-\u0a83\u0abc\u0abe-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acd\u0ae2\u0ae3\u0ae6-\u0aef\u0afa-\u0aff\u0b01-\u0b03\u0b3c\u0b3e-\u0b44\u0b47\u0b48\u0b4b-\u0b4d\u0b55-\u0b57\u0b62\u0b63\u0b66-\u0b6f\u0b82\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd7\u0be6-\u0bef\u0c00-\u0c04\u0c3e-\u0c44\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c62\u0c63\u0c66-\u0c6f\u0c81-\u0c83\u0cbc\u0cbe-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5\u0cd6\u0ce2\u0ce3\u0ce6-\u0cef\u0d00-\u0d03\u0d3b\u0d3c\u0d3e-\u0d44\u0d46-\u0d48\u0d4a-\u0d4d\u0d57\u0d62\u0d63\u0d66-\u0d6f\u0d81-\u0d83\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0de6-\u0def\u0df2\u0df3\u0e31\u0e34-\u0e3a\u0e47-\u0e4e\u0e50-\u0e59\u0eb1\u0eb4-\u0ebc\u0ec8-\u0ecd\u0ed0-\u0ed9\u0f18\u0f19\u0f20-\u0f29\u0f35\u0f37\u0f39\u0f3e\u0f3f\u0f71-\u0f84\u0f86\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u102b-\u103e\u1040-\u1049\u1056-\u1059\u105e-\u1060\u1062-\u1064\u1067-\u106d\u1071-\u1074\u1082-\u108d\u108f-\u109d\u135d-\u135f\u1369-\u1371\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17b4-\u17d3\u17dd\u17e0-\u17e9\u180b-\u180d\u1810-\u1819\u18a9\u1920-\u192b\u1930-\u193b\u1946-\u194f\u19d0-\u19da\u1a17-\u1a1b\u1a55-\u1a5e\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1ab0-\u1abd\u1abf\u1ac0\u1b00-\u1b04\u1b34-\u1b44\u1b50-\u1b59\u1b6b-\u1b73\u1b80-\u1b82\u1ba1-\u1bad\u1bb0-\u1bb9\u1be6-\u1bf3\u1c24-\u1c37\u1c40-\u1c49\u1c50-\u1c59\u1cd0-\u1cd2\u1cd4-\u1ce8\u1ced\u1cf4\u1cf7-\u1cf9\u1dc0-\u1df9\u1dfb-\u1dff\u203f\u2040\u2054\u20d0-\u20dc\u20e1\u20e5-\u20f0\u2cef-\u2cf1\u2d7f\u2de0-\u2dff\u302a-\u302f\u3099\u309a\ua620-\ua629\ua66f\ua674-\ua67d\ua69e\ua69f\ua6f0\ua6f1\ua802\ua806\ua80b\ua823-\ua827\ua82c\ua880\ua881\ua8b4-\ua8c5\ua8d0-\ua8d9\ua8e0-\ua8f1\ua8ff-\ua909\ua926-\ua92d\ua947-\ua953\ua980-\ua983\ua9b3-\ua9c0\ua9d0-\ua9d9\ua9e5\ua9f0-\ua9f9\uaa29-\uaa36\uaa43\uaa4c\uaa4d\uaa50-\uaa59\uaa7b-\uaa7d\uaab0\uaab2-\uaab4\uaab7\uaab8\uaabe\uaabf\uaac1\uaaeb-\uaaef\uaaf5\uaaf6\uabe3-\uabea\uabec\uabed\uabf0-\uabf9\ufb1e\ufe00-\ufe0f\ufe20-\ufe2f\ufe33\ufe34\ufe4d-\ufe4f\uff10-\uff19\uff3f";
+let nonASCIIidentifierStartChars = "\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u037f\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u052f\u0531-\u0556\u0559\u0560-\u0588\u05d0-\u05ea\u05ef-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u0860-\u086a\u0870-\u0887\u0889-\u088e\u08a0-\u08c9\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0980\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u09fc\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0af9\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c39\u0c3d\u0c58-\u0c5a\u0c5d\u0c60\u0c61\u0c80\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cdd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d04-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d54-\u0d56\u0d5f-\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e86-\u0e8a\u0e8c-\u0ea3\u0ea5\u0ea7-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f5\u13f8-\u13fd\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f8\u1700-\u1711\u171f-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1878\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191e\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19b0-\u19c9\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4c\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1c80-\u1c88\u1c90-\u1cba\u1cbd-\u1cbf\u1ce9-\u1cec\u1cee-\u1cf3\u1cf5\u1cf6\u1cfa\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2118-\u211d\u2124\u2126\u2128\u212a-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309b-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312f\u3131-\u318e\u31a0-\u31bf\u31f0-\u31ff\u3400-\u4dbf\u4e00-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua69d\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua7ca\ua7d0\ua7d1\ua7d3\ua7d5-\ua7d9\ua7f2-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua8fd\ua8fe\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\ua9e0-\ua9e4\ua9e6-\ua9ef\ua9fa-\ua9fe\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa7e-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uab30-\uab5a\uab5c-\uab69\uab70-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc";
+let nonASCIIidentifierChars = "\u200c\u200d\xb7\u0300-\u036f\u0387\u0483-\u0487\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7\u0610-\u061a\u064b-\u0669\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7\u06e8\u06ea-\u06ed\u06f0-\u06f9\u0711\u0730-\u074a\u07a6-\u07b0\u07c0-\u07c9\u07eb-\u07f3\u07fd\u0816-\u0819\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0859-\u085b\u0898-\u089f\u08ca-\u08e1\u08e3-\u0903\u093a-\u093c\u093e-\u094f\u0951-\u0957\u0962\u0963\u0966-\u096f\u0981-\u0983\u09bc\u09be-\u09c4\u09c7\u09c8\u09cb-\u09cd\u09d7\u09e2\u09e3\u09e6-\u09ef\u09fe\u0a01-\u0a03\u0a3c\u0a3e-\u0a42\u0a47\u0a48\u0a4b-\u0a4d\u0a51\u0a66-\u0a71\u0a75\u0a81-\u0a83\u0abc\u0abe-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acd\u0ae2\u0ae3\u0ae6-\u0aef\u0afa-\u0aff\u0b01-\u0b03\u0b3c\u0b3e-\u0b44\u0b47\u0b48\u0b4b-\u0b4d\u0b55-\u0b57\u0b62\u0b63\u0b66-\u0b6f\u0b82\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd7\u0be6-\u0bef\u0c00-\u0c04\u0c3c\u0c3e-\u0c44\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c62\u0c63\u0c66-\u0c6f\u0c81-\u0c83\u0cbc\u0cbe-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5\u0cd6\u0ce2\u0ce3\u0ce6-\u0cef\u0d00-\u0d03\u0d3b\u0d3c\u0d3e-\u0d44\u0d46-\u0d48\u0d4a-\u0d4d\u0d57\u0d62\u0d63\u0d66-\u0d6f\u0d81-\u0d83\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0de6-\u0def\u0df2\u0df3\u0e31\u0e34-\u0e3a\u0e47-\u0e4e\u0e50-\u0e59\u0eb1\u0eb4-\u0ebc\u0ec8-\u0ecd\u0ed0-\u0ed9\u0f18\u0f19\u0f20-\u0f29\u0f35\u0f37\u0f39\u0f3e\u0f3f\u0f71-\u0f84\u0f86\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u102b-\u103e\u1040-\u1049\u1056-\u1059\u105e-\u1060\u1062-\u1064\u1067-\u106d\u1071-\u1074\u1082-\u108d\u108f-\u109d\u135d-\u135f\u1369-\u1371\u1712-\u1715\u1732-\u1734\u1752\u1753\u1772\u1773\u17b4-\u17d3\u17dd\u17e0-\u17e9\u180b-\u180d\u180f-\u1819\u18a9\u1920-\u192b\u1930-\u193b\u1946-\u194f\u19d0-\u19da\u1a17-\u1a1b\u1a55-\u1a5e\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1ab0-\u1abd\u1abf-\u1ace\u1b00-\u1b04\u1b34-\u1b44\u1b50-\u1b59\u1b6b-\u1b73\u1b80-\u1b82\u1ba1-\u1bad\u1bb0-\u1bb9\u1be6-\u1bf3\u1c24-\u1c37\u1c40-\u1c49\u1c50-\u1c59\u1cd0-\u1cd2\u1cd4-\u1ce8\u1ced\u1cf4\u1cf7-\u1cf9\u1dc0-\u1dff\u203f\u2040\u2054\u20d0-\u20dc\u20e1\u20e5-\u20f0\u2cef-\u2cf1\u2d7f\u2de0-\u2dff\u302a-\u302f\u3099\u309a\ua620-\ua629\ua66f\ua674-\ua67d\ua69e\ua69f\ua6f0\ua6f1\ua802\ua806\ua80b\ua823-\ua827\ua82c\ua880\ua881\ua8b4-\ua8c5\ua8d0-\ua8d9\ua8e0-\ua8f1\ua8ff-\ua909\ua926-\ua92d\ua947-\ua953\ua980-\ua983\ua9b3-\ua9c0\ua9d0-\ua9d9\ua9e5\ua9f0-\ua9f9\uaa29-\uaa36\uaa43\uaa4c\uaa4d\uaa50-\uaa59\uaa7b-\uaa7d\uaab0\uaab2-\uaab4\uaab7\uaab8\uaabe\uaabf\uaac1\uaaeb-\uaaef\uaaf5\uaaf6\uabe3-\uabea\uabec\uabed\uabf0-\uabf9\ufb1e\ufe00-\ufe0f\ufe20-\ufe2f\ufe33\ufe34\ufe4d-\ufe4f\uff10-\uff19\uff3f";
 const nonASCIIidentifierStart = new RegExp("[" + nonASCIIidentifierStartChars + "]");
 const nonASCIIidentifier = new RegExp("[" + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "]");
 nonASCIIidentifierStartChars = nonASCIIidentifierChars = null;
-const astralIdentifierStartCodes = [0, 11, 2, 25, 2, 18, 2, 1, 2, 14, 3, 13, 35, 122, 70, 52, 268, 28, 4, 48, 48, 31, 14, 29, 6, 37, 11, 29, 3, 35, 5, 7, 2, 4, 43, 157, 19, 35, 5, 35, 5, 39, 9, 51, 157, 310, 10, 21, 11, 7, 153, 5, 3, 0, 2, 43, 2, 1, 4, 0, 3, 22, 11, 22, 10, 30, 66, 18, 2, 1, 11, 21, 11, 25, 71, 55, 7, 1, 65, 0, 16, 3, 2, 2, 2, 28, 43, 28, 4, 28, 36, 7, 2, 27, 28, 53, 11, 21, 11, 18, 14, 17, 111, 72, 56, 50, 14, 50, 14, 35, 349, 41, 7, 1, 79, 28, 11, 0, 9, 21, 107, 20, 28, 22, 13, 52, 76, 44, 33, 24, 27, 35, 30, 0, 3, 0, 9, 34, 4, 0, 13, 47, 15, 3, 22, 0, 2, 0, 36, 17, 2, 24, 85, 6, 2, 0, 2, 3, 2, 14, 2, 9, 8, 46, 39, 7, 3, 1, 3, 21, 2, 6, 2, 1, 2, 4, 4, 0, 19, 0, 13, 4, 159, 52, 19, 3, 21, 2, 31, 47, 21, 1, 2, 0, 185, 46, 42, 3, 37, 47, 21, 0, 60, 42, 14, 0, 72, 26, 230, 43, 117, 63, 32, 7, 3, 0, 3, 7, 2, 1, 2, 23, 16, 0, 2, 0, 95, 7, 3, 38, 17, 0, 2, 0, 29, 0, 11, 39, 8, 0, 22, 0, 12, 45, 20, 0, 35, 56, 264, 8, 2, 36, 18, 0, 50, 29, 113, 6, 2, 1, 2, 37, 22, 0, 26, 5, 2, 1, 2, 31, 15, 0, 328, 18, 190, 0, 80, 921, 103, 110, 18, 195, 2749, 1070, 4050, 582, 8634, 568, 8, 30, 114, 29, 19, 47, 17, 3, 32, 20, 6, 18, 689, 63, 129, 74, 6, 0, 67, 12, 65, 1, 2, 0, 29, 6135, 9, 1237, 43, 8, 8952, 286, 50, 2, 18, 3, 9, 395, 2309, 106, 6, 12, 4, 8, 8, 9, 5991, 84, 2, 70, 2, 1, 3, 0, 3, 1, 3, 3, 2, 11, 2, 0, 2, 6, 2, 64, 2, 3, 3, 7, 2, 6, 2, 27, 2, 3, 2, 4, 2, 0, 4, 6, 2, 339, 3, 24, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 7, 2357, 44, 11, 6, 17, 0, 370, 43, 1301, 196, 60, 67, 8, 0, 1205, 3, 2, 26, 2, 1, 2, 0, 3, 0, 2, 9, 2, 3, 2, 0, 2, 0, 7, 0, 5, 0, 2, 0, 2, 0, 2, 2, 2, 1, 2, 0, 3, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1, 2, 0, 3, 3, 2, 6, 2, 3, 2, 3, 2, 0, 2, 9, 2, 16, 6, 2, 2, 4, 2, 16, 4421, 42717, 35, 4148, 12, 221, 3, 5761, 15, 7472, 3104, 541, 1507, 4938];
-const astralIdentifierCodes = [509, 0, 227, 0, 150, 4, 294, 9, 1368, 2, 2, 1, 6, 3, 41, 2, 5, 0, 166, 1, 574, 3, 9, 9, 370, 1, 154, 10, 176, 2, 54, 14, 32, 9, 16, 3, 46, 10, 54, 9, 7, 2, 37, 13, 2, 9, 6, 1, 45, 0, 13, 2, 49, 13, 9, 3, 2, 11, 83, 11, 7, 0, 161, 11, 6, 9, 7, 3, 56, 1, 2, 6, 3, 1, 3, 2, 10, 0, 11, 1, 3, 6, 4, 4, 193, 17, 10, 9, 5, 0, 82, 19, 13, 9, 214, 6, 3, 8, 28, 1, 83, 16, 16, 9, 82, 12, 9, 9, 84, 14, 5, 9, 243, 14, 166, 9, 71, 5, 2, 1, 3, 3, 2, 0, 2, 1, 13, 9, 120, 6, 3, 6, 4, 0, 29, 9, 41, 6, 2, 3, 9, 0, 10, 10, 47, 15, 406, 7, 2, 7, 17, 9, 57, 21, 2, 13, 123, 5, 4, 0, 2, 1, 2, 6, 2, 0, 9, 9, 49, 4, 2, 1, 2, 4, 9, 9, 330, 3, 19306, 9, 135, 4, 60, 6, 26, 9, 1014, 0, 2, 54, 8, 3, 82, 0, 12, 1, 19628, 1, 5319, 4, 4, 5, 9, 7, 3, 6, 31, 3, 149, 2, 1418, 49, 513, 54, 5, 49, 9, 0, 15, 0, 23, 4, 2, 14, 1361, 6, 2, 16, 3, 6, 2, 1, 2, 4, 262, 6, 10, 9, 419, 13, 1495, 6, 110, 6, 6, 9, 4759, 9, 787719, 239];
+const astralIdentifierStartCodes = [0, 11, 2, 25, 2, 18, 2, 1, 2, 14, 3, 13, 35, 122, 70, 52, 268, 28, 4, 48, 48, 31, 14, 29, 6, 37, 11, 29, 3, 35, 5, 7, 2, 4, 43, 157, 19, 35, 5, 35, 5, 39, 9, 51, 13, 10, 2, 14, 2, 6, 2, 1, 2, 10, 2, 14, 2, 6, 2, 1, 68, 310, 10, 21, 11, 7, 25, 5, 2, 41, 2, 8, 70, 5, 3, 0, 2, 43, 2, 1, 4, 0, 3, 22, 11, 22, 10, 30, 66, 18, 2, 1, 11, 21, 11, 25, 71, 55, 7, 1, 65, 0, 16, 3, 2, 2, 2, 28, 43, 28, 4, 28, 36, 7, 2, 27, 28, 53, 11, 21, 11, 18, 14, 17, 111, 72, 56, 50, 14, 50, 14, 35, 349, 41, 7, 1, 79, 28, 11, 0, 9, 21, 43, 17, 47, 20, 28, 22, 13, 52, 58, 1, 3, 0, 14, 44, 33, 24, 27, 35, 30, 0, 3, 0, 9, 34, 4, 0, 13, 47, 15, 3, 22, 0, 2, 0, 36, 17, 2, 24, 85, 6, 2, 0, 2, 3, 2, 14, 2, 9, 8, 46, 39, 7, 3, 1, 3, 21, 2, 6, 2, 1, 2, 4, 4, 0, 19, 0, 13, 4, 159, 52, 19, 3, 21, 2, 31, 47, 21, 1, 2, 0, 185, 46, 42, 3, 37, 47, 21, 0, 60, 42, 14, 0, 72, 26, 38, 6, 186, 43, 117, 63, 32, 7, 3, 0, 3, 7, 2, 1, 2, 23, 16, 0, 2, 0, 95, 7, 3, 38, 17, 0, 2, 0, 29, 0, 11, 39, 8, 0, 22, 0, 12, 45, 20, 0, 19, 72, 264, 8, 2, 36, 18, 0, 50, 29, 113, 6, 2, 1, 2, 37, 22, 0, 26, 5, 2, 1, 2, 31, 15, 0, 328, 18, 190, 0, 80, 921, 103, 110, 18, 195, 2637, 96, 16, 1070, 4050, 582, 8634, 568, 8, 30, 18, 78, 18, 29, 19, 47, 17, 3, 32, 20, 6, 18, 689, 63, 129, 74, 6, 0, 67, 12, 65, 1, 2, 0, 29, 6135, 9, 1237, 43, 8, 8936, 3, 2, 6, 2, 1, 2, 290, 46, 2, 18, 3, 9, 395, 2309, 106, 6, 12, 4, 8, 8, 9, 5991, 84, 2, 70, 2, 1, 3, 0, 3, 1, 3, 3, 2, 11, 2, 0, 2, 6, 2, 64, 2, 3, 3, 7, 2, 6, 2, 27, 2, 3, 2, 4, 2, 0, 4, 6, 2, 339, 3, 24, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 7, 1845, 30, 482, 44, 11, 6, 17, 0, 322, 29, 19, 43, 1269, 6, 2, 3, 2, 1, 2, 14, 2, 196, 60, 67, 8, 0, 1205, 3, 2, 26, 2, 1, 2, 0, 3, 0, 2, 9, 2, 3, 2, 0, 2, 0, 7, 0, 5, 0, 2, 0, 2, 0, 2, 2, 2, 1, 2, 0, 3, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1, 2, 0, 3, 3, 2, 6, 2, 3, 2, 3, 2, 0, 2, 9, 2, 16, 6, 2, 2, 4, 2, 16, 4421, 42719, 33, 4152, 8, 221, 3, 5761, 15, 7472, 3104, 541, 1507, 4938];
+const astralIdentifierCodes = [509, 0, 227, 0, 150, 4, 294, 9, 1368, 2, 2, 1, 6, 3, 41, 2, 5, 0, 166, 1, 574, 3, 9, 9, 370, 1, 154, 10, 50, 3, 123, 2, 54, 14, 32, 10, 3, 1, 11, 3, 46, 10, 8, 0, 46, 9, 7, 2, 37, 13, 2, 9, 6, 1, 45, 0, 13, 2, 49, 13, 9, 3, 2, 11, 83, 11, 7, 0, 161, 11, 6, 9, 7, 3, 56, 1, 2, 6, 3, 1, 3, 2, 10, 0, 11, 1, 3, 6, 4, 4, 193, 17, 10, 9, 5, 0, 82, 19, 13, 9, 214, 6, 3, 8, 28, 1, 83, 16, 16, 9, 82, 12, 9, 9, 84, 14, 5, 9, 243, 14, 166, 9, 71, 5, 2, 1, 3, 3, 2, 0, 2, 1, 13, 9, 120, 6, 3, 6, 4, 0, 29, 9, 41, 6, 2, 3, 9, 0, 10, 10, 47, 15, 406, 7, 2, 7, 17, 9, 57, 21, 2, 13, 123, 5, 4, 0, 2, 1, 2, 6, 2, 0, 9, 9, 49, 4, 2, 1, 2, 4, 9, 9, 330, 3, 19306, 9, 87, 9, 39, 4, 60, 6, 26, 9, 1014, 0, 2, 54, 8, 3, 82, 0, 12, 1, 19628, 1, 4706, 45, 3, 22, 543, 4, 4, 5, 9, 7, 3, 6, 31, 3, 149, 2, 1418, 49, 513, 54, 5, 49, 9, 0, 15, 0, 23, 4, 2, 14, 1361, 6, 2, 16, 3, 6, 2, 1, 2, 4, 262, 6, 10, 9, 357, 0, 62, 13, 1495, 6, 110, 6, 6, 9, 4759, 9, 787719, 239];
 
 function isInAstralSet(code, set) {
   let pos = 0x10000;
@@ -1153,16 +2032,23 @@ function isIdentifierChar(code) {
 function isIdentifierName(name) {
   let isFirst = true;
 
-  for (let _i = 0, _Array$from = Array.from(name); _i < _Array$from.length; _i++) {
-    const char = _Array$from[_i];
-    const cp = char.codePointAt(0);
+  for (let i = 0; i < name.length; i++) {
+    let cp = name.charCodeAt(i);
+
+    if ((cp & 0xfc00) === 0xd800 && i + 1 < name.length) {
+      const trail = name.charCodeAt(++i);
+
+      if ((trail & 0xfc00) === 0xdc00) {
+        cp = 0x10000 + ((cp & 0x3ff) << 10) + (trail & 0x3ff);
+      }
+    }
 
     if (isFirst) {
+      isFirst = false;
+
       if (!isIdentifierStart(cp)) {
         return false;
       }
-
-      isFirst = false;
     } else if (!isIdentifierChar(cp)) {
       return false;
     }
@@ -1174,7 +2060,7 @@ function isIdentifierName(name) {
 /***/ }),
 
 /***/ 6607:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -1231,9 +2117,9 @@ Object.defineProperty(exports, "isKeyword", ({
   }
 }));
 
-var _identifier = __webpack_require__(6396);
+var _identifier = __nccwpck_require__(6396);
 
-var _keyword = __webpack_require__(7249);
+var _keyword = __nccwpck_require__(7249);
 
 /***/ }),
 
@@ -1283,7 +2169,7 @@ function isKeyword(word) {
 /***/ }),
 
 /***/ 6860:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -1295,23 +2181,19 @@ exports.shouldHighlight = shouldHighlight;
 exports.getChalk = getChalk;
 exports.default = highlight;
 
-var _jsTokens = _interopRequireWildcard(__webpack_require__(1531));
+var _jsTokens = __nccwpck_require__(1531);
 
-var _helperValidatorIdentifier = __webpack_require__(6607);
+var _helperValidatorIdentifier = __nccwpck_require__(6607);
 
-var _chalk = _interopRequireDefault(__webpack_require__(7658));
+var _chalk = __nccwpck_require__(7658);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+const sometimesKeywords = new Set(["as", "async", "from", "get", "of", "set"]);
 
 function getDefs(chalk) {
   return {
     keyword: chalk.cyan,
     capitalized: chalk.yellow,
-    jsx_tag: chalk.yellow,
+    jsxIdentifier: chalk.yellow,
     punctuator: chalk.yellow,
     number: chalk.magenta,
     string: chalk.green,
@@ -1322,66 +2204,79 @@ function getDefs(chalk) {
 }
 
 const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
-const JSX_TAG = /^[a-z][\w-]*$/i;
 const BRACKET = /^[()[\]{}]$/;
+let tokenize;
+{
+  const JSX_TAG = /^[a-z][\w-]*$/i;
 
-function getTokenType(match) {
-  const [offset, text] = match.slice(-2);
-  const token = (0, _jsTokens.matchToToken)(match);
+  const getTokenType = function (token, offset, text) {
+    if (token.type === "name") {
+      if ((0, _helperValidatorIdentifier.isKeyword)(token.value) || (0, _helperValidatorIdentifier.isStrictReservedWord)(token.value, true) || sometimesKeywords.has(token.value)) {
+        return "keyword";
+      }
 
-  if (token.type === "name") {
-    if ((0, _helperValidatorIdentifier.isKeyword)(token.value) || (0, _helperValidatorIdentifier.isReservedWord)(token.value)) {
-      return "keyword";
+      if (JSX_TAG.test(token.value) && (text[offset - 1] === "<" || text.substr(offset - 2, 2) == "</")) {
+        return "jsxIdentifier";
+      }
+
+      if (token.value[0] !== token.value[0].toLowerCase()) {
+        return "capitalized";
+      }
     }
 
-    if (JSX_TAG.test(token.value) && (text[offset - 1] === "<" || text.substr(offset - 2, 2) == "</")) {
-      return "jsx_tag";
+    if (token.type === "punctuator" && BRACKET.test(token.value)) {
+      return "bracket";
     }
 
-    if (token.value[0] !== token.value[0].toLowerCase()) {
-      return "capitalized";
+    if (token.type === "invalid" && (token.value === "@" || token.value === "#")) {
+      return "punctuator";
     }
-  }
 
-  if (token.type === "punctuator" && BRACKET.test(token.value)) {
-    return "bracket";
-  }
+    return token.type;
+  };
 
-  if (token.type === "invalid" && (token.value === "@" || token.value === "#")) {
-    return "punctuator";
-  }
+  tokenize = function* (text) {
+    let match;
 
-  return token.type;
+    while (match = _jsTokens.default.exec(text)) {
+      const token = _jsTokens.matchToToken(match);
+
+      yield {
+        type: getTokenType(token, match.index, text),
+        value: token.value
+      };
+    }
+  };
 }
 
 function highlightTokens(defs, text) {
-  return text.replace(_jsTokens.default, function (...args) {
-    const type = getTokenType(args);
+  let highlighted = "";
+
+  for (const {
+    type,
+    value
+  } of tokenize(text)) {
     const colorize = defs[type];
 
     if (colorize) {
-      return args[0].split(NEWLINE).map(str => colorize(str)).join("\n");
+      highlighted += value.split(NEWLINE).map(str => colorize(str)).join("\n");
     } else {
-      return args[0];
+      highlighted += value;
     }
-  });
+  }
+
+  return highlighted;
 }
 
 function shouldHighlight(options) {
-  return _chalk.default.supportsColor || options.forceColor;
+  return !!_chalk.supportsColor || options.forceColor;
 }
 
 function getChalk(options) {
-  let chalk = _chalk.default;
-
-  if (options.forceColor) {
-    chalk = new _chalk.default.constructor({
-      enabled: true,
-      level: 1
-    });
-  }
-
-  return chalk;
+  return options.forceColor ? new _chalk.constructor({
+    enabled: true,
+    level: 1
+  }) : _chalk;
 }
 
 function highlight(code, options = {}) {
@@ -1397,12 +2292,12 @@ function highlight(code, options = {}) {
 /***/ }),
 
 /***/ 6538:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-/* module decorator */ module = __webpack_require__.nmd(module);
+/* module decorator */ module = __nccwpck_require__.nmd(module);
 
-const colorConvert = __webpack_require__(5458);
+const colorConvert = __nccwpck_require__(5458);
 
 const wrapAnsi16 = (fn, offset) => function () {
 	const code = fn.apply(colorConvert, arguments);
@@ -1571,15 +2466,15 @@ Object.defineProperty(module, 'exports', {
 /***/ }),
 
 /***/ 7658:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const escapeStringRegexp = __webpack_require__(8691);
-const ansiStyles = __webpack_require__(6538);
-const stdoutColor = __webpack_require__(5317).stdout;
+const escapeStringRegexp = __nccwpck_require__(8691);
+const ansiStyles = __nccwpck_require__(6538);
+const stdoutColor = __nccwpck_require__(5317).stdout;
 
-const template = __webpack_require__(2558);
+const template = __nccwpck_require__(2558);
 
 const isSimpleWindowsTerm = process.platform === 'win32' && !(process.env.TERM || '').toLowerCase().startsWith('xterm');
 
@@ -1943,10 +2838,10 @@ module.exports = (chalk, tmp) => {
 /***/ }),
 
 /***/ 591:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /* MIT license */
-var cssKeywords = __webpack_require__(2780);
+var cssKeywords = __nccwpck_require__(2780);
 
 // NOTE: conversions should only return primitive values (i.e. arrays, or
 //       values that give correct `typeof` results).
@@ -2818,10 +3713,10 @@ convert.rgb.gray = function (rgb) {
 /***/ }),
 
 /***/ 5458:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var conversions = __webpack_require__(591);
-var route = __webpack_require__(9769);
+var conversions = __nccwpck_require__(591);
+var route = __nccwpck_require__(9769);
 
 var convert = {};
 
@@ -2903,9 +3798,9 @@ module.exports = convert;
 /***/ }),
 
 /***/ 9769:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var conversions = __webpack_require__(591);
+var conversions = __nccwpck_require__(591);
 
 /*
 	this function routes a model to all other models.
@@ -3183,12 +4078,12 @@ module.exports = (flag, argv) => {
 /***/ }),
 
 /***/ 5317:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const os = __webpack_require__(2087);
-const hasFlag = __webpack_require__(3226);
+const os = __nccwpck_require__(2087);
+const hasFlag = __nccwpck_require__(3226);
 
 const env = process.env;
 
@@ -3321,30 +4216,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5192:
-/***/ ((module) => {
-
-module.exports = class SemanticReleaseError extends Error {
-  constructor(message, code, details) {
-    super(message);
-    Error.captureStackTrace(this, this.constructor);
-    this.name = 'SemanticReleaseError';
-    this.code = code;
-    this.details = details;
-    this.semanticRelease = true;
-  }
-};
-
-
-/***/ }),
-
 /***/ 1231:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const indentString = __webpack_require__(8043);
-const cleanStack = __webpack_require__(7972);
+const indentString = __nccwpck_require__(8043);
+const cleanStack = __nccwpck_require__(7972);
 
 const cleanInternalStack = stack => stack.replace(/\s+at .*aggregate-error\/index.js:\d+:\d+\)?/g, '');
 
@@ -3566,7 +4444,7 @@ ansiEscapes.iTerm = {
 
 module.exports = ({onlyFirst = false} = {}) => {
 	const pattern = [
-		'[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+		'[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
 		'(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))'
 	].join('|');
 
@@ -3577,10 +4455,10 @@ module.exports = ({onlyFirst = false} = {}) => {
 /***/ }),
 
 /***/ 2068:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-/* module decorator */ module = __webpack_require__.nmd(module);
+/* module decorator */ module = __nccwpck_require__.nmd(module);
 
 
 const wrapAnsi16 = (fn, offset) => (...args) => {
@@ -3623,7 +4501,7 @@ const setLazyProperty = (object, property, get) => {
 let colorConvert;
 const makeDynamicStyles = (wrap, targetSpace, identity, isBackground) => {
 	if (colorConvert === undefined) {
-		colorConvert = __webpack_require__(6931);
+		colorConvert = __nccwpck_require__(6931);
 	}
 
 	const offset = isBackground ? 10 : 0;
@@ -3884,15 +4762,15 @@ exports.W = function formatArgv (object) {
 /***/ }),
 
 /***/ 610:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const stringify = __webpack_require__(8750);
-const compile = __webpack_require__(9434);
-const expand = __webpack_require__(5873);
-const parse = __webpack_require__(6477);
+const stringify = __nccwpck_require__(8750);
+const compile = __nccwpck_require__(9434);
+const expand = __nccwpck_require__(5873);
+const parse = __nccwpck_require__(6477);
 
 /**
  * Expand the given pattern or create a regex-compatible string.
@@ -4062,13 +4940,13 @@ module.exports = braces;
 /***/ }),
 
 /***/ 9434:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const fill = __webpack_require__(6330);
-const utils = __webpack_require__(5207);
+const fill = __nccwpck_require__(6330);
+const utils = __nccwpck_require__(5207);
 
 const compile = (ast, options = {}) => {
   let walk = (node, parent = {}) => {
@@ -4192,14 +5070,14 @@ module.exports = {
 /***/ }),
 
 /***/ 5873:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const fill = __webpack_require__(6330);
-const stringify = __webpack_require__(8750);
-const utils = __webpack_require__(5207);
+const fill = __nccwpck_require__(6330);
+const stringify = __nccwpck_require__(8750);
+const utils = __nccwpck_require__(5207);
 
 const append = (queue = '', stash = '', enclose = false) => {
   let result = [];
@@ -4313,12 +5191,12 @@ module.exports = expand;
 /***/ }),
 
 /***/ 6477:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const stringify = __webpack_require__(8750);
+const stringify = __nccwpck_require__(8750);
 
 /**
  * Constants
@@ -4340,7 +5218,7 @@ const {
   CHAR_SINGLE_QUOTE, /* ' */
   CHAR_NO_BREAK_SPACE,
   CHAR_ZERO_WIDTH_NOBREAK_SPACE
-} = __webpack_require__(8774);
+} = __nccwpck_require__(8774);
 
 /**
  * parse
@@ -4654,12 +5532,12 @@ module.exports = parse;
 /***/ }),
 
 /***/ 8750:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const utils = __webpack_require__(5207);
+const utils = __nccwpck_require__(5207);
 
 module.exports = (ast, options = {}) => {
   let stringify = (node, parent = {}) => {
@@ -4835,29 +5713,29 @@ module.exports.default = callsites;
 /***/ }),
 
 /***/ 6021:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 module.exports = {
-    highlight: __webpack_require__(4621)
-  , highlightFile: __webpack_require__(1189)
-  , highlightFileSync: __webpack_require__(2611)
+    highlight: __nccwpck_require__(4621)
+  , highlightFile: __nccwpck_require__(1189)
+  , highlightFileSync: __nccwpck_require__(2611)
 }
 
 
 /***/ }),
 
 /***/ 4621:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var redeyed =  __webpack_require__(6818)
-var theme   =  __webpack_require__(9867)
-var colors  =  __webpack_require__(6218)
+var redeyed =  __nccwpck_require__(6818)
+var theme   =  __nccwpck_require__(9867)
+var colors  =  __nccwpck_require__(6218)
 
 var colorSurround =  colors.brightBlack
 var surroundClose =  '\u001b[39m'
@@ -4933,13 +5811,13 @@ module.exports = function highlight(code, opts) {
 /***/ }),
 
 /***/ 1189:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var fs = __webpack_require__(5747)
-var highlight = __webpack_require__(4621)
+var fs = __nccwpck_require__(5747)
+var highlight = __nccwpck_require__(4621)
 
 function isFunction(obj) {
   return toString.call(obj) === '[object Function]'
@@ -4966,13 +5844,13 @@ module.exports = function highlightFile(fullPath, opts, cb) {
 /***/ }),
 
 /***/ 2611:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var fs = __webpack_require__(5747)
-var highlight = __webpack_require__(4621)
+var fs = __nccwpck_require__(5747)
+var highlight = __nccwpck_require__(4621)
 
 module.exports = function highlightFileSync(fullPath, opts) {
   var code = fs.readFileSync(fullPath, 'utf-8')
@@ -4984,9 +5862,9 @@ module.exports = function highlightFileSync(fullPath, opts) {
 /***/ }),
 
 /***/ 9867:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var colors = __webpack_require__(6218)
+var colors = __nccwpck_require__(6218)
 
 // Change the below definitions in order to tweak the color theme.
 module.exports = {
@@ -5192,16 +6070,16 @@ module.exports = {
 /***/ }),
 
 /***/ 8818:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const ansiStyles = __webpack_require__(2068);
-const {stdout: stdoutColor, stderr: stderrColor} = __webpack_require__(9318);
+const ansiStyles = __nccwpck_require__(2068);
+const {stdout: stdoutColor, stderr: stderrColor} = __nccwpck_require__(9318);
 const {
 	stringReplaceAll,
 	stringEncaseCRLFWithFirstIndex
-} = __webpack_require__(2415);
+} = __nccwpck_require__(2415);
 
 const {isArray} = Array;
 
@@ -5410,7 +6288,7 @@ const chalkTag = (chalk, ...strings) => {
 	}
 
 	if (template === undefined) {
-		template = __webpack_require__(500);
+		template = __nccwpck_require__(500);
 	}
 
 	return template(chalk, parts.join(''));
@@ -5618,11 +6496,11 @@ module.exports = {
 /***/ }),
 
 /***/ 7972:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const os = __webpack_require__(2087);
+const os = __nccwpck_require__(2087);
 
 const extractPathRegex = /\s+at.*(?:\(|\s)(.*)\)?/;
 const pathRegex = /^(?:(?:(?:node|(?:internal\/[\w/]*|.*node_modules\/(?:babel-polyfill|pirates)\/.*)?\w+)\.js:\d+:\d+)|native)/;
@@ -5665,2461 +6543,1030 @@ module.exports = (stack, options) => {
 
 /***/ }),
 
-/***/ 8797:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2101:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+module.exports = __nccwpck_require__(6136);
 
-/**
- * Module dependencies.
- */
+/***/ }),
 
-var colors = __webpack_require__(7656)
-  , utils = __webpack_require__(4659)
-  , repeat = utils.repeat
-  , truncate = utils.truncate
-  , pad = utils.pad;
+/***/ 6168:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-/**
- * Table constructor
- *
- * @param {Object} options
- * @api public
- */
+const utils = __nccwpck_require__(8911);
 
-function Table (options){
-  this.options = utils.options({
-      chars: {
-          'top': '─'
-        , 'top-mid': '┬'
-        , 'top-left': '┌'
-        , 'top-right': '┐'
-        , 'bottom': '─'
-        , 'bottom-mid': '┴'
-        , 'bottom-left': '└'
-        , 'bottom-right': '┘'
-        , 'left': '│'
-        , 'left-mid': '├'
-        , 'mid': '─'
-        , 'mid-mid': '┼'
-        , 'right': '│'
-        , 'right-mid': '┤'
-        , 'middle': '│'
-      }
-    , truncate: '…'
-    , colors: true
-    , colWidths: []
-    , colAligns: []
-    , style: {
-          'padding-left': 1
-        , 'padding-right': 1
-        , head: ['red']
-        , border: ['white']
-        , compact : false
-      }
-    , head: []
-  }, options);
-};
+class Cell {
+  /**
+   * A representation of a cell within the table.
+   * Implementations must have `init` and `draw` methods,
+   * as well as `colSpan`, `rowSpan`, `desiredHeight` and `desiredWidth` properties.
+   * @param options
+   * @constructor
+   */
+  constructor(options) {
+    this.setOptions(options);
 
-/**
- * Inherit from Array.
- */
-
-Table.prototype.__proto__ = Array.prototype;
-
-/**
- * Width getter
- *
- * @return {Number} width
- * @api public
- */
-
-Table.prototype.__defineGetter__('width', function (){
-  var str = this.toString().split("\n");
-  if (str.length) return str[0].length;
-  return 0;
-});
-
-/**
- * Render to a string.
- *
- * @return {String} table representation
- * @api public
- */
-
-Table.prototype.render
-Table.prototype.toString = function (){
-  var ret = ''
-    , options = this.options
-    , style = options.style
-    , head = options.head
-    , chars = options.chars
-    , truncater = options.truncate
-      , colWidths = options.colWidths || new Array(this.head.length)
-      , totalWidth = 0;
-
-    if (!head.length && !this.length) return '';
-
-    if (!colWidths.length){
-      var all_rows = this.slice(0);
-      if (head.length) { all_rows = all_rows.concat([head]) };
-
-      all_rows.forEach(function(cells){
-        // horizontal (arrays)
-        if (Array.isArray(cells) && cells.length) {
-          extractColumnWidths(cells);
-
-        // vertical (objects)
-        } else {
-          var header_cell = Object.keys(cells)[0]
-            , value_cell = cells[header_cell];
-
-          colWidths[0] = Math.max(colWidths[0] || 0, get_width(header_cell) || 0);
-
-          // cross (objects w/ array values)
-          if (Array.isArray(value_cell) && value_cell.length) {
-            extractColumnWidths(value_cell, 1);
-          } else {
-            colWidths[1] = Math.max(colWidths[1] || 0, get_width(value_cell) || 0);
-          }
-        }
-    });
-  };
-
-  totalWidth = (colWidths.length == 1 ? colWidths[0] : colWidths.reduce(
-    function (a, b){
-      return a + b
-    })) + colWidths.length + 1;
-
-  function extractColumnWidths(arr, offset) {
-    var offset = offset || 0;
-    arr.forEach(function(cell, i){
-      colWidths[i + offset] = Math.max(colWidths[i + offset] || 0, get_width(cell) || 0);
-    });
-  };
-
-  function get_width(obj) {
-    return typeof obj == 'object' && obj && obj.width != undefined
-         ? obj.width
-         : ((typeof obj == 'object' && obj !== null ? utils.strlen(obj.text) : utils.strlen(obj)) + (style['padding-left'] || 0) + (style['padding-right'] || 0))
+    /**
+     * Each cell will have it's `x` and `y` values set by the `layout-manager` prior to
+     * `init` being called;
+     * @type {Number}
+     */
+    this.x = null;
+    this.y = null;
   }
 
-  // draws a line
-  function line (line, left, right, intersection){
-    var width = 0
-      , line =
-          left
-        + repeat(line, totalWidth - 2)
-        + right;
+  setOptions(options) {
+    if (['boolean', 'number', 'string'].indexOf(typeof options) !== -1) {
+      options = { content: '' + options };
+    }
+    options = options || {};
+    this.options = options;
+    let content = options.content;
+    if (['boolean', 'number', 'string'].indexOf(typeof content) !== -1) {
+      this.content = String(content);
+    } else if (!content) {
+      this.content = '';
+    } else {
+      throw new Error('Content needs to be a primitive, got: ' + typeof content);
+    }
+    this.colSpan = options.colSpan || 1;
+    this.rowSpan = options.rowSpan || 1;
+  }
 
-    colWidths.forEach(function (w, i){
-      if (i == colWidths.length - 1) return;
-      width += w + 1;
-      line = line.substr(0, width) + intersection + line.substr(width + 1);
+  mergeTableOptions(tableOptions, cells) {
+    this.cells = cells;
+
+    let optionsChars = this.options.chars || {};
+    let tableChars = tableOptions.chars;
+    let chars = (this.chars = {});
+    CHAR_NAMES.forEach(function (name) {
+      setOption(optionsChars, tableChars, name, chars);
     });
 
-    return applyStyles(options.style.border, line);
-  };
+    this.truncate = this.options.truncate || tableOptions.truncate;
 
-  // draws the top line
-  function lineTop (){
-    var l = line(chars.top
-               , chars['top-left'] || chars.top
-               , chars['top-right'] ||  chars.top
-               , chars['top-mid']);
-    if (l)
-      ret += l + "\n";
-  };
+    let style = (this.options.style = this.options.style || {});
+    let tableStyle = tableOptions.style;
+    setOption(style, tableStyle, 'padding-left', this);
+    setOption(style, tableStyle, 'padding-right', this);
+    this.head = style.head || tableStyle.head;
+    this.border = style.border || tableStyle.border;
 
-  function generateRow (items, style) {
-    var cells = []
-      , max_height = 0;
+    let fixedWidth = tableOptions.colWidths[this.x];
+    if (tableOptions.wordWrap && fixedWidth) {
+      fixedWidth -= this.paddingLeft + this.paddingRight;
+      if (this.colSpan) {
+        let i = 1;
+        while (i < this.colSpan) {
+          fixedWidth += tableOptions.colWidths[this.x + i];
+          i++;
+        }
+      }
+      this.lines = utils.colorizeLines(utils.wordWrap(fixedWidth, this.content));
+    } else {
+      this.lines = utils.colorizeLines(this.content.split('\n'));
+    }
 
-    // prepare vertical and cross table data
-    if (!Array.isArray(items) && typeof items === "object") {
-      var key = Object.keys(items)[0]
-        , value = items[key]
-        , first_cell_head = true;
+    this.desiredWidth = utils.strlen(this.content) + this.paddingLeft + this.paddingRight;
+    this.desiredHeight = this.lines.length;
+  }
 
-      if (Array.isArray(value)) {
-        items = value;
-        items.unshift(key);
+  /**
+   * Initializes the Cells data structure.
+   *
+   * @param tableOptions - A fully populated set of tableOptions.
+   * In addition to the standard default values, tableOptions must have fully populated the
+   * `colWidths` and `rowWidths` arrays. Those arrays must have lengths equal to the number
+   * of columns or rows (respectively) in this table, and each array item must be a Number.
+   *
+   */
+  init(tableOptions) {
+    let x = this.x;
+    let y = this.y;
+    this.widths = tableOptions.colWidths.slice(x, x + this.colSpan);
+    this.heights = tableOptions.rowHeights.slice(y, y + this.rowSpan);
+    this.width = this.widths.reduce(sumPlusOne, -1);
+    this.height = this.heights.reduce(sumPlusOne, -1);
+
+    this.hAlign = this.options.hAlign || tableOptions.colAligns[x];
+    this.vAlign = this.options.vAlign || tableOptions.rowAligns[y];
+
+    this.drawRight = x + this.colSpan == tableOptions.colWidths.length;
+  }
+
+  /**
+   * Draws the given line of the cell.
+   * This default implementation defers to methods `drawTop`, `drawBottom`, `drawLine` and `drawEmpty`.
+   * @param lineNum - can be `top`, `bottom` or a numerical line number.
+   * @param spanningCell - will be a number if being called from a RowSpanCell, and will represent how
+   * many rows below it's being called from. Otherwise it's undefined.
+   * @returns {String} The representation of this line.
+   */
+  draw(lineNum, spanningCell) {
+    if (lineNum == 'top') return this.drawTop(this.drawRight);
+    if (lineNum == 'bottom') return this.drawBottom(this.drawRight);
+    let padLen = Math.max(this.height - this.lines.length, 0);
+    let padTop;
+    switch (this.vAlign) {
+      case 'center':
+        padTop = Math.ceil(padLen / 2);
+        break;
+      case 'bottom':
+        padTop = padLen;
+        break;
+      default:
+        padTop = 0;
+    }
+    if (lineNum < padTop || lineNum >= padTop + this.lines.length) {
+      return this.drawEmpty(this.drawRight, spanningCell);
+    }
+    let forceTruncation = this.lines.length > this.height && lineNum + 1 >= this.height;
+    return this.drawLine(lineNum - padTop, this.drawRight, forceTruncation, spanningCell);
+  }
+
+  /**
+   * Renders the top line of the cell.
+   * @param drawRight - true if this method should render the right edge of the cell.
+   * @returns {String}
+   */
+  drawTop(drawRight) {
+    let content = [];
+    if (this.cells) {
+      //TODO: cells should always exist - some tests don't fill it in though
+      this.widths.forEach(function (width, index) {
+        content.push(this._topLeftChar(index));
+        content.push(utils.repeat(this.chars[this.y == 0 ? 'top' : 'mid'], width));
+      }, this);
+    } else {
+      content.push(this._topLeftChar(0));
+      content.push(utils.repeat(this.chars[this.y == 0 ? 'top' : 'mid'], this.width));
+    }
+    if (drawRight) {
+      content.push(this.chars[this.y == 0 ? 'topRight' : 'rightMid']);
+    }
+    return this.wrapWithStyleColors('border', content.join(''));
+  }
+
+  _topLeftChar(offset) {
+    let x = this.x + offset;
+    let leftChar;
+    if (this.y == 0) {
+      leftChar = x == 0 ? 'topLeft' : offset == 0 ? 'topMid' : 'top';
+    } else {
+      if (x == 0) {
+        leftChar = 'leftMid';
       } else {
-        items = [key, value];
+        leftChar = offset == 0 ? 'midMid' : 'bottomMid';
+        if (this.cells) {
+          //TODO: cells should always exist - some tests don't fill it in though
+          let spanAbove = this.cells[this.y - 1][x] instanceof Cell.ColSpanCell;
+          if (spanAbove) {
+            leftChar = offset == 0 ? 'topMid' : 'mid';
+          }
+          if (offset == 0) {
+            let i = 1;
+            while (this.cells[this.y][x - i] instanceof Cell.ColSpanCell) {
+              i++;
+            }
+            if (this.cells[this.y][x - i] instanceof Cell.RowSpanCell) {
+              leftChar = 'leftMid';
+            }
+          }
+        }
+      }
+    }
+    return this.chars[leftChar];
+  }
+
+  wrapWithStyleColors(styleProperty, content) {
+    if (this[styleProperty] && this[styleProperty].length) {
+      try {
+        let colors = __nccwpck_require__(1997);
+        for (let i = this[styleProperty].length - 1; i >= 0; i--) {
+          colors = colors[this[styleProperty][i]];
+        }
+        return colors(content);
+      } catch (e) {
+        return content;
+      }
+    } else {
+      return content;
+    }
+  }
+
+  /**
+   * Renders a line of text.
+   * @param lineNum - Which line of text to render. This is not necessarily the line within the cell.
+   * There may be top-padding above the first line of text.
+   * @param drawRight - true if this method should render the right edge of the cell.
+   * @param forceTruncationSymbol - `true` if the rendered text should end with the truncation symbol even
+   * if the text fits. This is used when the cell is vertically truncated. If `false` the text should
+   * only include the truncation symbol if the text will not fit horizontally within the cell width.
+   * @param spanningCell - a number of if being called from a RowSpanCell. (how many rows below). otherwise undefined.
+   * @returns {String}
+   */
+  drawLine(lineNum, drawRight, forceTruncationSymbol, spanningCell) {
+    let left = this.chars[this.x == 0 ? 'left' : 'middle'];
+    if (this.x && spanningCell && this.cells) {
+      let cellLeft = this.cells[this.y + spanningCell][this.x - 1];
+      while (cellLeft instanceof ColSpanCell) {
+        cellLeft = this.cells[cellLeft.y][cellLeft.x - 1];
+      }
+      if (!(cellLeft instanceof RowSpanCell)) {
+        left = this.chars['rightMid'];
+      }
+    }
+    let leftPadding = utils.repeat(' ', this.paddingLeft);
+    let right = drawRight ? this.chars['right'] : '';
+    let rightPadding = utils.repeat(' ', this.paddingRight);
+    let line = this.lines[lineNum];
+    let len = this.width - (this.paddingLeft + this.paddingRight);
+    if (forceTruncationSymbol) line += this.truncate || '…';
+    let content = utils.truncate(line, len, this.truncate);
+    content = utils.pad(content, len, ' ', this.hAlign);
+    content = leftPadding + content + rightPadding;
+    return this.stylizeLine(left, content, right);
+  }
+
+  stylizeLine(left, content, right) {
+    left = this.wrapWithStyleColors('border', left);
+    right = this.wrapWithStyleColors('border', right);
+    if (this.y === 0) {
+      content = this.wrapWithStyleColors('head', content);
+    }
+    return left + content + right;
+  }
+
+  /**
+   * Renders the bottom line of the cell.
+   * @param drawRight - true if this method should render the right edge of the cell.
+   * @returns {String}
+   */
+  drawBottom(drawRight) {
+    let left = this.chars[this.x == 0 ? 'bottomLeft' : 'bottomMid'];
+    let content = utils.repeat(this.chars.bottom, this.width);
+    let right = drawRight ? this.chars['bottomRight'] : '';
+    return this.wrapWithStyleColors('border', left + content + right);
+  }
+
+  /**
+   * Renders a blank line of text within the cell. Used for top and/or bottom padding.
+   * @param drawRight - true if this method should render the right edge of the cell.
+   * @param spanningCell - a number of if being called from a RowSpanCell. (how many rows below). otherwise undefined.
+   * @returns {String}
+   */
+  drawEmpty(drawRight, spanningCell) {
+    let left = this.chars[this.x == 0 ? 'left' : 'middle'];
+    if (this.x && spanningCell && this.cells) {
+      let cellLeft = this.cells[this.y + spanningCell][this.x - 1];
+      while (cellLeft instanceof ColSpanCell) {
+        cellLeft = this.cells[cellLeft.y][cellLeft.x - 1];
+      }
+      if (!(cellLeft instanceof RowSpanCell)) {
+        left = this.chars['rightMid'];
+      }
+    }
+    let right = drawRight ? this.chars['right'] : '';
+    let content = utils.repeat(' ', this.width);
+    return this.stylizeLine(left, content, right);
+  }
+}
+
+class ColSpanCell {
+  /**
+   * A Cell that doesn't do anything. It just draws empty lines.
+   * Used as a placeholder in column spanning.
+   * @constructor
+   */
+  constructor() {}
+
+  draw() {
+    return '';
+  }
+
+  init() {}
+
+  mergeTableOptions() {}
+}
+
+class RowSpanCell {
+  /**
+   * A placeholder Cell for a Cell that spans multiple rows.
+   * It delegates rendering to the original cell, but adds the appropriate offset.
+   * @param originalCell
+   * @constructor
+   */
+  constructor(originalCell) {
+    this.originalCell = originalCell;
+  }
+
+  init(tableOptions) {
+    let y = this.y;
+    let originalY = this.originalCell.y;
+    this.cellOffset = y - originalY;
+    this.offset = findDimension(tableOptions.rowHeights, originalY, this.cellOffset);
+  }
+
+  draw(lineNum) {
+    if (lineNum == 'top') {
+      return this.originalCell.draw(this.offset, this.cellOffset);
+    }
+    if (lineNum == 'bottom') {
+      return this.originalCell.draw('bottom');
+    }
+    return this.originalCell.draw(this.offset + 1 + lineNum);
+  }
+
+  mergeTableOptions() {}
+}
+
+// HELPER FUNCTIONS
+function setOption(objA, objB, nameB, targetObj) {
+  let nameA = nameB.split('-');
+  if (nameA.length > 1) {
+    nameA[1] = nameA[1].charAt(0).toUpperCase() + nameA[1].substr(1);
+    nameA = nameA.join('');
+    targetObj[nameA] = objA[nameA] || objA[nameB] || objB[nameA] || objB[nameB];
+  } else {
+    targetObj[nameB] = objA[nameB] || objB[nameB];
+  }
+}
+
+function findDimension(dimensionTable, startingIndex, span) {
+  let ret = dimensionTable[startingIndex];
+  for (let i = 1; i < span; i++) {
+    ret += 1 + dimensionTable[startingIndex + i];
+  }
+  return ret;
+}
+
+function sumPlusOne(a, b) {
+  return a + b + 1;
+}
+
+let CHAR_NAMES = [
+  'top',
+  'top-mid',
+  'top-left',
+  'top-right',
+  'bottom',
+  'bottom-mid',
+  'bottom-left',
+  'bottom-right',
+  'left',
+  'left-mid',
+  'mid',
+  'mid-mid',
+  'right',
+  'right-mid',
+  'middle',
+];
+module.exports = Cell;
+module.exports.ColSpanCell = ColSpanCell;
+module.exports.RowSpanCell = RowSpanCell;
+
+
+/***/ }),
+
+/***/ 3875:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const objectAssign = __nccwpck_require__(7426);
+const Cell = __nccwpck_require__(6168);
+const { ColSpanCell, RowSpanCell } = Cell;
+
+(function () {
+  function layoutTable(table) {
+    table.forEach(function (row, rowIndex) {
+      row.forEach(function (cell, columnIndex) {
+        cell.y = rowIndex;
+        cell.x = columnIndex;
+        for (let y = rowIndex; y >= 0; y--) {
+          let row2 = table[y];
+          let xMax = y === rowIndex ? columnIndex : row2.length;
+          for (let x = 0; x < xMax; x++) {
+            let cell2 = row2[x];
+            while (cellsConflict(cell, cell2)) {
+              cell.x++;
+            }
+          }
+        }
+      });
+    });
+  }
+
+  function maxWidth(table) {
+    let mw = 0;
+    table.forEach(function (row) {
+      row.forEach(function (cell) {
+        mw = Math.max(mw, cell.x + (cell.colSpan || 1));
+      });
+    });
+    return mw;
+  }
+
+  function maxHeight(table) {
+    return table.length;
+  }
+
+  function cellsConflict(cell1, cell2) {
+    let yMin1 = cell1.y;
+    let yMax1 = cell1.y - 1 + (cell1.rowSpan || 1);
+    let yMin2 = cell2.y;
+    let yMax2 = cell2.y - 1 + (cell2.rowSpan || 1);
+    let yConflict = !(yMin1 > yMax2 || yMin2 > yMax1);
+
+    let xMin1 = cell1.x;
+    let xMax1 = cell1.x - 1 + (cell1.colSpan || 1);
+    let xMin2 = cell2.x;
+    let xMax2 = cell2.x - 1 + (cell2.colSpan || 1);
+    let xConflict = !(xMin1 > xMax2 || xMin2 > xMax1);
+
+    return yConflict && xConflict;
+  }
+
+  function conflictExists(rows, x, y) {
+    let i_max = Math.min(rows.length - 1, y);
+    let cell = { x: x, y: y };
+    for (let i = 0; i <= i_max; i++) {
+      let row = rows[i];
+      for (let j = 0; j < row.length; j++) {
+        if (cellsConflict(cell, row[j])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function allBlank(rows, y, xMin, xMax) {
+    for (let x = xMin; x < xMax; x++) {
+      if (conflictExists(rows, x, y)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function addRowSpanCells(table) {
+    table.forEach(function (row, rowIndex) {
+      row.forEach(function (cell) {
+        for (let i = 1; i < cell.rowSpan; i++) {
+          let rowSpanCell = new RowSpanCell(cell);
+          rowSpanCell.x = cell.x;
+          rowSpanCell.y = cell.y + i;
+          rowSpanCell.colSpan = cell.colSpan;
+          insertCell(rowSpanCell, table[rowIndex + i]);
+        }
+      });
+    });
+  }
+
+  function addColSpanCells(cellRows) {
+    for (let rowIndex = cellRows.length - 1; rowIndex >= 0; rowIndex--) {
+      let cellColumns = cellRows[rowIndex];
+      for (let columnIndex = 0; columnIndex < cellColumns.length; columnIndex++) {
+        let cell = cellColumns[columnIndex];
+        for (let k = 1; k < cell.colSpan; k++) {
+          let colSpanCell = new ColSpanCell();
+          colSpanCell.x = cell.x + k;
+          colSpanCell.y = cell.y;
+          cellColumns.splice(columnIndex + 1, 0, colSpanCell);
+        }
+      }
+    }
+  }
+
+  function insertCell(cell, row) {
+    let x = 0;
+    while (x < row.length && row[x].x < cell.x) {
+      x++;
+    }
+    row.splice(x, 0, cell);
+  }
+
+  function fillInTable(table) {
+    let h_max = maxHeight(table);
+    let w_max = maxWidth(table);
+    for (let y = 0; y < h_max; y++) {
+      for (let x = 0; x < w_max; x++) {
+        if (!conflictExists(table, x, y)) {
+          let opts = { x: x, y: y, colSpan: 1, rowSpan: 1 };
+          x++;
+          while (x < w_max && !conflictExists(table, x, y)) {
+            opts.colSpan++;
+            x++;
+          }
+          let y2 = y + 1;
+          while (y2 < h_max && allBlank(table, y2, opts.x, opts.x + opts.colSpan)) {
+            opts.rowSpan++;
+            y2++;
+          }
+
+          let cell = new Cell(opts);
+          cell.x = opts.x;
+          cell.y = opts.y;
+          insertCell(cell, table[y]);
+        }
+      }
+    }
+  }
+
+  function generateCells(rows) {
+    return rows.map(function (row) {
+      if (!Array.isArray(row)) {
+        let key = Object.keys(row)[0];
+        row = row[key];
+        if (Array.isArray(row)) {
+          row = row.slice();
+          row.unshift(key);
+        } else {
+          row = [key, row];
+        }
+      }
+      return row.map(function (cell) {
+        return new Cell(cell);
+      });
+    });
+  }
+
+  function makeTableLayout(rows) {
+    let cellRows = generateCells(rows);
+    layoutTable(cellRows);
+    fillInTable(cellRows);
+    addRowSpanCells(cellRows);
+    addColSpanCells(cellRows);
+    return cellRows;
+  }
+
+  module.exports = {
+    makeTableLayout: makeTableLayout,
+    layoutTable: layoutTable,
+    addRowSpanCells: addRowSpanCells,
+    maxWidth: maxWidth,
+    fillInTable: fillInTable,
+    computeWidths: makeComputeWidths('colSpan', 'desiredWidth', 'x', 1),
+    computeHeights: makeComputeWidths('rowSpan', 'desiredHeight', 'y', 1),
+  };
+})();
+
+function makeComputeWidths(colSpan, desiredWidth, x, forcedMin) {
+  return function (vals, table) {
+    let result = [];
+    let spanners = [];
+    table.forEach(function (row) {
+      row.forEach(function (cell) {
+        if ((cell[colSpan] || 1) > 1) {
+          spanners.push(cell);
+        } else {
+          result[cell[x]] = Math.max(result[cell[x]] || 0, cell[desiredWidth] || 0, forcedMin);
+        }
+      });
+    });
+
+    vals.forEach(function (val, index) {
+      if (typeof val === 'number') {
+        result[index] = val;
+      }
+    });
+
+    //spanners.forEach(function(cell){
+    for (let k = spanners.length - 1; k >= 0; k--) {
+      let cell = spanners[k];
+      let span = cell[colSpan];
+      let col = cell[x];
+      let existingWidth = result[col];
+      let editableCols = typeof vals[col] === 'number' ? 0 : 1;
+      for (let i = 1; i < span; i++) {
+        existingWidth += 1 + result[col + i];
+        if (typeof vals[col + i] !== 'number') {
+          editableCols++;
+        }
+      }
+      if (cell[desiredWidth] > existingWidth) {
+        let i = 0;
+        while (editableCols > 0 && cell[desiredWidth] > existingWidth) {
+          if (typeof vals[col + i] !== 'number') {
+            let dif = Math.round((cell[desiredWidth] - existingWidth) / editableCols);
+            existingWidth += dif;
+            result[col + i] += dif;
+            editableCols--;
+          }
+          i++;
+        }
       }
     }
 
-    // transform array of item strings into structure of cells
-    items.forEach(function (item, i) {
-      var contents = (item == null ? '' : item).toString().split("\n").reduce(function (memo, l) {
-        memo.push(string(l, i));
-        return memo;
-      }, [])
-
-      var height = contents.length;
-      if (height > max_height) { max_height = height };
-
-      cells.push({ contents: contents , height: height });
-    });
-
-    // transform vertical cells into horizontal lines
-    var lines = new Array(max_height);
-    cells.forEach(function (cell, i) {
-      cell.contents.forEach(function (line, j) {
-        if (!lines[j]) { lines[j] = [] };
-        if (style || (first_cell_head && i === 0 && options.style.head)) {
-          line = applyStyles(options.style.head, line)
-        }
-
-        lines[j].push(line);
-      });
-
-      // populate empty lines in cell
-      for (var j = cell.height, l = max_height; j < l; j++) {
-        if (!lines[j]) { lines[j] = [] };
-        lines[j].push(string('', i));
-      }
-    });
-    var ret = "";
-    lines.forEach(function (line, index) {
-      if (ret.length > 0) {
-        ret += "\n" + applyStyles(options.style.border, chars.left);
-      }
-
-      ret += line.join(applyStyles(options.style.border, chars.middle)) + applyStyles(options.style.border, chars.right);
-    });
-
-    return applyStyles(options.style.border, chars.left) + ret;
+    objectAssign(vals, result);
+    for (let j = 0; j < vals.length; j++) {
+      vals[j] = Math.max(forcedMin, vals[j] || 0);
+    }
   };
+}
 
-  function applyStyles(styles, subject) {
-    if (!subject)
-      return '';
-    if (!options.colors)
-      return subject;
-    styles.forEach(function(style) {
-      subject = colors[style](subject);
-    });
-    return subject;
-  };
 
-  // renders a string, by padding it or truncating it
-  function string (str, index){
-    var str = String(typeof str == 'object' && str.text ? str.text : str)
-      , length = utils.strlen(str)
-      , width = colWidths[index]
-          - (style['padding-left'] || 0)
-          - (style['padding-right'] || 0)
-      , align = options.colAligns[index] || 'left';
+/***/ }),
 
-    return repeat(' ', style['padding-left'] || 0)
-         + (length == width ? str :
-             (length < width
-              ? pad(str, ( width + (str.length - length) ), ' ', align == 'left' ? 'right' :
-                  (align == 'middle' ? 'both' : 'left'))
-              : (truncater ? truncate(str, width, truncater) : str))
-           )
-         + repeat(' ', style['padding-right'] || 0);
-  };
+/***/ 6136:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-  if (head.length){
-    lineTop();
+const utils = __nccwpck_require__(8911);
+const tableLayout = __nccwpck_require__(3875);
 
-    ret += generateRow(head, style.head) + "\n"
+class Table extends Array {
+  constructor(options) {
+    super();
+
+    this.options = utils.mergeOptions(options);
   }
 
-  if (this.length)
-    this.forEach(function (cells, i){
-      if (!head.length && i == 0)
-        lineTop();
-      else {
-        if (!style.compact || i<(!!head.length) ?1: false || cells.length == 0){
-          var l = line(chars.mid
-                     , chars['left-mid']
-                     , chars['right-mid']
-                     , chars['mid-mid']);
-          if (l)
-            ret += l + "\n"
-        }
+  toString() {
+    let array = this;
+    let headersPresent = this.options.head && this.options.head.length;
+    if (headersPresent) {
+      array = [this.options.head];
+      if (this.length) {
+        array.push.apply(array, this);
+      }
+    } else {
+      this.options.style.head = [];
+    }
+
+    let cells = tableLayout.makeTableLayout(array);
+
+    cells.forEach(function (row) {
+      row.forEach(function (cell) {
+        cell.mergeTableOptions(this.options, cells);
+      }, this);
+    }, this);
+
+    tableLayout.computeWidths(this.options.colWidths, cells);
+    tableLayout.computeHeights(this.options.rowHeights, cells);
+
+    cells.forEach(function (row) {
+      row.forEach(function (cell) {
+        cell.init(this.options);
+      }, this);
+    }, this);
+
+    let result = [];
+
+    for (let rowIndex = 0; rowIndex < cells.length; rowIndex++) {
+      let row = cells[rowIndex];
+      let heightOfRow = this.options.rowHeights[rowIndex];
+
+      if (rowIndex === 0 || !this.options.style.compact || (rowIndex == 1 && headersPresent)) {
+        doDraw(row, 'top', result);
       }
 
-      if (Array.isArray(cells) && !cells.length) {
-        return
-      } else {
-        ret += generateRow(cells) + "\n";
-      };
-    });
+      for (let lineNum = 0; lineNum < heightOfRow; lineNum++) {
+        doDraw(row, lineNum, result);
+      }
 
-  var l = line(chars.bottom
-             , chars['bottom-left'] || chars.bottom
-             , chars['bottom-right'] || chars.bottom
-             , chars['bottom-mid']);
-  if (l)
-    ret += l;
-  else
-    // trim the last '\n' if we didn't add the bottom decoration
-    ret = ret.slice(0, -1);
+      if (rowIndex + 1 == cells.length) {
+        doDraw(row, 'bottom', result);
+      }
+    }
 
-  return ret;
-};
+    return result.join('\n');
+  }
 
-/**
- * Module exports.
- */
+  get width() {
+    let str = this.toString().split('\n');
+    return str[0].length;
+  }
+}
+
+function doDraw(row, lineNum, result) {
+  let line = [];
+  row.forEach(function (cell) {
+    line.push(cell.draw(lineNum));
+  });
+  let str = line.join('');
+  if (str.length) result.push(str);
+}
 
 module.exports = Table;
 
-module.exports.version = __webpack_require__(9663).version;
-
 
 /***/ }),
 
-/***/ 4659:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8911:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var stringWidth = __webpack_require__(6208);
+const objectAssign = __nccwpck_require__(7426);
+const stringWidth = __nccwpck_require__(2577);
 
-/**
- * Repeats a string.
- *
- * @param {String} char(s)
- * @param {Number} number of times
- * @return {String} repeated string
- */
+function codeRegex(capture) {
+  return capture ? /\u001b\[((?:\d*;){0,5}\d*)m/g : /\u001b\[(?:\d*;){0,5}\d*m/g;
+}
 
-exports.repeat = function (str, times){
-  return Array(times + 1).join(str);
-};
-
-/**
- * Pads a string
- *
- * @api public
- */
-
-exports.pad = function (str, len, pad, dir) {
-  if (len + 1 >= str.length)
-    switch (dir){
-      case 'left':
-        str = Array(len + 1 - str.length).join(pad) + str;
-        break;
-
-      case 'both':
-        var right = Math.ceil((padlen = len - str.length) / 2);
-        var left = padlen - right;
-        str = Array(left + 1).join(pad) + str + Array(right + 1).join(pad);
-        break;
-
-      default:
-        str = str + Array(len + 1 - str.length).join(pad);
-    };
-
-  return str;
-};
-
-/**
- * Truncates a string
- *
- * @api public
- */
-
-exports.truncate = function (str, length, chr){
-  chr = chr || '…';
-  return str.length >= length ? str.substr(0, length - chr.length) + chr : str;
-};
-
-/**
- * Copies and merges options with defaults.
- *
- * @param {Object} defaults
- * @param {Object} supplied options
- * @return {Object} new (merged) object
- */
-
-function options(defaults, opts) {
-  for (var p in opts) {
-    if (opts[p] && opts[p].constructor && opts[p].constructor === Object) {
-      defaults[p] = defaults[p] || {};
-      options(defaults[p], opts[p]);
-    } else {
-      defaults[p] = opts[p];
-    }
-  }
-  return defaults;
-};
-exports.options = options;
-
-//
-// For consideration of terminal "color" programs like colors.js,
-// which can add ANSI escape color codes to strings,
-// we destyle the ANSI color escape codes for padding calculations.
-//
-// see: http://en.wikipedia.org/wiki/ANSI_escape_code
-//
-exports.strlen = function(str){
-  var code = /\u001b\[(?:\d*;){0,5}\d*m/g;
-  var stripped = ("" + (str != null ? str : '')).replace(code,'');
-  var split = stripped.split("\n");
+function strlen(str) {
+  let code = codeRegex();
+  let stripped = ('' + str).replace(code, '');
+  let split = stripped.split('\n');
   return split.reduce(function (memo, s) {
-      var len = stringWidth(s);
-      return (len > memo) ? len : memo;
+    return stringWidth(s) > memo ? stringWidth(s) : memo;
   }, 0);
 }
 
-
-/***/ }),
-
-/***/ 5441:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-/* module decorator */ module = __webpack_require__.nmd(module);
-
-const colorConvert = __webpack_require__(9551);
-
-const wrapAnsi16 = (fn, offset) => function () {
-	const code = fn.apply(colorConvert, arguments);
-	return `\u001B[${code + offset}m`;
-};
-
-const wrapAnsi256 = (fn, offset) => function () {
-	const code = fn.apply(colorConvert, arguments);
-	return `\u001B[${38 + offset};5;${code}m`;
-};
-
-const wrapAnsi16m = (fn, offset) => function () {
-	const rgb = fn.apply(colorConvert, arguments);
-	return `\u001B[${38 + offset};2;${rgb[0]};${rgb[1]};${rgb[2]}m`;
-};
-
-function assembleStyles() {
-	const codes = new Map();
-	const styles = {
-		modifier: {
-			reset: [0, 0],
-			// 21 isn't widely supported and 22 does the same thing
-			bold: [1, 22],
-			dim: [2, 22],
-			italic: [3, 23],
-			underline: [4, 24],
-			inverse: [7, 27],
-			hidden: [8, 28],
-			strikethrough: [9, 29]
-		},
-		color: {
-			black: [30, 39],
-			red: [31, 39],
-			green: [32, 39],
-			yellow: [33, 39],
-			blue: [34, 39],
-			magenta: [35, 39],
-			cyan: [36, 39],
-			white: [37, 39],
-			gray: [90, 39],
-
-			// Bright color
-			redBright: [91, 39],
-			greenBright: [92, 39],
-			yellowBright: [93, 39],
-			blueBright: [94, 39],
-			magentaBright: [95, 39],
-			cyanBright: [96, 39],
-			whiteBright: [97, 39]
-		},
-		bgColor: {
-			bgBlack: [40, 49],
-			bgRed: [41, 49],
-			bgGreen: [42, 49],
-			bgYellow: [43, 49],
-			bgBlue: [44, 49],
-			bgMagenta: [45, 49],
-			bgCyan: [46, 49],
-			bgWhite: [47, 49],
-
-			// Bright color
-			bgBlackBright: [100, 49],
-			bgRedBright: [101, 49],
-			bgGreenBright: [102, 49],
-			bgYellowBright: [103, 49],
-			bgBlueBright: [104, 49],
-			bgMagentaBright: [105, 49],
-			bgCyanBright: [106, 49],
-			bgWhiteBright: [107, 49]
-		}
-	};
-
-	// Fix humans
-	styles.color.grey = styles.color.gray;
-
-	for (const groupName of Object.keys(styles)) {
-		const group = styles[groupName];
-
-		for (const styleName of Object.keys(group)) {
-			const style = group[styleName];
-
-			styles[styleName] = {
-				open: `\u001B[${style[0]}m`,
-				close: `\u001B[${style[1]}m`
-			};
-
-			group[styleName] = styles[styleName];
-
-			codes.set(style[0], style[1]);
-		}
-
-		Object.defineProperty(styles, groupName, {
-			value: group,
-			enumerable: false
-		});
-
-		Object.defineProperty(styles, 'codes', {
-			value: codes,
-			enumerable: false
-		});
-	}
-
-	const ansi2ansi = n => n;
-	const rgb2rgb = (r, g, b) => [r, g, b];
-
-	styles.color.close = '\u001B[39m';
-	styles.bgColor.close = '\u001B[49m';
-
-	styles.color.ansi = {
-		ansi: wrapAnsi16(ansi2ansi, 0)
-	};
-	styles.color.ansi256 = {
-		ansi256: wrapAnsi256(ansi2ansi, 0)
-	};
-	styles.color.ansi16m = {
-		rgb: wrapAnsi16m(rgb2rgb, 0)
-	};
-
-	styles.bgColor.ansi = {
-		ansi: wrapAnsi16(ansi2ansi, 10)
-	};
-	styles.bgColor.ansi256 = {
-		ansi256: wrapAnsi256(ansi2ansi, 10)
-	};
-	styles.bgColor.ansi16m = {
-		rgb: wrapAnsi16m(rgb2rgb, 10)
-	};
-
-	for (let key of Object.keys(colorConvert)) {
-		if (typeof colorConvert[key] !== 'object') {
-			continue;
-		}
-
-		const suite = colorConvert[key];
-
-		if (key === 'ansi16') {
-			key = 'ansi';
-		}
-
-		if ('ansi16' in suite) {
-			styles.color.ansi[key] = wrapAnsi16(suite.ansi16, 0);
-			styles.bgColor.ansi[key] = wrapAnsi16(suite.ansi16, 10);
-		}
-
-		if ('ansi256' in suite) {
-			styles.color.ansi256[key] = wrapAnsi256(suite.ansi256, 0);
-			styles.bgColor.ansi256[key] = wrapAnsi256(suite.ansi256, 10);
-		}
-
-		if ('rgb' in suite) {
-			styles.color.ansi16m[key] = wrapAnsi16m(suite.rgb, 0);
-			styles.bgColor.ansi16m[key] = wrapAnsi16m(suite.rgb, 10);
-		}
-	}
-
-	return styles;
+function repeat(str, times) {
+  return Array(times + 1).join(str);
 }
 
-// Make the export immutable
-Object.defineProperty(module, 'exports', {
-	enumerable: true,
-	get: assembleStyles
-});
-
-
-/***/ }),
-
-/***/ 7656:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const escapeStringRegexp = __webpack_require__(8691);
-const ansiStyles = __webpack_require__(5441);
-const stdoutColor = __webpack_require__(1884).stdout;
-
-const template = __webpack_require__(3557);
-
-const isSimpleWindowsTerm = process.platform === 'win32' && !(process.env.TERM || '').toLowerCase().startsWith('xterm');
-
-// `supportsColor.level` → `ansiStyles.color[name]` mapping
-const levelMapping = ['ansi', 'ansi', 'ansi256', 'ansi16m'];
-
-// `color-convert` models to exclude from the Chalk API due to conflicts and such
-const skipModels = new Set(['gray']);
-
-const styles = Object.create(null);
-
-function applyOptions(obj, options) {
-	options = options || {};
-
-	// Detect level if not set manually
-	const scLevel = stdoutColor ? stdoutColor.level : 0;
-	obj.level = options.level === undefined ? scLevel : options.level;
-	obj.enabled = 'enabled' in options ? options.enabled : obj.level > 0;
+function pad(str, len, pad, dir) {
+  let length = strlen(str);
+  if (len + 1 >= length) {
+    let padlen = len - length;
+    switch (dir) {
+      case 'right': {
+        str = repeat(pad, padlen) + str;
+        break;
+      }
+      case 'center': {
+        let right = Math.ceil(padlen / 2);
+        let left = padlen - right;
+        str = repeat(pad, left) + str + repeat(pad, right);
+        break;
+      }
+      default: {
+        str = str + repeat(pad, padlen);
+        break;
+      }
+    }
+  }
+  return str;
 }
 
-function Chalk(options) {
-	// We check for this.template here since calling `chalk.constructor()`
-	// by itself will have a `this` of a previously constructed chalk object
-	if (!this || !(this instanceof Chalk) || this.template) {
-		const chalk = {};
-		applyOptions(chalk, options);
+let codeCache = {};
 
-		chalk.template = function () {
-			const args = [].slice.call(arguments);
-			return chalkTag.apply(null, [chalk.template].concat(args));
-		};
-
-		Object.setPrototypeOf(chalk, Chalk.prototype);
-		Object.setPrototypeOf(chalk.template, chalk);
-
-		chalk.template.constructor = Chalk;
-
-		return chalk.template;
-	}
-
-	applyOptions(this, options);
+function addToCodeCache(name, on, off) {
+  on = '\u001b[' + on + 'm';
+  off = '\u001b[' + off + 'm';
+  codeCache[on] = { set: name, to: true };
+  codeCache[off] = { set: name, to: false };
+  codeCache[name] = { on: on, off: off };
 }
 
-// Use bright blue on Windows as the normal blue color is illegible
-if (isSimpleWindowsTerm) {
-	ansiStyles.blue.open = '\u001B[94m';
+//https://github.com/Marak/colors.js/blob/master/lib/styles.js
+addToCodeCache('bold', 1, 22);
+addToCodeCache('italics', 3, 23);
+addToCodeCache('underline', 4, 24);
+addToCodeCache('inverse', 7, 27);
+addToCodeCache('strikethrough', 9, 29);
+
+function updateState(state, controlChars) {
+  let controlCode = controlChars[1] ? parseInt(controlChars[1].split(';')[0]) : 0;
+  if ((controlCode >= 30 && controlCode <= 39) || (controlCode >= 90 && controlCode <= 97)) {
+    state.lastForegroundAdded = controlChars[0];
+    return;
+  }
+  if ((controlCode >= 40 && controlCode <= 49) || (controlCode >= 100 && controlCode <= 107)) {
+    state.lastBackgroundAdded = controlChars[0];
+    return;
+  }
+  if (controlCode === 0) {
+    for (let i in state) {
+      /* istanbul ignore else */
+      if (Object.prototype.hasOwnProperty.call(state, i)) {
+        delete state[i];
+      }
+    }
+    return;
+  }
+  let info = codeCache[controlChars[0]];
+  if (info) {
+    state[info.set] = info.to;
+  }
 }
 
-for (const key of Object.keys(ansiStyles)) {
-	ansiStyles[key].closeRe = new RegExp(escapeStringRegexp(ansiStyles[key].close), 'g');
-
-	styles[key] = {
-		get() {
-			const codes = ansiStyles[key];
-			return build.call(this, this._styles ? this._styles.concat(codes) : [codes], this._empty, key);
-		}
-	};
+function readState(line) {
+  let code = codeRegex(true);
+  let controlChars = code.exec(line);
+  let state = {};
+  while (controlChars !== null) {
+    updateState(state, controlChars);
+    controlChars = code.exec(line);
+  }
+  return state;
 }
 
-styles.visible = {
-	get() {
-		return build.call(this, this._styles || [], true, 'visible');
-	}
-};
+function unwindState(state, ret) {
+  let lastBackgroundAdded = state.lastBackgroundAdded;
+  let lastForegroundAdded = state.lastForegroundAdded;
 
-ansiStyles.color.closeRe = new RegExp(escapeStringRegexp(ansiStyles.color.close), 'g');
-for (const model of Object.keys(ansiStyles.color.ansi)) {
-	if (skipModels.has(model)) {
-		continue;
-	}
+  delete state.lastBackgroundAdded;
+  delete state.lastForegroundAdded;
 
-	styles[model] = {
-		get() {
-			const level = this.level;
-			return function () {
-				const open = ansiStyles.color[levelMapping[level]][model].apply(null, arguments);
-				const codes = {
-					open,
-					close: ansiStyles.color.close,
-					closeRe: ansiStyles.color.closeRe
-				};
-				return build.call(this, this._styles ? this._styles.concat(codes) : [codes], this._empty, model);
-			};
-		}
-	};
+  Object.keys(state).forEach(function (key) {
+    if (state[key]) {
+      ret += codeCache[key].off;
+    }
+  });
+
+  if (lastBackgroundAdded && lastBackgroundAdded != '\u001b[49m') {
+    ret += '\u001b[49m';
+  }
+  if (lastForegroundAdded && lastForegroundAdded != '\u001b[39m') {
+    ret += '\u001b[39m';
+  }
+
+  return ret;
 }
 
-ansiStyles.bgColor.closeRe = new RegExp(escapeStringRegexp(ansiStyles.bgColor.close), 'g');
-for (const model of Object.keys(ansiStyles.bgColor.ansi)) {
-	if (skipModels.has(model)) {
-		continue;
-	}
+function rewindState(state, ret) {
+  let lastBackgroundAdded = state.lastBackgroundAdded;
+  let lastForegroundAdded = state.lastForegroundAdded;
 
-	const bgModel = 'bg' + model[0].toUpperCase() + model.slice(1);
-	styles[bgModel] = {
-		get() {
-			const level = this.level;
-			return function () {
-				const open = ansiStyles.bgColor[levelMapping[level]][model].apply(null, arguments);
-				const codes = {
-					open,
-					close: ansiStyles.bgColor.close,
-					closeRe: ansiStyles.bgColor.closeRe
-				};
-				return build.call(this, this._styles ? this._styles.concat(codes) : [codes], this._empty, model);
-			};
-		}
-	};
+  delete state.lastBackgroundAdded;
+  delete state.lastForegroundAdded;
+
+  Object.keys(state).forEach(function (key) {
+    if (state[key]) {
+      ret = codeCache[key].on + ret;
+    }
+  });
+
+  if (lastBackgroundAdded && lastBackgroundAdded != '\u001b[49m') {
+    ret = lastBackgroundAdded + ret;
+  }
+  if (lastForegroundAdded && lastForegroundAdded != '\u001b[39m') {
+    ret = lastForegroundAdded + ret;
+  }
+
+  return ret;
 }
 
-const proto = Object.defineProperties(() => {}, styles);
+function truncateWidth(str, desiredLength) {
+  if (str.length === strlen(str)) {
+    return str.substr(0, desiredLength);
+  }
 
-function build(_styles, _empty, key) {
-	const builder = function () {
-		return applyStyle.apply(builder, arguments);
-	};
+  while (strlen(str) > desiredLength) {
+    str = str.slice(0, -1);
+  }
 
-	builder._styles = _styles;
-	builder._empty = _empty;
-
-	const self = this;
-
-	Object.defineProperty(builder, 'level', {
-		enumerable: true,
-		get() {
-			return self.level;
-		},
-		set(level) {
-			self.level = level;
-		}
-	});
-
-	Object.defineProperty(builder, 'enabled', {
-		enumerable: true,
-		get() {
-			return self.enabled;
-		},
-		set(enabled) {
-			self.enabled = enabled;
-		}
-	});
-
-	// See below for fix regarding invisible grey/dim combination on Windows
-	builder.hasGrey = this.hasGrey || key === 'gray' || key === 'grey';
-
-	// `__proto__` is used because we must return a function, but there is
-	// no way to create a function with a different prototype
-	builder.__proto__ = proto; // eslint-disable-line no-proto
-
-	return builder;
+  return str;
 }
 
-function applyStyle() {
-	// Support varags, but simply cast to string in case there's only one arg
-	const args = arguments;
-	const argsLen = args.length;
-	let str = String(arguments[0]);
+function truncateWidthWithAnsi(str, desiredLength) {
+  let code = codeRegex(true);
+  let split = str.split(codeRegex());
+  let splitIndex = 0;
+  let retLen = 0;
+  let ret = '';
+  let myArray;
+  let state = {};
 
-	if (argsLen === 0) {
-		return '';
-	}
+  while (retLen < desiredLength) {
+    myArray = code.exec(str);
+    let toAdd = split[splitIndex];
+    splitIndex++;
+    if (retLen + strlen(toAdd) > desiredLength) {
+      toAdd = truncateWidth(toAdd, desiredLength - retLen);
+    }
+    ret += toAdd;
+    retLen += strlen(toAdd);
 
-	if (argsLen > 1) {
-		// Don't slice `arguments`, it prevents V8 optimizations
-		for (let a = 1; a < argsLen; a++) {
-			str += ' ' + args[a];
-		}
-	}
+    if (retLen < desiredLength) {
+      if (!myArray) {
+        break;
+      } // full-width chars may cause a whitespace which cannot be filled
+      ret += myArray[0];
+      updateState(state, myArray);
+    }
+  }
 
-	if (!this.enabled || this.level <= 0 || !str) {
-		return this._empty ? '' : str;
-	}
-
-	// Turns out that on Windows dimmed gray text becomes invisible in cmd.exe,
-	// see https://github.com/chalk/chalk/issues/58
-	// If we're on Windows and we're dealing with a gray color, temporarily make 'dim' a noop.
-	const originalDim = ansiStyles.dim.open;
-	if (isSimpleWindowsTerm && this.hasGrey) {
-		ansiStyles.dim.open = '';
-	}
-
-	for (const code of this._styles.slice().reverse()) {
-		// Replace any instances already present with a re-opening code
-		// otherwise only the part of the string until said closing code
-		// will be colored, and the rest will simply be 'plain'.
-		str = code.open + str.replace(code.closeRe, code.open) + code.close;
-
-		// Close the styling before a linebreak and reopen
-		// after next line to fix a bleed issue on macOS
-		// https://github.com/chalk/chalk/pull/92
-		str = str.replace(/\r?\n/g, `${code.close}$&${code.open}`);
-	}
-
-	// Reset the original `dim` if we changed it to work around the Windows dimmed gray issue
-	ansiStyles.dim.open = originalDim;
-
-	return str;
+  return unwindState(state, ret);
 }
 
-function chalkTag(chalk, strings) {
-	if (!Array.isArray(strings)) {
-		// If chalk() was called by itself or with a string,
-		// return the string itself as a string.
-		return [].slice.call(arguments, 1).join(' ');
-	}
+function truncate(str, desiredLength, truncateChar) {
+  truncateChar = truncateChar || '…';
+  let lengthOfStr = strlen(str);
+  if (lengthOfStr <= desiredLength) {
+    return str;
+  }
+  desiredLength -= strlen(truncateChar);
 
-	const args = [].slice.call(arguments, 2);
-	const parts = [strings.raw[0]];
+  let ret = truncateWidthWithAnsi(str, desiredLength);
 
-	for (let i = 1; i < strings.length; i++) {
-		parts.push(String(args[i - 1]).replace(/[{}\\]/g, '\\$&'));
-		parts.push(String(strings.raw[i]));
-	}
-
-	return template(chalk, parts.join(''));
+  return ret + truncateChar;
 }
 
-Object.defineProperties(Chalk.prototype, styles);
-
-module.exports = Chalk(); // eslint-disable-line new-cap
-module.exports.supportsColor = stdoutColor;
-module.exports.default = module.exports; // For TypeScript
-
-
-/***/ }),
-
-/***/ 3557:
-/***/ ((module) => {
-
-"use strict";
-
-const TEMPLATE_REGEX = /(?:\\(u[a-f\d]{4}|x[a-f\d]{2}|.))|(?:\{(~)?(\w+(?:\([^)]*\))?(?:\.\w+(?:\([^)]*\))?)*)(?:[ \t]|(?=\r?\n)))|(\})|((?:.|[\r\n\f])+?)/gi;
-const STYLE_REGEX = /(?:^|\.)(\w+)(?:\(([^)]*)\))?/g;
-const STRING_REGEX = /^(['"])((?:\\.|(?!\1)[^\\])*)\1$/;
-const ESCAPE_REGEX = /\\(u[a-f\d]{4}|x[a-f\d]{2}|.)|([^\\])/gi;
-
-const ESCAPES = new Map([
-	['n', '\n'],
-	['r', '\r'],
-	['t', '\t'],
-	['b', '\b'],
-	['f', '\f'],
-	['v', '\v'],
-	['0', '\0'],
-	['\\', '\\'],
-	['e', '\u001B'],
-	['a', '\u0007']
-]);
-
-function unescape(c) {
-	if ((c[0] === 'u' && c.length === 5) || (c[0] === 'x' && c.length === 3)) {
-		return String.fromCharCode(parseInt(c.slice(1), 16));
-	}
-
-	return ESCAPES.get(c) || c;
+function defaultOptions() {
+  return {
+    chars: {
+      top: '─',
+      'top-mid': '┬',
+      'top-left': '┌',
+      'top-right': '┐',
+      bottom: '─',
+      'bottom-mid': '┴',
+      'bottom-left': '└',
+      'bottom-right': '┘',
+      left: '│',
+      'left-mid': '├',
+      mid: '─',
+      'mid-mid': '┼',
+      right: '│',
+      'right-mid': '┤',
+      middle: '│',
+    },
+    truncate: '…',
+    colWidths: [],
+    rowHeights: [],
+    colAligns: [],
+    rowAligns: [],
+    style: {
+      'padding-left': 1,
+      'padding-right': 1,
+      head: ['red'],
+      border: ['grey'],
+      compact: false,
+    },
+    head: [],
+  };
 }
 
-function parseArguments(name, args) {
-	const results = [];
-	const chunks = args.trim().split(/\s*,\s*/g);
-	let matches;
-
-	for (const chunk of chunks) {
-		if (!isNaN(chunk)) {
-			results.push(Number(chunk));
-		} else if ((matches = chunk.match(STRING_REGEX))) {
-			results.push(matches[2].replace(ESCAPE_REGEX, (m, escape, chr) => escape ? unescape(escape) : chr));
-		} else {
-			throw new Error(`Invalid Chalk template style argument: ${chunk} (in style '${name}')`);
-		}
-	}
-
-	return results;
+function mergeOptions(options, defaults) {
+  options = options || {};
+  defaults = defaults || defaultOptions();
+  let ret = objectAssign({}, defaults, options);
+  ret.chars = objectAssign({}, defaults.chars, options.chars);
+  ret.style = objectAssign({}, defaults.style, options.style);
+  return ret;
 }
 
-function parseStyle(style) {
-	STYLE_REGEX.lastIndex = 0;
-
-	const results = [];
-	let matches;
-
-	while ((matches = STYLE_REGEX.exec(style)) !== null) {
-		const name = matches[1];
-
-		if (matches[2]) {
-			const args = parseArguments(name, matches[2]);
-			results.push([name].concat(args));
-		} else {
-			results.push([name]);
-		}
-	}
-
-	return results;
+function wordWrap(maxLength, input) {
+  let lines = [];
+  let split = input.split(/(\s+)/g);
+  let line = [];
+  let lineLength = 0;
+  let whitespace;
+  for (let i = 0; i < split.length; i += 2) {
+    let word = split[i];
+    let newLength = lineLength + strlen(word);
+    if (lineLength > 0 && whitespace) {
+      newLength += whitespace.length;
+    }
+    if (newLength > maxLength) {
+      if (lineLength !== 0) {
+        lines.push(line.join(''));
+      }
+      line = [word];
+      lineLength = strlen(word);
+    } else {
+      line.push(whitespace || '', word);
+      lineLength = newLength;
+    }
+    whitespace = split[i + 1];
+  }
+  if (lineLength) {
+    lines.push(line.join(''));
+  }
+  return lines;
 }
 
-function buildStyle(chalk, styles) {
-	const enabled = {};
-
-	for (const layer of styles) {
-		for (const style of layer.styles) {
-			enabled[style[0]] = layer.inverse ? null : style.slice(1);
-		}
-	}
-
-	let current = chalk;
-	for (const styleName of Object.keys(enabled)) {
-		if (Array.isArray(enabled[styleName])) {
-			if (!(styleName in current)) {
-				throw new Error(`Unknown Chalk style: ${styleName}`);
-			}
-
-			if (enabled[styleName].length > 0) {
-				current = current[styleName].apply(current, enabled[styleName]);
-			} else {
-				current = current[styleName];
-			}
-		}
-	}
-
-	return current;
+function multiLineWordWrap(maxLength, input) {
+  let output = [];
+  input = input.split('\n');
+  for (let i = 0; i < input.length; i++) {
+    output.push.apply(output, wordWrap(maxLength, input[i]));
+  }
+  return output;
 }
 
-module.exports = (chalk, tmp) => {
-	const styles = [];
-	const chunks = [];
-	let chunk = [];
-
-	// eslint-disable-next-line max-params
-	tmp.replace(TEMPLATE_REGEX, (m, escapeChar, inverse, style, close, chr) => {
-		if (escapeChar) {
-			chunk.push(unescape(escapeChar));
-		} else if (style) {
-			const str = chunk.join('');
-			chunk = [];
-			chunks.push(styles.length === 0 ? str : buildStyle(chalk, styles)(str));
-			styles.push({inverse, styles: parseStyle(style)});
-		} else if (close) {
-			if (styles.length === 0) {
-				throw new Error('Found extraneous } in Chalk template literal');
-			}
-
-			chunks.push(buildStyle(chalk, styles)(chunk.join('')));
-			chunk = [];
-			styles.pop();
-		} else {
-			chunk.push(chr);
-		}
-	});
-
-	chunks.push(chunk.join(''));
-
-	if (styles.length > 0) {
-		const errMsg = `Chalk template literal is missing ${styles.length} closing bracket${styles.length === 1 ? '' : 's'} (\`}\`)`;
-		throw new Error(errMsg);
-	}
-
-	return chunks.join('');
-};
-
-
-/***/ }),
-
-/***/ 5951:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-/* MIT license */
-var cssKeywords = __webpack_require__(9781);
-
-// NOTE: conversions should only return primitive values (i.e. arrays, or
-//       values that give correct `typeof` results).
-//       do not use box values types (i.e. Number(), String(), etc.)
-
-var reverseKeywords = {};
-for (var key in cssKeywords) {
-	if (cssKeywords.hasOwnProperty(key)) {
-		reverseKeywords[cssKeywords[key]] = key;
-	}
-}
-
-var convert = module.exports = {
-	rgb: {channels: 3, labels: 'rgb'},
-	hsl: {channels: 3, labels: 'hsl'},
-	hsv: {channels: 3, labels: 'hsv'},
-	hwb: {channels: 3, labels: 'hwb'},
-	cmyk: {channels: 4, labels: 'cmyk'},
-	xyz: {channels: 3, labels: 'xyz'},
-	lab: {channels: 3, labels: 'lab'},
-	lch: {channels: 3, labels: 'lch'},
-	hex: {channels: 1, labels: ['hex']},
-	keyword: {channels: 1, labels: ['keyword']},
-	ansi16: {channels: 1, labels: ['ansi16']},
-	ansi256: {channels: 1, labels: ['ansi256']},
-	hcg: {channels: 3, labels: ['h', 'c', 'g']},
-	apple: {channels: 3, labels: ['r16', 'g16', 'b16']},
-	gray: {channels: 1, labels: ['gray']}
-};
-
-// hide .channels and .labels properties
-for (var model in convert) {
-	if (convert.hasOwnProperty(model)) {
-		if (!('channels' in convert[model])) {
-			throw new Error('missing channels property: ' + model);
-		}
-
-		if (!('labels' in convert[model])) {
-			throw new Error('missing channel labels property: ' + model);
-		}
-
-		if (convert[model].labels.length !== convert[model].channels) {
-			throw new Error('channel and label counts mismatch: ' + model);
-		}
-
-		var channels = convert[model].channels;
-		var labels = convert[model].labels;
-		delete convert[model].channels;
-		delete convert[model].labels;
-		Object.defineProperty(convert[model], 'channels', {value: channels});
-		Object.defineProperty(convert[model], 'labels', {value: labels});
-	}
-}
-
-convert.rgb.hsl = function (rgb) {
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-	var min = Math.min(r, g, b);
-	var max = Math.max(r, g, b);
-	var delta = max - min;
-	var h;
-	var s;
-	var l;
-
-	if (max === min) {
-		h = 0;
-	} else if (r === max) {
-		h = (g - b) / delta;
-	} else if (g === max) {
-		h = 2 + (b - r) / delta;
-	} else if (b === max) {
-		h = 4 + (r - g) / delta;
-	}
-
-	h = Math.min(h * 60, 360);
-
-	if (h < 0) {
-		h += 360;
-	}
-
-	l = (min + max) / 2;
-
-	if (max === min) {
-		s = 0;
-	} else if (l <= 0.5) {
-		s = delta / (max + min);
-	} else {
-		s = delta / (2 - max - min);
-	}
-
-	return [h, s * 100, l * 100];
-};
-
-convert.rgb.hsv = function (rgb) {
-	var rdif;
-	var gdif;
-	var bdif;
-	var h;
-	var s;
-
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-	var v = Math.max(r, g, b);
-	var diff = v - Math.min(r, g, b);
-	var diffc = function (c) {
-		return (v - c) / 6 / diff + 1 / 2;
-	};
-
-	if (diff === 0) {
-		h = s = 0;
-	} else {
-		s = diff / v;
-		rdif = diffc(r);
-		gdif = diffc(g);
-		bdif = diffc(b);
-
-		if (r === v) {
-			h = bdif - gdif;
-		} else if (g === v) {
-			h = (1 / 3) + rdif - bdif;
-		} else if (b === v) {
-			h = (2 / 3) + gdif - rdif;
-		}
-		if (h < 0) {
-			h += 1;
-		} else if (h > 1) {
-			h -= 1;
-		}
-	}
-
-	return [
-		h * 360,
-		s * 100,
-		v * 100
-	];
-};
-
-convert.rgb.hwb = function (rgb) {
-	var r = rgb[0];
-	var g = rgb[1];
-	var b = rgb[2];
-	var h = convert.rgb.hsl(rgb)[0];
-	var w = 1 / 255 * Math.min(r, Math.min(g, b));
-
-	b = 1 - 1 / 255 * Math.max(r, Math.max(g, b));
-
-	return [h, w * 100, b * 100];
-};
-
-convert.rgb.cmyk = function (rgb) {
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-	var c;
-	var m;
-	var y;
-	var k;
-
-	k = Math.min(1 - r, 1 - g, 1 - b);
-	c = (1 - r - k) / (1 - k) || 0;
-	m = (1 - g - k) / (1 - k) || 0;
-	y = (1 - b - k) / (1 - k) || 0;
-
-	return [c * 100, m * 100, y * 100, k * 100];
-};
-
-/**
- * See https://en.m.wikipedia.org/wiki/Euclidean_distance#Squared_Euclidean_distance
- * */
-function comparativeDistance(x, y) {
-	return (
-		Math.pow(x[0] - y[0], 2) +
-		Math.pow(x[1] - y[1], 2) +
-		Math.pow(x[2] - y[2], 2)
-	);
-}
-
-convert.rgb.keyword = function (rgb) {
-	var reversed = reverseKeywords[rgb];
-	if (reversed) {
-		return reversed;
-	}
-
-	var currentClosestDistance = Infinity;
-	var currentClosestKeyword;
-
-	for (var keyword in cssKeywords) {
-		if (cssKeywords.hasOwnProperty(keyword)) {
-			var value = cssKeywords[keyword];
-
-			// Compute comparative distance
-			var distance = comparativeDistance(rgb, value);
-
-			// Check if its less, if so set as closest
-			if (distance < currentClosestDistance) {
-				currentClosestDistance = distance;
-				currentClosestKeyword = keyword;
-			}
-		}
-	}
-
-	return currentClosestKeyword;
-};
-
-convert.keyword.rgb = function (keyword) {
-	return cssKeywords[keyword];
-};
-
-convert.rgb.xyz = function (rgb) {
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-
-	// assume sRGB
-	r = r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : (r / 12.92);
-	g = g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : (g / 12.92);
-	b = b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : (b / 12.92);
-
-	var x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
-	var y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
-	var z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
-
-	return [x * 100, y * 100, z * 100];
-};
-
-convert.rgb.lab = function (rgb) {
-	var xyz = convert.rgb.xyz(rgb);
-	var x = xyz[0];
-	var y = xyz[1];
-	var z = xyz[2];
-	var l;
-	var a;
-	var b;
-
-	x /= 95.047;
-	y /= 100;
-	z /= 108.883;
-
-	x = x > 0.008856 ? Math.pow(x, 1 / 3) : (7.787 * x) + (16 / 116);
-	y = y > 0.008856 ? Math.pow(y, 1 / 3) : (7.787 * y) + (16 / 116);
-	z = z > 0.008856 ? Math.pow(z, 1 / 3) : (7.787 * z) + (16 / 116);
-
-	l = (116 * y) - 16;
-	a = 500 * (x - y);
-	b = 200 * (y - z);
-
-	return [l, a, b];
-};
-
-convert.hsl.rgb = function (hsl) {
-	var h = hsl[0] / 360;
-	var s = hsl[1] / 100;
-	var l = hsl[2] / 100;
-	var t1;
-	var t2;
-	var t3;
-	var rgb;
-	var val;
-
-	if (s === 0) {
-		val = l * 255;
-		return [val, val, val];
-	}
-
-	if (l < 0.5) {
-		t2 = l * (1 + s);
-	} else {
-		t2 = l + s - l * s;
-	}
-
-	t1 = 2 * l - t2;
-
-	rgb = [0, 0, 0];
-	for (var i = 0; i < 3; i++) {
-		t3 = h + 1 / 3 * -(i - 1);
-		if (t3 < 0) {
-			t3++;
-		}
-		if (t3 > 1) {
-			t3--;
-		}
-
-		if (6 * t3 < 1) {
-			val = t1 + (t2 - t1) * 6 * t3;
-		} else if (2 * t3 < 1) {
-			val = t2;
-		} else if (3 * t3 < 2) {
-			val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
-		} else {
-			val = t1;
-		}
-
-		rgb[i] = val * 255;
-	}
-
-	return rgb;
-};
-
-convert.hsl.hsv = function (hsl) {
-	var h = hsl[0];
-	var s = hsl[1] / 100;
-	var l = hsl[2] / 100;
-	var smin = s;
-	var lmin = Math.max(l, 0.01);
-	var sv;
-	var v;
-
-	l *= 2;
-	s *= (l <= 1) ? l : 2 - l;
-	smin *= lmin <= 1 ? lmin : 2 - lmin;
-	v = (l + s) / 2;
-	sv = l === 0 ? (2 * smin) / (lmin + smin) : (2 * s) / (l + s);
-
-	return [h, sv * 100, v * 100];
-};
-
-convert.hsv.rgb = function (hsv) {
-	var h = hsv[0] / 60;
-	var s = hsv[1] / 100;
-	var v = hsv[2] / 100;
-	var hi = Math.floor(h) % 6;
-
-	var f = h - Math.floor(h);
-	var p = 255 * v * (1 - s);
-	var q = 255 * v * (1 - (s * f));
-	var t = 255 * v * (1 - (s * (1 - f)));
-	v *= 255;
-
-	switch (hi) {
-		case 0:
-			return [v, t, p];
-		case 1:
-			return [q, v, p];
-		case 2:
-			return [p, v, t];
-		case 3:
-			return [p, q, v];
-		case 4:
-			return [t, p, v];
-		case 5:
-			return [v, p, q];
-	}
-};
-
-convert.hsv.hsl = function (hsv) {
-	var h = hsv[0];
-	var s = hsv[1] / 100;
-	var v = hsv[2] / 100;
-	var vmin = Math.max(v, 0.01);
-	var lmin;
-	var sl;
-	var l;
-
-	l = (2 - s) * v;
-	lmin = (2 - s) * vmin;
-	sl = s * vmin;
-	sl /= (lmin <= 1) ? lmin : 2 - lmin;
-	sl = sl || 0;
-	l /= 2;
-
-	return [h, sl * 100, l * 100];
-};
-
-// http://dev.w3.org/csswg/css-color/#hwb-to-rgb
-convert.hwb.rgb = function (hwb) {
-	var h = hwb[0] / 360;
-	var wh = hwb[1] / 100;
-	var bl = hwb[2] / 100;
-	var ratio = wh + bl;
-	var i;
-	var v;
-	var f;
-	var n;
-
-	// wh + bl cant be > 1
-	if (ratio > 1) {
-		wh /= ratio;
-		bl /= ratio;
-	}
-
-	i = Math.floor(6 * h);
-	v = 1 - bl;
-	f = 6 * h - i;
-
-	if ((i & 0x01) !== 0) {
-		f = 1 - f;
-	}
-
-	n = wh + f * (v - wh); // linear interpolation
-
-	var r;
-	var g;
-	var b;
-	switch (i) {
-		default:
-		case 6:
-		case 0: r = v; g = n; b = wh; break;
-		case 1: r = n; g = v; b = wh; break;
-		case 2: r = wh; g = v; b = n; break;
-		case 3: r = wh; g = n; b = v; break;
-		case 4: r = n; g = wh; b = v; break;
-		case 5: r = v; g = wh; b = n; break;
-	}
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.cmyk.rgb = function (cmyk) {
-	var c = cmyk[0] / 100;
-	var m = cmyk[1] / 100;
-	var y = cmyk[2] / 100;
-	var k = cmyk[3] / 100;
-	var r;
-	var g;
-	var b;
-
-	r = 1 - Math.min(1, c * (1 - k) + k);
-	g = 1 - Math.min(1, m * (1 - k) + k);
-	b = 1 - Math.min(1, y * (1 - k) + k);
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.xyz.rgb = function (xyz) {
-	var x = xyz[0] / 100;
-	var y = xyz[1] / 100;
-	var z = xyz[2] / 100;
-	var r;
-	var g;
-	var b;
-
-	r = (x * 3.2406) + (y * -1.5372) + (z * -0.4986);
-	g = (x * -0.9689) + (y * 1.8758) + (z * 0.0415);
-	b = (x * 0.0557) + (y * -0.2040) + (z * 1.0570);
-
-	// assume sRGB
-	r = r > 0.0031308
-		? ((1.055 * Math.pow(r, 1.0 / 2.4)) - 0.055)
-		: r * 12.92;
-
-	g = g > 0.0031308
-		? ((1.055 * Math.pow(g, 1.0 / 2.4)) - 0.055)
-		: g * 12.92;
-
-	b = b > 0.0031308
-		? ((1.055 * Math.pow(b, 1.0 / 2.4)) - 0.055)
-		: b * 12.92;
-
-	r = Math.min(Math.max(0, r), 1);
-	g = Math.min(Math.max(0, g), 1);
-	b = Math.min(Math.max(0, b), 1);
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.xyz.lab = function (xyz) {
-	var x = xyz[0];
-	var y = xyz[1];
-	var z = xyz[2];
-	var l;
-	var a;
-	var b;
-
-	x /= 95.047;
-	y /= 100;
-	z /= 108.883;
-
-	x = x > 0.008856 ? Math.pow(x, 1 / 3) : (7.787 * x) + (16 / 116);
-	y = y > 0.008856 ? Math.pow(y, 1 / 3) : (7.787 * y) + (16 / 116);
-	z = z > 0.008856 ? Math.pow(z, 1 / 3) : (7.787 * z) + (16 / 116);
-
-	l = (116 * y) - 16;
-	a = 500 * (x - y);
-	b = 200 * (y - z);
-
-	return [l, a, b];
-};
-
-convert.lab.xyz = function (lab) {
-	var l = lab[0];
-	var a = lab[1];
-	var b = lab[2];
-	var x;
-	var y;
-	var z;
-
-	y = (l + 16) / 116;
-	x = a / 500 + y;
-	z = y - b / 200;
-
-	var y2 = Math.pow(y, 3);
-	var x2 = Math.pow(x, 3);
-	var z2 = Math.pow(z, 3);
-	y = y2 > 0.008856 ? y2 : (y - 16 / 116) / 7.787;
-	x = x2 > 0.008856 ? x2 : (x - 16 / 116) / 7.787;
-	z = z2 > 0.008856 ? z2 : (z - 16 / 116) / 7.787;
-
-	x *= 95.047;
-	y *= 100;
-	z *= 108.883;
-
-	return [x, y, z];
-};
-
-convert.lab.lch = function (lab) {
-	var l = lab[0];
-	var a = lab[1];
-	var b = lab[2];
-	var hr;
-	var h;
-	var c;
-
-	hr = Math.atan2(b, a);
-	h = hr * 360 / 2 / Math.PI;
-
-	if (h < 0) {
-		h += 360;
-	}
-
-	c = Math.sqrt(a * a + b * b);
-
-	return [l, c, h];
-};
-
-convert.lch.lab = function (lch) {
-	var l = lch[0];
-	var c = lch[1];
-	var h = lch[2];
-	var a;
-	var b;
-	var hr;
-
-	hr = h / 360 * 2 * Math.PI;
-	a = c * Math.cos(hr);
-	b = c * Math.sin(hr);
-
-	return [l, a, b];
-};
-
-convert.rgb.ansi16 = function (args) {
-	var r = args[0];
-	var g = args[1];
-	var b = args[2];
-	var value = 1 in arguments ? arguments[1] : convert.rgb.hsv(args)[2]; // hsv -> ansi16 optimization
-
-	value = Math.round(value / 50);
-
-	if (value === 0) {
-		return 30;
-	}
-
-	var ansi = 30
-		+ ((Math.round(b / 255) << 2)
-		| (Math.round(g / 255) << 1)
-		| Math.round(r / 255));
-
-	if (value === 2) {
-		ansi += 60;
-	}
-
-	return ansi;
-};
-
-convert.hsv.ansi16 = function (args) {
-	// optimization here; we already know the value and don't need to get
-	// it converted for us.
-	return convert.rgb.ansi16(convert.hsv.rgb(args), args[2]);
-};
-
-convert.rgb.ansi256 = function (args) {
-	var r = args[0];
-	var g = args[1];
-	var b = args[2];
-
-	// we use the extended greyscale palette here, with the exception of
-	// black and white. normal palette only has 4 greyscale shades.
-	if (r === g && g === b) {
-		if (r < 8) {
-			return 16;
-		}
-
-		if (r > 248) {
-			return 231;
-		}
-
-		return Math.round(((r - 8) / 247) * 24) + 232;
-	}
-
-	var ansi = 16
-		+ (36 * Math.round(r / 255 * 5))
-		+ (6 * Math.round(g / 255 * 5))
-		+ Math.round(b / 255 * 5);
-
-	return ansi;
-};
-
-convert.ansi16.rgb = function (args) {
-	var color = args % 10;
-
-	// handle greyscale
-	if (color === 0 || color === 7) {
-		if (args > 50) {
-			color += 3.5;
-		}
-
-		color = color / 10.5 * 255;
-
-		return [color, color, color];
-	}
-
-	var mult = (~~(args > 50) + 1) * 0.5;
-	var r = ((color & 1) * mult) * 255;
-	var g = (((color >> 1) & 1) * mult) * 255;
-	var b = (((color >> 2) & 1) * mult) * 255;
-
-	return [r, g, b];
-};
-
-convert.ansi256.rgb = function (args) {
-	// handle greyscale
-	if (args >= 232) {
-		var c = (args - 232) * 10 + 8;
-		return [c, c, c];
-	}
-
-	args -= 16;
-
-	var rem;
-	var r = Math.floor(args / 36) / 5 * 255;
-	var g = Math.floor((rem = args % 36) / 6) / 5 * 255;
-	var b = (rem % 6) / 5 * 255;
-
-	return [r, g, b];
-};
-
-convert.rgb.hex = function (args) {
-	var integer = ((Math.round(args[0]) & 0xFF) << 16)
-		+ ((Math.round(args[1]) & 0xFF) << 8)
-		+ (Math.round(args[2]) & 0xFF);
-
-	var string = integer.toString(16).toUpperCase();
-	return '000000'.substring(string.length) + string;
-};
-
-convert.hex.rgb = function (args) {
-	var match = args.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
-	if (!match) {
-		return [0, 0, 0];
-	}
-
-	var colorString = match[0];
-
-	if (match[0].length === 3) {
-		colorString = colorString.split('').map(function (char) {
-			return char + char;
-		}).join('');
-	}
-
-	var integer = parseInt(colorString, 16);
-	var r = (integer >> 16) & 0xFF;
-	var g = (integer >> 8) & 0xFF;
-	var b = integer & 0xFF;
-
-	return [r, g, b];
-};
-
-convert.rgb.hcg = function (rgb) {
-	var r = rgb[0] / 255;
-	var g = rgb[1] / 255;
-	var b = rgb[2] / 255;
-	var max = Math.max(Math.max(r, g), b);
-	var min = Math.min(Math.min(r, g), b);
-	var chroma = (max - min);
-	var grayscale;
-	var hue;
-
-	if (chroma < 1) {
-		grayscale = min / (1 - chroma);
-	} else {
-		grayscale = 0;
-	}
-
-	if (chroma <= 0) {
-		hue = 0;
-	} else
-	if (max === r) {
-		hue = ((g - b) / chroma) % 6;
-	} else
-	if (max === g) {
-		hue = 2 + (b - r) / chroma;
-	} else {
-		hue = 4 + (r - g) / chroma + 4;
-	}
-
-	hue /= 6;
-	hue %= 1;
-
-	return [hue * 360, chroma * 100, grayscale * 100];
-};
-
-convert.hsl.hcg = function (hsl) {
-	var s = hsl[1] / 100;
-	var l = hsl[2] / 100;
-	var c = 1;
-	var f = 0;
-
-	if (l < 0.5) {
-		c = 2.0 * s * l;
-	} else {
-		c = 2.0 * s * (1.0 - l);
-	}
-
-	if (c < 1.0) {
-		f = (l - 0.5 * c) / (1.0 - c);
-	}
-
-	return [hsl[0], c * 100, f * 100];
-};
-
-convert.hsv.hcg = function (hsv) {
-	var s = hsv[1] / 100;
-	var v = hsv[2] / 100;
-
-	var c = s * v;
-	var f = 0;
-
-	if (c < 1.0) {
-		f = (v - c) / (1 - c);
-	}
-
-	return [hsv[0], c * 100, f * 100];
-};
-
-convert.hcg.rgb = function (hcg) {
-	var h = hcg[0] / 360;
-	var c = hcg[1] / 100;
-	var g = hcg[2] / 100;
-
-	if (c === 0.0) {
-		return [g * 255, g * 255, g * 255];
-	}
-
-	var pure = [0, 0, 0];
-	var hi = (h % 1) * 6;
-	var v = hi % 1;
-	var w = 1 - v;
-	var mg = 0;
-
-	switch (Math.floor(hi)) {
-		case 0:
-			pure[0] = 1; pure[1] = v; pure[2] = 0; break;
-		case 1:
-			pure[0] = w; pure[1] = 1; pure[2] = 0; break;
-		case 2:
-			pure[0] = 0; pure[1] = 1; pure[2] = v; break;
-		case 3:
-			pure[0] = 0; pure[1] = w; pure[2] = 1; break;
-		case 4:
-			pure[0] = v; pure[1] = 0; pure[2] = 1; break;
-		default:
-			pure[0] = 1; pure[1] = 0; pure[2] = w;
-	}
-
-	mg = (1.0 - c) * g;
-
-	return [
-		(c * pure[0] + mg) * 255,
-		(c * pure[1] + mg) * 255,
-		(c * pure[2] + mg) * 255
-	];
-};
-
-convert.hcg.hsv = function (hcg) {
-	var c = hcg[1] / 100;
-	var g = hcg[2] / 100;
-
-	var v = c + g * (1.0 - c);
-	var f = 0;
-
-	if (v > 0.0) {
-		f = c / v;
-	}
-
-	return [hcg[0], f * 100, v * 100];
-};
-
-convert.hcg.hsl = function (hcg) {
-	var c = hcg[1] / 100;
-	var g = hcg[2] / 100;
-
-	var l = g * (1.0 - c) + 0.5 * c;
-	var s = 0;
-
-	if (l > 0.0 && l < 0.5) {
-		s = c / (2 * l);
-	} else
-	if (l >= 0.5 && l < 1.0) {
-		s = c / (2 * (1 - l));
-	}
-
-	return [hcg[0], s * 100, l * 100];
-};
-
-convert.hcg.hwb = function (hcg) {
-	var c = hcg[1] / 100;
-	var g = hcg[2] / 100;
-	var v = c + g * (1.0 - c);
-	return [hcg[0], (v - c) * 100, (1 - v) * 100];
-};
-
-convert.hwb.hcg = function (hwb) {
-	var w = hwb[1] / 100;
-	var b = hwb[2] / 100;
-	var v = 1 - b;
-	var c = v - w;
-	var g = 0;
-
-	if (c < 1) {
-		g = (v - c) / (1 - c);
-	}
-
-	return [hwb[0], c * 100, g * 100];
-};
-
-convert.apple.rgb = function (apple) {
-	return [(apple[0] / 65535) * 255, (apple[1] / 65535) * 255, (apple[2] / 65535) * 255];
-};
-
-convert.rgb.apple = function (rgb) {
-	return [(rgb[0] / 255) * 65535, (rgb[1] / 255) * 65535, (rgb[2] / 255) * 65535];
-};
-
-convert.gray.rgb = function (args) {
-	return [args[0] / 100 * 255, args[0] / 100 * 255, args[0] / 100 * 255];
-};
-
-convert.gray.hsl = convert.gray.hsv = function (args) {
-	return [0, 0, args[0]];
-};
-
-convert.gray.hwb = function (gray) {
-	return [0, 100, gray[0]];
-};
-
-convert.gray.cmyk = function (gray) {
-	return [0, 0, 0, gray[0]];
-};
-
-convert.gray.lab = function (gray) {
-	return [gray[0], 0, 0];
-};
-
-convert.gray.hex = function (gray) {
-	var val = Math.round(gray[0] / 100 * 255) & 0xFF;
-	var integer = (val << 16) + (val << 8) + val;
-
-	var string = integer.toString(16).toUpperCase();
-	return '000000'.substring(string.length) + string;
-};
-
-convert.rgb.gray = function (rgb) {
-	var val = (rgb[0] + rgb[1] + rgb[2]) / 3;
-	return [val / 255 * 100];
-};
-
-
-/***/ }),
-
-/***/ 9551:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var conversions = __webpack_require__(5951);
-var route = __webpack_require__(563);
-
-var convert = {};
-
-var models = Object.keys(conversions);
-
-function wrapRaw(fn) {
-	var wrappedFn = function (args) {
-		if (args === undefined || args === null) {
-			return args;
-		}
-
-		if (arguments.length > 1) {
-			args = Array.prototype.slice.call(arguments);
-		}
-
-		return fn(args);
-	};
-
-	// preserve .conversion property if there is one
-	if ('conversion' in fn) {
-		wrappedFn.conversion = fn.conversion;
-	}
-
-	return wrappedFn;
-}
-
-function wrapRounded(fn) {
-	var wrappedFn = function (args) {
-		if (args === undefined || args === null) {
-			return args;
-		}
-
-		if (arguments.length > 1) {
-			args = Array.prototype.slice.call(arguments);
-		}
-
-		var result = fn(args);
-
-		// we're assuming the result is an array here.
-		// see notice in conversions.js; don't use box types
-		// in conversion functions.
-		if (typeof result === 'object') {
-			for (var len = result.length, i = 0; i < len; i++) {
-				result[i] = Math.round(result[i]);
-			}
-		}
-
-		return result;
-	};
-
-	// preserve .conversion property if there is one
-	if ('conversion' in fn) {
-		wrappedFn.conversion = fn.conversion;
-	}
-
-	return wrappedFn;
-}
-
-models.forEach(function (fromModel) {
-	convert[fromModel] = {};
-
-	Object.defineProperty(convert[fromModel], 'channels', {value: conversions[fromModel].channels});
-	Object.defineProperty(convert[fromModel], 'labels', {value: conversions[fromModel].labels});
-
-	var routes = route(fromModel);
-	var routeModels = Object.keys(routes);
-
-	routeModels.forEach(function (toModel) {
-		var fn = routes[toModel];
-
-		convert[fromModel][toModel] = wrapRounded(fn);
-		convert[fromModel][toModel].raw = wrapRaw(fn);
-	});
-});
-
-module.exports = convert;
-
-
-/***/ }),
-
-/***/ 563:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var conversions = __webpack_require__(5951);
-
-/*
-	this function routes a model to all other models.
-
-	all functions that are routed have a property `.conversion` attached
-	to the returned synthetic function. This property is an array
-	of strings, each with the steps in between the 'from' and 'to'
-	color models (inclusive).
-
-	conversions that are not possible simply are not included.
-*/
-
-function buildGraph() {
-	var graph = {};
-	// https://jsperf.com/object-keys-vs-for-in-with-closure/3
-	var models = Object.keys(conversions);
-
-	for (var len = models.length, i = 0; i < len; i++) {
-		graph[models[i]] = {
-			// http://jsperf.com/1-vs-infinity
-			// micro-opt, but this is simple.
-			distance: -1,
-			parent: null
-		};
-	}
-
-	return graph;
-}
-
-// https://en.wikipedia.org/wiki/Breadth-first_search
-function deriveBFS(fromModel) {
-	var graph = buildGraph();
-	var queue = [fromModel]; // unshift -> queue -> pop
-
-	graph[fromModel].distance = 0;
-
-	while (queue.length) {
-		var current = queue.pop();
-		var adjacents = Object.keys(conversions[current]);
-
-		for (var len = adjacents.length, i = 0; i < len; i++) {
-			var adjacent = adjacents[i];
-			var node = graph[adjacent];
-
-			if (node.distance === -1) {
-				node.distance = graph[current].distance + 1;
-				node.parent = current;
-				queue.unshift(adjacent);
-			}
-		}
-	}
-
-	return graph;
-}
-
-function link(from, to) {
-	return function (args) {
-		return to(from(args));
-	};
-}
-
-function wrapConversion(toModel, graph) {
-	var path = [graph[toModel].parent, toModel];
-	var fn = conversions[graph[toModel].parent][toModel];
-
-	var cur = graph[toModel].parent;
-	while (graph[cur].parent) {
-		path.unshift(graph[cur].parent);
-		fn = link(conversions[graph[cur].parent][cur], fn);
-		cur = graph[cur].parent;
-	}
-
-	fn.conversion = path;
-	return fn;
-}
-
-module.exports = function (fromModel) {
-	var graph = deriveBFS(fromModel);
-	var conversion = {};
-
-	var models = Object.keys(graph);
-	for (var len = models.length, i = 0; i < len; i++) {
-		var toModel = models[i];
-		var node = graph[toModel];
-
-		if (node.parent === null) {
-			// no possible conversion, or this node is the source model.
-			continue;
-		}
-
-		conversion[toModel] = wrapConversion(toModel, graph);
-	}
-
-	return conversion;
-};
-
-
-
-/***/ }),
-
-/***/ 9781:
-/***/ ((module) => {
-
-"use strict";
-
-
-module.exports = {
-	"aliceblue": [240, 248, 255],
-	"antiquewhite": [250, 235, 215],
-	"aqua": [0, 255, 255],
-	"aquamarine": [127, 255, 212],
-	"azure": [240, 255, 255],
-	"beige": [245, 245, 220],
-	"bisque": [255, 228, 196],
-	"black": [0, 0, 0],
-	"blanchedalmond": [255, 235, 205],
-	"blue": [0, 0, 255],
-	"blueviolet": [138, 43, 226],
-	"brown": [165, 42, 42],
-	"burlywood": [222, 184, 135],
-	"cadetblue": [95, 158, 160],
-	"chartreuse": [127, 255, 0],
-	"chocolate": [210, 105, 30],
-	"coral": [255, 127, 80],
-	"cornflowerblue": [100, 149, 237],
-	"cornsilk": [255, 248, 220],
-	"crimson": [220, 20, 60],
-	"cyan": [0, 255, 255],
-	"darkblue": [0, 0, 139],
-	"darkcyan": [0, 139, 139],
-	"darkgoldenrod": [184, 134, 11],
-	"darkgray": [169, 169, 169],
-	"darkgreen": [0, 100, 0],
-	"darkgrey": [169, 169, 169],
-	"darkkhaki": [189, 183, 107],
-	"darkmagenta": [139, 0, 139],
-	"darkolivegreen": [85, 107, 47],
-	"darkorange": [255, 140, 0],
-	"darkorchid": [153, 50, 204],
-	"darkred": [139, 0, 0],
-	"darksalmon": [233, 150, 122],
-	"darkseagreen": [143, 188, 143],
-	"darkslateblue": [72, 61, 139],
-	"darkslategray": [47, 79, 79],
-	"darkslategrey": [47, 79, 79],
-	"darkturquoise": [0, 206, 209],
-	"darkviolet": [148, 0, 211],
-	"deeppink": [255, 20, 147],
-	"deepskyblue": [0, 191, 255],
-	"dimgray": [105, 105, 105],
-	"dimgrey": [105, 105, 105],
-	"dodgerblue": [30, 144, 255],
-	"firebrick": [178, 34, 34],
-	"floralwhite": [255, 250, 240],
-	"forestgreen": [34, 139, 34],
-	"fuchsia": [255, 0, 255],
-	"gainsboro": [220, 220, 220],
-	"ghostwhite": [248, 248, 255],
-	"gold": [255, 215, 0],
-	"goldenrod": [218, 165, 32],
-	"gray": [128, 128, 128],
-	"green": [0, 128, 0],
-	"greenyellow": [173, 255, 47],
-	"grey": [128, 128, 128],
-	"honeydew": [240, 255, 240],
-	"hotpink": [255, 105, 180],
-	"indianred": [205, 92, 92],
-	"indigo": [75, 0, 130],
-	"ivory": [255, 255, 240],
-	"khaki": [240, 230, 140],
-	"lavender": [230, 230, 250],
-	"lavenderblush": [255, 240, 245],
-	"lawngreen": [124, 252, 0],
-	"lemonchiffon": [255, 250, 205],
-	"lightblue": [173, 216, 230],
-	"lightcoral": [240, 128, 128],
-	"lightcyan": [224, 255, 255],
-	"lightgoldenrodyellow": [250, 250, 210],
-	"lightgray": [211, 211, 211],
-	"lightgreen": [144, 238, 144],
-	"lightgrey": [211, 211, 211],
-	"lightpink": [255, 182, 193],
-	"lightsalmon": [255, 160, 122],
-	"lightseagreen": [32, 178, 170],
-	"lightskyblue": [135, 206, 250],
-	"lightslategray": [119, 136, 153],
-	"lightslategrey": [119, 136, 153],
-	"lightsteelblue": [176, 196, 222],
-	"lightyellow": [255, 255, 224],
-	"lime": [0, 255, 0],
-	"limegreen": [50, 205, 50],
-	"linen": [250, 240, 230],
-	"magenta": [255, 0, 255],
-	"maroon": [128, 0, 0],
-	"mediumaquamarine": [102, 205, 170],
-	"mediumblue": [0, 0, 205],
-	"mediumorchid": [186, 85, 211],
-	"mediumpurple": [147, 112, 219],
-	"mediumseagreen": [60, 179, 113],
-	"mediumslateblue": [123, 104, 238],
-	"mediumspringgreen": [0, 250, 154],
-	"mediumturquoise": [72, 209, 204],
-	"mediumvioletred": [199, 21, 133],
-	"midnightblue": [25, 25, 112],
-	"mintcream": [245, 255, 250],
-	"mistyrose": [255, 228, 225],
-	"moccasin": [255, 228, 181],
-	"navajowhite": [255, 222, 173],
-	"navy": [0, 0, 128],
-	"oldlace": [253, 245, 230],
-	"olive": [128, 128, 0],
-	"olivedrab": [107, 142, 35],
-	"orange": [255, 165, 0],
-	"orangered": [255, 69, 0],
-	"orchid": [218, 112, 214],
-	"palegoldenrod": [238, 232, 170],
-	"palegreen": [152, 251, 152],
-	"paleturquoise": [175, 238, 238],
-	"palevioletred": [219, 112, 147],
-	"papayawhip": [255, 239, 213],
-	"peachpuff": [255, 218, 185],
-	"peru": [205, 133, 63],
-	"pink": [255, 192, 203],
-	"plum": [221, 160, 221],
-	"powderblue": [176, 224, 230],
-	"purple": [128, 0, 128],
-	"rebeccapurple": [102, 51, 153],
-	"red": [255, 0, 0],
-	"rosybrown": [188, 143, 143],
-	"royalblue": [65, 105, 225],
-	"saddlebrown": [139, 69, 19],
-	"salmon": [250, 128, 114],
-	"sandybrown": [244, 164, 96],
-	"seagreen": [46, 139, 87],
-	"seashell": [255, 245, 238],
-	"sienna": [160, 82, 45],
-	"silver": [192, 192, 192],
-	"skyblue": [135, 206, 235],
-	"slateblue": [106, 90, 205],
-	"slategray": [112, 128, 144],
-	"slategrey": [112, 128, 144],
-	"snow": [255, 250, 250],
-	"springgreen": [0, 255, 127],
-	"steelblue": [70, 130, 180],
-	"tan": [210, 180, 140],
-	"teal": [0, 128, 128],
-	"thistle": [216, 191, 216],
-	"tomato": [255, 99, 71],
-	"turquoise": [64, 224, 208],
-	"violet": [238, 130, 238],
-	"wheat": [245, 222, 179],
-	"white": [255, 255, 255],
-	"whitesmoke": [245, 245, 245],
-	"yellow": [255, 255, 0],
-	"yellowgreen": [154, 205, 50]
-};
-
-
-/***/ }),
-
-/***/ 565:
-/***/ ((module) => {
-
-"use strict";
-
-module.exports = (flag, argv) => {
-	argv = argv || process.argv;
-	const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
-	const pos = argv.indexOf(prefix + flag);
-	const terminatorPos = argv.indexOf('--');
-	return pos !== -1 && (terminatorPos === -1 ? true : pos < terminatorPos);
-};
-
-
-/***/ }),
-
-/***/ 9950:
-/***/ ((module) => {
-
-"use strict";
-/* eslint-disable yoda */
-
-
-const isFullwidthCodePoint = codePoint => {
-	if (Number.isNaN(codePoint)) {
-		return false;
-	}
-
-	// Code points are derived from:
-	// http://www.unix.org/Public/UNIDATA/EastAsianWidth.txt
-	if (
-		codePoint >= 0x1100 && (
-			codePoint <= 0x115F || // Hangul Jamo
-			codePoint === 0x2329 || // LEFT-POINTING ANGLE BRACKET
-			codePoint === 0x232A || // RIGHT-POINTING ANGLE BRACKET
-			// CJK Radicals Supplement .. Enclosed CJK Letters and Months
-			(0x2E80 <= codePoint && codePoint <= 0x3247 && codePoint !== 0x303F) ||
-			// Enclosed CJK Letters and Months .. CJK Unified Ideographs Extension A
-			(0x3250 <= codePoint && codePoint <= 0x4DBF) ||
-			// CJK Unified Ideographs .. Yi Radicals
-			(0x4E00 <= codePoint && codePoint <= 0xA4C6) ||
-			// Hangul Jamo Extended-A
-			(0xA960 <= codePoint && codePoint <= 0xA97C) ||
-			// Hangul Syllables
-			(0xAC00 <= codePoint && codePoint <= 0xD7A3) ||
-			// CJK Compatibility Ideographs
-			(0xF900 <= codePoint && codePoint <= 0xFAFF) ||
-			// Vertical Forms
-			(0xFE10 <= codePoint && codePoint <= 0xFE19) ||
-			// CJK Compatibility Forms .. Small Form Variants
-			(0xFE30 <= codePoint && codePoint <= 0xFE6B) ||
-			// Halfwidth and Fullwidth Forms
-			(0xFF01 <= codePoint && codePoint <= 0xFF60) ||
-			(0xFFE0 <= codePoint && codePoint <= 0xFFE6) ||
-			// Kana Supplement
-			(0x1B000 <= codePoint && codePoint <= 0x1B001) ||
-			// Enclosed Ideographic Supplement
-			(0x1F200 <= codePoint && codePoint <= 0x1F251) ||
-			// CJK Unified Ideographs Extension B .. Tertiary Ideographic Plane
-			(0x20000 <= codePoint && codePoint <= 0x3FFFD)
-		)
-	) {
-		return true;
-	}
-
-	return false;
-};
-
-module.exports = isFullwidthCodePoint;
-module.exports.default = isFullwidthCodePoint;
-
-
-/***/ }),
-
-/***/ 6208:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const stripAnsi = __webpack_require__(8098);
-const isFullwidthCodePoint = __webpack_require__(9950);
-const emojiRegex = __webpack_require__(8212);
-
-const stringWidth = string => {
-	string = string.replace(emojiRegex(), '  ');
-
-	if (typeof string !== 'string' || string.length === 0) {
-		return 0;
-	}
-
-	string = stripAnsi(string);
-
-	let width = 0;
-
-	for (let i = 0; i < string.length; i++) {
-		const code = string.codePointAt(i);
-
-		// Ignore control characters
-		if (code <= 0x1F || (code >= 0x7F && code <= 0x9F)) {
-			continue;
-		}
-
-		// Ignore combining characters
-		if (code >= 0x300 && code <= 0x36F) {
-			continue;
-		}
-
-		// Surrogates
-		if (code > 0xFFFF) {
-			i++;
-		}
-
-		width += isFullwidthCodePoint(code) ? 2 : 1;
-	}
-
-	return width;
-};
-
-module.exports = stringWidth;
-// TODO: remove this in the next major version
-module.exports.default = stringWidth;
-
-
-/***/ }),
-
-/***/ 8098:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const ansiRegex = __webpack_require__(5063);
-
-module.exports = string => typeof string === 'string' ? string.replace(ansiRegex(), '') : string;
-
-
-/***/ }),
-
-/***/ 1884:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const os = __webpack_require__(2087);
-const hasFlag = __webpack_require__(565);
-
-const env = process.env;
-
-let forceColor;
-if (hasFlag('no-color') ||
-	hasFlag('no-colors') ||
-	hasFlag('color=false')) {
-	forceColor = false;
-} else if (hasFlag('color') ||
-	hasFlag('colors') ||
-	hasFlag('color=true') ||
-	hasFlag('color=always')) {
-	forceColor = true;
-}
-if ('FORCE_COLOR' in env) {
-	forceColor = env.FORCE_COLOR.length === 0 || parseInt(env.FORCE_COLOR, 10) !== 0;
-}
-
-function translateLevel(level) {
-	if (level === 0) {
-		return false;
-	}
-
-	return {
-		level,
-		hasBasic: true,
-		has256: level >= 2,
-		has16m: level >= 3
-	};
-}
-
-function supportsColor(stream) {
-	if (forceColor === false) {
-		return 0;
-	}
-
-	if (hasFlag('color=16m') ||
-		hasFlag('color=full') ||
-		hasFlag('color=truecolor')) {
-		return 3;
-	}
-
-	if (hasFlag('color=256')) {
-		return 2;
-	}
-
-	if (stream && !stream.isTTY && forceColor !== true) {
-		return 0;
-	}
-
-	const min = forceColor ? 1 : 0;
-
-	if (process.platform === 'win32') {
-		// Node.js 7.5.0 is the first version of Node.js to include a patch to
-		// libuv that enables 256 color output on Windows. Anything earlier and it
-		// won't work. However, here we target Node.js 8 at minimum as it is an LTS
-		// release, and Node.js 7 is not. Windows 10 build 10586 is the first Windows
-		// release that supports 256 colors. Windows 10 build 14931 is the first release
-		// that supports 16m/TrueColor.
-		const osRelease = os.release().split('.');
-		if (
-			Number(process.versions.node.split('.')[0]) >= 8 &&
-			Number(osRelease[0]) >= 10 &&
-			Number(osRelease[2]) >= 10586
-		) {
-			return Number(osRelease[2]) >= 14931 ? 3 : 2;
-		}
-
-		return 1;
-	}
-
-	if ('CI' in env) {
-		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
-			return 1;
-		}
-
-		return min;
-	}
-
-	if ('TEAMCITY_VERSION' in env) {
-		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-	}
-
-	if (env.COLORTERM === 'truecolor') {
-		return 3;
-	}
-
-	if ('TERM_PROGRAM' in env) {
-		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
-
-		switch (env.TERM_PROGRAM) {
-			case 'iTerm.app':
-				return version >= 3 ? 3 : 2;
-			case 'Apple_Terminal':
-				return 2;
-			// No default
-		}
-	}
-
-	if (/-256(color)?$/i.test(env.TERM)) {
-		return 2;
-	}
-
-	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-		return 1;
-	}
-
-	if ('COLORTERM' in env) {
-		return 1;
-	}
-
-	if (env.TERM === 'dumb') {
-		return min;
-	}
-
-	return min;
-}
-
-function getSupportLevel(stream) {
-	const level = supportsColor(stream);
-	return translateLevel(level);
+function colorizeLines(input) {
+  let state = {};
+  let output = [];
+  for (let i = 0; i < input.length; i++) {
+    let line = rewindState(state, input[i]);
+    state = readState(line);
+    let temp = objectAssign({}, state);
+    output.push(unwindState(temp, line));
+  }
+  return output;
 }
 
 module.exports = {
-	supportsColor: getSupportLevel,
-	stdout: getSupportLevel(process.stdout),
-	stderr: getSupportLevel(process.stderr)
+  strlen: strlen,
+  repeat: repeat,
+  pad: pad,
+  truncate: truncate,
+  mergeOptions: mergeOptions,
+  wordWrap: multiLineWordWrap,
+  colorizeLines: colorizeLines,
 };
 
 
 /***/ }),
 
 /***/ 7391:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /* MIT license */
 /* eslint-disable no-mixed-operators */
-const cssKeywords = __webpack_require__(8510);
+const cssKeywords = __nccwpck_require__(8510);
 
 // NOTE: conversions should only return primitive values (i.e. arrays, or
 //       values that give correct `typeof` results).
@@ -8961,10 +8408,10 @@ convert.rgb.gray = function (rgb) {
 /***/ }),
 
 /***/ 6931:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const conversions = __webpack_require__(7391);
-const route = __webpack_require__(880);
+const conversions = __nccwpck_require__(7391);
+const route = __nccwpck_require__(880);
 
 const convert = {};
 
@@ -9049,9 +8496,9 @@ module.exports = convert;
 /***/ }),
 
 /***/ 880:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const conversions = __webpack_require__(7391);
+const conversions = __nccwpck_require__(7391);
 
 /*
 	This function routes a model to all other models.
@@ -9312,8 +8759,783 @@ module.exports = {
 
 /***/ }),
 
+/***/ 3595:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+/*
+
+The MIT License (MIT)
+
+Original Library
+  - Copyright (c) Marak Squires
+
+Additional functionality
+ - Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+var colors = {};
+module['exports'] = colors;
+
+colors.themes = {};
+
+var util = __nccwpck_require__(1669);
+var ansiStyles = colors.styles = __nccwpck_require__(3104);
+var defineProps = Object.defineProperties;
+var newLineRegex = new RegExp(/[\r\n]+/g);
+
+colors.supportsColor = __nccwpck_require__(662).supportsColor;
+
+if (typeof colors.enabled === 'undefined') {
+  colors.enabled = colors.supportsColor() !== false;
+}
+
+colors.enable = function() {
+  colors.enabled = true;
+};
+
+colors.disable = function() {
+  colors.enabled = false;
+};
+
+colors.stripColors = colors.strip = function(str) {
+  return ('' + str).replace(/\x1B\[\d+m/g, '');
+};
+
+// eslint-disable-next-line no-unused-vars
+var stylize = colors.stylize = function stylize(str, style) {
+  if (!colors.enabled) {
+    return str+'';
+  }
+
+  var styleMap = ansiStyles[style];
+
+  // Stylize should work for non-ANSI styles, too
+  if(!styleMap && style in colors){
+    // Style maps like trap operate as functions on strings;
+    // they don't have properties like open or close.
+    return colors[style](str);
+  }
+
+  return styleMap.open + str + styleMap.close;
+};
+
+var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
+var escapeStringRegexp = function(str) {
+  if (typeof str !== 'string') {
+    throw new TypeError('Expected a string');
+  }
+  return str.replace(matchOperatorsRe, '\\$&');
+};
+
+function build(_styles) {
+  var builder = function builder() {
+    return applyStyle.apply(builder, arguments);
+  };
+  builder._styles = _styles;
+  // __proto__ is used because we must return a function, but there is
+  // no way to create a function with a different prototype.
+  builder.__proto__ = proto;
+  return builder;
+}
+
+var styles = (function() {
+  var ret = {};
+  ansiStyles.grey = ansiStyles.gray;
+  Object.keys(ansiStyles).forEach(function(key) {
+    ansiStyles[key].closeRe =
+      new RegExp(escapeStringRegexp(ansiStyles[key].close), 'g');
+    ret[key] = {
+      get: function() {
+        return build(this._styles.concat(key));
+      },
+    };
+  });
+  return ret;
+})();
+
+var proto = defineProps(function colors() {}, styles);
+
+function applyStyle() {
+  var args = Array.prototype.slice.call(arguments);
+
+  var str = args.map(function(arg) {
+    // Use weak equality check so we can colorize null/undefined in safe mode
+    if (arg != null && arg.constructor === String) {
+      return arg;
+    } else {
+      return util.inspect(arg);
+    }
+  }).join(' ');
+
+  if (!colors.enabled || !str) {
+    return str;
+  }
+
+  var newLinesPresent = str.indexOf('\n') != -1;
+
+  var nestedStyles = this._styles;
+
+  var i = nestedStyles.length;
+  while (i--) {
+    var code = ansiStyles[nestedStyles[i]];
+    str = code.open + str.replace(code.closeRe, code.open) + code.close;
+    if (newLinesPresent) {
+      str = str.replace(newLineRegex, function(match) {
+        return code.close + match + code.open;
+      });
+    }
+  }
+
+  return str;
+}
+
+colors.setTheme = function(theme) {
+  if (typeof theme === 'string') {
+    console.log('colors.setTheme now only accepts an object, not a string.  ' +
+      'If you are trying to set a theme from a file, it is now your (the ' +
+      'caller\'s) responsibility to require the file.  The old syntax ' +
+      'looked like colors.setTheme(__dirname + ' +
+      '\'/../themes/generic-logging.js\'); The new syntax looks like '+
+      'colors.setTheme(require(__dirname + ' +
+      '\'/../themes/generic-logging.js\'));');
+    return;
+  }
+  for (var style in theme) {
+    (function(style) {
+      colors[style] = function(str) {
+        if (typeof theme[style] === 'object') {
+          var out = str;
+          for (var i in theme[style]) {
+            out = colors[theme[style][i]](out);
+          }
+          return out;
+        }
+        return colors[theme[style]](str);
+      };
+    })(style);
+  }
+};
+
+function init() {
+  var ret = {};
+  Object.keys(styles).forEach(function(name) {
+    ret[name] = {
+      get: function() {
+        return build([name]);
+      },
+    };
+  });
+  return ret;
+}
+
+var sequencer = function sequencer(map, str) {
+  var exploded = str.split('');
+  exploded = exploded.map(map);
+  return exploded.join('');
+};
+
+// custom formatter methods
+colors.trap = __nccwpck_require__(1302);
+colors.zalgo = __nccwpck_require__(7743);
+
+// maps
+colors.maps = {};
+colors.maps.america = __nccwpck_require__(6936)(colors);
+colors.maps.zebra = __nccwpck_require__(2989)(colors);
+colors.maps.rainbow = __nccwpck_require__(5210)(colors);
+colors.maps.random = __nccwpck_require__(3441)(colors);
+
+for (var map in colors.maps) {
+  (function(map) {
+    colors[map] = function(str) {
+      return sequencer(colors.maps[map], str);
+    };
+  })(map);
+}
+
+defineProps(colors, init());
+
+
+/***/ }),
+
+/***/ 1302:
+/***/ ((module) => {
+
+module['exports'] = function runTheTrap(text, options) {
+  var result = '';
+  text = text || 'Run the trap, drop the bass';
+  text = text.split('');
+  var trap = {
+    a: ['\u0040', '\u0104', '\u023a', '\u0245', '\u0394', '\u039b', '\u0414'],
+    b: ['\u00df', '\u0181', '\u0243', '\u026e', '\u03b2', '\u0e3f'],
+    c: ['\u00a9', '\u023b', '\u03fe'],
+    d: ['\u00d0', '\u018a', '\u0500', '\u0501', '\u0502', '\u0503'],
+    e: ['\u00cb', '\u0115', '\u018e', '\u0258', '\u03a3', '\u03be', '\u04bc',
+      '\u0a6c'],
+    f: ['\u04fa'],
+    g: ['\u0262'],
+    h: ['\u0126', '\u0195', '\u04a2', '\u04ba', '\u04c7', '\u050a'],
+    i: ['\u0f0f'],
+    j: ['\u0134'],
+    k: ['\u0138', '\u04a0', '\u04c3', '\u051e'],
+    l: ['\u0139'],
+    m: ['\u028d', '\u04cd', '\u04ce', '\u0520', '\u0521', '\u0d69'],
+    n: ['\u00d1', '\u014b', '\u019d', '\u0376', '\u03a0', '\u048a'],
+    o: ['\u00d8', '\u00f5', '\u00f8', '\u01fe', '\u0298', '\u047a', '\u05dd',
+      '\u06dd', '\u0e4f'],
+    p: ['\u01f7', '\u048e'],
+    q: ['\u09cd'],
+    r: ['\u00ae', '\u01a6', '\u0210', '\u024c', '\u0280', '\u042f'],
+    s: ['\u00a7', '\u03de', '\u03df', '\u03e8'],
+    t: ['\u0141', '\u0166', '\u0373'],
+    u: ['\u01b1', '\u054d'],
+    v: ['\u05d8'],
+    w: ['\u0428', '\u0460', '\u047c', '\u0d70'],
+    x: ['\u04b2', '\u04fe', '\u04fc', '\u04fd'],
+    y: ['\u00a5', '\u04b0', '\u04cb'],
+    z: ['\u01b5', '\u0240'],
+  };
+  text.forEach(function(c) {
+    c = c.toLowerCase();
+    var chars = trap[c] || [' '];
+    var rand = Math.floor(Math.random() * chars.length);
+    if (typeof trap[c] !== 'undefined') {
+      result += trap[c][rand];
+    } else {
+      result += c;
+    }
+  });
+  return result;
+};
+
+
+/***/ }),
+
+/***/ 7743:
+/***/ ((module) => {
+
+// please no
+module['exports'] = function zalgo(text, options) {
+  text = text || '   he is here   ';
+  var soul = {
+    'up': [
+      '̍', '̎', '̄', '̅',
+      '̿', '̑', '̆', '̐',
+      '͒', '͗', '͑', '̇',
+      '̈', '̊', '͂', '̓',
+      '̈', '͊', '͋', '͌',
+      '̃', '̂', '̌', '͐',
+      '̀', '́', '̋', '̏',
+      '̒', '̓', '̔', '̽',
+      '̉', 'ͣ', 'ͤ', 'ͥ',
+      'ͦ', 'ͧ', 'ͨ', 'ͩ',
+      'ͪ', 'ͫ', 'ͬ', 'ͭ',
+      'ͮ', 'ͯ', '̾', '͛',
+      '͆', '̚',
+    ],
+    'down': [
+      '̖', '̗', '̘', '̙',
+      '̜', '̝', '̞', '̟',
+      '̠', '̤', '̥', '̦',
+      '̩', '̪', '̫', '̬',
+      '̭', '̮', '̯', '̰',
+      '̱', '̲', '̳', '̹',
+      '̺', '̻', '̼', 'ͅ',
+      '͇', '͈', '͉', '͍',
+      '͎', '͓', '͔', '͕',
+      '͖', '͙', '͚', '̣',
+    ],
+    'mid': [
+      '̕', '̛', '̀', '́',
+      '͘', '̡', '̢', '̧',
+      '̨', '̴', '̵', '̶',
+      '͜', '͝', '͞',
+      '͟', '͠', '͢', '̸',
+      '̷', '͡', ' ҉',
+    ],
+  };
+  var all = [].concat(soul.up, soul.down, soul.mid);
+
+  function randomNumber(range) {
+    var r = Math.floor(Math.random() * range);
+    return r;
+  }
+
+  function isChar(character) {
+    var bool = false;
+    all.filter(function(i) {
+      bool = (i === character);
+    });
+    return bool;
+  }
+
+
+  function heComes(text, options) {
+    var result = '';
+    var counts;
+    var l;
+    options = options || {};
+    options['up'] =
+      typeof options['up'] !== 'undefined' ? options['up'] : true;
+    options['mid'] =
+      typeof options['mid'] !== 'undefined' ? options['mid'] : true;
+    options['down'] =
+      typeof options['down'] !== 'undefined' ? options['down'] : true;
+    options['size'] =
+      typeof options['size'] !== 'undefined' ? options['size'] : 'maxi';
+    text = text.split('');
+    for (l in text) {
+      if (isChar(l)) {
+        continue;
+      }
+      result = result + text[l];
+      counts = {'up': 0, 'down': 0, 'mid': 0};
+      switch (options.size) {
+        case 'mini':
+          counts.up = randomNumber(8);
+          counts.mid = randomNumber(2);
+          counts.down = randomNumber(8);
+          break;
+        case 'maxi':
+          counts.up = randomNumber(16) + 3;
+          counts.mid = randomNumber(4) + 1;
+          counts.down = randomNumber(64) + 3;
+          break;
+        default:
+          counts.up = randomNumber(8) + 1;
+          counts.mid = randomNumber(6) / 2;
+          counts.down = randomNumber(8) + 1;
+          break;
+      }
+
+      var arr = ['up', 'mid', 'down'];
+      for (var d in arr) {
+        var index = arr[d];
+        for (var i = 0; i <= counts[index]; i++) {
+          if (options[index]) {
+            result = result + soul[index][randomNumber(soul[index].length)];
+          }
+        }
+      }
+    }
+    return result;
+  }
+  // don't summon him
+  return heComes(text, options);
+};
+
+
+
+/***/ }),
+
+/***/ 6936:
+/***/ ((module) => {
+
+module['exports'] = function(colors) {
+  return function(letter, i, exploded) {
+    if (letter === ' ') return letter;
+    switch (i%3) {
+      case 0: return colors.red(letter);
+      case 1: return colors.white(letter);
+      case 2: return colors.blue(letter);
+    }
+  };
+};
+
+
+/***/ }),
+
+/***/ 5210:
+/***/ ((module) => {
+
+module['exports'] = function(colors) {
+  // RoY G BiV
+  var rainbowColors = ['red', 'yellow', 'green', 'blue', 'magenta'];
+  return function(letter, i, exploded) {
+    if (letter === ' ') {
+      return letter;
+    } else {
+      return colors[rainbowColors[i++ % rainbowColors.length]](letter);
+    }
+  };
+};
+
+
+
+/***/ }),
+
+/***/ 3441:
+/***/ ((module) => {
+
+module['exports'] = function(colors) {
+  var available = ['underline', 'inverse', 'grey', 'yellow', 'red', 'green',
+    'blue', 'white', 'cyan', 'magenta', 'brightYellow', 'brightRed',
+    'brightGreen', 'brightBlue', 'brightWhite', 'brightCyan', 'brightMagenta'];
+  return function(letter, i, exploded) {
+    return letter === ' ' ? letter :
+      colors[
+          available[Math.round(Math.random() * (available.length - 2))]
+      ](letter);
+  };
+};
+
+
+/***/ }),
+
+/***/ 2989:
+/***/ ((module) => {
+
+module['exports'] = function(colors) {
+  return function(letter, i, exploded) {
+    return i % 2 === 0 ? letter : colors.inverse(letter);
+  };
+};
+
+
+/***/ }),
+
+/***/ 3104:
+/***/ ((module) => {
+
+/*
+The MIT License (MIT)
+
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+var styles = {};
+module['exports'] = styles;
+
+var codes = {
+  reset: [0, 0],
+
+  bold: [1, 22],
+  dim: [2, 22],
+  italic: [3, 23],
+  underline: [4, 24],
+  inverse: [7, 27],
+  hidden: [8, 28],
+  strikethrough: [9, 29],
+
+  black: [30, 39],
+  red: [31, 39],
+  green: [32, 39],
+  yellow: [33, 39],
+  blue: [34, 39],
+  magenta: [35, 39],
+  cyan: [36, 39],
+  white: [37, 39],
+  gray: [90, 39],
+  grey: [90, 39],
+
+  brightRed: [91, 39],
+  brightGreen: [92, 39],
+  brightYellow: [93, 39],
+  brightBlue: [94, 39],
+  brightMagenta: [95, 39],
+  brightCyan: [96, 39],
+  brightWhite: [97, 39],
+
+  bgBlack: [40, 49],
+  bgRed: [41, 49],
+  bgGreen: [42, 49],
+  bgYellow: [43, 49],
+  bgBlue: [44, 49],
+  bgMagenta: [45, 49],
+  bgCyan: [46, 49],
+  bgWhite: [47, 49],
+  bgGray: [100, 49],
+  bgGrey: [100, 49],
+
+  bgBrightRed: [101, 49],
+  bgBrightGreen: [102, 49],
+  bgBrightYellow: [103, 49],
+  bgBrightBlue: [104, 49],
+  bgBrightMagenta: [105, 49],
+  bgBrightCyan: [106, 49],
+  bgBrightWhite: [107, 49],
+
+  // legacy styles for colors pre v1.0.0
+  blackBG: [40, 49],
+  redBG: [41, 49],
+  greenBG: [42, 49],
+  yellowBG: [43, 49],
+  blueBG: [44, 49],
+  magentaBG: [45, 49],
+  cyanBG: [46, 49],
+  whiteBG: [47, 49],
+
+};
+
+Object.keys(codes).forEach(function(key) {
+  var val = codes[key];
+  var style = styles[key] = [];
+  style.open = '\u001b[' + val[0] + 'm';
+  style.close = '\u001b[' + val[1] + 'm';
+});
+
+
+/***/ }),
+
+/***/ 223:
+/***/ ((module) => {
+
+"use strict";
+/*
+MIT License
+
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
+
+module.exports = function(flag, argv) {
+  argv = argv || process.argv;
+
+  var terminatorPos = argv.indexOf('--');
+  var prefix = /^-{1,2}/.test(flag) ? '' : '--';
+  var pos = argv.indexOf(prefix + flag);
+
+  return pos !== -1 && (terminatorPos === -1 ? true : pos < terminatorPos);
+};
+
+
+/***/ }),
+
+/***/ 662:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+/*
+The MIT License (MIT)
+
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+
+
+var os = __nccwpck_require__(2087);
+var hasFlag = __nccwpck_require__(223);
+
+var env = process.env;
+
+var forceColor = void 0;
+if (hasFlag('no-color') || hasFlag('no-colors') || hasFlag('color=false')) {
+  forceColor = false;
+} else if (hasFlag('color') || hasFlag('colors') || hasFlag('color=true')
+           || hasFlag('color=always')) {
+  forceColor = true;
+}
+if ('FORCE_COLOR' in env) {
+  forceColor = env.FORCE_COLOR.length === 0
+    || parseInt(env.FORCE_COLOR, 10) !== 0;
+}
+
+function translateLevel(level) {
+  if (level === 0) {
+    return false;
+  }
+
+  return {
+    level: level,
+    hasBasic: true,
+    has256: level >= 2,
+    has16m: level >= 3,
+  };
+}
+
+function supportsColor(stream) {
+  if (forceColor === false) {
+    return 0;
+  }
+
+  if (hasFlag('color=16m') || hasFlag('color=full')
+      || hasFlag('color=truecolor')) {
+    return 3;
+  }
+
+  if (hasFlag('color=256')) {
+    return 2;
+  }
+
+  if (stream && !stream.isTTY && forceColor !== true) {
+    return 0;
+  }
+
+  var min = forceColor ? 1 : 0;
+
+  if (process.platform === 'win32') {
+    // Node.js 7.5.0 is the first version of Node.js to include a patch to
+    // libuv that enables 256 color output on Windows. Anything earlier and it
+    // won't work. However, here we target Node.js 8 at minimum as it is an LTS
+    // release, and Node.js 7 is not. Windows 10 build 10586 is the first
+    // Windows release that supports 256 colors. Windows 10 build 14931 is the
+    // first release that supports 16m/TrueColor.
+    var osRelease = os.release().split('.');
+    if (Number(process.versions.node.split('.')[0]) >= 8
+        && Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
+      return Number(osRelease[2]) >= 14931 ? 3 : 2;
+    }
+
+    return 1;
+  }
+
+  if ('CI' in env) {
+    if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(function(sign) {
+      return sign in env;
+    }) || env.CI_NAME === 'codeship') {
+      return 1;
+    }
+
+    return min;
+  }
+
+  if ('TEAMCITY_VERSION' in env) {
+    return (/^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0
+    );
+  }
+
+  if ('TERM_PROGRAM' in env) {
+    var version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
+
+    switch (env.TERM_PROGRAM) {
+      case 'iTerm.app':
+        return version >= 3 ? 3 : 2;
+      case 'Hyper':
+        return 3;
+      case 'Apple_Terminal':
+        return 2;
+      // No default
+    }
+  }
+
+  if (/-256(color)?$/i.test(env.TERM)) {
+    return 2;
+  }
+
+  if (/^screen|^xterm|^vt100|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
+    return 1;
+  }
+
+  if ('COLORTERM' in env) {
+    return 1;
+  }
+
+  if (env.TERM === 'dumb') {
+    return min;
+  }
+
+  return min;
+}
+
+function getSupportLevel(stream) {
+  var level = supportsColor(stream);
+  return translateLevel(level);
+}
+
+module.exports = {
+  supportsColor: getSupportLevel,
+  stdout: getSupportLevel(process.stdout),
+  stderr: getSupportLevel(process.stderr),
+};
+
+
+/***/ }),
+
+/***/ 1997:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+//
+// Remark: Requiring this file will use the "safe" colors API,
+// which will not touch String.prototype.
+//
+//   var colors = require('colors/safe');
+//   colors.red("foo")
+//
+//
+var colors = __nccwpck_require__(3595);
+module['exports'] = colors;
+
+
+/***/ }),
+
 /***/ 5898:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -9417,7 +9639,7 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = Buffer.isBuffer;
+exports.isBuffer = __nccwpck_require__(4293).Buffer.isBuffer;
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -9427,7 +9649,7 @@ function objectToString(o) {
 /***/ }),
 
 /***/ 4638:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -9437,19 +9659,17 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.Explorer = void 0;
 
-var _path = _interopRequireDefault(__webpack_require__(5622));
+var _path = _interopRequireDefault(__nccwpck_require__(5622));
 
-var _ExplorerBase = __webpack_require__(4135);
+var _ExplorerBase = __nccwpck_require__(4135);
 
-var _readFile = __webpack_require__(1238);
+var _readFile = __nccwpck_require__(1238);
 
-var _cacheWrapper = __webpack_require__(6559);
+var _cacheWrapper = __nccwpck_require__(6559);
 
-var _getDirectory = __webpack_require__(6427);
+var _getDirectory = __nccwpck_require__(6427);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _asyncIterator(iterable) { var method; if (typeof Symbol !== "undefined") { if (Symbol.asyncIterator) { method = iterable[Symbol.asyncIterator]; if (method != null) return method.call(iterable); } if (Symbol.iterator) { method = iterable[Symbol.iterator]; if (method != null) return method.call(iterable); } } throw new TypeError("Object is not async iterable"); }
 
 class Explorer extends _ExplorerBase.ExplorerBase {
   constructor(options) {
@@ -9485,35 +9705,14 @@ class Explorer extends _ExplorerBase.ExplorerBase {
   }
 
   async searchDirectory(dir) {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
+    for await (const place of this.config.searchPlaces) {
+      const placeResult = await this.loadSearchPlace(dir, place);
 
-    var _iteratorError;
-
-    try {
-      for (var _iterator = _asyncIterator(this.config.searchPlaces), _step, _value; _step = await _iterator.next(), _iteratorNormalCompletion = _step.done, _value = await _step.value, !_iteratorNormalCompletion; _iteratorNormalCompletion = true) {
-        const place = _value;
-        const placeResult = await this.loadSearchPlace(dir, place);
-
-        if (this.shouldSearchStopWithResult(placeResult) === true) {
-          return placeResult;
-        }
-      } // config not found
-
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          await _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
+      if (this.shouldSearchStopWithResult(placeResult) === true) {
+        return placeResult;
       }
-    }
+    } // config not found
+
 
     return null;
   }
@@ -9575,7 +9774,7 @@ exports.Explorer = Explorer;
 /***/ }),
 
 /***/ 4135:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -9586,11 +9785,11 @@ Object.defineProperty(exports, "__esModule", ({
 exports.getExtensionDescription = getExtensionDescription;
 exports.ExplorerBase = void 0;
 
-var _path = _interopRequireDefault(__webpack_require__(5622));
+var _path = _interopRequireDefault(__nccwpck_require__(5622));
 
-var _loaders = __webpack_require__(8751);
+var _loaders = __nccwpck_require__(8751);
 
-var _getPropertyByPath = __webpack_require__(1719);
+var _getPropertyByPath = __nccwpck_require__(1719);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9724,7 +9923,7 @@ function getExtensionDescription(filepath) {
 /***/ }),
 
 /***/ 6239:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -9734,15 +9933,15 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.ExplorerSync = void 0;
 
-var _path = _interopRequireDefault(__webpack_require__(5622));
+var _path = _interopRequireDefault(__nccwpck_require__(5622));
 
-var _ExplorerBase = __webpack_require__(4135);
+var _ExplorerBase = __nccwpck_require__(4135);
 
-var _readFile = __webpack_require__(1238);
+var _readFile = __nccwpck_require__(1238);
 
-var _cacheWrapper = __webpack_require__(6559);
+var _cacheWrapper = __nccwpck_require__(6559);
 
-var _getDirectory = __webpack_require__(6427);
+var _getDirectory = __nccwpck_require__(6427);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9888,7 +10087,7 @@ function cacheWrapperSync(cache, key, fn) {
 /***/ }),
 
 /***/ 6427:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -9899,9 +10098,9 @@ Object.defineProperty(exports, "__esModule", ({
 exports.getDirectory = getDirectory;
 exports.getDirectorySync = getDirectorySync;
 
-var _path = _interopRequireDefault(__webpack_require__(5622));
+var _path = _interopRequireDefault(__nccwpck_require__(5622));
 
-var _pathType = __webpack_require__(3433);
+var _pathType = __nccwpck_require__(3433);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9968,7 +10167,7 @@ function getPropertyByPath(source, path) {
 /***/ }),
 
 /***/ 4066:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -9980,18 +10179,19 @@ exports.cosmiconfig = cosmiconfig;
 exports.cosmiconfigSync = cosmiconfigSync;
 exports.defaultLoaders = void 0;
 
-var _os = _interopRequireDefault(__webpack_require__(2087));
+var _os = _interopRequireDefault(__nccwpck_require__(2087));
 
-var _Explorer = __webpack_require__(4638);
+var _Explorer = __nccwpck_require__(4638);
 
-var _ExplorerSync = __webpack_require__(6239);
+var _ExplorerSync = __nccwpck_require__(6239);
 
-var _loaders = __webpack_require__(8751);
+var _loaders = __nccwpck_require__(8751);
 
-var _types = __webpack_require__(1943);
+var _types = __nccwpck_require__(1943);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function cosmiconfig(moduleName, options = {}) {
   const normalizedOptions = normalizeOptions(moduleName, options);
@@ -10020,6 +10220,7 @@ function cosmiconfigSync(moduleName, options = {}) {
 
 
 const defaultLoaders = Object.freeze({
+  '.cjs': _loaders.loaders.loadJs,
   '.js': _loaders.loaders.loadJs,
   '.json': _loaders.loaders.loadJson,
   '.yaml': _loaders.loaders.loadYaml,
@@ -10028,10 +10229,14 @@ const defaultLoaders = Object.freeze({
 });
 exports.defaultLoaders = defaultLoaders;
 
+const identity = function identity(x) {
+  return x;
+};
+
 function normalizeOptions(moduleName, options) {
   const defaults = {
     packageProp: moduleName,
-    searchPlaces: ['package.json', `.${moduleName}rc`, `.${moduleName}rc.json`, `.${moduleName}rc.yaml`, `.${moduleName}rc.yml`, `.${moduleName}rc.js`, `${moduleName}.config.js`],
+    searchPlaces: ['package.json', `.${moduleName}rc`, `.${moduleName}rc.json`, `.${moduleName}rc.yaml`, `.${moduleName}rc.yml`, `.${moduleName}rc.js`, `.${moduleName}rc.cjs`, `${moduleName}.config.js`, `${moduleName}.config.cjs`],
     ignoreEmptySearchPlaces: true,
     stopDir: _os.default.homedir(),
     cache: true,
@@ -10046,16 +10251,12 @@ function normalizeOptions(moduleName, options) {
   };
   return normalizedOptions;
 }
-
-const identity = function identity(x) {
-  return x;
-};
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
 /***/ 8751:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -10070,7 +10271,7 @@ let importFresh;
 
 const loadJs = function loadJs(filepath) {
   if (importFresh === undefined) {
-    importFresh = __webpack_require__(2714);
+    importFresh = __nccwpck_require__(2714);
   }
 
   const result = importFresh(filepath);
@@ -10081,7 +10282,7 @@ let parseJson;
 
 const loadJson = function loadJson(filepath, content) {
   if (parseJson === undefined) {
-    parseJson = __webpack_require__(6615);
+    parseJson = __nccwpck_require__(6615);
   }
 
   try {
@@ -10097,7 +10298,7 @@ let yaml;
 
 const loadYaml = function loadYaml(filepath, content) {
   if (yaml === undefined) {
-    yaml = __webpack_require__(3552);
+    yaml = __nccwpck_require__(3552);
   }
 
   try {
@@ -10122,7 +10323,7 @@ exports.loaders = loaders;
 /***/ }),
 
 /***/ 1238:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -10133,7 +10334,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.readFile = readFile;
 exports.readFileSync = readFileSync;
 
-var _fs = _interopRequireDefault(__webpack_require__(5747));
+var _fs = _interopRequireDefault(__nccwpck_require__(5747));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10157,7 +10358,7 @@ async function readFile(filepath, options = {}) {
     const content = await fsReadFileAsync(filepath, 'utf8');
     return content;
   } catch (error) {
-    if (throwNotFound === false && error.code === 'ENOENT') {
+    if (throwNotFound === false && (error.code === 'ENOENT' || error.code === 'EISDIR')) {
       return null;
     }
 
@@ -10173,7 +10374,7 @@ function readFileSync(filepath, options = {}) {
 
     return content;
   } catch (error) {
-    if (throwNotFound === false && error.code === 'ENOENT') {
+    if (throwNotFound === false && (error.code === 'ENOENT' || error.code === 'EISDIR')) {
       return null;
     }
 
@@ -10185,23 +10386,27 @@ function readFileSync(filepath, options = {}) {
 /***/ }),
 
 /***/ 1943:
-/***/ (() => {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 //# sourceMappingURL=types.js.map
 
 /***/ }),
 
 /***/ 2746:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const cp = __webpack_require__(3129);
-const parse = __webpack_require__(6855);
-const enoent = __webpack_require__(4101);
+const cp = __nccwpck_require__(3129);
+const parse = __nccwpck_require__(6855);
+const enoent = __nccwpck_require__(4101);
 
 function spawn(command, args, options) {
     // Parse the arguments
@@ -10308,15 +10513,15 @@ module.exports = {
 /***/ }),
 
 /***/ 6855:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const path = __webpack_require__(5622);
-const resolveCommand = __webpack_require__(7274);
-const escape = __webpack_require__(4274);
-const readShebang = __webpack_require__(1252);
+const path = __nccwpck_require__(5622);
+const resolveCommand = __nccwpck_require__(7274);
+const escape = __nccwpck_require__(4274);
+const readShebang = __nccwpck_require__(1252);
 
 const isWin = process.platform === 'win32';
 const isExecutableRegExp = /\.(?:com|exe)$/i;
@@ -10460,13 +10665,13 @@ module.exports.argument = escapeArgument;
 /***/ }),
 
 /***/ 1252:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const fs = __webpack_require__(5747);
-const shebangCommand = __webpack_require__(1326);
+const fs = __nccwpck_require__(5747);
+const shebangCommand = __nccwpck_require__(7032);
 
 function readShebang(command) {
     // Read the first 150 bytes from the file
@@ -10491,14 +10696,14 @@ module.exports = readShebang;
 /***/ }),
 
 /***/ 7274:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const path = __webpack_require__(5622);
-const which = __webpack_require__(9383);
-const getPathKey = __webpack_require__(9060);
+const path = __nccwpck_require__(5622);
+const which = __nccwpck_require__(4207);
+const getPathKey = __nccwpck_require__(539);
 
 function resolveCommandAttempt(parsed, withoutPathExt) {
     const env = parsed.options.env || process.env;
@@ -10546,199 +10751,6 @@ function resolveCommand(parsed) {
 }
 
 module.exports = resolveCommand;
-
-
-/***/ }),
-
-/***/ 9060:
-/***/ ((module) => {
-
-"use strict";
-
-
-const pathKey = (options = {}) => {
-	const environment = options.env || process.env;
-	const platform = options.platform || process.platform;
-
-	if (platform !== 'win32') {
-		return 'PATH';
-	}
-
-	return Object.keys(environment).reverse().find(key => key.toUpperCase() === 'PATH') || 'Path';
-};
-
-module.exports = pathKey;
-// TODO: Remove this for the next major release
-module.exports.default = pathKey;
-
-
-/***/ }),
-
-/***/ 1326:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const shebangRegex = __webpack_require__(9823);
-
-module.exports = (string = '') => {
-	const match = string.match(shebangRegex);
-
-	if (!match) {
-		return null;
-	}
-
-	const [path, argument] = match[0].replace(/#! ?/, '').split(' ');
-	const binary = path.split('/').pop();
-
-	if (binary === 'env') {
-		return argument;
-	}
-
-	return argument ? `${binary} ${argument}` : binary;
-};
-
-
-/***/ }),
-
-/***/ 9823:
-/***/ ((module) => {
-
-"use strict";
-
-module.exports = /^#!(.*)/;
-
-
-/***/ }),
-
-/***/ 9383:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const isWindows = process.platform === 'win32' ||
-    process.env.OSTYPE === 'cygwin' ||
-    process.env.OSTYPE === 'msys'
-
-const path = __webpack_require__(5622)
-const COLON = isWindows ? ';' : ':'
-const isexe = __webpack_require__(7126)
-
-const getNotFoundError = (cmd) =>
-  Object.assign(new Error(`not found: ${cmd}`), { code: 'ENOENT' })
-
-const getPathInfo = (cmd, opt) => {
-  const colon = opt.colon || COLON
-
-  // If it has a slash, then we don't bother searching the pathenv.
-  // just check the file itself, and that's it.
-  const pathEnv = cmd.match(/\//) || isWindows && cmd.match(/\\/) ? ['']
-    : (
-      [
-        // windows always checks the cwd first
-        ...(isWindows ? [process.cwd()] : []),
-        ...(opt.path || process.env.PATH ||
-          /* istanbul ignore next: very unusual */ '').split(colon),
-      ]
-    )
-  const pathExtExe = isWindows
-    ? opt.pathExt || process.env.PATHEXT || '.EXE;.CMD;.BAT;.COM'
-    : ''
-  const pathExt = isWindows ? pathExtExe.split(colon) : ['']
-
-  if (isWindows) {
-    if (cmd.indexOf('.') !== -1 && pathExt[0] !== '')
-      pathExt.unshift('')
-  }
-
-  return {
-    pathEnv,
-    pathExt,
-    pathExtExe,
-  }
-}
-
-const which = (cmd, opt, cb) => {
-  if (typeof opt === 'function') {
-    cb = opt
-    opt = {}
-  }
-  if (!opt)
-    opt = {}
-
-  const { pathEnv, pathExt, pathExtExe } = getPathInfo(cmd, opt)
-  const found = []
-
-  const step = i => new Promise((resolve, reject) => {
-    if (i === pathEnv.length)
-      return opt.all && found.length ? resolve(found)
-        : reject(getNotFoundError(cmd))
-
-    const ppRaw = pathEnv[i]
-    const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw
-
-    const pCmd = path.join(pathPart, cmd)
-    const p = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd
-      : pCmd
-
-    resolve(subStep(p, i, 0))
-  })
-
-  const subStep = (p, i, ii) => new Promise((resolve, reject) => {
-    if (ii === pathExt.length)
-      return resolve(step(i + 1))
-    const ext = pathExt[ii]
-    isexe(p + ext, { pathExt: pathExtExe }, (er, is) => {
-      if (!er && is) {
-        if (opt.all)
-          found.push(p + ext)
-        else
-          return resolve(p + ext)
-      }
-      return resolve(subStep(p, i, ii + 1))
-    })
-  })
-
-  return cb ? step(0).then(res => cb(null, res), cb) : step(0)
-}
-
-const whichSync = (cmd, opt) => {
-  opt = opt || {}
-
-  const { pathEnv, pathExt, pathExtExe } = getPathInfo(cmd, opt)
-  const found = []
-
-  for (let i = 0; i < pathEnv.length; i ++) {
-    const ppRaw = pathEnv[i]
-    const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw
-
-    const pCmd = path.join(pathPart, cmd)
-    const p = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd
-      : pCmd
-
-    for (let j = 0; j < pathExt.length; j ++) {
-      const cur = p + pathExt[j]
-      try {
-        const is = isexe.sync(cur, { pathExt: pathExtExe })
-        if (is) {
-          if (opt.all)
-            found.push(cur)
-          else
-            return cur
-        }
-      } catch (ex) {}
-    }
-  }
-
-  if (opt.all && found.length)
-    return found
-
-  if (opt.nothrow)
-    return null
-
-  throw getNotFoundError(cmd)
-}
-
-module.exports = which
-which.sync = whichSync
 
 
 /***/ }),
@@ -10913,7 +10925,7 @@ function plural(ms, msAbs, n, name) {
 /***/ }),
 
 /***/ 8222:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ ((module, exports, __nccwpck_require__) => {
 
 /* eslint-env browser */
 
@@ -11169,7 +11181,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __webpack_require__(6243)(exports);
+module.exports = __nccwpck_require__(6243)(exports);
 
 const {formatters} = module.exports;
 
@@ -11189,7 +11201,7 @@ formatters.j = function (v) {
 /***/ }),
 
 /***/ 6243:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
 /**
@@ -11204,7 +11216,7 @@ function setup(env) {
 	createDebug.disable = disable;
 	createDebug.enable = enable;
 	createDebug.enabled = enabled;
-	createDebug.humanize = __webpack_require__(4697);
+	createDebug.humanize = __nccwpck_require__(4697);
 	createDebug.destroy = destroy;
 
 	Object.keys(env).forEach(key => {
@@ -11253,6 +11265,8 @@ function setup(env) {
 	function createDebug(namespace) {
 		let prevTime;
 		let enableOverride = null;
+		let namespacesCache;
+		let enabledCache;
 
 		function debug(...args) {
 			// Disabled?
@@ -11313,7 +11327,17 @@ function setup(env) {
 		Object.defineProperty(debug, 'enabled', {
 			enumerable: true,
 			configurable: false,
-			get: () => enableOverride === null ? createDebug.enabled(namespace) : enableOverride,
+			get: () => {
+				if (enableOverride !== null) {
+					return enableOverride;
+				}
+				if (namespacesCache !== createDebug.namespaces) {
+					namespacesCache = createDebug.namespaces;
+					enabledCache = createDebug.enabled(namespace);
+				}
+
+				return enabledCache;
+			},
 			set: v => {
 				enableOverride = v;
 			}
@@ -11342,6 +11366,7 @@ function setup(env) {
 	*/
 	function enable(namespaces) {
 		createDebug.save(namespaces);
+		createDebug.namespaces = namespaces;
 
 		createDebug.names = [];
 		createDebug.skips = [];
@@ -11457,7 +11482,7 @@ module.exports = setup;
 /***/ }),
 
 /***/ 8237:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
  * Detect Electron renderer / nwjs process, which is node, but we should
@@ -11465,23 +11490,23 @@ module.exports = setup;
  */
 
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
-	module.exports = __webpack_require__(8222);
+	module.exports = __nccwpck_require__(8222);
 } else {
-	module.exports = __webpack_require__(5332);
+	module.exports = __nccwpck_require__(5332);
 }
 
 
 /***/ }),
 
 /***/ 5332:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ ((module, exports, __nccwpck_require__) => {
 
 /**
  * Module dependencies.
  */
 
-const tty = __webpack_require__(3867);
-const util = __webpack_require__(1669);
+const tty = __nccwpck_require__(3867);
+const util = __nccwpck_require__(1669);
 
 /**
  * This is the Node.js implementation of `debug()`.
@@ -11507,7 +11532,7 @@ exports.colors = [6, 2, 3, 4, 5, 1];
 try {
 	// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 	// eslint-disable-next-line import/no-extraneous-dependencies
-	const supportsColor = __webpack_require__(9318);
+	const supportsColor = __nccwpck_require__(9318);
 
 	if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		exports.colors = [
@@ -11715,7 +11740,7 @@ function init(debug) {
 	}
 }
 
-module.exports = __webpack_require__(6243)(exports);
+module.exports = __nccwpck_require__(6243)(exports);
 
 const {formatters} = module.exports;
 
@@ -11744,12 +11769,12 @@ formatters.O = function (v) {
 /***/ }),
 
 /***/ 1932:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var stream = __webpack_require__(1642);
+var stream = __nccwpck_require__(1642);
 
 function DuplexWrapper(options, writable, readable) {
   if (typeof readable === "undefined") {
@@ -11842,9 +11867,9 @@ module.exports = function () {
 /***/ }),
 
 /***/ 1205:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var once = __webpack_require__(1223);
+var once = __nccwpck_require__(1223);
 
 var noop = function() {};
 
@@ -11943,39 +11968,39 @@ module.exports = eos;
 /***/ }),
 
 /***/ 7686:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const process = __webpack_require__(1765); // eslint-disable-line node/prefer-global/process
-const git = __webpack_require__(9778);
+const process = __nccwpck_require__(1765); // eslint-disable-line node/prefer-global/process
+const git = __nccwpck_require__(9778);
 
 const services = {
-	appveyor: __webpack_require__(7323),
-	bamboo: __webpack_require__(4285),
-	bitbucket: __webpack_require__(741),
-	bitrise: __webpack_require__(5069),
-	buddy: __webpack_require__(6905),
-	buildkite: __webpack_require__(5909),
-	circleci: __webpack_require__(4846),
-	cirrus: __webpack_require__(2277),
-	codebuild: __webpack_require__(3875),
-	codefresh: __webpack_require__(2972),
-	codeship: __webpack_require__(5954),
-	drone: __webpack_require__(9068),
-	github: __webpack_require__(9653),
-	gitlab: __webpack_require__(6926),
-	jenkins: __webpack_require__(1237),
-	puppet: __webpack_require__(3590),
-	sail: __webpack_require__(3164),
-	scrutinizer: __webpack_require__(6410),
-	semaphore: __webpack_require__(5416),
-	shippable: __webpack_require__(8053),
-	teamcity: __webpack_require__(63),
-	travis: __webpack_require__(5042),
-	vsts: __webpack_require__(771),
-	wercker: __webpack_require__(8061),
+	appveyor: __nccwpck_require__(7323),
+	bamboo: __nccwpck_require__(4285),
+	bitbucket: __nccwpck_require__(741),
+	bitrise: __nccwpck_require__(5069),
+	buddy: __nccwpck_require__(6905),
+	buildkite: __nccwpck_require__(5909),
+	circleci: __nccwpck_require__(4846),
+	cirrus: __nccwpck_require__(2277),
+	codebuild: __nccwpck_require__(5416),
+	codefresh: __nccwpck_require__(2972),
+	codeship: __nccwpck_require__(5954),
+	drone: __nccwpck_require__(9068),
+	github: __nccwpck_require__(9653),
+	gitlab: __nccwpck_require__(6926),
+	jenkins: __nccwpck_require__(1237),
+	puppet: __nccwpck_require__(3590),
+	sail: __nccwpck_require__(3164),
+	scrutinizer: __nccwpck_require__(6410),
+	semaphore: __nccwpck_require__(8871),
+	shippable: __nccwpck_require__(8053),
+	teamcity: __nccwpck_require__(63),
+	travis: __nccwpck_require__(5042),
+	vsts: __nccwpck_require__(771),
+	wercker: __nccwpck_require__(8061),
 };
 
 module.exports = ({env = process.env, cwd = process.cwd()} = {}) => {
@@ -11992,9 +12017,9 @@ module.exports = ({env = process.env, cwd = process.cwd()} = {}) => {
 /***/ }),
 
 /***/ 6482:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const execa = __webpack_require__(5447);
+const execa = __nccwpck_require__(6688);
 
 function head(options) {
 	try {
@@ -12041,6 +12066,1301 @@ function parseBranch(branch) {
 
 module.exports = {prNumber, parseBranch};
 
+
+/***/ }),
+
+/***/ 6688:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const path = __nccwpck_require__(5622);
+const childProcess = __nccwpck_require__(3129);
+const crossSpawn = __nccwpck_require__(2746);
+const stripFinalNewline = __nccwpck_require__(8174);
+const npmRunPath = __nccwpck_require__(502);
+const onetime = __nccwpck_require__(9082);
+const makeError = __nccwpck_require__(1041);
+const normalizeStdio = __nccwpck_require__(1969);
+const {spawnedKill, spawnedCancel, setupTimeout, setExitHandler} = __nccwpck_require__(6633);
+const {handleInput, getSpawnedResult, makeAllStream, validateInputSync} = __nccwpck_require__(4606);
+const {mergePromise, getSpawnedPromise} = __nccwpck_require__(1483);
+const {joinCommand, parseCommand} = __nccwpck_require__(1097);
+
+const DEFAULT_MAX_BUFFER = 1000 * 1000 * 100;
+
+const getEnv = ({env: envOption, extendEnv, preferLocal, localDir, execPath}) => {
+	const env = extendEnv ? {...process.env, ...envOption} : envOption;
+
+	if (preferLocal) {
+		return npmRunPath.env({env, cwd: localDir, execPath});
+	}
+
+	return env;
+};
+
+const handleArguments = (file, args, options = {}) => {
+	const parsed = crossSpawn._parse(file, args, options);
+	file = parsed.command;
+	args = parsed.args;
+	options = parsed.options;
+
+	options = {
+		maxBuffer: DEFAULT_MAX_BUFFER,
+		buffer: true,
+		stripFinalNewline: true,
+		extendEnv: true,
+		preferLocal: false,
+		localDir: options.cwd || process.cwd(),
+		execPath: process.execPath,
+		encoding: 'utf8',
+		reject: true,
+		cleanup: true,
+		all: false,
+		windowsHide: true,
+		...options
+	};
+
+	options.env = getEnv(options);
+
+	options.stdio = normalizeStdio(options);
+
+	if (process.platform === 'win32' && path.basename(file, '.exe') === 'cmd') {
+		// #116
+		args.unshift('/q');
+	}
+
+	return {file, args, options, parsed};
+};
+
+const handleOutput = (options, value, error) => {
+	if (typeof value !== 'string' && !Buffer.isBuffer(value)) {
+		// When `execa.sync()` errors, we normalize it to '' to mimic `execa()`
+		return error === undefined ? undefined : '';
+	}
+
+	if (options.stripFinalNewline) {
+		return stripFinalNewline(value);
+	}
+
+	return value;
+};
+
+const execa = (file, args, options) => {
+	const parsed = handleArguments(file, args, options);
+	const command = joinCommand(file, args);
+
+	let spawned;
+	try {
+		spawned = childProcess.spawn(parsed.file, parsed.args, parsed.options);
+	} catch (error) {
+		// Ensure the returned error is always both a promise and a child process
+		const dummySpawned = new childProcess.ChildProcess();
+		const errorPromise = Promise.reject(makeError({
+			error,
+			stdout: '',
+			stderr: '',
+			all: '',
+			command,
+			parsed,
+			timedOut: false,
+			isCanceled: false,
+			killed: false
+		}));
+		return mergePromise(dummySpawned, errorPromise);
+	}
+
+	const spawnedPromise = getSpawnedPromise(spawned);
+	const timedPromise = setupTimeout(spawned, parsed.options, spawnedPromise);
+	const processDone = setExitHandler(spawned, parsed.options, timedPromise);
+
+	const context = {isCanceled: false};
+
+	spawned.kill = spawnedKill.bind(null, spawned.kill.bind(spawned));
+	spawned.cancel = spawnedCancel.bind(null, spawned, context);
+
+	const handlePromise = async () => {
+		const [{error, exitCode, signal, timedOut}, stdoutResult, stderrResult, allResult] = await getSpawnedResult(spawned, parsed.options, processDone);
+		const stdout = handleOutput(parsed.options, stdoutResult);
+		const stderr = handleOutput(parsed.options, stderrResult);
+		const all = handleOutput(parsed.options, allResult);
+
+		if (error || exitCode !== 0 || signal !== null) {
+			const returnedError = makeError({
+				error,
+				exitCode,
+				signal,
+				stdout,
+				stderr,
+				all,
+				command,
+				parsed,
+				timedOut,
+				isCanceled: context.isCanceled,
+				killed: spawned.killed
+			});
+
+			if (!parsed.options.reject) {
+				return returnedError;
+			}
+
+			throw returnedError;
+		}
+
+		return {
+			command,
+			exitCode: 0,
+			stdout,
+			stderr,
+			all,
+			failed: false,
+			timedOut: false,
+			isCanceled: false,
+			killed: false
+		};
+	};
+
+	const handlePromiseOnce = onetime(handlePromise);
+
+	crossSpawn._enoent.hookChildProcess(spawned, parsed.parsed);
+
+	handleInput(spawned, parsed.options.input);
+
+	spawned.all = makeAllStream(spawned, parsed.options);
+
+	return mergePromise(spawned, handlePromiseOnce);
+};
+
+module.exports = execa;
+
+module.exports.sync = (file, args, options) => {
+	const parsed = handleArguments(file, args, options);
+	const command = joinCommand(file, args);
+
+	validateInputSync(parsed.options);
+
+	let result;
+	try {
+		result = childProcess.spawnSync(parsed.file, parsed.args, parsed.options);
+	} catch (error) {
+		throw makeError({
+			error,
+			stdout: '',
+			stderr: '',
+			all: '',
+			command,
+			parsed,
+			timedOut: false,
+			isCanceled: false,
+			killed: false
+		});
+	}
+
+	const stdout = handleOutput(parsed.options, result.stdout, result.error);
+	const stderr = handleOutput(parsed.options, result.stderr, result.error);
+
+	if (result.error || result.status !== 0 || result.signal !== null) {
+		const error = makeError({
+			stdout,
+			stderr,
+			error: result.error,
+			signal: result.signal,
+			exitCode: result.status,
+			command,
+			parsed,
+			timedOut: result.error && result.error.code === 'ETIMEDOUT',
+			isCanceled: false,
+			killed: result.signal !== null
+		});
+
+		if (!parsed.options.reject) {
+			return error;
+		}
+
+		throw error;
+	}
+
+	return {
+		command,
+		exitCode: 0,
+		stdout,
+		stderr,
+		failed: false,
+		timedOut: false,
+		isCanceled: false,
+		killed: false
+	};
+};
+
+module.exports.command = (command, options) => {
+	const [file, ...args] = parseCommand(command);
+	return execa(file, args, options);
+};
+
+module.exports.commandSync = (command, options) => {
+	const [file, ...args] = parseCommand(command);
+	return execa.sync(file, args, options);
+};
+
+module.exports.node = (scriptPath, args, options = {}) => {
+	if (args && !Array.isArray(args) && typeof args === 'object') {
+		options = args;
+		args = [];
+	}
+
+	const stdio = normalizeStdio.node(options);
+	const defaultExecArgv = process.execArgv.filter(arg => !arg.startsWith('--inspect'));
+
+	const {
+		nodePath = process.execPath,
+		nodeOptions = defaultExecArgv
+	} = options;
+
+	return execa(
+		nodePath,
+		[
+			...nodeOptions,
+			scriptPath,
+			...(Array.isArray(args) ? args : [])
+		],
+		{
+			...options,
+			stdin: undefined,
+			stdout: undefined,
+			stderr: undefined,
+			stdio,
+			shell: false
+		}
+	);
+};
+
+
+/***/ }),
+
+/***/ 1097:
+/***/ ((module) => {
+
+"use strict";
+
+const SPACES_REGEXP = / +/g;
+
+const joinCommand = (file, args = []) => {
+	if (!Array.isArray(args)) {
+		return file;
+	}
+
+	return [file, ...args].join(' ');
+};
+
+// Handle `execa.command()`
+const parseCommand = command => {
+	const tokens = [];
+	for (const token of command.trim().split(SPACES_REGEXP)) {
+		// Allow spaces to be escaped by a backslash if not meant as a delimiter
+		const previousToken = tokens[tokens.length - 1];
+		if (previousToken && previousToken.endsWith('\\')) {
+			// Merge previous token with current one
+			tokens[tokens.length - 1] = `${previousToken.slice(0, -1)} ${token}`;
+		} else {
+			tokens.push(token);
+		}
+	}
+
+	return tokens;
+};
+
+module.exports = {
+	joinCommand,
+	parseCommand
+};
+
+
+/***/ }),
+
+/***/ 1041:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const {signalsByName} = __nccwpck_require__(5433);
+
+const getErrorPrefix = ({timedOut, timeout, errorCode, signal, signalDescription, exitCode, isCanceled}) => {
+	if (timedOut) {
+		return `timed out after ${timeout} milliseconds`;
+	}
+
+	if (isCanceled) {
+		return 'was canceled';
+	}
+
+	if (errorCode !== undefined) {
+		return `failed with ${errorCode}`;
+	}
+
+	if (signal !== undefined) {
+		return `was killed with ${signal} (${signalDescription})`;
+	}
+
+	if (exitCode !== undefined) {
+		return `failed with exit code ${exitCode}`;
+	}
+
+	return 'failed';
+};
+
+const makeError = ({
+	stdout,
+	stderr,
+	all,
+	error,
+	signal,
+	exitCode,
+	command,
+	timedOut,
+	isCanceled,
+	killed,
+	parsed: {options: {timeout}}
+}) => {
+	// `signal` and `exitCode` emitted on `spawned.on('exit')` event can be `null`.
+	// We normalize them to `undefined`
+	exitCode = exitCode === null ? undefined : exitCode;
+	signal = signal === null ? undefined : signal;
+	const signalDescription = signal === undefined ? undefined : signalsByName[signal].description;
+
+	const errorCode = error && error.code;
+
+	const prefix = getErrorPrefix({timedOut, timeout, errorCode, signal, signalDescription, exitCode, isCanceled});
+	const execaMessage = `Command ${prefix}: ${command}`;
+	const isError = Object.prototype.toString.call(error) === '[object Error]';
+	const shortMessage = isError ? `${execaMessage}\n${error.message}` : execaMessage;
+	const message = [shortMessage, stderr, stdout].filter(Boolean).join('\n');
+
+	if (isError) {
+		error.originalMessage = error.message;
+		error.message = message;
+	} else {
+		error = new Error(message);
+	}
+
+	error.shortMessage = shortMessage;
+	error.command = command;
+	error.exitCode = exitCode;
+	error.signal = signal;
+	error.signalDescription = signalDescription;
+	error.stdout = stdout;
+	error.stderr = stderr;
+
+	if (all !== undefined) {
+		error.all = all;
+	}
+
+	if ('bufferedData' in error) {
+		delete error.bufferedData;
+	}
+
+	error.failed = true;
+	error.timedOut = Boolean(timedOut);
+	error.isCanceled = isCanceled;
+	error.killed = killed && !timedOut;
+
+	return error;
+};
+
+module.exports = makeError;
+
+
+/***/ }),
+
+/***/ 6633:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const os = __nccwpck_require__(2087);
+const onExit = __nccwpck_require__(4931);
+
+const DEFAULT_FORCE_KILL_TIMEOUT = 1000 * 5;
+
+// Monkey-patches `childProcess.kill()` to add `forceKillAfterTimeout` behavior
+const spawnedKill = (kill, signal = 'SIGTERM', options = {}) => {
+	const killResult = kill(signal);
+	setKillTimeout(kill, signal, options, killResult);
+	return killResult;
+};
+
+const setKillTimeout = (kill, signal, options, killResult) => {
+	if (!shouldForceKill(signal, options, killResult)) {
+		return;
+	}
+
+	const timeout = getForceKillAfterTimeout(options);
+	const t = setTimeout(() => {
+		kill('SIGKILL');
+	}, timeout);
+
+	// Guarded because there's no `.unref()` when `execa` is used in the renderer
+	// process in Electron. This cannot be tested since we don't run tests in
+	// Electron.
+	// istanbul ignore else
+	if (t.unref) {
+		t.unref();
+	}
+};
+
+const shouldForceKill = (signal, {forceKillAfterTimeout}, killResult) => {
+	return isSigterm(signal) && forceKillAfterTimeout !== false && killResult;
+};
+
+const isSigterm = signal => {
+	return signal === os.constants.signals.SIGTERM ||
+		(typeof signal === 'string' && signal.toUpperCase() === 'SIGTERM');
+};
+
+const getForceKillAfterTimeout = ({forceKillAfterTimeout = true}) => {
+	if (forceKillAfterTimeout === true) {
+		return DEFAULT_FORCE_KILL_TIMEOUT;
+	}
+
+	if (!Number.isFinite(forceKillAfterTimeout) || forceKillAfterTimeout < 0) {
+		throw new TypeError(`Expected the \`forceKillAfterTimeout\` option to be a non-negative integer, got \`${forceKillAfterTimeout}\` (${typeof forceKillAfterTimeout})`);
+	}
+
+	return forceKillAfterTimeout;
+};
+
+// `childProcess.cancel()`
+const spawnedCancel = (spawned, context) => {
+	const killResult = spawned.kill();
+
+	if (killResult) {
+		context.isCanceled = true;
+	}
+};
+
+const timeoutKill = (spawned, signal, reject) => {
+	spawned.kill(signal);
+	reject(Object.assign(new Error('Timed out'), {timedOut: true, signal}));
+};
+
+// `timeout` option handling
+const setupTimeout = (spawned, {timeout, killSignal = 'SIGTERM'}, spawnedPromise) => {
+	if (timeout === 0 || timeout === undefined) {
+		return spawnedPromise;
+	}
+
+	if (!Number.isFinite(timeout) || timeout < 0) {
+		throw new TypeError(`Expected the \`timeout\` option to be a non-negative integer, got \`${timeout}\` (${typeof timeout})`);
+	}
+
+	let timeoutId;
+	const timeoutPromise = new Promise((resolve, reject) => {
+		timeoutId = setTimeout(() => {
+			timeoutKill(spawned, killSignal, reject);
+		}, timeout);
+	});
+
+	const safeSpawnedPromise = spawnedPromise.finally(() => {
+		clearTimeout(timeoutId);
+	});
+
+	return Promise.race([timeoutPromise, safeSpawnedPromise]);
+};
+
+// `cleanup` option handling
+const setExitHandler = async (spawned, {cleanup, detached}, timedPromise) => {
+	if (!cleanup || detached) {
+		return timedPromise;
+	}
+
+	const removeExitHandler = onExit(() => {
+		spawned.kill();
+	});
+
+	return timedPromise.finally(() => {
+		removeExitHandler();
+	});
+};
+
+module.exports = {
+	spawnedKill,
+	spawnedCancel,
+	setupTimeout,
+	setExitHandler
+};
+
+
+/***/ }),
+
+/***/ 1483:
+/***/ ((module) => {
+
+"use strict";
+
+
+const nativePromisePrototype = (async () => {})().constructor.prototype;
+const descriptors = ['then', 'catch', 'finally'].map(property => [
+	property,
+	Reflect.getOwnPropertyDescriptor(nativePromisePrototype, property)
+]);
+
+// The return value is a mixin of `childProcess` and `Promise`
+const mergePromise = (spawned, promise) => {
+	for (const [property, descriptor] of descriptors) {
+		// Starting the main `promise` is deferred to avoid consuming streams
+		const value = typeof promise === 'function' ?
+			(...args) => Reflect.apply(descriptor.value, promise(), args) :
+			descriptor.value.bind(promise);
+
+		Reflect.defineProperty(spawned, property, {...descriptor, value});
+	}
+
+	return spawned;
+};
+
+// Use promises instead of `child_process` events
+const getSpawnedPromise = spawned => {
+	return new Promise((resolve, reject) => {
+		spawned.on('exit', (exitCode, signal) => {
+			resolve({exitCode, signal});
+		});
+
+		spawned.on('error', error => {
+			reject(error);
+		});
+
+		if (spawned.stdin) {
+			spawned.stdin.on('error', error => {
+				reject(error);
+			});
+		}
+	});
+};
+
+module.exports = {
+	mergePromise,
+	getSpawnedPromise
+};
+
+
+
+/***/ }),
+
+/***/ 1969:
+/***/ ((module) => {
+
+"use strict";
+
+const aliases = ['stdin', 'stdout', 'stderr'];
+
+const hasAlias = opts => aliases.some(alias => opts[alias] !== undefined);
+
+const normalizeStdio = opts => {
+	if (!opts) {
+		return;
+	}
+
+	const {stdio} = opts;
+
+	if (stdio === undefined) {
+		return aliases.map(alias => opts[alias]);
+	}
+
+	if (hasAlias(opts)) {
+		throw new Error(`It's not possible to provide \`stdio\` in combination with one of ${aliases.map(alias => `\`${alias}\``).join(', ')}`);
+	}
+
+	if (typeof stdio === 'string') {
+		return stdio;
+	}
+
+	if (!Array.isArray(stdio)) {
+		throw new TypeError(`Expected \`stdio\` to be of type \`string\` or \`Array\`, got \`${typeof stdio}\``);
+	}
+
+	const length = Math.max(stdio.length, aliases.length);
+	return Array.from({length}, (value, index) => stdio[index]);
+};
+
+module.exports = normalizeStdio;
+
+// `ipc` is pushed unless it is already present
+module.exports.node = opts => {
+	const stdio = normalizeStdio(opts);
+
+	if (stdio === 'ipc') {
+		return 'ipc';
+	}
+
+	if (stdio === undefined || typeof stdio === 'string') {
+		return [stdio, stdio, stdio, 'ipc'];
+	}
+
+	if (stdio.includes('ipc')) {
+		return stdio;
+	}
+
+	return [...stdio, 'ipc'];
+};
+
+
+/***/ }),
+
+/***/ 4606:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const isStream = __nccwpck_require__(1554);
+const getStream = __nccwpck_require__(1937);
+const mergeStream = __nccwpck_require__(2621);
+
+// `input` option
+const handleInput = (spawned, input) => {
+	// Checking for stdin is workaround for https://github.com/nodejs/node/issues/26852
+	// TODO: Remove `|| spawned.stdin === undefined` once we drop support for Node.js <=12.2.0
+	if (input === undefined || spawned.stdin === undefined) {
+		return;
+	}
+
+	if (isStream(input)) {
+		input.pipe(spawned.stdin);
+	} else {
+		spawned.stdin.end(input);
+	}
+};
+
+// `all` interleaves `stdout` and `stderr`
+const makeAllStream = (spawned, {all}) => {
+	if (!all || (!spawned.stdout && !spawned.stderr)) {
+		return;
+	}
+
+	const mixed = mergeStream();
+
+	if (spawned.stdout) {
+		mixed.add(spawned.stdout);
+	}
+
+	if (spawned.stderr) {
+		mixed.add(spawned.stderr);
+	}
+
+	return mixed;
+};
+
+// On failure, `result.stdout|stderr|all` should contain the currently buffered stream
+const getBufferedData = async (stream, streamPromise) => {
+	if (!stream) {
+		return;
+	}
+
+	stream.destroy();
+
+	try {
+		return await streamPromise;
+	} catch (error) {
+		return error.bufferedData;
+	}
+};
+
+const getStreamPromise = (stream, {encoding, buffer, maxBuffer}) => {
+	if (!stream || !buffer) {
+		return;
+	}
+
+	if (encoding) {
+		return getStream(stream, {encoding, maxBuffer});
+	}
+
+	return getStream.buffer(stream, {maxBuffer});
+};
+
+// Retrieve result of child process: exit code, signal, error, streams (stdout/stderr/all)
+const getSpawnedResult = async ({stdout, stderr, all}, {encoding, buffer, maxBuffer}, processDone) => {
+	const stdoutPromise = getStreamPromise(stdout, {encoding, buffer, maxBuffer});
+	const stderrPromise = getStreamPromise(stderr, {encoding, buffer, maxBuffer});
+	const allPromise = getStreamPromise(all, {encoding, buffer, maxBuffer: maxBuffer * 2});
+
+	try {
+		return await Promise.all([processDone, stdoutPromise, stderrPromise, allPromise]);
+	} catch (error) {
+		return Promise.all([
+			{error, signal: error.signal, timedOut: error.timedOut},
+			getBufferedData(stdout, stdoutPromise),
+			getBufferedData(stderr, stderrPromise),
+			getBufferedData(all, allPromise)
+		]);
+	}
+};
+
+const validateInputSync = ({input}) => {
+	if (isStream(input)) {
+		throw new TypeError('The `input` option cannot be a stream in sync mode');
+	}
+};
+
+module.exports = {
+	handleInput,
+	makeAllStream,
+	getSpawnedResult,
+	validateInputSync
+};
+
+
+
+/***/ }),
+
+/***/ 1169:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const {PassThrough: PassThroughStream} = __nccwpck_require__(2413);
+
+module.exports = options => {
+	options = {...options};
+
+	const {array} = options;
+	let {encoding} = options;
+	const isBuffer = encoding === 'buffer';
+	let objectMode = false;
+
+	if (array) {
+		objectMode = !(encoding || isBuffer);
+	} else {
+		encoding = encoding || 'utf8';
+	}
+
+	if (isBuffer) {
+		encoding = null;
+	}
+
+	const stream = new PassThroughStream({objectMode});
+
+	if (encoding) {
+		stream.setEncoding(encoding);
+	}
+
+	let length = 0;
+	const chunks = [];
+
+	stream.on('data', chunk => {
+		chunks.push(chunk);
+
+		if (objectMode) {
+			length = chunks.length;
+		} else {
+			length += chunk.length;
+		}
+	});
+
+	stream.getBufferedValue = () => {
+		if (array) {
+			return chunks;
+		}
+
+		return isBuffer ? Buffer.concat(chunks, length) : chunks.join('');
+	};
+
+	stream.getBufferedLength = () => length;
+
+	return stream;
+};
+
+
+/***/ }),
+
+/***/ 1937:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const {constants: BufferConstants} = __nccwpck_require__(4293);
+const pump = __nccwpck_require__(8341);
+const bufferStream = __nccwpck_require__(1169);
+
+class MaxBufferError extends Error {
+	constructor() {
+		super('maxBuffer exceeded');
+		this.name = 'MaxBufferError';
+	}
+}
+
+async function getStream(inputStream, options) {
+	if (!inputStream) {
+		return Promise.reject(new Error('Expected a stream'));
+	}
+
+	options = {
+		maxBuffer: Infinity,
+		...options
+	};
+
+	const {maxBuffer} = options;
+
+	let stream;
+	await new Promise((resolve, reject) => {
+		const rejectPromise = error => {
+			// Don't retrieve an oversized buffer.
+			if (error && stream.getBufferedLength() <= BufferConstants.MAX_LENGTH) {
+				error.bufferedData = stream.getBufferedValue();
+			}
+
+			reject(error);
+		};
+
+		stream = pump(inputStream, bufferStream(options), error => {
+			if (error) {
+				rejectPromise(error);
+				return;
+			}
+
+			resolve();
+		});
+
+		stream.on('data', () => {
+			if (stream.getBufferedLength() > maxBuffer) {
+				rejectPromise(new MaxBufferError());
+			}
+		});
+	});
+
+	return stream.getBufferedValue();
+}
+
+module.exports = getStream;
+// TODO: Remove this for the next major release
+module.exports.default = getStream;
+module.exports.buffer = (stream, options) => getStream(stream, {...options, encoding: 'buffer'});
+module.exports.array = (stream, options) => getStream(stream, {...options, array: true});
+module.exports.MaxBufferError = MaxBufferError;
+
+
+/***/ }),
+
+/***/ 8009:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", ({value:true}));exports.SIGNALS=void 0;
+
+const SIGNALS=[
+{
+name:"SIGHUP",
+number:1,
+action:"terminate",
+description:"Terminal closed",
+standard:"posix"},
+
+{
+name:"SIGINT",
+number:2,
+action:"terminate",
+description:"User interruption with CTRL-C",
+standard:"ansi"},
+
+{
+name:"SIGQUIT",
+number:3,
+action:"core",
+description:"User interruption with CTRL-\\",
+standard:"posix"},
+
+{
+name:"SIGILL",
+number:4,
+action:"core",
+description:"Invalid machine instruction",
+standard:"ansi"},
+
+{
+name:"SIGTRAP",
+number:5,
+action:"core",
+description:"Debugger breakpoint",
+standard:"posix"},
+
+{
+name:"SIGABRT",
+number:6,
+action:"core",
+description:"Aborted",
+standard:"ansi"},
+
+{
+name:"SIGIOT",
+number:6,
+action:"core",
+description:"Aborted",
+standard:"bsd"},
+
+{
+name:"SIGBUS",
+number:7,
+action:"core",
+description:
+"Bus error due to misaligned, non-existing address or paging error",
+standard:"bsd"},
+
+{
+name:"SIGEMT",
+number:7,
+action:"terminate",
+description:"Command should be emulated but is not implemented",
+standard:"other"},
+
+{
+name:"SIGFPE",
+number:8,
+action:"core",
+description:"Floating point arithmetic error",
+standard:"ansi"},
+
+{
+name:"SIGKILL",
+number:9,
+action:"terminate",
+description:"Forced termination",
+standard:"posix",
+forced:true},
+
+{
+name:"SIGUSR1",
+number:10,
+action:"terminate",
+description:"Application-specific signal",
+standard:"posix"},
+
+{
+name:"SIGSEGV",
+number:11,
+action:"core",
+description:"Segmentation fault",
+standard:"ansi"},
+
+{
+name:"SIGUSR2",
+number:12,
+action:"terminate",
+description:"Application-specific signal",
+standard:"posix"},
+
+{
+name:"SIGPIPE",
+number:13,
+action:"terminate",
+description:"Broken pipe or socket",
+standard:"posix"},
+
+{
+name:"SIGALRM",
+number:14,
+action:"terminate",
+description:"Timeout or timer",
+standard:"posix"},
+
+{
+name:"SIGTERM",
+number:15,
+action:"terminate",
+description:"Termination",
+standard:"ansi"},
+
+{
+name:"SIGSTKFLT",
+number:16,
+action:"terminate",
+description:"Stack is empty or overflowed",
+standard:"other"},
+
+{
+name:"SIGCHLD",
+number:17,
+action:"ignore",
+description:"Child process terminated, paused or unpaused",
+standard:"posix"},
+
+{
+name:"SIGCLD",
+number:17,
+action:"ignore",
+description:"Child process terminated, paused or unpaused",
+standard:"other"},
+
+{
+name:"SIGCONT",
+number:18,
+action:"unpause",
+description:"Unpaused",
+standard:"posix",
+forced:true},
+
+{
+name:"SIGSTOP",
+number:19,
+action:"pause",
+description:"Paused",
+standard:"posix",
+forced:true},
+
+{
+name:"SIGTSTP",
+number:20,
+action:"pause",
+description:"Paused using CTRL-Z or \"suspend\"",
+standard:"posix"},
+
+{
+name:"SIGTTIN",
+number:21,
+action:"pause",
+description:"Background process cannot read terminal input",
+standard:"posix"},
+
+{
+name:"SIGBREAK",
+number:21,
+action:"terminate",
+description:"User interruption with CTRL-BREAK",
+standard:"other"},
+
+{
+name:"SIGTTOU",
+number:22,
+action:"pause",
+description:"Background process cannot write to terminal output",
+standard:"posix"},
+
+{
+name:"SIGURG",
+number:23,
+action:"ignore",
+description:"Socket received out-of-band data",
+standard:"bsd"},
+
+{
+name:"SIGXCPU",
+number:24,
+action:"core",
+description:"Process timed out",
+standard:"bsd"},
+
+{
+name:"SIGXFSZ",
+number:25,
+action:"core",
+description:"File too big",
+standard:"bsd"},
+
+{
+name:"SIGVTALRM",
+number:26,
+action:"terminate",
+description:"Timeout or timer",
+standard:"bsd"},
+
+{
+name:"SIGPROF",
+number:27,
+action:"terminate",
+description:"Timeout or timer",
+standard:"bsd"},
+
+{
+name:"SIGWINCH",
+number:28,
+action:"ignore",
+description:"Terminal window size changed",
+standard:"bsd"},
+
+{
+name:"SIGIO",
+number:29,
+action:"terminate",
+description:"I/O is available",
+standard:"other"},
+
+{
+name:"SIGPOLL",
+number:29,
+action:"terminate",
+description:"Watched event",
+standard:"other"},
+
+{
+name:"SIGINFO",
+number:29,
+action:"ignore",
+description:"Request for process information",
+standard:"other"},
+
+{
+name:"SIGPWR",
+number:30,
+action:"terminate",
+description:"Device running out of power",
+standard:"systemv"},
+
+{
+name:"SIGSYS",
+number:31,
+action:"core",
+description:"Invalid system call",
+standard:"other"},
+
+{
+name:"SIGUNUSED",
+number:31,
+action:"terminate",
+description:"Invalid system call",
+standard:"other"}];exports.SIGNALS=SIGNALS;
+//# sourceMappingURL=core.js.map
+
+/***/ }),
+
+/***/ 5433:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", ({value:true}));exports.signalsByNumber=exports.signalsByName=void 0;var _os=__nccwpck_require__(2087);
+
+var _signals=__nccwpck_require__(9034);
+var _realtime=__nccwpck_require__(1931);
+
+
+
+const getSignalsByName=function(){
+const signals=(0,_signals.getSignals)();
+return signals.reduce(getSignalByName,{});
+};
+
+const getSignalByName=function(
+signalByNameMemo,
+{name,number,description,supported,action,forced,standard})
+{
+return{
+...signalByNameMemo,
+[name]:{name,number,description,supported,action,forced,standard}};
+
+};
+
+const signalsByName=getSignalsByName();exports.signalsByName=signalsByName;
+
+
+
+
+const getSignalsByNumber=function(){
+const signals=(0,_signals.getSignals)();
+const length=_realtime.SIGRTMAX+1;
+const signalsA=Array.from({length},(value,number)=>
+getSignalByNumber(number,signals));
+
+return Object.assign({},...signalsA);
+};
+
+const getSignalByNumber=function(number,signals){
+const signal=findSignalByNumber(number,signals);
+
+if(signal===undefined){
+return{};
+}
+
+const{name,description,supported,action,forced,standard}=signal;
+return{
+[number]:{
+name,
+number,
+description,
+supported,
+action,
+forced,
+standard}};
+
+
+};
+
+
+
+const findSignalByNumber=function(number,signals){
+const signal=signals.find(({name})=>_os.constants.signals[name]===number);
+
+if(signal!==undefined){
+return signal;
+}
+
+return signals.find(signalA=>signalA.number===number);
+};
+
+const signalsByNumber=getSignalsByNumber();exports.signalsByNumber=signalsByNumber;
+//# sourceMappingURL=main.js.map
+
+/***/ }),
+
+/***/ 1931:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", ({value:true}));exports.SIGRTMAX=exports.getRealtimeSignals=void 0;
+const getRealtimeSignals=function(){
+const length=SIGRTMAX-SIGRTMIN+1;
+return Array.from({length},getRealtimeSignal);
+};exports.getRealtimeSignals=getRealtimeSignals;
+
+const getRealtimeSignal=function(value,index){
+return{
+name:`SIGRT${index+1}`,
+number:SIGRTMIN+index,
+action:"terminate",
+description:"Application-specific signal (realtime)",
+standard:"posix"};
+
+};
+
+const SIGRTMIN=34;
+const SIGRTMAX=64;exports.SIGRTMAX=SIGRTMAX;
+//# sourceMappingURL=realtime.js.map
+
+/***/ }),
+
+/***/ 9034:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", ({value:true}));exports.getSignals=void 0;var _os=__nccwpck_require__(2087);
+
+var _core=__nccwpck_require__(8009);
+var _realtime=__nccwpck_require__(1931);
+
+
+
+const getSignals=function(){
+const realtimeSignals=(0,_realtime.getRealtimeSignals)();
+const signals=[..._core.SIGNALS,...realtimeSignals].map(normalizeSignal);
+return signals;
+};exports.getSignals=getSignals;
+
+
+
+
+
+
+
+const normalizeSignal=function({
+name,
+number:defaultNumber,
+description,
+action,
+forced=false,
+standard})
+{
+const{
+signals:{[name]:constantSignal}}=
+_os.constants;
+const supported=constantSignal!==undefined;
+const number=supported?constantSignal:defaultNumber;
+return{name,number,description,supported,action,forced,standard};
+};
+//# sourceMappingURL=signals.js.map
 
 /***/ }),
 
@@ -12165,11 +13485,11 @@ module.exports = {
 /***/ }),
 
 /***/ 6905:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // https://buddy.works/knowledge/deployments/how-use-environment-variables#default-environment-variables
 
-const {prNumber} = __webpack_require__(4073);
+const {prNumber} = __nccwpck_require__(4073);
 
 module.exports = {
 	detect({env}) {
@@ -12231,11 +13551,11 @@ module.exports = {
 /***/ }),
 
 /***/ 4846:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 
-const {prNumber} = __webpack_require__(4073);
+const {prNumber} = __nccwpck_require__(4073);
 
 module.exports = {
 	detect({env}) {
@@ -12301,10 +13621,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3875:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 5416:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {head, branch} = __webpack_require__(6482);
+const {head, branch} = __nccwpck_require__(6482);
 
 // https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
 
@@ -12420,9 +13740,9 @@ module.exports = {
 /***/ }),
 
 /***/ 9778:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {head, branch} = __webpack_require__(6482);
+const {head, branch} = __nccwpck_require__(6482);
 
 module.exports = {
 	configuration(options) {
@@ -12434,10 +13754,10 @@ module.exports = {
 /***/ }),
 
 /***/ 9653:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // https://help.github.com/en/articles/virtual-environments-for-github-actions#environment-variables
-const {parseBranch} = __webpack_require__(4073);
+const {parseBranch} = __nccwpck_require__(4073);
 
 const getPrEvent = ({env}) => {
 	try {
@@ -12517,9 +13837,9 @@ module.exports = {
 /***/ }),
 
 /***/ 1237:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {head} = __webpack_require__(6482);
+const {head} = __nccwpck_require__(6482);
 
 // https://wiki.jenkins.io/display/JENKINS/Building+a+software+project
 
@@ -12633,10 +13953,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5416:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 8871:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {head} = __webpack_require__(6482);
+const {head} = __nccwpck_require__(6482);
 
 // 1.0: https://semaphoreci.com/docs/available-environment-variables.html
 // 2.0: https://docs.semaphoreci.com/article/12-environment-variables
@@ -12703,12 +14023,12 @@ module.exports = {
 /***/ }),
 
 /***/ 63:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // https://confluence.jetbrains.com/display/TCD10/Predefined+Build+Parameters
 
-const javaProperties = __webpack_require__(7735);
-const {branch} = __webpack_require__(6482);
+const javaProperties = __nccwpck_require__(7735);
+const {branch} = __nccwpck_require__(6482);
 
 const PROPERTIES_MAPPING = {root: 'teamcity.build.workingDir', branch: 'teamcity.build.branch'};
 
@@ -12794,11 +14114,11 @@ module.exports = {
 /***/ }),
 
 /***/ 771:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // https://docs.microsoft.com/en-us/vsts/pipelines/build/variables
 // The docs indicate that SYSTEM_PULLREQUEST_SOURCEBRANCH and SYSTEM_PULLREQUEST_TARGETBRANCH are in the long format (e.g `refs/heads/master`) however tests show they are both in the short format (e.g. `master`)
-const {parseBranch} = __webpack_require__(4073);
+const {parseBranch} = __nccwpck_require__(4073);
 
 module.exports = {
 	detect({env}) {
@@ -12852,13 +14172,13 @@ module.exports = {
 /***/ }),
 
 /***/ 3505:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var util = __webpack_require__(1669);
-var isArrayish = __webpack_require__(7604);
+var util = __nccwpck_require__(1669);
+var isArrayish = __nccwpck_require__(7604);
 
 var errorEx = function errorEx(name, properties) {
 	if (!name || name.constructor !== String) {
@@ -19729,22 +21049,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ }),
 
 /***/ 5447:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const childProcess = __webpack_require__(3129);
-const crossSpawn = __webpack_require__(2746);
-const stripFinalNewline = __webpack_require__(8174);
-const npmRunPath = __webpack_require__(3459);
-const onetime = __webpack_require__(9082);
-const makeError = __webpack_require__(2187);
-const normalizeStdio = __webpack_require__(166);
-const {spawnedKill, spawnedCancel, setupTimeout, setExitHandler} = __webpack_require__(9819);
-const {handleInput, getSpawnedResult, makeAllStream, validateInputSync} = __webpack_require__(2592);
-const {mergePromise, getSpawnedPromise} = __webpack_require__(7814);
-const {joinCommand, parseCommand} = __webpack_require__(8286);
+const path = __nccwpck_require__(5622);
+const childProcess = __nccwpck_require__(3129);
+const crossSpawn = __nccwpck_require__(2746);
+const stripFinalNewline = __nccwpck_require__(8174);
+const npmRunPath = __nccwpck_require__(502);
+const onetime = __nccwpck_require__(9082);
+const makeError = __nccwpck_require__(2291);
+const normalizeStdio = __nccwpck_require__(166);
+const {spawnedKill, spawnedCancel, setupTimeout, validateTimeout, setExitHandler} = __nccwpck_require__(9819);
+const {handleInput, getSpawnedResult, makeAllStream, validateInputSync} = __nccwpck_require__(2592);
+const {mergePromise, getSpawnedPromise} = __nccwpck_require__(7814);
+const {joinCommand, parseCommand, getEscapedCommand} = __nccwpck_require__(8286);
 
 const DEFAULT_MAX_BUFFER = 1000 * 1000 * 100;
 
@@ -19808,6 +21128,9 @@ const handleOutput = (options, value, error) => {
 const execa = (file, args, options) => {
 	const parsed = handleArguments(file, args, options);
 	const command = joinCommand(file, args);
+	const escapedCommand = getEscapedCommand(file, args);
+
+	validateTimeout(parsed.options);
 
 	let spawned;
 	try {
@@ -19821,6 +21144,7 @@ const execa = (file, args, options) => {
 			stderr: '',
 			all: '',
 			command,
+			escapedCommand,
 			parsed,
 			timedOut: false,
 			isCanceled: false,
@@ -19853,6 +21177,7 @@ const execa = (file, args, options) => {
 				stderr,
 				all,
 				command,
+				escapedCommand,
 				parsed,
 				timedOut,
 				isCanceled: context.isCanceled,
@@ -19868,6 +21193,7 @@ const execa = (file, args, options) => {
 
 		return {
 			command,
+			escapedCommand,
 			exitCode: 0,
 			stdout,
 			stderr,
@@ -19881,8 +21207,6 @@ const execa = (file, args, options) => {
 
 	const handlePromiseOnce = onetime(handlePromise);
 
-	crossSpawn._enoent.hookChildProcess(spawned, parsed.parsed);
-
 	handleInput(spawned, parsed.options.input);
 
 	spawned.all = makeAllStream(spawned, parsed.options);
@@ -19895,6 +21219,7 @@ module.exports = execa;
 module.exports.sync = (file, args, options) => {
 	const parsed = handleArguments(file, args, options);
 	const command = joinCommand(file, args);
+	const escapedCommand = getEscapedCommand(file, args);
 
 	validateInputSync(parsed.options);
 
@@ -19908,6 +21233,7 @@ module.exports.sync = (file, args, options) => {
 			stderr: '',
 			all: '',
 			command,
+			escapedCommand,
 			parsed,
 			timedOut: false,
 			isCanceled: false,
@@ -19926,6 +21252,7 @@ module.exports.sync = (file, args, options) => {
 			signal: result.signal,
 			exitCode: result.status,
 			command,
+			escapedCommand,
 			parsed,
 			timedOut: result.error && result.error.code === 'ETIMEDOUT',
 			isCanceled: false,
@@ -19941,6 +21268,7 @@ module.exports.sync = (file, args, options) => {
 
 	return {
 		command,
+		escapedCommand,
 		exitCode: 0,
 		stdout,
 		stderr,
@@ -20001,15 +21329,34 @@ module.exports.node = (scriptPath, args, options = {}) => {
 
 "use strict";
 
-const SPACES_REGEXP = / +/g;
-
-const joinCommand = (file, args = []) => {
+const normalizeArgs = (file, args = []) => {
 	if (!Array.isArray(args)) {
-		return file;
+		return [file];
 	}
 
-	return [file, ...args].join(' ');
+	return [file, ...args];
 };
+
+const NO_ESCAPE_REGEXP = /^[\w.-]+$/;
+const DOUBLE_QUOTES_REGEXP = /"/g;
+
+const escapeArg = arg => {
+	if (typeof arg !== 'string' || NO_ESCAPE_REGEXP.test(arg)) {
+		return arg;
+	}
+
+	return `"${arg.replace(DOUBLE_QUOTES_REGEXP, '\\"')}"`;
+};
+
+const joinCommand = (file, args) => {
+	return normalizeArgs(file, args).join(' ');
+};
+
+const getEscapedCommand = (file, args) => {
+	return normalizeArgs(file, args).map(arg => escapeArg(arg)).join(' ');
+};
+
+const SPACES_REGEXP = / +/g;
 
 // Handle `execa.command()`
 const parseCommand = command => {
@@ -20030,18 +21377,19 @@ const parseCommand = command => {
 
 module.exports = {
 	joinCommand,
+	getEscapedCommand,
 	parseCommand
 };
 
 
 /***/ }),
 
-/***/ 2187:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 2291:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const {signalsByName} = __webpack_require__(2779);
+const {signalsByName} = __nccwpck_require__(2779);
 
 const getErrorPrefix = ({timedOut, timeout, errorCode, signal, signalDescription, exitCode, isCanceled}) => {
 	if (timedOut) {
@@ -20075,6 +21423,7 @@ const makeError = ({
 	signal,
 	exitCode,
 	command,
+	escapedCommand,
 	timedOut,
 	isCanceled,
 	killed,
@@ -20103,6 +21452,7 @@ const makeError = ({
 
 	error.shortMessage = shortMessage;
 	error.command = command;
+	error.escapedCommand = escapedCommand;
 	error.exitCode = exitCode;
 	error.signal = signal;
 	error.signalDescription = signalDescription;
@@ -20131,12 +21481,12 @@ module.exports = makeError;
 /***/ }),
 
 /***/ 9819:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const os = __webpack_require__(2087);
-const onExit = __webpack_require__(4931);
+const os = __nccwpck_require__(2087);
+const onExit = __nccwpck_require__(4931);
 
 const DEFAULT_FORCE_KILL_TIMEOUT = 1000 * 5;
 
@@ -20207,10 +21557,6 @@ const setupTimeout = (spawned, {timeout, killSignal = 'SIGTERM'}, spawnedPromise
 		return spawnedPromise;
 	}
 
-	if (!Number.isFinite(timeout) || timeout < 0) {
-		throw new TypeError(`Expected the \`timeout\` option to be a non-negative integer, got \`${timeout}\` (${typeof timeout})`);
-	}
-
 	let timeoutId;
 	const timeoutPromise = new Promise((resolve, reject) => {
 		timeoutId = setTimeout(() => {
@@ -20223,6 +21569,12 @@ const setupTimeout = (spawned, {timeout, killSignal = 'SIGTERM'}, spawnedPromise
 	});
 
 	return Promise.race([timeoutPromise, safeSpawnedPromise]);
+};
+
+const validateTimeout = ({timeout}) => {
+	if (timeout !== undefined && (!Number.isFinite(timeout) || timeout < 0)) {
+		throw new TypeError(`Expected the \`timeout\` option to be a non-negative integer, got \`${timeout}\` (${typeof timeout})`);
+	}
 };
 
 // `cleanup` option handling
@@ -20244,6 +21596,7 @@ module.exports = {
 	spawnedKill,
 	spawnedCancel,
 	setupTimeout,
+	validateTimeout,
 	setExitHandler
 };
 
@@ -20311,20 +21664,20 @@ module.exports = {
 
 const aliases = ['stdin', 'stdout', 'stderr'];
 
-const hasAlias = opts => aliases.some(alias => opts[alias] !== undefined);
+const hasAlias = options => aliases.some(alias => options[alias] !== undefined);
 
-const normalizeStdio = opts => {
-	if (!opts) {
+const normalizeStdio = options => {
+	if (!options) {
 		return;
 	}
 
-	const {stdio} = opts;
+	const {stdio} = options;
 
 	if (stdio === undefined) {
-		return aliases.map(alias => opts[alias]);
+		return aliases.map(alias => options[alias]);
 	}
 
-	if (hasAlias(opts)) {
+	if (hasAlias(options)) {
 		throw new Error(`It's not possible to provide \`stdio\` in combination with one of ${aliases.map(alias => `\`${alias}\``).join(', ')}`);
 	}
 
@@ -20343,8 +21696,8 @@ const normalizeStdio = opts => {
 module.exports = normalizeStdio;
 
 // `ipc` is pushed unless it is already present
-module.exports.node = opts => {
-	const stdio = normalizeStdio(opts);
+module.exports.node = options => {
+	const stdio = normalizeStdio(options);
 
 	if (stdio === 'ipc') {
 		return 'ipc';
@@ -20365,18 +21718,18 @@ module.exports.node = opts => {
 /***/ }),
 
 /***/ 2592:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const isStream = __webpack_require__(1657);
-const getStream = __webpack_require__(1336);
-const mergeStream = __webpack_require__(2621);
+const isStream = __nccwpck_require__(1554);
+const getStream = __nccwpck_require__(1766);
+const mergeStream = __nccwpck_require__(2621);
 
 // `input` option
 const handleInput = (spawned, input) => {
 	// Checking for stdin is workaround for https://github.com/nodejs/node/issues/26852
-	// TODO: Remove `|| spawned.stdin === undefined` once we drop support for Node.js <=12.2.0
+	// @todo remove `|| spawned.stdin === undefined` once we drop support for Node.js <=12.2.0
 	if (input === undefined || spawned.stdin === undefined) {
 		return;
 	}
@@ -20469,256 +21822,12 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7740:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const {PassThrough: PassThroughStream} = __webpack_require__(2413);
-
-module.exports = options => {
-	options = {...options};
-
-	const {array} = options;
-	let {encoding} = options;
-	const isBuffer = encoding === 'buffer';
-	let objectMode = false;
-
-	if (array) {
-		objectMode = !(encoding || isBuffer);
-	} else {
-		encoding = encoding || 'utf8';
-	}
-
-	if (isBuffer) {
-		encoding = null;
-	}
-
-	const stream = new PassThroughStream({objectMode});
-
-	if (encoding) {
-		stream.setEncoding(encoding);
-	}
-
-	let length = 0;
-	const chunks = [];
-
-	stream.on('data', chunk => {
-		chunks.push(chunk);
-
-		if (objectMode) {
-			length = chunks.length;
-		} else {
-			length += chunk.length;
-		}
-	});
-
-	stream.getBufferedValue = () => {
-		if (array) {
-			return chunks;
-		}
-
-		return isBuffer ? Buffer.concat(chunks, length) : chunks.join('');
-	};
-
-	stream.getBufferedLength = () => length;
-
-	return stream;
-};
-
-
-/***/ }),
-
-/***/ 1336:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const {constants: BufferConstants} = __webpack_require__(4293);
-const pump = __webpack_require__(8341);
-const bufferStream = __webpack_require__(7740);
-
-class MaxBufferError extends Error {
-	constructor() {
-		super('maxBuffer exceeded');
-		this.name = 'MaxBufferError';
-	}
-}
-
-async function getStream(inputStream, options) {
-	if (!inputStream) {
-		return Promise.reject(new Error('Expected a stream'));
-	}
-
-	options = {
-		maxBuffer: Infinity,
-		...options
-	};
-
-	const {maxBuffer} = options;
-
-	let stream;
-	await new Promise((resolve, reject) => {
-		const rejectPromise = error => {
-			// Don't retrieve an oversized buffer.
-			if (error && stream.getBufferedLength() <= BufferConstants.MAX_LENGTH) {
-				error.bufferedData = stream.getBufferedValue();
-			}
-
-			reject(error);
-		};
-
-		stream = pump(inputStream, bufferStream(options), error => {
-			if (error) {
-				rejectPromise(error);
-				return;
-			}
-
-			resolve();
-		});
-
-		stream.on('data', () => {
-			if (stream.getBufferedLength() > maxBuffer) {
-				rejectPromise(new MaxBufferError());
-			}
-		});
-	});
-
-	return stream.getBufferedValue();
-}
-
-module.exports = getStream;
-// TODO: Remove this for the next major release
-module.exports.default = getStream;
-module.exports.buffer = (stream, options) => getStream(stream, {...options, encoding: 'buffer'});
-module.exports.array = (stream, options) => getStream(stream, {...options, array: true});
-module.exports.MaxBufferError = MaxBufferError;
-
-
-/***/ }),
-
-/***/ 1657:
-/***/ ((module) => {
-
-"use strict";
-
-
-const isStream = stream =>
-	stream !== null &&
-	typeof stream === 'object' &&
-	typeof stream.pipe === 'function';
-
-isStream.writable = stream =>
-	isStream(stream) &&
-	stream.writable !== false &&
-	typeof stream._write === 'function' &&
-	typeof stream._writableState === 'object';
-
-isStream.readable = stream =>
-	isStream(stream) &&
-	stream.readable !== false &&
-	typeof stream._read === 'function' &&
-	typeof stream._readableState === 'object';
-
-isStream.duplex = stream =>
-	isStream.writable(stream) &&
-	isStream.readable(stream);
-
-isStream.transform = stream =>
-	isStream.duplex(stream) &&
-	typeof stream._transform === 'function' &&
-	typeof stream._transformState === 'object';
-
-module.exports = isStream;
-
-
-/***/ }),
-
-/***/ 3459:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const path = __webpack_require__(5622);
-const pathKey = __webpack_require__(5600);
-
-const npmRunPath = options => {
-	options = {
-		cwd: process.cwd(),
-		path: process.env[pathKey()],
-		execPath: process.execPath,
-		...options
-	};
-
-	let previous;
-	let cwdPath = path.resolve(options.cwd);
-	const result = [];
-
-	while (previous !== cwdPath) {
-		result.push(path.join(cwdPath, 'node_modules/.bin'));
-		previous = cwdPath;
-		cwdPath = path.resolve(cwdPath, '..');
-	}
-
-	// Ensure the running `node` binary is used
-	const execPathDir = path.resolve(options.cwd, options.execPath, '..');
-	result.push(execPathDir);
-
-	return result.concat(options.path).join(path.delimiter);
-};
-
-module.exports = npmRunPath;
-// TODO: Remove this for the next major release
-module.exports.default = npmRunPath;
-
-module.exports.env = options => {
-	options = {
-		env: process.env,
-		...options
-	};
-
-	const env = {...options.env};
-	const path = pathKey({env});
-
-	options.path = env[path];
-	env[path] = module.exports(options);
-
-	return env;
-};
-
-
-/***/ }),
-
-/***/ 5600:
-/***/ ((module) => {
-
-"use strict";
-
-
-const pathKey = (options = {}) => {
-	const environment = options.env || process.env;
-	const platform = options.platform || process.platform;
-
-	if (platform !== 'win32') {
-		return 'PATH';
-	}
-
-	return Object.keys(environment).reverse().find(key => key.toUpperCase() === 'PATH') || 'Path';
-};
-
-module.exports = pathKey;
-// TODO: Remove this for the next major release
-module.exports.default = pathKey;
-
-
-/***/ }),
-
 /***/ 7099:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const escapeStringRegexp = __webpack_require__(8691);
+const escapeStringRegexp = __nccwpck_require__(8691);
 
 const {platform} = process;
 
@@ -20873,7 +21982,7 @@ module.exports.windows = windows;
 /***/ }),
 
 /***/ 6330:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 /*!
@@ -20885,8 +21994,8 @@ module.exports.windows = windows;
 
 
 
-const util = __webpack_require__(1669);
-const toRegexRange = __webpack_require__(1861);
+const util = __nccwpck_require__(1669);
+const toRegexRange = __nccwpck_require__(1861);
 
 const isObject = val => val !== null && typeof val === 'object' && !Array.isArray(val);
 
@@ -21130,13 +22239,13 @@ module.exports = fill;
 /***/ }),
 
 /***/ 9486:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const locatePath = __webpack_require__(3447);
-const pathExists = __webpack_require__(1594);
+const path = __nccwpck_require__(5622);
+const locatePath = __nccwpck_require__(3447);
+const pathExists = __nccwpck_require__(6978);
 
 const stop = Symbol('findUp.stop');
 
@@ -21226,37 +22335,6 @@ module.exports.stop = stop;
 
 /***/ }),
 
-/***/ 1594:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const fs = __webpack_require__(5747);
-const {promisify} = __webpack_require__(1669);
-
-const pAccess = promisify(fs.access);
-
-module.exports = async path => {
-	try {
-		await pAccess(path);
-		return true;
-	} catch (_) {
-		return false;
-	}
-};
-
-module.exports.sync = path => {
-	try {
-		fs.accessSync(path);
-		return true;
-	} catch (_) {
-		return false;
-	}
-};
-
-
-/***/ }),
-
 /***/ 9320:
 /***/ ((module) => {
 
@@ -21318,25 +22396,154 @@ module.exports = function bind(that) {
 /***/ }),
 
 /***/ 8334:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var implementation = __webpack_require__(9320);
+var implementation = __nccwpck_require__(9320);
 
 module.exports = Function.prototype.bind || implementation;
 
 
 /***/ }),
 
+/***/ 1585:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const {PassThrough: PassThroughStream} = __nccwpck_require__(2413);
+
+module.exports = options => {
+	options = {...options};
+
+	const {array} = options;
+	let {encoding} = options;
+	const isBuffer = encoding === 'buffer';
+	let objectMode = false;
+
+	if (array) {
+		objectMode = !(encoding || isBuffer);
+	} else {
+		encoding = encoding || 'utf8';
+	}
+
+	if (isBuffer) {
+		encoding = null;
+	}
+
+	const stream = new PassThroughStream({objectMode});
+
+	if (encoding) {
+		stream.setEncoding(encoding);
+	}
+
+	let length = 0;
+	const chunks = [];
+
+	stream.on('data', chunk => {
+		chunks.push(chunk);
+
+		if (objectMode) {
+			length = chunks.length;
+		} else {
+			length += chunk.length;
+		}
+	});
+
+	stream.getBufferedValue = () => {
+		if (array) {
+			return chunks;
+		}
+
+		return isBuffer ? Buffer.concat(chunks, length) : chunks.join('');
+	};
+
+	stream.getBufferedLength = () => length;
+
+	return stream;
+};
+
+
+/***/ }),
+
+/***/ 1766:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const {constants: BufferConstants} = __nccwpck_require__(4293);
+const stream = __nccwpck_require__(2413);
+const {promisify} = __nccwpck_require__(1669);
+const bufferStream = __nccwpck_require__(1585);
+
+const streamPipelinePromisified = promisify(stream.pipeline);
+
+class MaxBufferError extends Error {
+	constructor() {
+		super('maxBuffer exceeded');
+		this.name = 'MaxBufferError';
+	}
+}
+
+async function getStream(inputStream, options) {
+	if (!inputStream) {
+		throw new Error('Expected a stream');
+	}
+
+	options = {
+		maxBuffer: Infinity,
+		...options
+	};
+
+	const {maxBuffer} = options;
+	const stream = bufferStream(options);
+
+	await new Promise((resolve, reject) => {
+		const rejectPromise = error => {
+			// Don't retrieve an oversized buffer.
+			if (error && stream.getBufferedLength() <= BufferConstants.MAX_LENGTH) {
+				error.bufferedData = stream.getBufferedValue();
+			}
+
+			reject(error);
+		};
+
+		(async () => {
+			try {
+				await streamPipelinePromisified(inputStream, stream);
+				resolve();
+			} catch (error) {
+				rejectPromise(error);
+			}
+		})();
+
+		stream.on('data', () => {
+			if (stream.getBufferedLength() > maxBuffer) {
+				rejectPromise(new MaxBufferError());
+			}
+		});
+	});
+
+	return stream.getBufferedValue();
+}
+
+module.exports = getStream;
+module.exports.buffer = (stream, options) => getStream(stream, {...options, encoding: 'buffer'});
+module.exports.array = (stream, options) => getStream(stream, {...options, array: true});
+module.exports.MaxBufferError = MaxBufferError;
+
+
+/***/ }),
+
 /***/ 475:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var traverse = __webpack_require__(8588);
+var traverse = __nccwpck_require__(8588);
 
 exports.config = {
   commit: {
@@ -21385,19 +22592,19 @@ exports.map = function () {
 /***/ }),
 
 /***/ 886:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var spawn    = __webpack_require__(3129).spawn;
-var through  = __webpack_require__(8180);
-var split    = __webpack_require__(5000);
-var traverse = __webpack_require__(8588);
-var fields   = __webpack_require__(475);
-var toArgv   = __webpack_require__(2909)/* .format */ .W;
-var combine  = __webpack_require__(8769);
-var fwd      = __webpack_require__(1847);
+var spawn    = __nccwpck_require__(3129).spawn;
+var through  = __nccwpck_require__(8180);
+var split    = __nccwpck_require__(5000);
+var traverse = __nccwpck_require__(8588);
+var fields   = __nccwpck_require__(475);
+var toArgv   = __nccwpck_require__(2909)/* .format */ .W;
+var combine  = __nccwpck_require__(8769);
+var fwd      = __nccwpck_require__(1847);
 
 var END = '==END==';
 var FIELD = '==FIELD==';
@@ -21463,12 +22670,16 @@ exports.fields = fields.config;
 
 module.exports = clone
 
+var getPrototypeOf = Object.getPrototypeOf || function (obj) {
+  return obj.__proto__
+}
+
 function clone (obj) {
   if (obj === null || typeof obj !== 'object')
     return obj
 
   if (obj instanceof Object)
-    var copy = { __proto__: obj.__proto__ }
+    var copy = { __proto__: getPrototypeOf(obj) }
   else
     var copy = Object.create(null)
 
@@ -21483,14 +22694,14 @@ function clone (obj) {
 /***/ }),
 
 /***/ 7758:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var fs = __webpack_require__(5747)
-var polyfills = __webpack_require__(263)
-var legacy = __webpack_require__(3086)
-var clone = __webpack_require__(7356)
+var fs = __nccwpck_require__(5747)
+var polyfills = __nccwpck_require__(263)
+var legacy = __nccwpck_require__(3086)
+var clone = __nccwpck_require__(7356)
 
-var util = __webpack_require__(1669)
+var util = __nccwpck_require__(1669)
 
 /* istanbul ignore next - node 0.x polyfill */
 var gracefulQueue
@@ -21541,7 +22752,7 @@ if (!fs[gracefulQueue]) {
       return fs$close.call(fs, fd, function (err) {
         // This function uses the graceful-fs shared queue
         if (!err) {
-          retry()
+          resetQueue()
         }
 
         if (typeof cb === 'function')
@@ -21559,7 +22770,7 @@ if (!fs[gracefulQueue]) {
     function closeSync (fd) {
       // This function uses the graceful-fs shared queue
       fs$closeSync.apply(fs, arguments)
-      retry()
+      resetQueue()
     }
 
     Object.defineProperty(closeSync, previousSymbol, {
@@ -21571,7 +22782,7 @@ if (!fs[gracefulQueue]) {
   if (/\bgfs4\b/i.test(process.env.NODE_DEBUG || '')) {
     process.on('exit', function() {
       debug(fs[gracefulQueue])
-      __webpack_require__(2357).equal(fs[gracefulQueue].length, 0)
+      __nccwpck_require__(2357).equal(fs[gracefulQueue].length, 0)
     })
   }
 }
@@ -21601,14 +22812,13 @@ function patch (fs) {
 
     return go$readFile(path, options, cb)
 
-    function go$readFile (path, options, cb) {
+    function go$readFile (path, options, cb, startTime) {
       return fs$readFile(path, options, function (err) {
         if (err && (err.code === 'EMFILE' || err.code === 'ENFILE'))
-          enqueue([go$readFile, [path, options, cb]])
+          enqueue([go$readFile, [path, options, cb], err, startTime || Date.now(), Date.now()])
         else {
           if (typeof cb === 'function')
             cb.apply(this, arguments)
-          retry()
         }
       })
     }
@@ -21622,14 +22832,13 @@ function patch (fs) {
 
     return go$writeFile(path, data, options, cb)
 
-    function go$writeFile (path, data, options, cb) {
+    function go$writeFile (path, data, options, cb, startTime) {
       return fs$writeFile(path, data, options, function (err) {
         if (err && (err.code === 'EMFILE' || err.code === 'ENFILE'))
-          enqueue([go$writeFile, [path, data, options, cb]])
+          enqueue([go$writeFile, [path, data, options, cb], err, startTime || Date.now(), Date.now()])
         else {
           if (typeof cb === 'function')
             cb.apply(this, arguments)
-          retry()
         }
       })
     }
@@ -21644,14 +22853,35 @@ function patch (fs) {
 
     return go$appendFile(path, data, options, cb)
 
-    function go$appendFile (path, data, options, cb) {
+    function go$appendFile (path, data, options, cb, startTime) {
       return fs$appendFile(path, data, options, function (err) {
         if (err && (err.code === 'EMFILE' || err.code === 'ENFILE'))
-          enqueue([go$appendFile, [path, data, options, cb]])
+          enqueue([go$appendFile, [path, data, options, cb], err, startTime || Date.now(), Date.now()])
         else {
           if (typeof cb === 'function')
             cb.apply(this, arguments)
-          retry()
+        }
+      })
+    }
+  }
+
+  var fs$copyFile = fs.copyFile
+  if (fs$copyFile)
+    fs.copyFile = copyFile
+  function copyFile (src, dest, flags, cb) {
+    if (typeof flags === 'function') {
+      cb = flags
+      flags = 0
+    }
+    return go$copyFile(src, dest, flags, cb)
+
+    function go$copyFile (src, dest, flags, cb, startTime) {
+      return fs$copyFile(src, dest, flags, function (err) {
+        if (err && (err.code === 'EMFILE' || err.code === 'ENFILE'))
+          enqueue([go$copyFile, [src, dest, flags, cb], err, startTime || Date.now(), Date.now()])
+        else {
+          if (typeof cb === 'function')
+            cb.apply(this, arguments)
         }
       })
     }
@@ -21660,33 +22890,24 @@ function patch (fs) {
   var fs$readdir = fs.readdir
   fs.readdir = readdir
   function readdir (path, options, cb) {
-    var args = [path]
-    if (typeof options !== 'function') {
-      args.push(options)
-    } else {
-      cb = options
+    if (typeof options === 'function')
+      cb = options, options = null
+
+    return go$readdir(path, options, cb)
+
+    function go$readdir (path, options, cb, startTime) {
+      return fs$readdir(path, options, function (err, files) {
+        if (err && (err.code === 'EMFILE' || err.code === 'ENFILE'))
+          enqueue([go$readdir, [path, options, cb], err, startTime || Date.now(), Date.now()])
+        else {
+          if (files && files.sort)
+            files.sort()
+
+          if (typeof cb === 'function')
+            cb.call(this, err, files)
+        }
+      })
     }
-    args.push(go$readdir$cb)
-
-    return go$readdir(args)
-
-    function go$readdir$cb (err, files) {
-      if (files && files.sort)
-        files.sort()
-
-      if (err && (err.code === 'EMFILE' || err.code === 'ENFILE'))
-        enqueue([go$readdir, [args]])
-
-      else {
-        if (typeof cb === 'function')
-          cb.apply(this, arguments)
-        retry()
-      }
-    }
-  }
-
-  function go$readdir (args) {
-    return fs$readdir.apply(fs, args)
   }
 
   if (process.version.substr(0, 4) === 'v0.8') {
@@ -21811,14 +23032,13 @@ function patch (fs) {
 
     return go$open(path, flags, mode, cb)
 
-    function go$open (path, flags, mode, cb) {
+    function go$open (path, flags, mode, cb, startTime) {
       return fs$open(path, flags, mode, function (err, fd) {
         if (err && (err.code === 'EMFILE' || err.code === 'ENFILE'))
-          enqueue([go$open, [path, flags, mode, cb]])
+          enqueue([go$open, [path, flags, mode, cb], err, startTime || Date.now(), Date.now()])
         else {
           if (typeof cb === 'function')
             cb.apply(this, arguments)
-          retry()
         }
       })
     }
@@ -21830,13 +23050,79 @@ function patch (fs) {
 function enqueue (elem) {
   debug('ENQUEUE', elem[0].name, elem[1])
   fs[gracefulQueue].push(elem)
+  retry()
+}
+
+// keep track of the timeout between retry() calls
+var retryTimer
+
+// reset the startTime and lastTime to now
+// this resets the start of the 60 second overall timeout as well as the
+// delay between attempts so that we'll retry these jobs sooner
+function resetQueue () {
+  var now = Date.now()
+  for (var i = 0; i < fs[gracefulQueue].length; ++i) {
+    // entries that are only a length of 2 are from an older version, don't
+    // bother modifying those since they'll be retried anyway.
+    if (fs[gracefulQueue][i].length > 2) {
+      fs[gracefulQueue][i][3] = now // startTime
+      fs[gracefulQueue][i][4] = now // lastTime
+    }
+  }
+  // call retry to make sure we're actively processing the queue
+  retry()
 }
 
 function retry () {
+  // clear the timer and remove it to help prevent unintended concurrency
+  clearTimeout(retryTimer)
+  retryTimer = undefined
+
+  if (fs[gracefulQueue].length === 0)
+    return
+
   var elem = fs[gracefulQueue].shift()
-  if (elem) {
-    debug('RETRY', elem[0].name, elem[1])
-    elem[0].apply(null, elem[1])
+  var fn = elem[0]
+  var args = elem[1]
+  // these items may be unset if they were added by an older graceful-fs
+  var err = elem[2]
+  var startTime = elem[3]
+  var lastTime = elem[4]
+
+  // if we don't have a startTime we have no way of knowing if we've waited
+  // long enough, so go ahead and retry this item now
+  if (startTime === undefined) {
+    debug('RETRY', fn.name, args)
+    fn.apply(null, args)
+  } else if (Date.now() - startTime >= 60000) {
+    // it's been more than 60 seconds total, bail now
+    debug('TIMEOUT', fn.name, args)
+    var cb = args.pop()
+    if (typeof cb === 'function')
+      cb.call(null, err)
+  } else {
+    // the amount of time between the last attempt and right now
+    var sinceAttempt = Date.now() - lastTime
+    // the amount of time between when we first tried, and when we last tried
+    // rounded up to at least 1
+    var sinceStart = Math.max(lastTime - startTime, 1)
+    // backoff. wait longer than the total time we've been retrying, but only
+    // up to a maximum of 100ms
+    var desiredDelay = Math.min(sinceStart * 1.2, 100)
+    // it's been long enough since the last retry, do it again
+    if (sinceAttempt >= desiredDelay) {
+      debug('RETRY', fn.name, args)
+      fn.apply(null, args.concat([startTime]))
+    } else {
+      // if we can't do this job yet, push it to the end of the queue
+      // and let the next iteration check again
+      fs[gracefulQueue].push(elem)
+    }
+  }
+
+  // schedule our next run if one isn't already scheduled
+  if (retryTimer === undefined) {
+    retryTimer = setTimeout(retry, 0)
   }
 }
 
@@ -21844,9 +23130,9 @@ function retry () {
 /***/ }),
 
 /***/ 3086:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var Stream = __webpack_require__(2413).Stream
+var Stream = __nccwpck_require__(2413).Stream
 
 module.exports = legacy
 
@@ -21969,9 +23255,9 @@ function legacy (fs) {
 /***/ }),
 
 /***/ 263:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var constants = __webpack_require__(5721)
+var constants = __nccwpck_require__(5721)
 
 var origCwd = process.cwd
 var cwd = null
@@ -21987,10 +23273,14 @@ try {
   process.cwd()
 } catch (er) {}
 
-var chdir = process.chdir
-process.chdir = function(d) {
-  cwd = null
-  chdir.call(process, d)
+// This check is needed until node.js 12 is required
+if (typeof process.chdir === 'function') {
+  var chdir = process.chdir
+  process.chdir = function (d) {
+    cwd = null
+    chdir.call(process, d)
+  }
+  if (Object.setPrototypeOf) Object.setPrototypeOf(process.chdir, chdir)
 }
 
 module.exports = patch
@@ -22105,7 +23395,7 @@ function patch (fs) {
     }
 
     // This ensures `util.promisify` works as it does for native `fs.read`.
-    read.__proto__ = fs$read
+    if (Object.setPrototypeOf) Object.setPrototypeOf(read, fs$read)
     return read
   })(fs.read)
 
@@ -22334,12 +23624,12 @@ module.exports = (flag, argv = process.argv) => {
 /***/ }),
 
 /***/ 6339:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var bind = __webpack_require__(8334);
+var bind = __nccwpck_require__(8334);
 
 module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
 
@@ -22430,262 +23720,293 @@ module.exports = hookStd;
 
 "use strict";
 
+const maybeJoin = (...args) => args.every(arg => arg) ? args.join('') : ''
+const maybeEncode = (arg) => arg ? encodeURIComponent(arg) : ''
 
-var gitHosts = module.exports = {
-  github: {
-    // First two are insecure and generally shouldn't be used any more, but
-    // they are still supported.
-    'protocols': [ 'git', 'http', 'git+ssh', 'git+https', 'ssh', 'https' ],
-    'domain': 'github.com',
-    'treepath': 'tree',
-    'filetemplate': 'https://{auth@}raw.githubusercontent.com/{user}/{project}/{committish}/{path}',
-    'bugstemplate': 'https://{domain}/{user}/{project}/issues',
-    'gittemplate': 'git://{auth@}{domain}/{user}/{project}.git{#committish}',
-    'tarballtemplate': 'https://codeload.{domain}/{user}/{project}/tar.gz/{committish}'
-  },
-  bitbucket: {
-    'protocols': [ 'git+ssh', 'git+https', 'ssh', 'https' ],
-    'domain': 'bitbucket.org',
-    'treepath': 'src',
-    'tarballtemplate': 'https://{domain}/{user}/{project}/get/{committish}.tar.gz'
-  },
-  gitlab: {
-    'protocols': [ 'git+ssh', 'git+https', 'ssh', 'https' ],
-    'domain': 'gitlab.com',
-    'treepath': 'tree',
-    'bugstemplate': 'https://{domain}/{user}/{project}/issues',
-    'httpstemplate': 'git+https://{auth@}{domain}/{user}/{projectPath}.git{#committish}',
-    'tarballtemplate': 'https://{domain}/{user}/{project}/repository/archive.tar.gz?ref={committish}',
-    'pathmatch': /^[/]([^/]+)[/]((?!.*(\/-\/|\/repository\/archive\.tar\.gz\?=.*|\/repository\/[^/]+\/archive.tar.gz$)).*?)(?:[.]git|[/])?$/
-  },
-  gist: {
-    'protocols': [ 'git', 'git+ssh', 'git+https', 'ssh', 'https' ],
-    'domain': 'gist.github.com',
-    'pathmatch': /^[/](?:([^/]+)[/])?([a-z0-9]{32,})(?:[.]git)?$/,
-    'filetemplate': 'https://gist.githubusercontent.com/{user}/{project}/raw{/committish}/{path}',
-    'bugstemplate': 'https://{domain}/{project}',
-    'gittemplate': 'git://{domain}/{project}.git{#committish}',
-    'sshtemplate': 'git@{domain}:/{project}.git{#committish}',
-    'sshurltemplate': 'git+ssh://git@{domain}/{project}.git{#committish}',
-    'browsetemplate': 'https://{domain}/{project}{/committish}',
-    'browsefiletemplate': 'https://{domain}/{project}{/committish}{#path}',
-    'docstemplate': 'https://{domain}/{project}{/committish}',
-    'httpstemplate': 'git+https://{domain}/{project}.git{#committish}',
-    'shortcuttemplate': '{type}:{project}{#committish}',
-    'pathtemplate': '{project}{#committish}',
-    'tarballtemplate': 'https://codeload.github.com/gist/{project}/tar.gz/{committish}',
-    'hashformat': function (fragment) {
-      return 'file-' + formatHashFragment(fragment)
+const defaults = {
+  sshtemplate: ({ domain, user, project, committish }) => `git@${domain}:${user}/${project}.git${maybeJoin('#', committish)}`,
+  sshurltemplate: ({ domain, user, project, committish }) => `git+ssh://git@${domain}/${user}/${project}.git${maybeJoin('#', committish)}`,
+  browsetemplate: ({ domain, user, project, committish, treepath }) => `https://${domain}/${user}/${project}${maybeJoin('/', treepath, '/', maybeEncode(committish))}`,
+  browsefiletemplate: ({ domain, user, project, committish, treepath, path, fragment, hashformat }) => `https://${domain}/${user}/${project}/${treepath}/${maybeEncode(committish || 'master')}/${path}${maybeJoin('#', hashformat(fragment || ''))}`,
+  docstemplate: ({ domain, user, project, treepath, committish }) => `https://${domain}/${user}/${project}${maybeJoin('/', treepath, '/', maybeEncode(committish))}#readme`,
+  httpstemplate: ({ auth, domain, user, project, committish }) => `git+https://${maybeJoin(auth, '@')}${domain}/${user}/${project}.git${maybeJoin('#', committish)}`,
+  filetemplate: ({ domain, user, project, committish, path }) => `https://${domain}/${user}/${project}/raw/${maybeEncode(committish) || 'master'}/${path}`,
+  shortcuttemplate: ({ type, user, project, committish }) => `${type}:${user}/${project}${maybeJoin('#', committish)}`,
+  pathtemplate: ({ user, project, committish }) => `${user}/${project}${maybeJoin('#', committish)}`,
+  bugstemplate: ({ domain, user, project }) => `https://${domain}/${user}/${project}/issues`,
+  hashformat: formatHashFragment
+}
+
+const gitHosts = {}
+gitHosts.github = Object.assign({}, defaults, {
+  // First two are insecure and generally shouldn't be used any more, but
+  // they are still supported.
+  protocols: ['git:', 'http:', 'git+ssh:', 'git+https:', 'ssh:', 'https:'],
+  domain: 'github.com',
+  treepath: 'tree',
+  filetemplate: ({ auth, user, project, committish, path }) => `https://${maybeJoin(auth, '@')}raw.githubusercontent.com/${user}/${project}/${maybeEncode(committish) || 'master'}/${path}`,
+  gittemplate: ({ auth, domain, user, project, committish }) => `git://${maybeJoin(auth, '@')}${domain}/${user}/${project}.git${maybeJoin('#', committish)}`,
+  tarballtemplate: ({ domain, user, project, committish }) => `https://codeload.${domain}/${user}/${project}/tar.gz/${maybeEncode(committish) || 'master'}`,
+  extract: (url) => {
+    let [, user, project, type, committish] = url.pathname.split('/', 5)
+    if (type && type !== 'tree') {
+      return
     }
+
+    if (!type) {
+      committish = url.hash.slice(1)
+    }
+
+    if (project && project.endsWith('.git')) {
+      project = project.slice(0, -4)
+    }
+
+    if (!user || !project) {
+      return
+    }
+
+    return { user, project, committish }
   }
-}
-
-var gitHostDefaults = {
-  'sshtemplate': 'git@{domain}:{user}/{project}.git{#committish}',
-  'sshurltemplate': 'git+ssh://git@{domain}/{user}/{project}.git{#committish}',
-  'browsetemplate': 'https://{domain}/{user}/{project}{/tree/committish}',
-  'browsefiletemplate': 'https://{domain}/{user}/{project}/{treepath}/{committish}/{path}{#fragment}',
-  'docstemplate': 'https://{domain}/{user}/{project}{/tree/committish}#readme',
-  'httpstemplate': 'git+https://{auth@}{domain}/{user}/{project}.git{#committish}',
-  'filetemplate': 'https://{domain}/{user}/{project}/raw/{committish}/{path}',
-  'shortcuttemplate': '{type}:{user}/{project}{#committish}',
-  'pathtemplate': '{user}/{project}{#committish}',
-  'pathmatch': /^[/]([^/]+)[/]([^/]+?)(?:[.]git|[/])?$/,
-  'hashformat': formatHashFragment
-}
-
-Object.keys(gitHosts).forEach(function (name) {
-  Object.keys(gitHostDefaults).forEach(function (key) {
-    if (gitHosts[name][key]) return
-    gitHosts[name][key] = gitHostDefaults[key]
-  })
-  gitHosts[name].protocols_re = RegExp('^(' +
-    gitHosts[name].protocols.map(function (protocol) {
-      return protocol.replace(/([\\+*{}()[\]$^|])/g, '\\$1')
-    }).join('|') + '):$')
 })
+
+gitHosts.bitbucket = Object.assign({}, defaults, {
+  protocols: ['git+ssh:', 'git+https:', 'ssh:', 'https:'],
+  domain: 'bitbucket.org',
+  treepath: 'src',
+  tarballtemplate: ({ domain, user, project, committish }) => `https://${domain}/${user}/${project}/get/${maybeEncode(committish) || 'master'}.tar.gz`,
+  extract: (url) => {
+    let [, user, project, aux] = url.pathname.split('/', 4)
+    if (['get'].includes(aux)) {
+      return
+    }
+
+    if (project && project.endsWith('.git')) {
+      project = project.slice(0, -4)
+    }
+
+    if (!user || !project) {
+      return
+    }
+
+    return { user, project, committish: url.hash.slice(1) }
+  }
+})
+
+gitHosts.gitlab = Object.assign({}, defaults, {
+  protocols: ['git+ssh:', 'git+https:', 'ssh:', 'https:'],
+  domain: 'gitlab.com',
+  treepath: 'tree',
+  httpstemplate: ({ auth, domain, user, project, committish }) => `git+https://${maybeJoin(auth, '@')}${domain}/${user}/${project}.git${maybeJoin('#', committish)}`,
+  tarballtemplate: ({ domain, user, project, committish }) => `https://${domain}/${user}/${project}/repository/archive.tar.gz?ref=${maybeEncode(committish) || 'master'}`,
+  extract: (url) => {
+    const path = url.pathname.slice(1)
+    if (path.includes('/-/') || path.includes('/archive.tar.gz')) {
+      return
+    }
+
+    const segments = path.split('/')
+    let project = segments.pop()
+    if (project.endsWith('.git')) {
+      project = project.slice(0, -4)
+    }
+
+    const user = segments.join('/')
+    if (!user || !project) {
+      return
+    }
+
+    return { user, project, committish: url.hash.slice(1) }
+  }
+})
+
+gitHosts.gist = Object.assign({}, defaults, {
+  protocols: ['git:', 'git+ssh:', 'git+https:', 'ssh:', 'https:'],
+  domain: 'gist.github.com',
+  sshtemplate: ({ domain, project, committish }) => `git@${domain}:${project}.git${maybeJoin('#', committish)}`,
+  sshurltemplate: ({ domain, project, committish }) => `git+ssh://git@${domain}/${project}.git${maybeJoin('#', committish)}`,
+  browsetemplate: ({ domain, project, committish }) => `https://${domain}/${project}${maybeJoin('/', maybeEncode(committish))}`,
+  browsefiletemplate: ({ domain, project, committish, path, hashformat }) => `https://${domain}/${project}${maybeJoin('/', maybeEncode(committish))}${maybeJoin('#', hashformat(path))}`,
+  docstemplate: ({ domain, project, committish }) => `https://${domain}/${project}${maybeJoin('/', maybeEncode(committish))}`,
+  httpstemplate: ({ domain, project, committish }) => `git+https://${domain}/${project}.git${maybeJoin('#', committish)}`,
+  filetemplate: ({ user, project, committish, path }) => `https://gist.githubusercontent.com/${user}/${project}/raw${maybeJoin('/', maybeEncode(committish))}/${path}`,
+  shortcuttemplate: ({ type, project, committish }) => `${type}:${project}${maybeJoin('#', committish)}`,
+  pathtemplate: ({ project, committish }) => `${project}${maybeJoin('#', committish)}`,
+  bugstemplate: ({ domain, project }) => `https://${domain}/${project}`,
+  gittemplate: ({ domain, project, committish }) => `git://${domain}/${project}.git${maybeJoin('#', committish)}`,
+  tarballtemplate: ({ project, committish }) => `https://codeload.github.com/gist/${project}/tar.gz/${maybeEncode(committish) || 'master'}`,
+  extract: (url) => {
+    let [, user, project, aux] = url.pathname.split('/', 4)
+    if (aux === 'raw') {
+      return
+    }
+
+    if (!project) {
+      if (!user) {
+        return
+      }
+
+      project = user
+      user = null
+    }
+
+    if (project.endsWith('.git')) {
+      project = project.slice(0, -4)
+    }
+
+    return { user, project, committish: url.hash.slice(1) }
+  },
+  hashformat: function (fragment) {
+    return fragment && 'file-' + formatHashFragment(fragment)
+  }
+})
+
+const names = Object.keys(gitHosts)
+gitHosts.byShortcut = {}
+gitHosts.byDomain = {}
+for (const name of names) {
+  gitHosts.byShortcut[`${name}:`] = name
+  gitHosts.byDomain[gitHosts[name].domain] = name
+}
 
 function formatHashFragment (fragment) {
   return fragment.toLowerCase().replace(/^\W+|\/|\W+$/g, '').replace(/\W+/g, '-')
 }
 
+module.exports = gitHosts
+
 
 /***/ }),
 
 /***/ 8145:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-var gitHosts = __webpack_require__(135)
-/* eslint-disable node/no-deprecated-api */
+const gitHosts = __nccwpck_require__(135)
 
-// copy-pasta util._extend from node's source, to avoid pulling
-// the whole util module into peoples' webpack bundles.
-/* istanbul ignore next */
-var extend = Object.assign || function _extend (target, source) {
-  // Don't do anything if source isn't an object
-  if (source === null || typeof source !== 'object') return target
-
-  var keys = Object.keys(source)
-  var i = keys.length
-  while (i--) {
-    target[keys[i]] = source[keys[i]]
+class GitHost {
+  constructor (type, user, auth, project, committish, defaultRepresentation, opts = {}) {
+    Object.assign(this, gitHosts[type])
+    this.type = type
+    this.user = user
+    this.auth = auth
+    this.project = project
+    this.committish = committish
+    this.default = defaultRepresentation
+    this.opts = opts
   }
-  return target
-}
 
+  hash () {
+    return this.committish ? `#${this.committish}` : ''
+  }
+
+  ssh (opts) {
+    return this._fill(this.sshtemplate, opts)
+  }
+
+  _fill (template, opts) {
+    if (typeof template === 'function') {
+      const options = { ...this, ...this.opts, ...opts }
+
+      // the path should always be set so we don't end up with 'undefined' in urls
+      if (!options.path) {
+        options.path = ''
+      }
+
+      // template functions will insert the leading slash themselves
+      if (options.path.startsWith('/')) {
+        options.path = options.path.slice(1)
+      }
+
+      if (options.noCommittish) {
+        options.committish = null
+      }
+
+      const result = template(options)
+      return options.noGitPlus && result.startsWith('git+') ? result.slice(4) : result
+    }
+
+    return null
+  }
+
+  sshurl (opts) {
+    return this._fill(this.sshurltemplate, opts)
+  }
+
+  browse (path, fragment, opts) {
+    // not a string, treat path as opts
+    if (typeof path !== 'string') {
+      return this._fill(this.browsetemplate, path)
+    }
+
+    if (typeof fragment !== 'string') {
+      opts = fragment
+      fragment = null
+    }
+    return this._fill(this.browsefiletemplate, { ...opts, fragment, path })
+  }
+
+  docs (opts) {
+    return this._fill(this.docstemplate, opts)
+  }
+
+  bugs (opts) {
+    return this._fill(this.bugstemplate, opts)
+  }
+
+  https (opts) {
+    return this._fill(this.httpstemplate, opts)
+  }
+
+  git (opts) {
+    return this._fill(this.gittemplate, opts)
+  }
+
+  shortcut (opts) {
+    return this._fill(this.shortcuttemplate, opts)
+  }
+
+  path (opts) {
+    return this._fill(this.pathtemplate, opts)
+  }
+
+  tarball (opts) {
+    return this._fill(this.tarballtemplate, { ...opts, noCommittish: false })
+  }
+
+  file (path, opts) {
+    return this._fill(this.filetemplate, { ...opts, path })
+  }
+
+  getDefaultRepresentation () {
+    return this.default
+  }
+
+  toString (opts) {
+    if (this.default && typeof this[this.default] === 'function') {
+      return this[this.default](opts)
+    }
+
+    return this.sshurl(opts)
+  }
+}
 module.exports = GitHost
-function GitHost (type, user, auth, project, committish, defaultRepresentation, opts) {
-  var gitHostInfo = this
-  gitHostInfo.type = type
-  Object.keys(gitHosts[type]).forEach(function (key) {
-    gitHostInfo[key] = gitHosts[type][key]
-  })
-  gitHostInfo.user = user
-  gitHostInfo.auth = auth
-  gitHostInfo.project = project
-  gitHostInfo.committish = committish
-  gitHostInfo.default = defaultRepresentation
-  gitHostInfo.opts = opts || {}
-}
-
-GitHost.prototype.hash = function () {
-  return this.committish ? '#' + this.committish : ''
-}
-
-GitHost.prototype._fill = function (template, opts) {
-  if (!template) return
-  var vars = extend({}, opts)
-  vars.path = vars.path ? vars.path.replace(/^[/]+/g, '') : ''
-  opts = extend(extend({}, this.opts), opts)
-  var self = this
-  Object.keys(this).forEach(function (key) {
-    if (self[key] != null && vars[key] == null) vars[key] = self[key]
-  })
-  var rawAuth = vars.auth
-  var rawcommittish = vars.committish
-  var rawFragment = vars.fragment
-  var rawPath = vars.path
-  var rawProject = vars.project
-  Object.keys(vars).forEach(function (key) {
-    var value = vars[key]
-    if ((key === 'path' || key === 'project') && typeof value === 'string') {
-      vars[key] = value.split('/').map(function (pathComponent) {
-        return encodeURIComponent(pathComponent)
-      }).join('/')
-    } else {
-      vars[key] = encodeURIComponent(value)
-    }
-  })
-  vars['auth@'] = rawAuth ? rawAuth + '@' : ''
-  vars['#fragment'] = rawFragment ? '#' + this.hashformat(rawFragment) : ''
-  vars.fragment = vars.fragment ? vars.fragment : ''
-  vars['#path'] = rawPath ? '#' + this.hashformat(rawPath) : ''
-  vars['/path'] = vars.path ? '/' + vars.path : ''
-  vars.projectPath = rawProject.split('/').map(encodeURIComponent).join('/')
-  if (opts.noCommittish) {
-    vars['#committish'] = ''
-    vars['/tree/committish'] = ''
-    vars['/committish'] = ''
-    vars.committish = ''
-  } else {
-    vars['#committish'] = rawcommittish ? '#' + rawcommittish : ''
-    vars['/tree/committish'] = vars.committish
-      ? '/' + vars.treepath + '/' + vars.committish
-      : ''
-    vars['/committish'] = vars.committish ? '/' + vars.committish : ''
-    vars.committish = vars.committish || 'master'
-  }
-  var res = template
-  Object.keys(vars).forEach(function (key) {
-    res = res.replace(new RegExp('[{]' + key + '[}]', 'g'), vars[key])
-  })
-  if (opts.noGitPlus) {
-    return res.replace(/^git[+]/, '')
-  } else {
-    return res
-  }
-}
-
-GitHost.prototype.ssh = function (opts) {
-  return this._fill(this.sshtemplate, opts)
-}
-
-GitHost.prototype.sshurl = function (opts) {
-  return this._fill(this.sshurltemplate, opts)
-}
-
-GitHost.prototype.browse = function (P, F, opts) {
-  if (typeof P === 'string') {
-    if (typeof F !== 'string') {
-      opts = F
-      F = null
-    }
-    return this._fill(this.browsefiletemplate, extend({
-      fragment: F,
-      path: P
-    }, opts))
-  } else {
-    return this._fill(this.browsetemplate, P)
-  }
-}
-
-GitHost.prototype.docs = function (opts) {
-  return this._fill(this.docstemplate, opts)
-}
-
-GitHost.prototype.bugs = function (opts) {
-  return this._fill(this.bugstemplate, opts)
-}
-
-GitHost.prototype.https = function (opts) {
-  return this._fill(this.httpstemplate, opts)
-}
-
-GitHost.prototype.git = function (opts) {
-  return this._fill(this.gittemplate, opts)
-}
-
-GitHost.prototype.shortcut = function (opts) {
-  return this._fill(this.shortcuttemplate, opts)
-}
-
-GitHost.prototype.path = function (opts) {
-  return this._fill(this.pathtemplate, opts)
-}
-
-GitHost.prototype.tarball = function (opts_) {
-  var opts = extend({}, opts_, { noCommittish: false })
-  return this._fill(this.tarballtemplate, opts)
-}
-
-GitHost.prototype.file = function (P, opts) {
-  return this._fill(this.filetemplate, extend({ path: P }, opts))
-}
-
-GitHost.prototype.getDefaultRepresentation = function () {
-  return this.default
-}
-
-GitHost.prototype.toString = function (opts) {
-  if (this.default && typeof this[this.default] === 'function') return this[this.default](opts)
-  return this.sshurl(opts)
-}
 
 
 /***/ }),
 
 /***/ 8869:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-var url = __webpack_require__(8835)
-var gitHosts = __webpack_require__(135)
-var GitHost = module.exports = __webpack_require__(8145)
+const url = __nccwpck_require__(8835)
+const gitHosts = __nccwpck_require__(135)
+const GitHost = module.exports = __nccwpck_require__(8145)
+const LRU = __nccwpck_require__(7129)
+const cache = new LRU({ max: 1000 })
 
-var protocolToRepresentationMap = {
+const protocolToRepresentationMap = {
   'git+ssh:': 'sshurl',
   'git+https:': 'https',
   'ssh:': 'sshurl',
@@ -22696,7 +24017,7 @@ function protocolToRepresentation (protocol) {
   return protocolToRepresentationMap[protocol] || protocol.slice(0, -1)
 }
 
-var authProtocols = {
+const authProtocols = {
   'git:': true,
   'https:': true,
   'git+https:': true,
@@ -22704,129 +24025,216 @@ var authProtocols = {
   'git+http:': true
 }
 
-var cache = {}
+const knownProtocols = Object.keys(gitHosts.byShortcut).concat(['http:', 'https:', 'git:', 'git+ssh:', 'git+https:', 'ssh:'])
 
 module.exports.fromUrl = function (giturl, opts) {
-  if (typeof giturl !== 'string') return
-  var key = giturl + JSON.stringify(opts || {})
-
-  if (!(key in cache)) {
-    cache[key] = fromUrl(giturl, opts)
+  if (typeof giturl !== 'string') {
+    return
   }
 
-  return cache[key]
+  const key = giturl + JSON.stringify(opts || {})
+
+  if (!cache.has(key)) {
+    cache.set(key, fromUrl(giturl, opts))
+  }
+
+  return cache.get(key)
 }
 
 function fromUrl (giturl, opts) {
-  if (giturl == null || giturl === '') return
-  var url = fixupUnqualifiedGist(
-    isGitHubShorthand(giturl) ? 'github:' + giturl : giturl
-  )
-  var parsed = parseGitUrl(url)
-  var shortcutMatch = url.match(new RegExp('^([^:]+):(?:(?:[^@:]+(?:[^@]+)?@)?([^/]*))[/](.+?)(?:[.]git)?($|#)'))
-  var matches = Object.keys(gitHosts).map(function (gitHostName) {
-    try {
-      var gitHostInfo = gitHosts[gitHostName]
-      var auth = null
-      if (parsed.auth && authProtocols[parsed.protocol]) {
-        auth = parsed.auth
+  if (!giturl) {
+    return
+  }
+
+  const url = isGitHubShorthand(giturl) ? 'github:' + giturl : correctProtocol(giturl)
+  const parsed = parseGitUrl(url)
+  if (!parsed) {
+    return parsed
+  }
+
+  const gitHostShortcut = gitHosts.byShortcut[parsed.protocol]
+  const gitHostDomain = gitHosts.byDomain[parsed.hostname.startsWith('www.') ? parsed.hostname.slice(4) : parsed.hostname]
+  const gitHostName = gitHostShortcut || gitHostDomain
+  if (!gitHostName) {
+    return
+  }
+
+  const gitHostInfo = gitHosts[gitHostShortcut || gitHostDomain]
+  let auth = null
+  if (authProtocols[parsed.protocol] && (parsed.username || parsed.password)) {
+    auth = `${parsed.username}${parsed.password ? ':' + parsed.password : ''}`
+  }
+
+  let committish = null
+  let user = null
+  let project = null
+  let defaultRepresentation = null
+
+  try {
+    if (gitHostShortcut) {
+      let pathname = parsed.pathname.startsWith('/') ? parsed.pathname.slice(1) : parsed.pathname
+      const firstAt = pathname.indexOf('@')
+      // we ignore auth for shortcuts, so just trim it out
+      if (firstAt > -1) {
+        pathname = pathname.slice(firstAt + 1)
       }
-      var committish = parsed.hash ? decodeURIComponent(parsed.hash.substr(1)) : null
-      var user = null
-      var project = null
-      var defaultRepresentation = null
-      if (shortcutMatch && shortcutMatch[1] === gitHostName) {
-        user = shortcutMatch[2] && decodeURIComponent(shortcutMatch[2])
-        project = decodeURIComponent(shortcutMatch[3])
-        defaultRepresentation = 'shortcut'
-      } else {
-        if (parsed.host && parsed.host !== gitHostInfo.domain && parsed.host.replace(/^www[.]/, '') !== gitHostInfo.domain) return
-        if (!gitHostInfo.protocols_re.test(parsed.protocol)) return
-        if (!parsed.path) return
-        var pathmatch = gitHostInfo.pathmatch
-        var matched = parsed.path.match(pathmatch)
-        if (!matched) return
-        /* istanbul ignore else */
-        if (matched[1] !== null && matched[1] !== undefined) {
-          user = decodeURIComponent(matched[1].replace(/^:/, ''))
+
+      const lastSlash = pathname.lastIndexOf('/')
+      if (lastSlash > -1) {
+        user = decodeURIComponent(pathname.slice(0, lastSlash))
+        // we want nulls only, never empty strings
+        if (!user) {
+          user = null
         }
-        project = decodeURIComponent(matched[2])
-        defaultRepresentation = protocolToRepresentation(parsed.protocol)
+        project = decodeURIComponent(pathname.slice(lastSlash + 1))
+      } else {
+        project = decodeURIComponent(pathname)
       }
-      return new GitHost(gitHostName, user, auth, project, committish, defaultRepresentation, opts)
-    } catch (ex) {
-      /* istanbul ignore else */
-      if (ex instanceof URIError) {
-      } else throw ex
-    }
-  }).filter(function (gitHostInfo) { return gitHostInfo })
-  if (matches.length !== 1) return
-  return matches[0]
-}
 
-function isGitHubShorthand (arg) {
-  // Note: This does not fully test the git ref format.
-  // See https://www.kernel.org/pub/software/scm/git/docs/git-check-ref-format.html
-  //
-  // The only way to do this properly would be to shell out to
-  // git-check-ref-format, and as this is a fast sync function,
-  // we don't want to do that.  Just let git fail if it turns
-  // out that the commit-ish is invalid.
-  // GH usernames cannot start with . or -
-  return /^[^:@%/\s.-][^:@%/\s]*[/][^:@\s/%]+(?:#.*)?$/.test(arg)
-}
-
-function fixupUnqualifiedGist (giturl) {
-  // necessary for round-tripping gists
-  var parsed = url.parse(giturl)
-  if (parsed.protocol === 'gist:' && parsed.host && !parsed.path) {
-    return parsed.protocol + '/' + parsed.host
-  } else {
-    return giturl
-  }
-}
-
-function parseGitUrl (giturl) {
-  var matched = giturl.match(/^([^@]+)@([^:/]+):[/]?((?:[^/]+[/])?[^/]+?)(?:[.]git)?(#.*)?$/)
-  if (!matched) {
-    var legacy = url.parse(giturl)
-    // If we don't have url.URL, then sorry, this is just not fixable.
-    // This affects Node <= 6.12.
-    if (legacy.auth && typeof url.URL === 'function') {
-      // git urls can be in the form of scp-style/ssh-connect strings, like
-      // git+ssh://user@host.com:some/path, which the legacy url parser
-      // supports, but WhatWG url.URL class does not.  However, the legacy
-      // parser de-urlencodes the username and password, so something like
-      // https://user%3An%40me:p%40ss%3Aword@x.com/ becomes
-      // https://user:n@me:p@ss:word@x.com/ which is all kinds of wrong.
-      // Pull off just the auth and host, so we dont' get the confusing
-      // scp-style URL, then pass that to the WhatWG parser to get the
-      // auth properly escaped.
-      var authmatch = giturl.match(/[^@]+@[^:/]+/)
-      /* istanbul ignore else - this should be impossible */
-      if (authmatch) {
-        var whatwg = new url.URL(authmatch[0])
-        legacy.auth = whatwg.username || ''
-        if (whatwg.password) legacy.auth += ':' + whatwg.password
+      if (project.endsWith('.git')) {
+        project = project.slice(0, -4)
       }
+
+      if (parsed.hash) {
+        committish = decodeURIComponent(parsed.hash.slice(1))
+      }
+
+      defaultRepresentation = 'shortcut'
+    } else {
+      if (!gitHostInfo.protocols.includes(parsed.protocol)) {
+        return
+      }
+
+      const segments = gitHostInfo.extract(parsed)
+      if (!segments) {
+        return
+      }
+
+      user = segments.user && decodeURIComponent(segments.user)
+      project = decodeURIComponent(segments.project)
+      committish = decodeURIComponent(segments.committish)
+      defaultRepresentation = protocolToRepresentation(parsed.protocol)
     }
-    return legacy
+  } catch (err) {
+    /* istanbul ignore else */
+    if (err instanceof URIError) {
+      return
+    } else {
+      throw err
+    }
   }
-  return {
-    protocol: 'git+ssh:',
-    slashes: true,
-    auth: matched[1],
-    host: matched[2],
-    port: null,
-    hostname: matched[2],
-    hash: matched[4],
-    search: null,
-    query: null,
-    pathname: '/' + matched[3],
-    path: '/' + matched[3],
-    href: 'git+ssh://' + matched[1] + '@' + matched[2] +
-          '/' + matched[3] + (matched[4] || '')
+
+  return new GitHost(gitHostName, user, auth, project, committish, defaultRepresentation, opts)
+}
+
+// accepts input like git:github.com:user/repo and inserts the // after the first :
+const correctProtocol = (arg) => {
+  const firstColon = arg.indexOf(':')
+  const proto = arg.slice(0, firstColon + 1)
+  if (knownProtocols.includes(proto)) {
+    return arg
   }
+
+  const firstAt = arg.indexOf('@')
+  if (firstAt > -1) {
+    if (firstAt > firstColon) {
+      return `git+ssh://${arg}`
+    } else {
+      return arg
+    }
+  }
+
+  const doubleSlash = arg.indexOf('//')
+  if (doubleSlash === firstColon + 1) {
+    return arg
+  }
+
+  return arg.slice(0, firstColon + 1) + '//' + arg.slice(firstColon + 1)
+}
+
+// look for github shorthand inputs, such as npm/cli
+const isGitHubShorthand = (arg) => {
+  // it cannot contain whitespace before the first #
+  // it cannot start with a / because that's probably an absolute file path
+  // but it must include a slash since repos are username/repository
+  // it cannot start with a . because that's probably a relative file path
+  // it cannot start with an @ because that's a scoped package if it passes the other tests
+  // it cannot contain a : before a # because that tells us that there's a protocol
+  // a second / may not exist before a #
+  const firstHash = arg.indexOf('#')
+  const firstSlash = arg.indexOf('/')
+  const secondSlash = arg.indexOf('/', firstSlash + 1)
+  const firstColon = arg.indexOf(':')
+  const firstSpace = /\s/.exec(arg)
+  const firstAt = arg.indexOf('@')
+
+  const spaceOnlyAfterHash = !firstSpace || (firstHash > -1 && firstSpace.index > firstHash)
+  const atOnlyAfterHash = firstAt === -1 || (firstHash > -1 && firstAt > firstHash)
+  const colonOnlyAfterHash = firstColon === -1 || (firstHash > -1 && firstColon > firstHash)
+  const secondSlashOnlyAfterHash = secondSlash === -1 || (firstHash > -1 && secondSlash > firstHash)
+  const hasSlash = firstSlash > 0
+  // if a # is found, what we really want to know is that the character immediately before # is not a /
+  const doesNotEndWithSlash = firstHash > -1 ? arg[firstHash - 1] !== '/' : !arg.endsWith('/')
+  const doesNotStartWithDot = !arg.startsWith('.')
+
+  return spaceOnlyAfterHash && hasSlash && doesNotEndWithSlash && doesNotStartWithDot && atOnlyAfterHash && colonOnlyAfterHash && secondSlashOnlyAfterHash
+}
+
+// attempt to correct an scp style url so that it will parse with `new URL()`
+const correctUrl = (giturl) => {
+  const firstAt = giturl.indexOf('@')
+  const lastHash = giturl.lastIndexOf('#')
+  let firstColon = giturl.indexOf(':')
+  let lastColon = giturl.lastIndexOf(':', lastHash > -1 ? lastHash : Infinity)
+
+  let corrected
+  if (lastColon > firstAt) {
+    // the last : comes after the first @ (or there is no @)
+    // like it would in:
+    // proto://hostname.com:user/repo
+    // username@hostname.com:user/repo
+    // :password@hostname.com:user/repo
+    // username:password@hostname.com:user/repo
+    // proto://username@hostname.com:user/repo
+    // proto://:password@hostname.com:user/repo
+    // proto://username:password@hostname.com:user/repo
+    // then we replace the last : with a / to create a valid path
+    corrected = giturl.slice(0, lastColon) + '/' + giturl.slice(lastColon + 1)
+    // // and we find our new : positions
+    firstColon = corrected.indexOf(':')
+    lastColon = corrected.lastIndexOf(':')
+  }
+
+  if (firstColon === -1 && giturl.indexOf('//') === -1) {
+    // we have no : at all
+    // as it would be in:
+    // username@hostname.com/user/repo
+    // then we prepend a protocol
+    corrected = `git+ssh://${corrected}`
+  }
+
+  return corrected
+}
+
+// try to parse the url as its given to us, if that throws
+// then we try to clean the url and parse that result instead
+// THIS FUNCTION SHOULD NEVER THROW
+const parseGitUrl = (giturl) => {
+  let result
+  try {
+    result = new url.URL(giturl)
+  } catch (err) {}
+
+  if (result) {
+    return result
+  }
+
+  const correctedUrl = correctUrl(giturl)
+  try {
+    result = new url.URL(correctedUrl)
+  } catch (err) {}
+
+  return result
 }
 
 
@@ -23113,13 +24521,13 @@ standard:"other"}];exports.SIGNALS=SIGNALS;
 /***/ }),
 
 /***/ 2779:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.signalsByNumber=exports.signalsByName=void 0;var _os=__webpack_require__(2087);
+Object.defineProperty(exports, "__esModule", ({value:true}));exports.signalsByNumber=exports.signalsByName=void 0;var _os=__nccwpck_require__(2087);
 
-var _signals=__webpack_require__(6435);
-var _realtime=__webpack_require__(5295);
+var _signals=__nccwpck_require__(6435);
+var _realtime=__nccwpck_require__(5295);
 
 
 
@@ -23217,13 +24625,13 @@ const SIGRTMAX=64;exports.SIGRTMAX=SIGRTMAX;
 /***/ }),
 
 /***/ 6435:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.getSignals=void 0;var _os=__webpack_require__(2087);
+Object.defineProperty(exports, "__esModule", ({value:true}));exports.getSignals=void 0;var _os=__nccwpck_require__(2087);
 
-var _core=__webpack_require__(8213);
-var _realtime=__webpack_require__(5295);
+var _core=__nccwpck_require__(8213);
+var _realtime=__nccwpck_require__(5295);
 
 
 
@@ -23259,13 +24667,13 @@ return{name,number,description,supported,action,forced,standard};
 /***/ }),
 
 /***/ 2714:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const resolveFrom = __webpack_require__(2053);
-const parentModule = __webpack_require__(9069);
+const path = __nccwpck_require__(5622);
+const resolveFrom = __nccwpck_require__(2053);
+const parentModule = __nccwpck_require__(9069);
 
 module.exports = moduleId => {
 	if (typeof moduleId !== 'string') {
@@ -23300,13 +24708,13 @@ module.exports = moduleId => {
 /***/ }),
 
 /***/ 2053:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const Module = __webpack_require__(2282);
-const fs = __webpack_require__(5747);
+const path = __nccwpck_require__(5622);
+const Module = __nccwpck_require__(2282);
+const fs = __nccwpck_require__(5747);
 
 const resolveFrom = (fromDir, moduleId, silent) => {
 	if (typeof fromDir !== 'string') {
@@ -23398,16 +24806,16 @@ module.exports = (string, count = 1, options) => {
 /***/ }),
 
 /***/ 4124:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 try {
-  var util = __webpack_require__(1669);
+  var util = __nccwpck_require__(1669);
   /* istanbul ignore next */
   if (typeof util.inherits !== 'function') throw '';
   module.exports = util.inherits;
 } catch (e) {
   /* istanbul ignore next */
-  module.exports = __webpack_require__(8544);
+  module.exports = __nccwpck_require__(8544);
 }
 
 
@@ -23466,12 +24874,12 @@ module.exports = function isArrayish(obj) {
 /***/ }),
 
 /***/ 6873:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var has = __webpack_require__(6339);
+var has = __nccwpck_require__(6339);
 
 function specifierIncluded(current, specifier) {
 	var nodeParts = current.split('.');
@@ -23515,7 +24923,7 @@ function versionIncluded(nodeVersion, specifierValue) {
 	}
 
 	var current = typeof nodeVersion === 'undefined'
-		? process.versions && process.versions.node && process.versions.node
+		? process.versions && process.versions.node
 		: nodeVersion;
 
 	if (typeof current !== 'string') {
@@ -23533,11 +24941,131 @@ function versionIncluded(nodeVersion, specifierValue) {
 	return matchesRange(current, specifierValue);
 }
 
-var data = __webpack_require__(3991);
+var data = __nccwpck_require__(3991);
 
 module.exports = function isCore(x, nodeVersion) {
 	return has(data, x) && versionIncluded(nodeVersion, data[x]);
 };
+
+
+/***/ }),
+
+/***/ 4882:
+/***/ ((module) => {
+
+"use strict";
+/* eslint-disable yoda */
+
+
+const isFullwidthCodePoint = codePoint => {
+	if (Number.isNaN(codePoint)) {
+		return false;
+	}
+
+	// Code points are derived from:
+	// http://www.unix.org/Public/UNIDATA/EastAsianWidth.txt
+	if (
+		codePoint >= 0x1100 && (
+			codePoint <= 0x115F || // Hangul Jamo
+			codePoint === 0x2329 || // LEFT-POINTING ANGLE BRACKET
+			codePoint === 0x232A || // RIGHT-POINTING ANGLE BRACKET
+			// CJK Radicals Supplement .. Enclosed CJK Letters and Months
+			(0x2E80 <= codePoint && codePoint <= 0x3247 && codePoint !== 0x303F) ||
+			// Enclosed CJK Letters and Months .. CJK Unified Ideographs Extension A
+			(0x3250 <= codePoint && codePoint <= 0x4DBF) ||
+			// CJK Unified Ideographs .. Yi Radicals
+			(0x4E00 <= codePoint && codePoint <= 0xA4C6) ||
+			// Hangul Jamo Extended-A
+			(0xA960 <= codePoint && codePoint <= 0xA97C) ||
+			// Hangul Syllables
+			(0xAC00 <= codePoint && codePoint <= 0xD7A3) ||
+			// CJK Compatibility Ideographs
+			(0xF900 <= codePoint && codePoint <= 0xFAFF) ||
+			// Vertical Forms
+			(0xFE10 <= codePoint && codePoint <= 0xFE19) ||
+			// CJK Compatibility Forms .. Small Form Variants
+			(0xFE30 <= codePoint && codePoint <= 0xFE6B) ||
+			// Halfwidth and Fullwidth Forms
+			(0xFF01 <= codePoint && codePoint <= 0xFF60) ||
+			(0xFFE0 <= codePoint && codePoint <= 0xFFE6) ||
+			// Kana Supplement
+			(0x1B000 <= codePoint && codePoint <= 0x1B001) ||
+			// Enclosed Ideographic Supplement
+			(0x1F200 <= codePoint && codePoint <= 0x1F251) ||
+			// CJK Unified Ideographs Extension B .. Tertiary Ideographic Plane
+			(0x20000 <= codePoint && codePoint <= 0x3FFFD)
+		)
+	) {
+		return true;
+	}
+
+	return false;
+};
+
+module.exports = isFullwidthCodePoint;
+module.exports.default = isFullwidthCodePoint;
+
+
+/***/ }),
+
+/***/ 5680:
+/***/ ((module) => {
+
+"use strict";
+/*!
+ * is-number <https://github.com/jonschlinkert/is-number>
+ *
+ * Copyright (c) 2014-present, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+
+
+module.exports = function(num) {
+  if (typeof num === 'number') {
+    return num - num === 0;
+  }
+  if (typeof num === 'string' && num.trim() !== '') {
+    return Number.isFinite ? Number.isFinite(+num) : isFinite(+num);
+  }
+  return false;
+};
+
+
+/***/ }),
+
+/***/ 1554:
+/***/ ((module) => {
+
+"use strict";
+
+
+const isStream = stream =>
+	stream !== null &&
+	typeof stream === 'object' &&
+	typeof stream.pipe === 'function';
+
+isStream.writable = stream =>
+	isStream(stream) &&
+	stream.writable !== false &&
+	typeof stream._write === 'function' &&
+	typeof stream._writableState === 'object';
+
+isStream.readable = stream =>
+	isStream(stream) &&
+	stream.readable !== false &&
+	typeof stream._read === 'function' &&
+	typeof stream._readableState === 'object';
+
+isStream.duplex = stream =>
+	isStream.writable(stream) &&
+	isStream.readable(stream);
+
+isStream.transform = stream =>
+	isStream.duplex(stream) &&
+	typeof stream._transform === 'function';
+
+module.exports = isStream;
 
 
 /***/ }),
@@ -23555,14 +25083,14 @@ module.exports = Array.isArray || function (arr) {
 /***/ }),
 
 /***/ 7126:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var fs = __webpack_require__(5747)
+var fs = __nccwpck_require__(5747)
 var core
 if (process.platform === 'win32' || global.TESTING_WINDOWS) {
-  core = __webpack_require__(2001)
+  core = __nccwpck_require__(2001)
 } else {
-  core = __webpack_require__(9728)
+  core = __nccwpck_require__(9728)
 }
 
 module.exports = isexe
@@ -23619,12 +25147,12 @@ function sync (path, options) {
 /***/ }),
 
 /***/ 9728:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 module.exports = isexe
 isexe.sync = sync
 
-var fs = __webpack_require__(5747)
+var fs = __nccwpck_require__(5747)
 
 function isexe (path, options, cb) {
   fs.stat(path, function (er, stat) {
@@ -23667,12 +25195,12 @@ function checkMode (stat, options) {
 /***/ }),
 
 /***/ 2001:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 module.exports = isexe
 isexe.sync = sync
 
-var fs = __webpack_require__(5747)
+var fs = __nccwpck_require__(5747)
 
 function checkPathExt (path, options) {
   var pathext = options.pathExt !== undefined ?
@@ -23716,7 +25244,7 @@ function sync (path, options) {
 /***/ }),
 
 /***/ 7735:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -23726,7 +25254,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.of = exports.PropertiesFile = void 0;
 
-var _fs = _interopRequireDefault(__webpack_require__(5747));
+var _fs = _interopRequireDefault(__nccwpck_require__(5747));
 
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {
@@ -24211,15 +25739,15 @@ exports.default = LinesAndColumns;
 /***/ }),
 
 /***/ 5978:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const fs = __webpack_require__(7758);
-const stripBom = __webpack_require__(1963);
-const parseJson = __webpack_require__(1680);
-const pify = __webpack_require__(3990);
+const path = __nccwpck_require__(5622);
+const fs = __nccwpck_require__(7758);
+const stripBom = __nccwpck_require__(9383);
+const parseJson = __nccwpck_require__(1680);
+const pify = __nccwpck_require__(4810);
 
 const parse = (data, fp) => parseJson(stripBom(data), path.relative('.', fp));
 
@@ -24230,12 +25758,12 @@ module.exports.sync = fp => parse(fs.readFileSync(fp, 'utf8'), fp);
 /***/ }),
 
 /***/ 1680:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const errorEx = __webpack_require__(3505);
-const fallback = __webpack_require__(5586);
+const errorEx = __nccwpck_require__(3505);
+const fallback = __nccwpck_require__(5586);
 
 const JSONError = errorEx('JSONError', {
 	fileName: errorEx.append('in %s')
@@ -24270,107 +25798,37 @@ module.exports = (input, reviver, filename) => {
 
 /***/ }),
 
-/***/ 3990:
+/***/ 9383:
 /***/ ((module) => {
 
 "use strict";
 
-
-const processFn = (fn, opts) => function () {
-	const P = opts.promiseModule;
-	const args = new Array(arguments.length);
-
-	for (let i = 0; i < arguments.length; i++) {
-		args[i] = arguments[i];
+module.exports = x => {
+	if (typeof x !== 'string') {
+		throw new TypeError('Expected a string, got ' + typeof x);
 	}
 
-	return new P((resolve, reject) => {
-		if (opts.errorFirst) {
-			args.push(function (err, result) {
-				if (opts.multiArgs) {
-					const results = new Array(arguments.length - 1);
-
-					for (let i = 1; i < arguments.length; i++) {
-						results[i - 1] = arguments[i];
-					}
-
-					if (err) {
-						results.unshift(err);
-						reject(results);
-					} else {
-						resolve(results);
-					}
-				} else if (err) {
-					reject(err);
-				} else {
-					resolve(result);
-				}
-			});
-		} else {
-			args.push(function (result) {
-				if (opts.multiArgs) {
-					const results = new Array(arguments.length - 1);
-
-					for (let i = 0; i < arguments.length; i++) {
-						results[i] = arguments[i];
-					}
-
-					resolve(results);
-				} else {
-					resolve(result);
-				}
-			});
-		}
-
-		fn.apply(this, args);
-	});
-};
-
-module.exports = (obj, opts) => {
-	opts = Object.assign({
-		exclude: [/.+(Sync|Stream)$/],
-		errorFirst: true,
-		promiseModule: Promise
-	}, opts);
-
-	const filter = key => {
-		const match = pattern => typeof pattern === 'string' ? key === pattern : pattern.test(key);
-		return opts.include ? opts.include.some(match) : !opts.exclude.some(match);
-	};
-
-	let ret;
-	if (typeof obj === 'function') {
-		ret = function () {
-			if (opts.excludeMain) {
-				return obj.apply(this, arguments);
-			}
-
-			return processFn(obj, opts).apply(this, arguments);
-		};
-	} else {
-		ret = Object.create(Object.getPrototypeOf(obj));
+	// Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
+	// conversion translates it to FEFF (UTF-16 BOM)
+	if (x.charCodeAt(0) === 0xFEFF) {
+		return x.slice(1);
 	}
 
-	for (const key in obj) { // eslint-disable-line guard-for-in
-		const x = obj[key];
-		ret[key] = typeof x === 'function' && filter(key) ? processFn(x, opts) : x;
-	}
-
-	return ret;
+	return x;
 };
 
 
 /***/ }),
 
 /***/ 3447:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const fs = __webpack_require__(5747);
-const {promisify} = __webpack_require__(1669);
-const pLocate = __webpack_require__(104);
+const path = __nccwpck_require__(5622);
+const fs = __nccwpck_require__(5747);
+const {promisify} = __nccwpck_require__(1669);
+const pLocate = __nccwpck_require__(104);
 
 const fsStat = promisify(fs.stat);
 const fsLStat = promisify(fs.lstat);
@@ -24435,83 +25893,147 @@ module.exports.sync = (paths, options) => {
 
 /***/ }),
 
-/***/ 5166:
+/***/ 1857:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var getNative = __nccwpck_require__(4479),
+    root = __nccwpck_require__(9882);
+
+/* Built-in method references that are verified to be native. */
+var DataView = getNative(root, 'DataView');
+
+module.exports = DataView;
+
+
+/***/ }),
+
+/***/ 881:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var getNative = __nccwpck_require__(4479),
+    root = __nccwpck_require__(9882);
+
+/* Built-in method references that are verified to be native. */
+var Map = getNative(root, 'Map');
+
+module.exports = Map;
+
+
+/***/ }),
+
+/***/ 4671:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var getNative = __nccwpck_require__(4479),
+    root = __nccwpck_require__(9882);
+
+/* Built-in method references that are verified to be native. */
+var Promise = getNative(root, 'Promise');
+
+module.exports = Promise;
+
+
+/***/ }),
+
+/***/ 5793:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var getNative = __nccwpck_require__(4479),
+    root = __nccwpck_require__(9882);
+
+/* Built-in method references that are verified to be native. */
+var Set = getNative(root, 'Set');
+
+module.exports = Set;
+
+
+/***/ }),
+
+/***/ 9213:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var root = __nccwpck_require__(9882);
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
+
+
+/***/ }),
+
+/***/ 3915:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var getNative = __nccwpck_require__(4479),
+    root = __nccwpck_require__(9882);
+
+/* Built-in method references that are verified to be native. */
+var WeakMap = getNative(root, 'WeakMap');
+
+module.exports = WeakMap;
+
+
+/***/ }),
+
+/***/ 2237:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseTimes = __nccwpck_require__(7765),
+    isArguments = __nccwpck_require__(8495),
+    isArray = __nccwpck_require__(4869),
+    isBuffer = __nccwpck_require__(4190),
+    isIndex = __nccwpck_require__(2936),
+    isTypedArray = __nccwpck_require__(2496);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Creates an array of the enumerable property names of the array-like `value`.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @param {boolean} inherited Specify returning inherited property names.
+ * @returns {Array} Returns the array of property names.
+ */
+function arrayLikeKeys(value, inherited) {
+  var isArr = isArray(value),
+      isArg = !isArr && isArguments(value),
+      isBuff = !isArr && !isArg && isBuffer(value),
+      isType = !isArr && !isArg && !isBuff && isTypedArray(value),
+      skipIndexes = isArr || isArg || isBuff || isType,
+      result = skipIndexes ? baseTimes(value.length, String) : [],
+      length = result.length;
+
+  for (var key in value) {
+    if ((inherited || hasOwnProperty.call(value, key)) &&
+        !(skipIndexes && (
+           // Safari 9 has enumerable `arguments.length` in strict mode.
+           key == 'length' ||
+           // Node.js 0.10 has enumerable non-index properties on buffers.
+           (isBuff && (key == 'offset' || key == 'parent')) ||
+           // PhantomJS 2 has enumerable non-index properties on typed arrays.
+           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
+           // Skip index properties.
+           isIndex(key, length)
+        ))) {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+module.exports = arrayLikeKeys;
+
+
+/***/ }),
+
+/***/ 4356:
 /***/ ((module) => {
-
-/**
- * lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="npm" -o ./`
- * Copyright jQuery Foundation and other contributors <https://jquery.org/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-
-/** Used as references for various `Number` constants. */
-var MAX_SAFE_INTEGER = 9007199254740991;
-
-/** `Object#toString` result references. */
-var argsTag = '[object Arguments]',
-    funcTag = '[object Function]',
-    genTag = '[object GeneratorFunction]',
-    mapTag = '[object Map]',
-    objectTag = '[object Object]',
-    promiseTag = '[object Promise]',
-    setTag = '[object Set]',
-    stringTag = '[object String]',
-    weakMapTag = '[object WeakMap]';
-
-var dataViewTag = '[object DataView]';
-
-/**
- * Used to match `RegExp`
- * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
- */
-var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-
-/** Used to detect host constructors (Safari). */
-var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-/** Used to detect unsigned integer values. */
-var reIsUint = /^(?:0|[1-9]\d*)$/;
-
-/** Used to compose unicode character classes. */
-var rsAstralRange = '\\ud800-\\udfff',
-    rsComboMarksRange = '\\u0300-\\u036f\\ufe20-\\ufe23',
-    rsComboSymbolsRange = '\\u20d0-\\u20f0',
-    rsVarRange = '\\ufe0e\\ufe0f';
-
-/** Used to compose unicode capture groups. */
-var rsAstral = '[' + rsAstralRange + ']',
-    rsCombo = '[' + rsComboMarksRange + rsComboSymbolsRange + ']',
-    rsFitz = '\\ud83c[\\udffb-\\udfff]',
-    rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
-    rsNonAstral = '[^' + rsAstralRange + ']',
-    rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
-    rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
-    rsZWJ = '\\u200d';
-
-/** Used to compose unicode regexes. */
-var reOptMod = rsModifier + '?',
-    rsOptVar = '[' + rsVarRange + ']?',
-    rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
-    rsSeq = rsOptVar + reOptMod + rsOptJoin,
-    rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
-
-/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
-var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
-
-/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
-var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange  + rsComboMarksRange + rsComboSymbolsRange + rsVarRange + ']');
-
-/** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
 
 /**
  * A specialized version of `_.map` for arrays without support for iteratee
@@ -24524,7 +26046,7 @@ var root = freeGlobal || freeSelf || Function('return this')();
  */
 function arrayMap(array, iteratee) {
   var index = -1,
-      length = array ? array.length : 0,
+      length = array == null ? 0 : array.length,
       result = Array(length);
 
   while (++index < length) {
@@ -24532,6 +26054,14 @@ function arrayMap(array, iteratee) {
   }
   return result;
 }
+
+module.exports = arrayMap;
+
+
+/***/ }),
+
+/***/ 2187:
+/***/ ((module) => {
 
 /**
  * Converts an ASCII `string` to an array.
@@ -24544,184 +26074,91 @@ function asciiToArray(string) {
   return string.split('');
 }
 
+module.exports = asciiToArray;
+
+
+/***/ }),
+
+/***/ 7497:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var Symbol = __nccwpck_require__(9213),
+    getRawTag = __nccwpck_require__(923),
+    objectToString = __nccwpck_require__(4200);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
 /**
- * The base implementation of `_.times` without support for iteratee shorthands
- * or max array length checks.
+ * The base implementation of `getTag` without fallbacks for buggy environments.
  *
  * @private
- * @param {number} n The number of times to invoke `iteratee`.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the array of results.
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
  */
-function baseTimes(n, iteratee) {
-  var index = -1,
-      result = Array(n);
-
-  while (++index < n) {
-    result[index] = iteratee(index);
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
   }
-  return result;
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
 }
 
-/**
- * The base implementation of `_.values` and `_.valuesIn` which creates an
- * array of `object` property values corresponding to the property names
- * of `props`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {Array} props The property names to get values for.
- * @returns {Object} Returns the array of property values.
- */
-function baseValues(object, props) {
-  return arrayMap(props, function(key) {
-    return object[key];
-  });
-}
+module.exports = baseGetTag;
+
+
+/***/ }),
+
+/***/ 2177:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseGetTag = __nccwpck_require__(7497),
+    isObjectLike = __nccwpck_require__(5926);
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]';
 
 /**
- * Gets the value at `key` of `object`.
- *
- * @private
- * @param {Object} [object] The object to query.
- * @param {string} key The key of the property to get.
- * @returns {*} Returns the property value.
- */
-function getValue(object, key) {
-  return object == null ? undefined : object[key];
-}
-
-/**
- * Checks if `string` contains Unicode symbols.
- *
- * @private
- * @param {string} string The string to inspect.
- * @returns {boolean} Returns `true` if a symbol is found, else `false`.
- */
-function hasUnicode(string) {
-  return reHasUnicode.test(string);
-}
-
-/**
- * Checks if `value` is a host object in IE < 9.
+ * The base implementation of `_.isArguments`.
  *
  * @private
  * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
  */
-function isHostObject(value) {
-  // Many host objects are `Object` objects that can coerce to strings
-  // despite having improperly defined `toString` methods.
-  var result = false;
-  if (value != null && typeof value.toString != 'function') {
-    try {
-      result = !!(value + '');
-    } catch (e) {}
-  }
-  return result;
+function baseIsArguments(value) {
+  return isObjectLike(value) && baseGetTag(value) == argsTag;
 }
+
+module.exports = baseIsArguments;
+
+
+/***/ }),
+
+/***/ 411:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var isFunction = __nccwpck_require__(7799),
+    isMasked = __nccwpck_require__(9058),
+    isObject = __nccwpck_require__(3334),
+    toSource = __nccwpck_require__(6928);
 
 /**
- * Converts `iterator` to an array.
- *
- * @private
- * @param {Object} iterator The iterator to convert.
- * @returns {Array} Returns the converted array.
+ * Used to match `RegExp`
+ * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
  */
-function iteratorToArray(iterator) {
-  var data,
-      result = [];
+var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 
-  while (!(data = iterator.next()).done) {
-    result.push(data.value);
-  }
-  return result;
-}
-
-/**
- * Converts `map` to its key-value pairs.
- *
- * @private
- * @param {Object} map The map to convert.
- * @returns {Array} Returns the key-value pairs.
- */
-function mapToArray(map) {
-  var index = -1,
-      result = Array(map.size);
-
-  map.forEach(function(value, key) {
-    result[++index] = [key, value];
-  });
-  return result;
-}
-
-/**
- * Creates a unary function that invokes `func` with its argument transformed.
- *
- * @private
- * @param {Function} func The function to wrap.
- * @param {Function} transform The argument transform.
- * @returns {Function} Returns the new function.
- */
-function overArg(func, transform) {
-  return function(arg) {
-    return func(transform(arg));
-  };
-}
-
-/**
- * Converts `set` to an array of its values.
- *
- * @private
- * @param {Object} set The set to convert.
- * @returns {Array} Returns the values.
- */
-function setToArray(set) {
-  var index = -1,
-      result = Array(set.size);
-
-  set.forEach(function(value) {
-    result[++index] = value;
-  });
-  return result;
-}
-
-/**
- * Converts `string` to an array.
- *
- * @private
- * @param {string} string The string to convert.
- * @returns {Array} Returns the converted array.
- */
-function stringToArray(string) {
-  return hasUnicode(string)
-    ? unicodeToArray(string)
-    : asciiToArray(string);
-}
-
-/**
- * Converts a Unicode `string` to an array.
- *
- * @private
- * @param {string} string The string to convert.
- * @returns {Array} Returns the converted array.
- */
-function unicodeToArray(string) {
-  return string.match(reUnicode) || [];
-}
+/** Used to detect host constructors (Safari). */
+var reIsHostCtor = /^\[object .+?Constructor\]$/;
 
 /** Used for built-in method references. */
 var funcProto = Function.prototype,
     objectProto = Object.prototype;
-
-/** Used to detect overreaching core-js shims. */
-var coreJsData = root['__core-js_shared__'];
-
-/** Used to detect methods masquerading as native. */
-var maskSrcKey = (function() {
-  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-  return uid ? ('Symbol(src)_1.' + uid) : '';
-}());
 
 /** Used to resolve the decompiled source of functions. */
 var funcToString = funcProto.toString;
@@ -24729,78 +26166,11 @@ var funcToString = funcProto.toString;
 /** Used to check objects for own properties. */
 var hasOwnProperty = objectProto.hasOwnProperty;
 
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString = objectProto.toString;
-
 /** Used to detect if a method is native. */
 var reIsNative = RegExp('^' +
   funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
   .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
 );
-
-/** Built-in value references. */
-var Symbol = root.Symbol,
-    iteratorSymbol = Symbol ? Symbol.iterator : undefined,
-    propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeKeys = overArg(Object.keys, Object);
-
-/* Built-in method references that are verified to be native. */
-var DataView = getNative(root, 'DataView'),
-    Map = getNative(root, 'Map'),
-    Promise = getNative(root, 'Promise'),
-    Set = getNative(root, 'Set'),
-    WeakMap = getNative(root, 'WeakMap');
-
-/** Used to detect maps, sets, and weakmaps. */
-var dataViewCtorString = toSource(DataView),
-    mapCtorString = toSource(Map),
-    promiseCtorString = toSource(Promise),
-    setCtorString = toSource(Set),
-    weakMapCtorString = toSource(WeakMap);
-
-/**
- * Creates an array of the enumerable property names of the array-like `value`.
- *
- * @private
- * @param {*} value The value to query.
- * @param {boolean} inherited Specify returning inherited property names.
- * @returns {Array} Returns the array of property names.
- */
-function arrayLikeKeys(value, inherited) {
-  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
-  // Safari 9 makes `arguments.length` enumerable in strict mode.
-  var result = (isArray(value) || isArguments(value))
-    ? baseTimes(value.length, String)
-    : [];
-
-  var length = result.length,
-      skipIndexes = !!length;
-
-  for (var key in value) {
-    if ((inherited || hasOwnProperty.call(value, key)) &&
-        !(skipIndexes && (key == 'length' || isIndex(key, length)))) {
-      result.push(key);
-    }
-  }
-  return result;
-}
-
-/**
- * The base implementation of `getTag`.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  return objectToString.call(value);
-}
 
 /**
  * The base implementation of `_.isNative` without bad shim checks.
@@ -24814,9 +26184,93 @@ function baseIsNative(value) {
   if (!isObject(value) || isMasked(value)) {
     return false;
   }
-  var pattern = (isFunction(value) || isHostObject(value)) ? reIsNative : reIsHostCtor;
+  var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
   return pattern.test(toSource(value));
 }
+
+module.exports = baseIsNative;
+
+
+/***/ }),
+
+/***/ 1528:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseGetTag = __nccwpck_require__(7497),
+    isLength = __nccwpck_require__(4530),
+    isObjectLike = __nccwpck_require__(5926);
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    arrayTag = '[object Array]',
+    boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    errorTag = '[object Error]',
+    funcTag = '[object Function]',
+    mapTag = '[object Map]',
+    numberTag = '[object Number]',
+    objectTag = '[object Object]',
+    regexpTag = '[object RegExp]',
+    setTag = '[object Set]',
+    stringTag = '[object String]',
+    weakMapTag = '[object WeakMap]';
+
+var arrayBufferTag = '[object ArrayBuffer]',
+    dataViewTag = '[object DataView]',
+    float32Tag = '[object Float32Array]',
+    float64Tag = '[object Float64Array]',
+    int8Tag = '[object Int8Array]',
+    int16Tag = '[object Int16Array]',
+    int32Tag = '[object Int32Array]',
+    uint8Tag = '[object Uint8Array]',
+    uint8ClampedTag = '[object Uint8ClampedArray]',
+    uint16Tag = '[object Uint16Array]',
+    uint32Tag = '[object Uint32Array]';
+
+/** Used to identify `toStringTag` values of typed arrays. */
+var typedArrayTags = {};
+typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
+typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
+typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
+typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
+typedArrayTags[uint32Tag] = true;
+typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
+typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
+typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
+typedArrayTags[errorTag] = typedArrayTags[funcTag] =
+typedArrayTags[mapTag] = typedArrayTags[numberTag] =
+typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
+typedArrayTags[setTag] = typedArrayTags[stringTag] =
+typedArrayTags[weakMapTag] = false;
+
+/**
+ * The base implementation of `_.isTypedArray` without Node.js optimizations.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
+ */
+function baseIsTypedArray(value) {
+  return isObjectLike(value) &&
+    isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+}
+
+module.exports = baseIsTypedArray;
+
+
+/***/ }),
+
+/***/ 7164:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var isPrototype = __nccwpck_require__(10),
+    nativeKeys = __nccwpck_require__(5778);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
 
 /**
  * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
@@ -24838,6 +26292,88 @@ function baseKeys(object) {
   return result;
 }
 
+module.exports = baseKeys;
+
+
+/***/ }),
+
+/***/ 7765:
+/***/ ((module) => {
+
+/**
+ * The base implementation of `_.times` without support for iteratee shorthands
+ * or max array length checks.
+ *
+ * @private
+ * @param {number} n The number of times to invoke `iteratee`.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the array of results.
+ */
+function baseTimes(n, iteratee) {
+  var index = -1,
+      result = Array(n);
+
+  while (++index < n) {
+    result[index] = iteratee(index);
+  }
+  return result;
+}
+
+module.exports = baseTimes;
+
+
+/***/ }),
+
+/***/ 9258:
+/***/ ((module) => {
+
+/**
+ * The base implementation of `_.unary` without support for storing metadata.
+ *
+ * @private
+ * @param {Function} func The function to cap arguments for.
+ * @returns {Function} Returns the new capped function.
+ */
+function baseUnary(func) {
+  return function(value) {
+    return func(value);
+  };
+}
+
+module.exports = baseUnary;
+
+
+/***/ }),
+
+/***/ 5159:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var arrayMap = __nccwpck_require__(4356);
+
+/**
+ * The base implementation of `_.values` and `_.valuesIn` which creates an
+ * array of `object` property values corresponding to the property names
+ * of `props`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {Array} props The property names to get values for.
+ * @returns {Object} Returns the array of property values.
+ */
+function baseValues(object, props) {
+  return arrayMap(props, function(key) {
+    return object[key];
+  });
+}
+
+module.exports = baseValues;
+
+
+/***/ }),
+
+/***/ 5157:
+/***/ ((module) => {
+
 /**
  * Copies the values of `source` to `array`.
  *
@@ -24857,6 +26393,41 @@ function copyArray(source, array) {
   return array;
 }
 
+module.exports = copyArray;
+
+
+/***/ }),
+
+/***/ 8380:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var root = __nccwpck_require__(9882);
+
+/** Used to detect overreaching core-js shims. */
+var coreJsData = root['__core-js_shared__'];
+
+module.exports = coreJsData;
+
+
+/***/ }),
+
+/***/ 2085:
+/***/ ((module) => {
+
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+module.exports = freeGlobal;
+
+
+/***/ }),
+
+/***/ 4479:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseIsNative = __nccwpck_require__(411),
+    getValue = __nccwpck_require__(3542);
+
 /**
  * Gets the native function at `key` of `object`.
  *
@@ -24870,6 +26441,91 @@ function getNative(object, key) {
   return baseIsNative(value) ? value : undefined;
 }
 
+module.exports = getNative;
+
+
+/***/ }),
+
+/***/ 923:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var Symbol = __nccwpck_require__(9213);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+module.exports = getRawTag;
+
+
+/***/ }),
+
+/***/ 941:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var DataView = __nccwpck_require__(1857),
+    Map = __nccwpck_require__(881),
+    Promise = __nccwpck_require__(4671),
+    Set = __nccwpck_require__(5793),
+    WeakMap = __nccwpck_require__(3915),
+    baseGetTag = __nccwpck_require__(7497),
+    toSource = __nccwpck_require__(6928);
+
+/** `Object#toString` result references. */
+var mapTag = '[object Map]',
+    objectTag = '[object Object]',
+    promiseTag = '[object Promise]',
+    setTag = '[object Set]',
+    weakMapTag = '[object WeakMap]';
+
+var dataViewTag = '[object DataView]';
+
+/** Used to detect maps, sets, and weakmaps. */
+var dataViewCtorString = toSource(DataView),
+    mapCtorString = toSource(Map),
+    promiseCtorString = toSource(Promise),
+    setCtorString = toSource(Set),
+    weakMapCtorString = toSource(WeakMap);
+
 /**
  * Gets the `toStringTag` of `value`.
  *
@@ -24879,17 +26535,16 @@ function getNative(object, key) {
  */
 var getTag = baseGetTag;
 
-// Fallback for data views, maps, sets, and weak maps in IE 11,
-// for data views in Edge < 14, and promises in Node.js.
+// Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
 if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
     (Map && getTag(new Map) != mapTag) ||
     (Promise && getTag(Promise.resolve()) != promiseTag) ||
     (Set && getTag(new Set) != setTag) ||
     (WeakMap && getTag(new WeakMap) != weakMapTag)) {
   getTag = function(value) {
-    var result = objectToString.call(value),
+    var result = baseGetTag(value),
         Ctor = result == objectTag ? value.constructor : undefined,
-        ctorString = Ctor ? toSource(Ctor) : undefined;
+        ctorString = Ctor ? toSource(Ctor) : '';
 
     if (ctorString) {
       switch (ctorString) {
@@ -24904,6 +26559,73 @@ if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
   };
 }
 
+module.exports = getTag;
+
+
+/***/ }),
+
+/***/ 3542:
+/***/ ((module) => {
+
+/**
+ * Gets the value at `key` of `object`.
+ *
+ * @private
+ * @param {Object} [object] The object to query.
+ * @param {string} key The key of the property to get.
+ * @returns {*} Returns the property value.
+ */
+function getValue(object, key) {
+  return object == null ? undefined : object[key];
+}
+
+module.exports = getValue;
+
+
+/***/ }),
+
+/***/ 9489:
+/***/ ((module) => {
+
+/** Used to compose unicode character classes. */
+var rsAstralRange = '\\ud800-\\udfff',
+    rsComboMarksRange = '\\u0300-\\u036f',
+    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+    rsComboSymbolsRange = '\\u20d0-\\u20ff',
+    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
+    rsVarRange = '\\ufe0e\\ufe0f';
+
+/** Used to compose unicode capture groups. */
+var rsZWJ = '\\u200d';
+
+/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
+var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange  + rsComboRange + rsVarRange + ']');
+
+/**
+ * Checks if `string` contains Unicode symbols.
+ *
+ * @private
+ * @param {string} string The string to inspect.
+ * @returns {boolean} Returns `true` if a symbol is found, else `false`.
+ */
+function hasUnicode(string) {
+  return reHasUnicode.test(string);
+}
+
+module.exports = hasUnicode;
+
+
+/***/ }),
+
+/***/ 2936:
+/***/ ((module) => {
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
 /**
  * Checks if `value` is a valid array-like index.
  *
@@ -24913,11 +26635,30 @@ if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
  * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
  */
 function isIndex(value, length) {
+  var type = typeof value;
   length = length == null ? MAX_SAFE_INTEGER : length;
+
   return !!length &&
-    (typeof value == 'number' || reIsUint.test(value)) &&
-    (value > -1 && value % 1 == 0 && value < length);
+    (type == 'number' ||
+      (type != 'symbol' && reIsUint.test(value))) &&
+        (value > -1 && value % 1 == 0 && value < length);
 }
+
+module.exports = isIndex;
+
+
+/***/ }),
+
+/***/ 9058:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var coreJsData = __nccwpck_require__(8380);
+
+/** Used to detect methods masquerading as native. */
+var maskSrcKey = (function() {
+  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
+  return uid ? ('Symbol(src)_1.' + uid) : '';
+}());
 
 /**
  * Checks if `func` has its source masked.
@@ -24929,6 +26670,17 @@ function isIndex(value, length) {
 function isMasked(func) {
   return !!maskSrcKey && (maskSrcKey in func);
 }
+
+module.exports = isMasked;
+
+
+/***/ }),
+
+/***/ 10:
+/***/ ((module) => {
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
 
 /**
  * Checks if `value` is likely a prototype object.
@@ -24944,11 +26696,243 @@ function isPrototype(value) {
   return value === proto;
 }
 
+module.exports = isPrototype;
+
+
+/***/ }),
+
+/***/ 2796:
+/***/ ((module) => {
+
+/**
+ * Converts `iterator` to an array.
+ *
+ * @private
+ * @param {Object} iterator The iterator to convert.
+ * @returns {Array} Returns the converted array.
+ */
+function iteratorToArray(iterator) {
+  var data,
+      result = [];
+
+  while (!(data = iterator.next()).done) {
+    result.push(data.value);
+  }
+  return result;
+}
+
+module.exports = iteratorToArray;
+
+
+/***/ }),
+
+/***/ 5853:
+/***/ ((module) => {
+
+/**
+ * Converts `map` to its key-value pairs.
+ *
+ * @private
+ * @param {Object} map The map to convert.
+ * @returns {Array} Returns the key-value pairs.
+ */
+function mapToArray(map) {
+  var index = -1,
+      result = Array(map.size);
+
+  map.forEach(function(value, key) {
+    result[++index] = [key, value];
+  });
+  return result;
+}
+
+module.exports = mapToArray;
+
+
+/***/ }),
+
+/***/ 5778:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var overArg = __nccwpck_require__(6320);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeKeys = overArg(Object.keys, Object);
+
+module.exports = nativeKeys;
+
+
+/***/ }),
+
+/***/ 4643:
+/***/ ((module, exports, __nccwpck_require__) => {
+
+/* module decorator */ module = __nccwpck_require__.nmd(module);
+var freeGlobal = __nccwpck_require__(2085);
+
+/** Detect free variable `exports`. */
+var freeExports =  true && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+var freeModule = freeExports && "object" == 'object' && module && !module.nodeType && module;
+
+/** Detect the popular CommonJS extension `module.exports`. */
+var moduleExports = freeModule && freeModule.exports === freeExports;
+
+/** Detect free variable `process` from Node.js. */
+var freeProcess = moduleExports && freeGlobal.process;
+
+/** Used to access faster Node.js helpers. */
+var nodeUtil = (function() {
+  try {
+    // Use `util.types` for Node.js 10+.
+    var types = freeModule && freeModule.require && freeModule.require('util').types;
+
+    if (types) {
+      return types;
+    }
+
+    // Legacy `process.binding('util')` for Node.js < 10.
+    return freeProcess && freeProcess.binding && freeProcess.binding('util');
+  } catch (e) {}
+}());
+
+module.exports = nodeUtil;
+
+
+/***/ }),
+
+/***/ 4200:
+/***/ ((module) => {
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+module.exports = objectToString;
+
+
+/***/ }),
+
+/***/ 6320:
+/***/ ((module) => {
+
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+module.exports = overArg;
+
+
+/***/ }),
+
+/***/ 9882:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var freeGlobal = __nccwpck_require__(2085);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ }),
+
+/***/ 9553:
+/***/ ((module) => {
+
+/**
+ * Converts `set` to an array of its values.
+ *
+ * @private
+ * @param {Object} set The set to convert.
+ * @returns {Array} Returns the values.
+ */
+function setToArray(set) {
+  var index = -1,
+      result = Array(set.size);
+
+  set.forEach(function(value) {
+    result[++index] = value;
+  });
+  return result;
+}
+
+module.exports = setToArray;
+
+
+/***/ }),
+
+/***/ 1296:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var asciiToArray = __nccwpck_require__(2187),
+    hasUnicode = __nccwpck_require__(9489),
+    unicodeToArray = __nccwpck_require__(1990);
+
+/**
+ * Converts `string` to an array.
+ *
+ * @private
+ * @param {string} string The string to convert.
+ * @returns {Array} Returns the converted array.
+ */
+function stringToArray(string) {
+  return hasUnicode(string)
+    ? unicodeToArray(string)
+    : asciiToArray(string);
+}
+
+module.exports = stringToArray;
+
+
+/***/ }),
+
+/***/ 6928:
+/***/ ((module) => {
+
+/** Used for built-in method references. */
+var funcProto = Function.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
 /**
  * Converts `func` to its source code.
  *
  * @private
- * @param {Function} func The function to process.
+ * @param {Function} func The function to convert.
  * @returns {string} Returns the source code.
  */
 function toSource(func) {
@@ -24962,6 +26946,73 @@ function toSource(func) {
   }
   return '';
 }
+
+module.exports = toSource;
+
+
+/***/ }),
+
+/***/ 1990:
+/***/ ((module) => {
+
+/** Used to compose unicode character classes. */
+var rsAstralRange = '\\ud800-\\udfff',
+    rsComboMarksRange = '\\u0300-\\u036f',
+    reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+    rsComboSymbolsRange = '\\u20d0-\\u20ff',
+    rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
+    rsVarRange = '\\ufe0e\\ufe0f';
+
+/** Used to compose unicode capture groups. */
+var rsAstral = '[' + rsAstralRange + ']',
+    rsCombo = '[' + rsComboRange + ']',
+    rsFitz = '\\ud83c[\\udffb-\\udfff]',
+    rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
+    rsNonAstral = '[^' + rsAstralRange + ']',
+    rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
+    rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
+    rsZWJ = '\\u200d';
+
+/** Used to compose unicode regexes. */
+var reOptMod = rsModifier + '?',
+    rsOptVar = '[' + rsVarRange + ']?',
+    rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
+    rsSeq = rsOptVar + reOptMod + rsOptJoin,
+    rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
+
+/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
+var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
+
+/**
+ * Converts a Unicode `string` to an array.
+ *
+ * @private
+ * @param {string} string The string to convert.
+ * @returns {Array} Returns the converted array.
+ */
+function unicodeToArray(string) {
+  return string.match(reUnicode) || [];
+}
+
+module.exports = unicodeToArray;
+
+
+/***/ }),
+
+/***/ 8495:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseIsArguments = __nccwpck_require__(2177),
+    isObjectLike = __nccwpck_require__(5926);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/** Built-in value references. */
+var propertyIsEnumerable = objectProto.propertyIsEnumerable;
 
 /**
  * Checks if `value` is likely an `arguments` object.
@@ -24981,11 +27032,18 @@ function toSource(func) {
  * _.isArguments([1, 2, 3]);
  * // => false
  */
-function isArguments(value) {
-  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
-  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
-    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
-}
+var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
+  return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&
+    !propertyIsEnumerable.call(value, 'callee');
+};
+
+module.exports = isArguments;
+
+
+/***/ }),
+
+/***/ 4869:
+/***/ ((module) => {
 
 /**
  * Checks if `value` is classified as an `Array` object.
@@ -25011,6 +27069,17 @@ function isArguments(value) {
  * // => false
  */
 var isArray = Array.isArray;
+
+module.exports = isArray;
+
+
+/***/ }),
+
+/***/ 8017:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var isFunction = __nccwpck_require__(7799),
+    isLength = __nccwpck_require__(4530);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -25041,34 +27110,68 @@ function isArrayLike(value) {
   return value != null && isLength(value.length) && !isFunction(value);
 }
 
+module.exports = isArrayLike;
+
+
+/***/ }),
+
+/***/ 4190:
+/***/ ((module, exports, __nccwpck_require__) => {
+
+/* module decorator */ module = __nccwpck_require__.nmd(module);
+var root = __nccwpck_require__(9882),
+    stubFalse = __nccwpck_require__(7744);
+
+/** Detect free variable `exports`. */
+var freeExports =  true && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+var freeModule = freeExports && "object" == 'object' && module && !module.nodeType && module;
+
+/** Detect the popular CommonJS extension `module.exports`. */
+var moduleExports = freeModule && freeModule.exports === freeExports;
+
+/** Built-in value references. */
+var Buffer = moduleExports ? root.Buffer : undefined;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
+
 /**
- * This method is like `_.isArrayLike` except that it also checks if `value`
- * is an object.
+ * Checks if `value` is a buffer.
  *
  * @static
  * @memberOf _
- * @since 4.0.0
+ * @since 4.3.0
  * @category Lang
  * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array-like object,
- *  else `false`.
+ * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
  * @example
  *
- * _.isArrayLikeObject([1, 2, 3]);
+ * _.isBuffer(new Buffer(2));
  * // => true
  *
- * _.isArrayLikeObject(document.body.children);
- * // => true
- *
- * _.isArrayLikeObject('abc');
- * // => false
- *
- * _.isArrayLikeObject(_.noop);
+ * _.isBuffer(new Uint8Array(2));
  * // => false
  */
-function isArrayLikeObject(value) {
-  return isObjectLike(value) && isArrayLike(value);
-}
+var isBuffer = nativeIsBuffer || stubFalse;
+
+module.exports = isBuffer;
+
+
+/***/ }),
+
+/***/ 7799:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseGetTag = __nccwpck_require__(7497),
+    isObject = __nccwpck_require__(3334);
+
+/** `Object#toString` result references. */
+var asyncTag = '[object AsyncFunction]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    proxyTag = '[object Proxy]';
 
 /**
  * Checks if `value` is classified as a `Function` object.
@@ -25088,11 +27191,25 @@ function isArrayLikeObject(value) {
  * // => false
  */
 function isFunction(value) {
+  if (!isObject(value)) {
+    return false;
+  }
   // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in Safari 8-9 which returns 'object' for typed array and other constructors.
-  var tag = isObject(value) ? objectToString.call(value) : '';
-  return tag == funcTag || tag == genTag;
+  // in Safari 9 which returns 'object' for typed arrays and other constructors.
+  var tag = baseGetTag(value);
+  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
 }
+
+module.exports = isFunction;
+
+
+/***/ }),
+
+/***/ 4530:
+/***/ ((module) => {
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
 
 /**
  * Checks if `value` is a valid array-like length.
@@ -25125,6 +27242,14 @@ function isLength(value) {
     value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
 }
 
+module.exports = isLength;
+
+
+/***/ }),
+
+/***/ 3334:
+/***/ ((module) => {
+
 /**
  * Checks if `value` is the
  * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
@@ -25152,8 +27277,16 @@ function isLength(value) {
  */
 function isObject(value) {
   var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
+  return value != null && (type == 'object' || type == 'function');
 }
+
+module.exports = isObject;
+
+
+/***/ }),
+
+/***/ 5926:
+/***/ ((module) => {
 
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
@@ -25180,8 +27313,23 @@ function isObject(value) {
  * // => false
  */
 function isObjectLike(value) {
-  return !!value && typeof value == 'object';
+  return value != null && typeof value == 'object';
 }
+
+module.exports = isObjectLike;
+
+
+/***/ }),
+
+/***/ 5704:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseGetTag = __nccwpck_require__(7497),
+    isArray = __nccwpck_require__(4869),
+    isObjectLike = __nccwpck_require__(5926);
+
+/** `Object#toString` result references. */
+var stringTag = '[object String]';
 
 /**
  * Checks if `value` is classified as a `String` primitive or object.
@@ -25202,47 +27350,54 @@ function isObjectLike(value) {
  */
 function isString(value) {
   return typeof value == 'string' ||
-    (!isArray(value) && isObjectLike(value) && objectToString.call(value) == stringTag);
+    (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
 }
+
+module.exports = isString;
+
+
+/***/ }),
+
+/***/ 2496:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseIsTypedArray = __nccwpck_require__(1528),
+    baseUnary = __nccwpck_require__(9258),
+    nodeUtil = __nccwpck_require__(4643);
+
+/* Node.js helper references. */
+var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
 
 /**
- * Converts `value` to an array.
+ * Checks if `value` is classified as a typed array.
  *
  * @static
- * @since 0.1.0
  * @memberOf _
+ * @since 3.0.0
  * @category Lang
- * @param {*} value The value to convert.
- * @returns {Array} Returns the converted array.
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
  * @example
  *
- * _.toArray({ 'a': 1, 'b': 2 });
- * // => [1, 2]
+ * _.isTypedArray(new Uint8Array);
+ * // => true
  *
- * _.toArray('abc');
- * // => ['a', 'b', 'c']
- *
- * _.toArray(1);
- * // => []
- *
- * _.toArray(null);
- * // => []
+ * _.isTypedArray([]);
+ * // => false
  */
-function toArray(value) {
-  if (!value) {
-    return [];
-  }
-  if (isArrayLike(value)) {
-    return isString(value) ? stringToArray(value) : copyArray(value);
-  }
-  if (iteratorSymbol && value[iteratorSymbol]) {
-    return iteratorToArray(value[iteratorSymbol]());
-  }
-  var tag = getTag(value),
-      func = tag == mapTag ? mapToArray : (tag == setTag ? setToArray : values);
+var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
 
-  return func(value);
-}
+module.exports = isTypedArray;
+
+
+/***/ }),
+
+/***/ 7645:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var arrayLikeKeys = __nccwpck_require__(2237),
+    baseKeys = __nccwpck_require__(7164),
+    isArrayLike = __nccwpck_require__(8017);
 
 /**
  * Creates an array of the own enumerable property names of `object`.
@@ -25276,45 +27431,15 @@ function keys(object) {
   return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
 }
 
-/**
- * Creates an array of the own enumerable string keyed property values of `object`.
- *
- * **Note:** Non-object values are coerced to objects.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Object
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property values.
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- *   this.b = 2;
- * }
- *
- * Foo.prototype.c = 3;
- *
- * _.values(new Foo);
- * // => [1, 2] (iteration order is not guaranteed)
- *
- * _.values('hi');
- * // => ['h', 'i']
- */
-function values(object) {
-  return object ? baseValues(object, keys(object)) : [];
-}
-
-module.exports = toArray;
+module.exports = keys;
 
 
 /***/ }),
 
 /***/ 250:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __nccwpck_require__) {
 
-/* module decorator */ module = __webpack_require__.nmd(module);
+/* module decorator */ module = __nccwpck_require__.nmd(module);
 /**
  * @license
  * Lodash <https://lodash.com/>
@@ -25329,14 +27454,15 @@ module.exports = toArray;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.20';
+  var VERSION = '4.17.21';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
 
   /** Error message constants. */
   var CORE_ERROR_TEXT = 'Unsupported core-js use. Try https://npms.io/search?q=ponyfill.',
-      FUNC_ERROR_TEXT = 'Expected a function';
+      FUNC_ERROR_TEXT = 'Expected a function',
+      INVALID_TEMPL_VAR_ERROR_TEXT = 'Invalid `variable` option passed into `_.template`';
 
   /** Used to stand-in for `undefined` hash values. */
   var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -25469,10 +27595,11 @@ module.exports = toArray;
   var reRegExpChar = /[\\^$.*+?()[\]{}|]/g,
       reHasRegExpChar = RegExp(reRegExpChar.source);
 
-  /** Used to match leading and trailing whitespace. */
-  var reTrim = /^\s+|\s+$/g,
-      reTrimStart = /^\s+/,
-      reTrimEnd = /\s+$/;
+  /** Used to match leading whitespace. */
+  var reTrimStart = /^\s+/;
+
+  /** Used to match a single whitespace character. */
+  var reWhitespace = /\s/;
 
   /** Used to match wrap detail comments. */
   var reWrapComment = /\{(?:\n\/\* \[wrapped with .+\] \*\/)?\n?/,
@@ -25481,6 +27608,18 @@ module.exports = toArray;
 
   /** Used to match words composed of alphanumeric characters. */
   var reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
+
+  /**
+   * Used to validate the `validate` option in `_.template` variable.
+   *
+   * Forbids characters which could potentially change the meaning of the function argument definition:
+   * - "()," (modification of function parameters)
+   * - "=" (default value)
+   * - "[]{}" (destructuring of function parameters)
+   * - "/" (beginning of a comment)
+   * - whitespace
+   */
+  var reForbiddenIdentifierChars = /[()=,{}\[\]\/\s]/;
 
   /** Used to match backslashes in property paths. */
   var reEscapeChar = /\\(\\)?/g;
@@ -26311,6 +28450,19 @@ module.exports = toArray;
   }
 
   /**
+   * The base implementation of `_.trim`.
+   *
+   * @private
+   * @param {string} string The string to trim.
+   * @returns {string} Returns the trimmed string.
+   */
+  function baseTrim(string) {
+    return string
+      ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+      : string;
+  }
+
+  /**
    * The base implementation of `_.unary` without support for storing metadata.
    *
    * @private
@@ -26641,6 +28793,21 @@ module.exports = toArray;
     return hasUnicode(string)
       ? unicodeToArray(string)
       : asciiToArray(string);
+  }
+
+  /**
+   * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+   * character of `string`.
+   *
+   * @private
+   * @param {string} string The string to inspect.
+   * @returns {number} Returns the index of the last non-whitespace character.
+   */
+  function trimmedEndIndex(string) {
+    var index = string.length;
+
+    while (index-- && reWhitespace.test(string.charAt(index))) {}
+    return index;
   }
 
   /**
@@ -37811,7 +39978,7 @@ module.exports = toArray;
       if (typeof value != 'string') {
         return value === 0 ? value : +value;
       }
-      value = value.replace(reTrim, '');
+      value = baseTrim(value);
       var isBinary = reIsBinary.test(value);
       return (isBinary || reIsOctal.test(value))
         ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
@@ -40183,6 +42350,12 @@ module.exports = toArray;
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
       }
+      // Throw an error if a forbidden character was found in `variable`, to prevent
+      // potential command injection attacks.
+      else if (reForbiddenIdentifierChars.test(variable)) {
+        throw new Error(INVALID_TEMPL_VAR_ERROR_TEXT);
+      }
+
       // Cleanup code by stripping empty strings.
       source = (isEvaluating ? source.replace(reEmptyStringLeading, '') : source)
         .replace(reEmptyStringMiddle, '$1')
@@ -40296,7 +42469,7 @@ module.exports = toArray;
     function trim(string, chars, guard) {
       string = toString(string);
       if (string && (guard || chars === undefined)) {
-        return string.replace(reTrim, '');
+        return baseTrim(string);
       }
       if (!string || !(chars = baseToString(chars))) {
         return string;
@@ -40331,7 +42504,7 @@ module.exports = toArray;
     function trimEnd(string, chars, guard) {
       string = toString(string);
       if (string && (guard || chars === undefined)) {
-        return string.replace(reTrimEnd, '');
+        return string.slice(0, trimmedEndIndex(string) + 1);
       }
       if (!string || !(chars = baseToString(chars))) {
         return string;
@@ -42480,18 +44653,491 @@ module.exports = toArray;
 
 /***/ }),
 
-/***/ 8138:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 7744:
+/***/ ((module) => {
+
+/**
+ * This method returns `false`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.13.0
+ * @category Util
+ * @returns {boolean} Returns `false`.
+ * @example
+ *
+ * _.times(2, _.stubFalse);
+ * // => [false, false]
+ */
+function stubFalse() {
+  return false;
+}
+
+module.exports = stubFalse;
+
+
+/***/ }),
+
+/***/ 9843:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var Symbol = __nccwpck_require__(9213),
+    copyArray = __nccwpck_require__(5157),
+    getTag = __nccwpck_require__(941),
+    isArrayLike = __nccwpck_require__(8017),
+    isString = __nccwpck_require__(5704),
+    iteratorToArray = __nccwpck_require__(2796),
+    mapToArray = __nccwpck_require__(5853),
+    setToArray = __nccwpck_require__(9553),
+    stringToArray = __nccwpck_require__(1296),
+    values = __nccwpck_require__(5736);
+
+/** `Object#toString` result references. */
+var mapTag = '[object Map]',
+    setTag = '[object Set]';
+
+/** Built-in value references. */
+var symIterator = Symbol ? Symbol.iterator : undefined;
+
+/**
+ * Converts `value` to an array.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {Array} Returns the converted array.
+ * @example
+ *
+ * _.toArray({ 'a': 1, 'b': 2 });
+ * // => [1, 2]
+ *
+ * _.toArray('abc');
+ * // => ['a', 'b', 'c']
+ *
+ * _.toArray(1);
+ * // => []
+ *
+ * _.toArray(null);
+ * // => []
+ */
+function toArray(value) {
+  if (!value) {
+    return [];
+  }
+  if (isArrayLike(value)) {
+    return isString(value) ? stringToArray(value) : copyArray(value);
+  }
+  if (symIterator && value[symIterator]) {
+    return iteratorToArray(value[symIterator]());
+  }
+  var tag = getTag(value),
+      func = tag == mapTag ? mapToArray : (tag == setTag ? setToArray : values);
+
+  return func(value);
+}
+
+module.exports = toArray;
+
+
+/***/ }),
+
+/***/ 5736:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var baseValues = __nccwpck_require__(5159),
+    keys = __nccwpck_require__(7645);
+
+/**
+ * Creates an array of the own enumerable string keyed property values of `object`.
+ *
+ * **Note:** Non-object values are coerced to objects.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property values.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ *   this.b = 2;
+ * }
+ *
+ * Foo.prototype.c = 3;
+ *
+ * _.values(new Foo);
+ * // => [1, 2] (iteration order is not guaranteed)
+ *
+ * _.values('hi');
+ * // => ['h', 'i']
+ */
+function values(object) {
+  return object == null ? [] : baseValues(object, keys(object));
+}
+
+module.exports = values;
+
+
+/***/ }),
+
+/***/ 7129:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var chalk = __webpack_require__(8818);
-var Table = __webpack_require__(8797);
-var cardinal = __webpack_require__(6021);
-var emoji = __webpack_require__(3331);
-const ansiEscapes = __webpack_require__(8512);
-const supportsHyperlinks = __webpack_require__(8824);
+// A linked list to keep track of recently-used-ness
+const Yallist = __nccwpck_require__(665)
+
+const MAX = Symbol('max')
+const LENGTH = Symbol('length')
+const LENGTH_CALCULATOR = Symbol('lengthCalculator')
+const ALLOW_STALE = Symbol('allowStale')
+const MAX_AGE = Symbol('maxAge')
+const DISPOSE = Symbol('dispose')
+const NO_DISPOSE_ON_SET = Symbol('noDisposeOnSet')
+const LRU_LIST = Symbol('lruList')
+const CACHE = Symbol('cache')
+const UPDATE_AGE_ON_GET = Symbol('updateAgeOnGet')
+
+const naiveLength = () => 1
+
+// lruList is a yallist where the head is the youngest
+// item, and the tail is the oldest.  the list contains the Hit
+// objects as the entries.
+// Each Hit object has a reference to its Yallist.Node.  This
+// never changes.
+//
+// cache is a Map (or PseudoMap) that matches the keys to
+// the Yallist.Node object.
+class LRUCache {
+  constructor (options) {
+    if (typeof options === 'number')
+      options = { max: options }
+
+    if (!options)
+      options = {}
+
+    if (options.max && (typeof options.max !== 'number' || options.max < 0))
+      throw new TypeError('max must be a non-negative number')
+    // Kind of weird to have a default max of Infinity, but oh well.
+    const max = this[MAX] = options.max || Infinity
+
+    const lc = options.length || naiveLength
+    this[LENGTH_CALCULATOR] = (typeof lc !== 'function') ? naiveLength : lc
+    this[ALLOW_STALE] = options.stale || false
+    if (options.maxAge && typeof options.maxAge !== 'number')
+      throw new TypeError('maxAge must be a number')
+    this[MAX_AGE] = options.maxAge || 0
+    this[DISPOSE] = options.dispose
+    this[NO_DISPOSE_ON_SET] = options.noDisposeOnSet || false
+    this[UPDATE_AGE_ON_GET] = options.updateAgeOnGet || false
+    this.reset()
+  }
+
+  // resize the cache when the max changes.
+  set max (mL) {
+    if (typeof mL !== 'number' || mL < 0)
+      throw new TypeError('max must be a non-negative number')
+
+    this[MAX] = mL || Infinity
+    trim(this)
+  }
+  get max () {
+    return this[MAX]
+  }
+
+  set allowStale (allowStale) {
+    this[ALLOW_STALE] = !!allowStale
+  }
+  get allowStale () {
+    return this[ALLOW_STALE]
+  }
+
+  set maxAge (mA) {
+    if (typeof mA !== 'number')
+      throw new TypeError('maxAge must be a non-negative number')
+
+    this[MAX_AGE] = mA
+    trim(this)
+  }
+  get maxAge () {
+    return this[MAX_AGE]
+  }
+
+  // resize the cache when the lengthCalculator changes.
+  set lengthCalculator (lC) {
+    if (typeof lC !== 'function')
+      lC = naiveLength
+
+    if (lC !== this[LENGTH_CALCULATOR]) {
+      this[LENGTH_CALCULATOR] = lC
+      this[LENGTH] = 0
+      this[LRU_LIST].forEach(hit => {
+        hit.length = this[LENGTH_CALCULATOR](hit.value, hit.key)
+        this[LENGTH] += hit.length
+      })
+    }
+    trim(this)
+  }
+  get lengthCalculator () { return this[LENGTH_CALCULATOR] }
+
+  get length () { return this[LENGTH] }
+  get itemCount () { return this[LRU_LIST].length }
+
+  rforEach (fn, thisp) {
+    thisp = thisp || this
+    for (let walker = this[LRU_LIST].tail; walker !== null;) {
+      const prev = walker.prev
+      forEachStep(this, fn, walker, thisp)
+      walker = prev
+    }
+  }
+
+  forEach (fn, thisp) {
+    thisp = thisp || this
+    for (let walker = this[LRU_LIST].head; walker !== null;) {
+      const next = walker.next
+      forEachStep(this, fn, walker, thisp)
+      walker = next
+    }
+  }
+
+  keys () {
+    return this[LRU_LIST].toArray().map(k => k.key)
+  }
+
+  values () {
+    return this[LRU_LIST].toArray().map(k => k.value)
+  }
+
+  reset () {
+    if (this[DISPOSE] &&
+        this[LRU_LIST] &&
+        this[LRU_LIST].length) {
+      this[LRU_LIST].forEach(hit => this[DISPOSE](hit.key, hit.value))
+    }
+
+    this[CACHE] = new Map() // hash of items by key
+    this[LRU_LIST] = new Yallist() // list of items in order of use recency
+    this[LENGTH] = 0 // length of items in the list
+  }
+
+  dump () {
+    return this[LRU_LIST].map(hit =>
+      isStale(this, hit) ? false : {
+        k: hit.key,
+        v: hit.value,
+        e: hit.now + (hit.maxAge || 0)
+      }).toArray().filter(h => h)
+  }
+
+  dumpLru () {
+    return this[LRU_LIST]
+  }
+
+  set (key, value, maxAge) {
+    maxAge = maxAge || this[MAX_AGE]
+
+    if (maxAge && typeof maxAge !== 'number')
+      throw new TypeError('maxAge must be a number')
+
+    const now = maxAge ? Date.now() : 0
+    const len = this[LENGTH_CALCULATOR](value, key)
+
+    if (this[CACHE].has(key)) {
+      if (len > this[MAX]) {
+        del(this, this[CACHE].get(key))
+        return false
+      }
+
+      const node = this[CACHE].get(key)
+      const item = node.value
+
+      // dispose of the old one before overwriting
+      // split out into 2 ifs for better coverage tracking
+      if (this[DISPOSE]) {
+        if (!this[NO_DISPOSE_ON_SET])
+          this[DISPOSE](key, item.value)
+      }
+
+      item.now = now
+      item.maxAge = maxAge
+      item.value = value
+      this[LENGTH] += len - item.length
+      item.length = len
+      this.get(key)
+      trim(this)
+      return true
+    }
+
+    const hit = new Entry(key, value, len, now, maxAge)
+
+    // oversized objects fall out of cache automatically.
+    if (hit.length > this[MAX]) {
+      if (this[DISPOSE])
+        this[DISPOSE](key, value)
+
+      return false
+    }
+
+    this[LENGTH] += hit.length
+    this[LRU_LIST].unshift(hit)
+    this[CACHE].set(key, this[LRU_LIST].head)
+    trim(this)
+    return true
+  }
+
+  has (key) {
+    if (!this[CACHE].has(key)) return false
+    const hit = this[CACHE].get(key).value
+    return !isStale(this, hit)
+  }
+
+  get (key) {
+    return get(this, key, true)
+  }
+
+  peek (key) {
+    return get(this, key, false)
+  }
+
+  pop () {
+    const node = this[LRU_LIST].tail
+    if (!node)
+      return null
+
+    del(this, node)
+    return node.value
+  }
+
+  del (key) {
+    del(this, this[CACHE].get(key))
+  }
+
+  load (arr) {
+    // reset the cache
+    this.reset()
+
+    const now = Date.now()
+    // A previous serialized cache has the most recent items first
+    for (let l = arr.length - 1; l >= 0; l--) {
+      const hit = arr[l]
+      const expiresAt = hit.e || 0
+      if (expiresAt === 0)
+        // the item was created without expiration in a non aged cache
+        this.set(hit.k, hit.v)
+      else {
+        const maxAge = expiresAt - now
+        // dont add already expired items
+        if (maxAge > 0) {
+          this.set(hit.k, hit.v, maxAge)
+        }
+      }
+    }
+  }
+
+  prune () {
+    this[CACHE].forEach((value, key) => get(this, key, false))
+  }
+}
+
+const get = (self, key, doUse) => {
+  const node = self[CACHE].get(key)
+  if (node) {
+    const hit = node.value
+    if (isStale(self, hit)) {
+      del(self, node)
+      if (!self[ALLOW_STALE])
+        return undefined
+    } else {
+      if (doUse) {
+        if (self[UPDATE_AGE_ON_GET])
+          node.value.now = Date.now()
+        self[LRU_LIST].unshiftNode(node)
+      }
+    }
+    return hit.value
+  }
+}
+
+const isStale = (self, hit) => {
+  if (!hit || (!hit.maxAge && !self[MAX_AGE]))
+    return false
+
+  const diff = Date.now() - hit.now
+  return hit.maxAge ? diff > hit.maxAge
+    : self[MAX_AGE] && (diff > self[MAX_AGE])
+}
+
+const trim = self => {
+  if (self[LENGTH] > self[MAX]) {
+    for (let walker = self[LRU_LIST].tail;
+      self[LENGTH] > self[MAX] && walker !== null;) {
+      // We know that we're about to delete this one, and also
+      // what the next least recently used key will be, so just
+      // go ahead and set it now.
+      const prev = walker.prev
+      del(self, walker)
+      walker = prev
+    }
+  }
+}
+
+const del = (self, node) => {
+  if (node) {
+    const hit = node.value
+    if (self[DISPOSE])
+      self[DISPOSE](hit.key, hit.value)
+
+    self[LENGTH] -= hit.length
+    self[CACHE].delete(hit.key)
+    self[LRU_LIST].removeNode(node)
+  }
+}
+
+class Entry {
+  constructor (key, value, length, now, maxAge) {
+    this.key = key
+    this.value = value
+    this.length = length
+    this.now = now
+    this.maxAge = maxAge || 0
+  }
+}
+
+const forEachStep = (self, fn, node, thisp) => {
+  let hit = node.value
+  if (isStale(self, hit)) {
+    del(self, node)
+    if (!self[ALLOW_STALE])
+      hit = undefined
+  }
+  if (hit)
+    fn.call(thisp, hit.value, hit.key, self)
+}
+
+module.exports = LRUCache
+
+
+/***/ }),
+
+/***/ 8138:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var chalk = __nccwpck_require__(8818);
+var Table = __nccwpck_require__(2101);
+var cardinal = __nccwpck_require__(6021);
+var emoji = __nccwpck_require__(3331);
+const ansiEscapes = __nccwpck_require__(8512);
+const supportsHyperlinks = __nccwpck_require__(8824);
 
 var TABLE_CELL_SPLIT = '^*||*^';
 var TABLE_ROW_WRAP = '*|*|*|*';
@@ -43007,12 +45653,12 @@ function sanitizeTab(tab, fallbackTab) {
 /***/ }),
 
 /***/ 8354:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const Tokenizer = __webpack_require__(8721);
-const { defaults } = __webpack_require__(7863);
-const { block, inline } = __webpack_require__(8770);
-const { repeatString } = __webpack_require__(6881);
+const Tokenizer = __nccwpck_require__(8721);
+const { defaults } = __nccwpck_require__(7863);
+const { block, inline } = __nccwpck_require__(8770);
+const { repeatString } = __nccwpck_require__(6881);
 
 /**
  * smartypants text replacement
@@ -43131,10 +45777,25 @@ module.exports = class Lexer {
    * Lexing
    */
   blockTokens(src, tokens = [], top = true) {
-    src = src.replace(/^ +$/gm, '');
-    let token, i, l, lastToken;
+    if (this.options.pedantic) {
+      src = src.replace(/^ +$/gm, '');
+    }
+    let token, i, l, lastToken, cutSrc, lastParagraphClipped;
 
     while (src) {
+      if (this.options.extensions
+        && this.options.extensions.block
+        && this.options.extensions.block.some((extTokenizer) => {
+          if (token = extTokenizer.call(this, src, tokens)) {
+            src = src.substring(token.raw.length);
+            tokens.push(token);
+            return true;
+          }
+          return false;
+        })) {
+        continue;
+      }
+
       // newline
       if (token = this.tokenizer.space(src)) {
         src = src.substring(token.raw.length);
@@ -43145,14 +45806,15 @@ module.exports = class Lexer {
       }
 
       // code
-      if (token = this.tokenizer.code(src, tokens)) {
+      if (token = this.tokenizer.code(src)) {
         src = src.substring(token.raw.length);
-        if (token.type) {
-          tokens.push(token);
-        } else {
-          lastToken = tokens[tokens.length - 1];
+        lastToken = tokens[tokens.length - 1];
+        // An indented code block cannot interrupt a paragraph.
+        if (lastToken && lastToken.type === 'paragraph') {
           lastToken.raw += '\n' + token.raw;
           lastToken.text += '\n' + token.text;
+        } else {
+          tokens.push(token);
         }
         continue;
       }
@@ -43238,21 +45900,42 @@ module.exports = class Lexer {
       }
 
       // top-level paragraph
-      if (top && (token = this.tokenizer.paragraph(src))) {
+      // prevent paragraph consuming extensions by clipping 'src' to extension start
+      cutSrc = src;
+      if (this.options.extensions && this.options.extensions.startBlock) {
+        let startIndex = Infinity;
+        const tempSrc = src.slice(1);
+        let tempStart;
+        this.options.extensions.startBlock.forEach(function(getStartIndex) {
+          tempStart = getStartIndex.call(this, tempSrc);
+          if (typeof tempStart === 'number' && tempStart >= 0) { startIndex = Math.min(startIndex, tempStart); }
+        });
+        if (startIndex < Infinity && startIndex >= 0) {
+          cutSrc = src.substring(0, startIndex + 1);
+        }
+      }
+      if (top && (token = this.tokenizer.paragraph(cutSrc))) {
+        lastToken = tokens[tokens.length - 1];
+        if (lastParagraphClipped && lastToken.type === 'paragraph') {
+          lastToken.raw += '\n' + token.raw;
+          lastToken.text += '\n' + token.text;
+        } else {
+          tokens.push(token);
+        }
+        lastParagraphClipped = (cutSrc.length !== src.length);
         src = src.substring(token.raw.length);
-        tokens.push(token);
         continue;
       }
 
       // text
-      if (token = this.tokenizer.text(src, tokens)) {
+      if (token = this.tokenizer.text(src)) {
         src = src.substring(token.raw.length);
-        if (token.type) {
-          tokens.push(token);
-        } else {
-          lastToken = tokens[tokens.length - 1];
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && lastToken.type === 'text') {
           lastToken.raw += '\n' + token.raw;
           lastToken.text += '\n' + token.text;
+        } else {
+          tokens.push(token);
         }
         continue;
       }
@@ -43340,7 +46023,7 @@ module.exports = class Lexer {
    * Lexing/Compiling
    */
   inlineTokens(src, tokens = [], inLink = false, inRawBlock = false) {
-    let token;
+    let token, lastToken, cutSrc;
 
     // String with links masked to avoid interference with em and strong
     let maskedSrc = src;
@@ -43363,11 +46046,31 @@ module.exports = class Lexer {
       maskedSrc = maskedSrc.slice(0, match.index) + '[' + repeatString('a', match[0].length - 2) + ']' + maskedSrc.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
     }
 
+    // Mask out escaped em & strong delimiters
+    while ((match = this.tokenizer.rules.inline.escapedEmSt.exec(maskedSrc)) != null) {
+      maskedSrc = maskedSrc.slice(0, match.index) + '++' + maskedSrc.slice(this.tokenizer.rules.inline.escapedEmSt.lastIndex);
+    }
+
     while (src) {
       if (!keepPrevChar) {
         prevChar = '';
       }
       keepPrevChar = false;
+
+      // extensions
+      if (this.options.extensions
+        && this.options.extensions.inline
+        && this.options.extensions.inline.some((extTokenizer) => {
+          if (token = extTokenizer.call(this, src, tokens)) {
+            src = src.substring(token.raw.length);
+            tokens.push(token);
+            return true;
+          }
+          return false;
+        })) {
+        continue;
+      }
+
       // escape
       if (token = this.tokenizer.escape(src)) {
         src = src.substring(token.raw.length);
@@ -43380,7 +46083,13 @@ module.exports = class Lexer {
         src = src.substring(token.raw.length);
         inLink = token.inLink;
         inRawBlock = token.inRawBlock;
-        tokens.push(token);
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && token.type === 'text' && lastToken.type === 'text') {
+          lastToken.raw += token.raw;
+          lastToken.text += token.text;
+        } else {
+          tokens.push(token);
+        }
         continue;
       }
 
@@ -43397,23 +46106,21 @@ module.exports = class Lexer {
       // reflink, nolink
       if (token = this.tokenizer.reflink(src, this.tokens.links)) {
         src = src.substring(token.raw.length);
+        lastToken = tokens[tokens.length - 1];
         if (token.type === 'link') {
           token.tokens = this.inlineTokens(token.text, [], true, inRawBlock);
+          tokens.push(token);
+        } else if (lastToken && token.type === 'text' && lastToken.type === 'text') {
+          lastToken.raw += token.raw;
+          lastToken.text += token.text;
+        } else {
+          tokens.push(token);
         }
-        tokens.push(token);
         continue;
       }
 
-      // strong
-      if (token = this.tokenizer.strong(src, maskedSrc, prevChar)) {
-        src = src.substring(token.raw.length);
-        token.tokens = this.inlineTokens(token.text, [], inLink, inRawBlock);
-        tokens.push(token);
-        continue;
-      }
-
-      // em
-      if (token = this.tokenizer.em(src, maskedSrc, prevChar)) {
+      // em & strong
+      if (token = this.tokenizer.emStrong(src, maskedSrc, prevChar)) {
         src = src.substring(token.raw.length);
         token.tokens = this.inlineTokens(token.text, [], inLink, inRawBlock);
         tokens.push(token);
@@ -43457,11 +46164,33 @@ module.exports = class Lexer {
       }
 
       // text
-      if (token = this.tokenizer.inlineText(src, inRawBlock, smartypants)) {
+      // prevent inlineText consuming extensions by clipping 'src' to extension start
+      cutSrc = src;
+      if (this.options.extensions && this.options.extensions.startInline) {
+        let startIndex = Infinity;
+        const tempSrc = src.slice(1);
+        let tempStart;
+        this.options.extensions.startInline.forEach(function(getStartIndex) {
+          tempStart = getStartIndex.call(this, tempSrc);
+          if (typeof tempStart === 'number' && tempStart >= 0) { startIndex = Math.min(startIndex, tempStart); }
+        });
+        if (startIndex < Infinity && startIndex >= 0) {
+          cutSrc = src.substring(0, startIndex + 1);
+        }
+      }
+      if (token = this.tokenizer.inlineText(cutSrc, inRawBlock, smartypants)) {
         src = src.substring(token.raw.length);
-        prevChar = token.raw.slice(-1);
+        if (token.raw.slice(-1) !== '_') { // Track prevChar before string of ____ started
+          prevChar = token.raw.slice(-1);
+        }
         keepPrevChar = true;
-        tokens.push(token);
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && lastToken.type === 'text') {
+          lastToken.raw += token.raw;
+          lastToken.text += token.text;
+        } else {
+          tokens.push(token);
+        }
         continue;
       }
 
@@ -43484,15 +46213,15 @@ module.exports = class Lexer {
 /***/ }),
 
 /***/ 4887:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const Renderer = __webpack_require__(1547);
-const TextRenderer = __webpack_require__(5381);
-const Slugger = __webpack_require__(9439);
-const { defaults } = __webpack_require__(7863);
+const Renderer = __nccwpck_require__(1547);
+const TextRenderer = __nccwpck_require__(5381);
+const Slugger = __nccwpck_require__(9439);
+const { defaults } = __nccwpck_require__(7863);
 const {
   unescape
-} = __webpack_require__(6881);
+} = __nccwpck_require__(6881);
 
 /**
  * Parsing & Compiling
@@ -43545,11 +46274,22 @@ module.exports = class Parser {
       item,
       checked,
       task,
-      checkbox;
+      checkbox,
+      ret;
 
     const l = tokens.length;
     for (i = 0; i < l; i++) {
       token = tokens[i];
+
+      // Run any renderer extensions
+      if (this.options.extensions && this.options.extensions.renderers && this.options.extensions.renderers[token.type]) {
+        ret = this.options.extensions.renderers[token.type].call(this, token);
+        if (ret !== false || !['space', 'hr', 'heading', 'code', 'table', 'blockquote', 'list', 'html', 'paragraph', 'text'].includes(token.type)) {
+          out += ret || '';
+          continue;
+        }
+      }
+
       switch (token.type) {
         case 'space': {
           continue;
@@ -43667,6 +46407,7 @@ module.exports = class Parser {
           out += top ? this.renderer.paragraph(body) : body;
           continue;
         }
+
         default: {
           const errMsg = 'Token with "' + token.type + '" type was not found.';
           if (this.options.silent) {
@@ -43689,11 +46430,22 @@ module.exports = class Parser {
     renderer = renderer || this.renderer;
     let out = '',
       i,
-      token;
+      token,
+      ret;
 
     const l = tokens.length;
     for (i = 0; i < l; i++) {
       token = tokens[i];
+
+      // Run any renderer extensions
+      if (this.options.extensions && this.options.extensions.renderers && this.options.extensions.renderers[token.type]) {
+        ret = this.options.extensions.renderers[token.type].call(this, token);
+        if (ret !== false || !['escape', 'html', 'link', 'image', 'strong', 'em', 'codespan', 'br', 'del', 'text'].includes(token.type)) {
+          out += ret || '';
+          continue;
+        }
+      }
+
       switch (token.type) {
         case 'escape': {
           out += renderer.text(token.text);
@@ -43754,13 +46506,13 @@ module.exports = class Parser {
 /***/ }),
 
 /***/ 1547:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const { defaults } = __webpack_require__(7863);
+const { defaults } = __nccwpck_require__(7863);
 const {
   cleanUrl,
   escape
-} = __webpack_require__(6881);
+} = __nccwpck_require__(6881);
 
 /**
  * Renderer
@@ -43779,6 +46531,8 @@ module.exports = class Renderer {
         code = out;
       }
     }
+
+    code = code.replace(/\n$/, '') + '\n';
 
     if (!lang) {
       return '<pre><code>'
@@ -44030,15 +46784,15 @@ module.exports = class TextRenderer {
 /***/ }),
 
 /***/ 8721:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const { defaults } = __webpack_require__(7863);
+const { defaults } = __nccwpck_require__(7863);
 const {
   rtrim,
   splitCells,
   escape,
   findClosingBracket
-} = __webpack_require__(6881);
+} = __nccwpck_require__(6881);
 
 function outputLink(cap, link, raw) {
   const href = link.href;
@@ -44113,19 +46867,10 @@ module.exports = class Tokenizer {
     }
   }
 
-  code(src, tokens) {
+  code(src) {
     const cap = this.rules.block.code.exec(src);
     if (cap) {
-      const lastToken = tokens[tokens.length - 1];
-      // An indented code block cannot interrupt a paragraph.
-      if (lastToken && lastToken.type === 'paragraph') {
-        return {
-          raw: cap[0],
-          text: cap[0].trimRight()
-        };
-      }
-
-      const text = cap[0].replace(/^ {4}/gm, '');
+      const text = cap[0].replace(/^ {1,4}/gm, '');
       return {
         type: 'code',
         raw: cap[0],
@@ -44263,7 +47008,8 @@ module.exports = class Tokenizer {
         addBack,
         loose,
         istask,
-        ischecked;
+        ischecked,
+        endMatch;
 
       let l = itemMatch.length;
       bcurr = this.rules.block.listItemStart.exec(itemMatch[0]);
@@ -44271,28 +47017,42 @@ module.exports = class Tokenizer {
         item = itemMatch[i];
         raw = item;
 
+        if (!this.options.pedantic) {
+          // Determine if current item contains the end of the list
+          endMatch = item.match(new RegExp('\\n\\s*\\n {0,' + (bcurr[0].length - 1) + '}\\S'));
+          if (endMatch) {
+            addBack = item.length - endMatch.index + itemMatch.slice(i + 1).join('\n').length;
+            list.raw = list.raw.substring(0, list.raw.length - addBack);
+
+            item = item.substring(0, endMatch.index);
+            raw = item;
+            l = i + 1;
+          }
+        }
+
         // Determine whether the next list item belongs here.
         // Backpedal if it does not belong in this list.
         if (i !== l - 1) {
           bnext = this.rules.block.listItemStart.exec(itemMatch[i + 1]);
-
-          if (bnext[1].length > bcurr[0].length || bnext[1].length > 3) {
-            // nested list
-            itemMatch.splice(i, 2, itemMatch[i] + '\n' + itemMatch[i + 1]);
+          if (
+            !this.options.pedantic
+              ? bnext[1].length >= bcurr[0].length || bnext[1].length > 3
+              : bnext[1].length > bcurr[1].length
+          ) {
+            // nested list or continuation
+            itemMatch.splice(i, 2, itemMatch[i] + (!this.options.pedantic && bnext[1].length < bcurr[0].length && !itemMatch[i].match(/\n$/) ? '' : '\n') + itemMatch[i + 1]);
             i--;
             l--;
             continue;
-          } else {
-            if (
-              // different bullet style
-              !this.options.pedantic || this.options.smartLists
-                ? bnext[2][bnext[2].length - 1] !== bull[bull.length - 1]
-                : isordered === (bnext[2].length === 1)
-            ) {
-              addBack = itemMatch.slice(i + 1).join('\n');
-              list.raw = list.raw.substring(0, list.raw.length - addBack.length);
-              i = l - 1;
-            }
+          } else if (
+            // different bullet style
+            !this.options.pedantic || this.options.smartLists
+              ? bnext[2][bnext[2].length - 1] !== bull[bull.length - 1]
+              : isordered === (bnext[2].length === 1)
+          ) {
+            addBack = itemMatch.slice(i + 1).join('\n').length;
+            list.raw = list.raw.substring(0, list.raw.length - addBack);
+            i = l - 1;
           }
           bcurr = bnext;
         }
@@ -44311,12 +47071,18 @@ module.exports = class Tokenizer {
             : item.replace(/^ {1,4}/gm, '');
         }
 
+        // trim item newlines at end
+        item = rtrim(item, '\n');
+        if (i !== l - 1) {
+          raw = raw + '\n';
+        }
+
         // Determine whether item is loose or not.
         // Use: /(^|\n)(?! )[^\n]+\n\n(?!\s*$)/
         // for discount behavior.
-        loose = next || /\n\n(?!\s*$)/.test(item);
+        loose = next || /\n\n(?!\s*$)/.test(raw);
         if (i !== l - 1) {
-          next = item.charAt(item.length - 1) === '\n';
+          next = raw.slice(-2) === '\n\n';
           if (!loose) loose = next;
         }
 
@@ -44369,6 +47135,7 @@ module.exports = class Tokenizer {
       if (cap[3]) cap[3] = cap[3].substring(1, cap[3].length - 1);
       const tag = cap[1].toLowerCase().replace(/\s+/g, ' ');
       return {
+        type: 'def',
         tag,
         raw: cap[0],
         href: cap[2],
@@ -44441,17 +47208,9 @@ module.exports = class Tokenizer {
     }
   }
 
-  text(src, tokens) {
+  text(src) {
     const cap = this.rules.block.text.exec(src);
     if (cap) {
-      const lastToken = tokens[tokens.length - 1];
-      if (lastToken && lastToken.type === 'text') {
-        return {
-          raw: cap[0],
-          text: cap[0]
-        };
-      }
-
       return {
         type: 'text',
         raw: cap[0],
@@ -44575,48 +47334,64 @@ module.exports = class Tokenizer {
     }
   }
 
-  strong(src, maskedSrc, prevChar = '') {
-    let match = this.rules.inline.strong.start.exec(src);
+  emStrong(src, maskedSrc, prevChar = '') {
+    let match = this.rules.inline.emStrong.lDelim.exec(src);
+    if (!match) return;
 
-    if (match && (!match[1] || (match[1] && (prevChar === '' || this.rules.inline.punctuation.exec(prevChar))))) {
-      maskedSrc = maskedSrc.slice(-1 * src.length);
-      const endReg = match[0] === '**' ? this.rules.inline.strong.endAst : this.rules.inline.strong.endUnd;
+    // _ can't be between two alphanumerics. \p{L}\p{N} includes non-english alphabet/numbers as well
+    if (match[3] && prevChar.match(/[\p{L}\p{N}]/u)) return;
 
+    const nextChar = match[1] || match[2] || '';
+
+    if (!nextChar || (nextChar && (prevChar === '' || this.rules.inline.punctuation.exec(prevChar)))) {
+      const lLength = match[0].length - 1;
+      let rDelim, rLength, delimTotal = lLength, midDelimTotal = 0;
+
+      const endReg = match[0][0] === '*' ? this.rules.inline.emStrong.rDelimAst : this.rules.inline.emStrong.rDelimUnd;
       endReg.lastIndex = 0;
 
-      let cap;
+      // Clip maskedSrc to same section of string as src (move to lexer?)
+      maskedSrc = maskedSrc.slice(-1 * src.length + lLength);
+
       while ((match = endReg.exec(maskedSrc)) != null) {
-        cap = this.rules.inline.strong.middle.exec(maskedSrc.slice(0, match.index + 3));
-        if (cap) {
-          return {
-            type: 'strong',
-            raw: src.slice(0, cap[0].length),
-            text: src.slice(2, cap[0].length - 2)
-          };
+        rDelim = match[1] || match[2] || match[3] || match[4] || match[5] || match[6];
+
+        if (!rDelim) continue; // skip single * in __abc*abc__
+
+        rLength = rDelim.length;
+
+        if (match[3] || match[4]) { // found another Left Delim
+          delimTotal += rLength;
+          continue;
+        } else if (match[5] || match[6]) { // either Left or Right Delim
+          if (lLength % 3 && !((lLength + rLength) % 3)) {
+            midDelimTotal += rLength;
+            continue; // CommonMark Emphasis Rules 9-10
+          }
         }
-      }
-    }
-  }
 
-  em(src, maskedSrc, prevChar = '') {
-    let match = this.rules.inline.em.start.exec(src);
+        delimTotal -= rLength;
 
-    if (match && (!match[1] || (match[1] && (prevChar === '' || this.rules.inline.punctuation.exec(prevChar))))) {
-      maskedSrc = maskedSrc.slice(-1 * src.length);
-      const endReg = match[0] === '*' ? this.rules.inline.em.endAst : this.rules.inline.em.endUnd;
+        if (delimTotal > 0) continue; // Haven't found enough closing delimiters
 
-      endReg.lastIndex = 0;
+        // Remove extra characters. *a*** -> *a*
+        rLength = Math.min(rLength, rLength + delimTotal + midDelimTotal);
 
-      let cap;
-      while ((match = endReg.exec(maskedSrc)) != null) {
-        cap = this.rules.inline.em.middle.exec(maskedSrc.slice(0, match.index + 2));
-        if (cap) {
+        // Create `em` if smallest delimiter has odd char count. *a***
+        if (Math.min(lLength, rLength) % 2) {
           return {
             type: 'em',
-            raw: src.slice(0, cap[0].length),
-            text: src.slice(1, cap[0].length - 1)
+            raw: src.slice(0, lLength + match.index + rLength + 1),
+            text: src.slice(1, lLength + match.index + rLength)
           };
         }
+
+        // Create 'strong' if smallest delimiter has even char count. **a***
+        return {
+          type: 'strong',
+          raw: src.slice(0, lLength + match.index + rLength + 1),
+          text: src.slice(2, lLength + match.index + rLength - 1)
+        };
       }
     }
   }
@@ -44753,6 +47528,7 @@ function getDefaults() {
   return {
     baseUrl: null,
     breaks: false,
+    extensions: null,
     gfm: true,
     headerIds: true,
     headerPrefix: '',
@@ -45053,24 +47829,24 @@ module.exports = {
 /***/ }),
 
 /***/ 4223:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const Lexer = __webpack_require__(8354);
-const Parser = __webpack_require__(4887);
-const Tokenizer = __webpack_require__(8721);
-const Renderer = __webpack_require__(1547);
-const TextRenderer = __webpack_require__(5381);
-const Slugger = __webpack_require__(9439);
+const Lexer = __nccwpck_require__(8354);
+const Parser = __nccwpck_require__(4887);
+const Tokenizer = __nccwpck_require__(8721);
+const Renderer = __nccwpck_require__(1547);
+const TextRenderer = __nccwpck_require__(5381);
+const Slugger = __nccwpck_require__(9439);
 const {
   merge,
   checkSanitizeDeprecation,
   escape
-} = __webpack_require__(6881);
+} = __nccwpck_require__(6881);
 const {
   getDefaults,
   changeDefaults,
   defaults
-} = __webpack_require__(7863);
+} = __nccwpck_require__(7863);
 
 /**
  * Marked
@@ -45108,6 +47884,9 @@ function marked(src, opt, callback) {
 
       if (!err) {
         try {
+          if (opt.walkTokens) {
+            marked.walkTokens(tokens, opt.walkTokens);
+          }
           out = Parser.parse(tokens, opt);
         } catch (e) {
           err = e;
@@ -45195,46 +47974,114 @@ marked.defaults = defaults;
  * Use Extension
  */
 
-marked.use = function(extension) {
-  const opts = merge({}, extension);
-  if (extension.renderer) {
-    const renderer = marked.defaults.renderer || new Renderer();
-    for (const prop in extension.renderer) {
-      const prevRenderer = renderer[prop];
-      renderer[prop] = (...args) => {
-        let ret = extension.renderer[prop].apply(renderer, args);
-        if (ret === false) {
-          ret = prevRenderer.apply(renderer, args);
+marked.use = function(...args) {
+  const opts = merge({}, ...args);
+  const extensions = marked.defaults.extensions || { renderers: {}, childTokens: {} };
+  let hasExtensions;
+
+  args.forEach((pack) => {
+    // ==-- Parse "addon" extensions --== //
+    if (pack.extensions) {
+      hasExtensions = true;
+      pack.extensions.forEach((ext) => {
+        if (!ext.name) {
+          throw new Error('extension name required');
         }
-        return ret;
-      };
-    }
-    opts.renderer = renderer;
-  }
-  if (extension.tokenizer) {
-    const tokenizer = marked.defaults.tokenizer || new Tokenizer();
-    for (const prop in extension.tokenizer) {
-      const prevTokenizer = tokenizer[prop];
-      tokenizer[prop] = (...args) => {
-        let ret = extension.tokenizer[prop].apply(tokenizer, args);
-        if (ret === false) {
-          ret = prevTokenizer.apply(tokenizer, args);
+        if (ext.renderer) { // Renderer extensions
+          const prevRenderer = extensions.renderers ? extensions.renderers[ext.name] : null;
+          if (prevRenderer) {
+            // Replace extension with func to run new extension but fall back if false
+            extensions.renderers[ext.name] = function(...args) {
+              let ret = ext.renderer.apply(this, args);
+              if (ret === false) {
+                ret = prevRenderer.apply(this, args);
+              }
+              return ret;
+            };
+          } else {
+            extensions.renderers[ext.name] = ext.renderer;
+          }
         }
-        return ret;
-      };
+        if (ext.tokenizer) { // Tokenizer Extensions
+          if (!ext.level || (ext.level !== 'block' && ext.level !== 'inline')) {
+            throw new Error("extension level must be 'block' or 'inline'");
+          }
+          if (extensions[ext.level]) {
+            extensions[ext.level].unshift(ext.tokenizer);
+          } else {
+            extensions[ext.level] = [ext.tokenizer];
+          }
+          if (ext.start) { // Function to check for start of token
+            if (ext.level === 'block') {
+              if (extensions.startBlock) {
+                extensions.startBlock.push(ext.start);
+              } else {
+                extensions.startBlock = [ext.start];
+              }
+            } else if (ext.level === 'inline') {
+              if (extensions.startInline) {
+                extensions.startInline.push(ext.start);
+              } else {
+                extensions.startInline = [ext.start];
+              }
+            }
+          }
+        }
+        if (ext.childTokens) { // Child tokens to be visited by walkTokens
+          extensions.childTokens[ext.name] = ext.childTokens;
+        }
+      });
     }
-    opts.tokenizer = tokenizer;
-  }
-  if (extension.walkTokens) {
-    const walkTokens = marked.defaults.walkTokens;
-    opts.walkTokens = (token) => {
-      extension.walkTokens(token);
-      if (walkTokens) {
-        walkTokens(token);
+
+    // ==-- Parse "overwrite" extensions --== //
+    if (pack.renderer) {
+      const renderer = marked.defaults.renderer || new Renderer();
+      for (const prop in pack.renderer) {
+        const prevRenderer = renderer[prop];
+        // Replace renderer with func to run extension, but fall back if false
+        renderer[prop] = (...args) => {
+          let ret = pack.renderer[prop].apply(renderer, args);
+          if (ret === false) {
+            ret = prevRenderer.apply(renderer, args);
+          }
+          return ret;
+        };
       }
-    };
-  }
-  marked.setOptions(opts);
+      opts.renderer = renderer;
+    }
+    if (pack.tokenizer) {
+      const tokenizer = marked.defaults.tokenizer || new Tokenizer();
+      for (const prop in pack.tokenizer) {
+        const prevTokenizer = tokenizer[prop];
+        // Replace tokenizer with func to run extension, but fall back if false
+        tokenizer[prop] = (...args) => {
+          let ret = pack.tokenizer[prop].apply(tokenizer, args);
+          if (ret === false) {
+            ret = prevTokenizer.apply(tokenizer, args);
+          }
+          return ret;
+        };
+      }
+      opts.tokenizer = tokenizer;
+    }
+
+    // ==-- Parse WalkTokens extensions --== //
+    if (pack.walkTokens) {
+      const walkTokens = marked.defaults.walkTokens;
+      opts.walkTokens = (token) => {
+        pack.walkTokens.call(this, token);
+        if (walkTokens) {
+          walkTokens(token);
+        }
+      };
+    }
+
+    if (hasExtensions) {
+      opts.extensions = extensions;
+    }
+
+    marked.setOptions(opts);
+  });
 };
 
 /**
@@ -45261,7 +48108,11 @@ marked.walkTokens = function(tokens, callback) {
         break;
       }
       default: {
-        if (token.tokens) {
+        if (marked.defaults.extensions && marked.defaults.extensions.childTokens && marked.defaults.extensions.childTokens[token.type]) { // Walk any extensions
+          marked.defaults.extensions.childTokens[token.type].forEach(function(childTokens) {
+            marked.walkTokens(token[childTokens], callback);
+          });
+        } else if (token.tokens) {
           marked.walkTokens(token.tokens, callback);
         }
       }
@@ -45327,34 +48178,34 @@ module.exports = marked;
 /***/ }),
 
 /***/ 8770:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const {
   noopTest,
   edit,
   merge
-} = __webpack_require__(6881);
+} = __nccwpck_require__(6881);
 
 /**
  * Block-Level Grammar
  */
 const block = {
-  newline: /^\n+/,
-  code: /^( {4}[^\n]+\n*)+/,
+  newline: /^(?: *(?:\n|$))+/,
+  code: /^( {4}[^\n]+(?:\n(?: *(?:\n|$))*)?)+/,
   fences: /^ {0,3}(`{3,}(?=[^`\n]*\n)|~{3,})([^\n]*)\n(?:|([\s\S]*?)\n)(?: {0,3}\1[~`]* *(?:\n+|$)|$)/,
   hr: /^ {0,3}((?:- *){3,}|(?:_ *){3,}|(?:\* *){3,})(?:\n+|$)/,
   heading: /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/,
   blockquote: /^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/,
   list: /^( {0,3})(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?! {0,3}bull )\n*|\s*$)/,
   html: '^ {0,3}(?:' // optional indentation
-    + '<(script|pre|style)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)' // (1)
+    + '<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)' // (1)
     + '|comment[^\\n]*(\\n+|$)' // (2)
     + '|<\\?[\\s\\S]*?(?:\\?>\\n*|$)' // (3)
     + '|<![A-Z][\\s\\S]*?(?:>\\n*|$)' // (4)
     + '|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*|$)' // (5)
-    + '|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:\\n{2,}|$)' // (6)
-    + '|<(?!script|pre|style)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:\\n{2,}|$)' // (7) open tag
-    + '|</(?!script|pre|style)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:\\n{2,}|$)' // (7) closing tag
+    + '|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n *)+\\n|$)' // (6)
+    + '|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)' // (7) open tag
+    + '|</(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)' // (7) closing tag
     + ')',
   def: /^ {0,3}\[(label)\]: *\n? *<?([^\s>]+)>?(?:(?: +\n? *| *\n *)(title))? *(?:\n+|$)/,
   nptable: noopTest,
@@ -45362,7 +48213,7 @@ const block = {
   lheading: /^([^\n]+)\n {0,3}(=+|-+) *(?:\n+|$)/,
   // regex template, placeholders will be replaced according to different paragraph
   // interruption rules of commonmark and the original markdown spec:
-  _paragraph: /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html)[^\n]+)*)/,
+  _paragraph: /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html| +\n)[^\n]+)*)/,
   text: /^[^\n]+/
 };
 
@@ -45379,7 +48230,7 @@ block.item = edit(block.item, 'gm')
   .replace(/bull/g, block.bullet)
   .getRegex();
 
-block.listItemStart = edit(/^( *)(bull)/)
+block.listItemStart = edit(/^( *)(bull) */)
   .replace('bull', block.bullet)
   .getRegex();
 
@@ -45409,7 +48260,7 @@ block.paragraph = edit(block._paragraph)
   .replace('blockquote', ' {0,3}>')
   .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
   .replace('list', ' {0,3}(?:[*+-]|1[.)]) ') // only lists starting from 1 can interrupt
-  .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|!--)')
+  .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)')
   .replace('tag', block._tag) // pars can be interrupted by type (6) html blocks
   .getRegex();
 
@@ -45443,7 +48294,7 @@ block.gfm.nptable = edit(block.gfm.nptable)
   .replace('code', ' {4}[^\\n]')
   .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
   .replace('list', ' {0,3}(?:[*+-]|1[.)]) ') // only lists starting from 1 can interrupt
-  .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|!--)')
+  .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)')
   .replace('tag', block._tag) // tables can be interrupted by type (6) html blocks
   .getRegex();
 
@@ -45454,7 +48305,7 @@ block.gfm.table = edit(block.gfm.table)
   .replace('code', ' {4}[^\\n]')
   .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
   .replace('list', ' {0,3}(?:[*+-]|1[.)]) ') // only lists starting from 1 can interrupt
-  .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|!--)')
+  .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)')
   .replace('tag', block._tag) // tables can be interrupted by type (6) html blocks
   .getRegex();
 
@@ -45504,74 +48355,41 @@ const inline = {
   reflink: /^!?\[(label)\]\[(?!\s*\])((?:\\[\[\]]?|[^\[\]\\])+)\]/,
   nolink: /^!?\[(?!\s*\])((?:\[[^\[\]]*\]|\\[\[\]]|[^\[\]])*)\](?:\[\])?/,
   reflinkSearch: 'reflink|nolink(?!\\()',
-  strong: {
-    start: /^(?:(\*\*(?=[*punctuation]))|\*\*)(?![\s])|__/, // (1) returns if starts w/ punctuation
-    middle: /^\*\*(?:(?:(?!overlapSkip)(?:[^*]|\\\*)|overlapSkip)|\*(?:(?!overlapSkip)(?:[^*]|\\\*)|overlapSkip)*?\*)+?\*\*$|^__(?![\s])((?:(?:(?!overlapSkip)(?:[^_]|\\_)|overlapSkip)|_(?:(?!overlapSkip)(?:[^_]|\\_)|overlapSkip)*?_)+?)__$/,
-    endAst: /[^punctuation\s]\*\*(?!\*)|[punctuation]\*\*(?!\*)(?:(?=[punctuation_\s]|$))/, // last char can't be punct, or final * must also be followed by punct (or endline)
-    endUnd: /[^\s]__(?!_)(?:(?=[punctuation*\s])|$)/ // last char can't be a space, and final _ must preceed punct or \s (or endline)
-  },
-  em: {
-    start: /^(?:(\*(?=[punctuation]))|\*)(?![*\s])|_/, // (1) returns if starts w/ punctuation
-    middle: /^\*(?:(?:(?!overlapSkip)(?:[^*]|\\\*)|overlapSkip)|\*(?:(?!overlapSkip)(?:[^*]|\\\*)|overlapSkip)*?\*)+?\*$|^_(?![_\s])(?:(?:(?!overlapSkip)(?:[^_]|\\_)|overlapSkip)|_(?:(?!overlapSkip)(?:[^_]|\\_)|overlapSkip)*?_)+?_$/,
-    endAst: /[^punctuation\s]\*(?!\*)|[punctuation]\*(?!\*)(?:(?=[punctuation_\s]|$))/, // last char can't be punct, or final * must also be followed by punct (or endline)
-    endUnd: /[^\s]_(?!_)(?:(?=[punctuation*\s])|$)/ // last char can't be a space, and final _ must preceed punct or \s (or endline)
+  emStrong: {
+    lDelim: /^(?:\*+(?:([punct_])|[^\s*]))|^_+(?:([punct*])|([^\s_]))/,
+    //        (1) and (2) can only be a Right Delimiter. (3) and (4) can only be Left.  (5) and (6) can be either Left or Right.
+    //        () Skip other delimiter (1) #***                   (2) a***#, a***                   (3) #***a, ***a                 (4) ***#              (5) #***#                 (6) a***a
+    rDelimAst: /\_\_[^_*]*?\*[^_*]*?\_\_|[punct_](\*+)(?=[\s]|$)|[^punct*_\s](\*+)(?=[punct_\s]|$)|[punct_\s](\*+)(?=[^punct*_\s])|[\s](\*+)(?=[punct_])|[punct_](\*+)(?=[punct_])|[^punct*_\s](\*+)(?=[^punct*_\s])/,
+    rDelimUnd: /\*\*[^_*]*?\_[^_*]*?\*\*|[punct*](\_+)(?=[\s]|$)|[^punct*_\s](\_+)(?=[punct*\s]|$)|[punct*\s](\_+)(?=[^punct*_\s])|[\s](\_+)(?=[punct*])|[punct*](\_+)(?=[punct*])/ // ^- Not allowed for _
   },
   code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,
   br: /^( {2,}|\\)\n(?!\s*$)/,
   del: noopTest,
-  text: /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*]|\b_|$)|[^ ](?= {2,}\n)))/,
-  punctuation: /^([\s*punctuation])/
+  text: /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/,
+  punctuation: /^([\spunctuation])/
 };
 
-// list of punctuation marks from common mark spec
-// without * and _ to workaround cases with double emphasis
+// list of punctuation marks from CommonMark spec
+// without * and _ to handle the different emphasis markers * and _
 inline._punctuation = '!"#$%&\'()+\\-.,/:;<=>?@\\[\\]`^{|}~';
 inline.punctuation = edit(inline.punctuation).replace(/punctuation/g, inline._punctuation).getRegex();
 
 // sequences em should skip over [title](link), `code`, <html>
-inline._blockSkip = '\\[[^\\]]*?\\]\\([^\\)]*?\\)|`[^`]*?`|<[^>]*?>';
-inline._overlapSkip = '__[^_]*?__|\\*\\*\\[^\\*\\]*?\\*\\*';
+inline.blockSkip = /\[[^\]]*?\]\([^\)]*?\)|`[^`]*?`|<[^>]*?>/g;
+inline.escapedEmSt = /\\\*|\\_/g;
 
 inline._comment = edit(block._comment).replace('(?:-->|$)', '-->').getRegex();
 
-inline.em.start = edit(inline.em.start)
-  .replace(/punctuation/g, inline._punctuation)
+inline.emStrong.lDelim = edit(inline.emStrong.lDelim)
+  .replace(/punct/g, inline._punctuation)
   .getRegex();
 
-inline.em.middle = edit(inline.em.middle)
-  .replace(/punctuation/g, inline._punctuation)
-  .replace(/overlapSkip/g, inline._overlapSkip)
+inline.emStrong.rDelimAst = edit(inline.emStrong.rDelimAst, 'g')
+  .replace(/punct/g, inline._punctuation)
   .getRegex();
 
-inline.em.endAst = edit(inline.em.endAst, 'g')
-  .replace(/punctuation/g, inline._punctuation)
-  .getRegex();
-
-inline.em.endUnd = edit(inline.em.endUnd, 'g')
-  .replace(/punctuation/g, inline._punctuation)
-  .getRegex();
-
-inline.strong.start = edit(inline.strong.start)
-  .replace(/punctuation/g, inline._punctuation)
-  .getRegex();
-
-inline.strong.middle = edit(inline.strong.middle)
-  .replace(/punctuation/g, inline._punctuation)
-  .replace(/overlapSkip/g, inline._overlapSkip)
-  .getRegex();
-
-inline.strong.endAst = edit(inline.strong.endAst, 'g')
-  .replace(/punctuation/g, inline._punctuation)
-  .getRegex();
-
-inline.strong.endUnd = edit(inline.strong.endUnd, 'g')
-  .replace(/punctuation/g, inline._punctuation)
-  .getRegex();
-
-inline.blockSkip = edit(inline._blockSkip, 'g')
-  .getRegex();
-
-inline.overlapSkip = edit(inline._overlapSkip, 'g')
+inline.emStrong.rDelimUnd = edit(inline.emStrong.rDelimUnd, 'g')
+  .replace(/punct/g, inline._punctuation)
   .getRegex();
 
 inline._escapes = /\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/g;
@@ -45650,7 +48468,7 @@ inline.gfm = merge({}, inline.normal, {
   url: /^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/,
   _backpedal: /(?:[^?!.,:;*_~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_~)]+(?!$))+/,
   del: /^(~~?)(?=[^\s~])([\s\S]*?[^\s~])\1(?=[^~]|$)/,
-  text: /^([`~]+|[^`~])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*~]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@))|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@))/
+  text: /^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/
 });
 
 inline.gfm.url = edit(inline.gfm.url, 'i')
@@ -45677,12 +48495,12 @@ module.exports = {
 /***/ }),
 
 /***/ 2621:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { PassThrough } = __webpack_require__(2413);
+const { PassThrough } = __nccwpck_require__(2413);
 
 module.exports = function (/*streams...*/) {
   var sources = []
@@ -45726,16 +48544,16 @@ module.exports = function (/*streams...*/) {
 /***/ }),
 
 /***/ 6228:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const util = __webpack_require__(1669);
-const braces = __webpack_require__(610);
-const picomatch = __webpack_require__(8569);
-const utils = __webpack_require__(479);
-const isEmptyString = val => typeof val === 'string' && (val === '' || val === './');
+const util = __nccwpck_require__(1669);
+const braces = __nccwpck_require__(610);
+const picomatch = __nccwpck_require__(8569);
+const utils = __nccwpck_require__(479);
+const isEmptyString = val => val === '' || val === './';
 
 /**
  * Returns an array of strings that match one or more glob patterns.
@@ -45747,9 +48565,9 @@ const isEmptyString = val => typeof val === 'string' && (val === '' || val === '
  * console.log(mm(['a.js', 'a.txt'], ['*.js']));
  * //=> [ 'a.js' ]
  * ```
- * @param {String|Array<string>} list List of strings to match.
- * @param {String|Array<string>} patterns One or more glob patterns to use for matching.
- * @param {Object} options See available [options](#options)
+ * @param {String|Array<string>} `list` List of strings to match.
+ * @param {String|Array<string>} `patterns` One or more glob patterns to use for matching.
+ * @param {Object} `options` See available [options](#options)
  * @return {Array} Returns an array of matches
  * @summary false
  * @api public
@@ -45844,9 +48662,9 @@ micromatch.matcher = (pattern, options) => picomatch(pattern, options);
  * console.log(mm.isMatch('a.a', ['b.*', '*.a'])); //=> true
  * console.log(mm.isMatch('a.a', 'b.*')); //=> false
  * ```
- * @param {String} str The string to test.
- * @param {String|Array} patterns One or more glob patterns to use for matching.
- * @param {Object} [options] See available [options](#options).
+ * @param {String} `str` The string to test.
+ * @param {String|Array} `patterns` One or more glob patterns to use for matching.
+ * @param {Object} `[options]` See available [options](#options).
  * @return {Boolean} Returns true if any patterns match `str`
  * @api public
  */
@@ -45912,7 +48730,7 @@ micromatch.not = (list, patterns, options = {}) => {
  * @param {String} `str` The string to match.
  * @param {String|Array} `patterns` Glob pattern to use for matching.
  * @param {Object} `options` See available [options](#options) for changing how matches are performed
- * @return {Boolean} Returns true if the patter matches any part of `str`.
+ * @return {Boolean} Returns true if any of the patterns matches any part of `str`.
  * @api public
  */
 
@@ -45983,7 +48801,7 @@ micromatch.matchKeys = (obj, patterns, options) => {
  * @param {String|Array} `list` The string or array of strings to test. Returns as soon as the first match is found.
  * @param {String|Array} `patterns` One or more glob patterns to use for matching.
  * @param {Object} `options` See available [options](#options) for changing how matches are performed
- * @return {Boolean} Returns true if any patterns match `str`
+ * @return {Boolean} Returns true if any `patterns` matches any of the strings in `list`
  * @api public
  */
 
@@ -46019,7 +48837,7 @@ micromatch.some = (list, patterns, options) => {
  * @param {String|Array} `list` The string or array of strings to test.
  * @param {String|Array} `patterns` One or more glob patterns to use for matching.
  * @param {Object} `options` See available [options](#options) for changing how matches are performed
- * @return {Boolean} Returns true if any patterns match `str`
+ * @return {Boolean} Returns true if all `patterns` matches all of the strings in `list`
  * @api public
  */
 
@@ -46085,7 +48903,7 @@ micromatch.all = (str, patterns, options) => {
  * @param {String} `glob` Glob pattern to use for matching.
  * @param {String} `input` String to match
  * @param {Object} `options` See available [options](#options) for changing how matches are performed
- * @return {Boolean} Returns an array of captures if the input matches the glob pattern, otherwise `null`.
+ * @return {Array|null} Returns an array of captures if the input matches the glob pattern, otherwise `null`.
  * @api public
  */
 
@@ -46222,18 +49040,18 @@ module.exports.default = mimicFn;
 /***/ }),
 
 /***/ 3331:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __webpack_require__(1487);
+module.exports = __nccwpck_require__(1487);
 
 /***/ }),
 
 /***/ 1487:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /*jslint node: true*/
-var toArray = __webpack_require__(5166);
-var emojiByName = __webpack_require__(9913);
+var toArray = __nccwpck_require__(9843);
+var emojiByName = __nccwpck_require__(9913);
 
 "use strict";
 
@@ -46319,12 +49137,14 @@ var Emoji = {
 };
 
 /**
- * get emoji code from name
+ * get emoji code from name. return emoji code back if code is passed in.
  * @param  {string} emoji
  * @return {string}
  */
 Emoji._get = function _get (emoji) {
-  if (emojiByName.hasOwnProperty(emoji)) {
+  if (emojiByCode[stripNSB(emoji)]) {
+    return emoji;
+  } else if (emojiByName.hasOwnProperty(emoji)) {
     return emojiByName[emoji];
   }
 
@@ -46510,7 +49330,7 @@ Emoji.replace = function replace (str, replacement, cleanSpaces) {
 
   var replaced = words.map(function(word, idx) {
     var emoji = Emoji.findByCode(word);
-    
+
     if (emoji && cleanSpaces && words[idx + 1] === ' ') {
       words[idx + 1] = '';
     }
@@ -46536,532 +49356,163 @@ module.exports = Emoji;
 
 /***/ }),
 
-/***/ 6976:
+/***/ 502:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const path = __nccwpck_require__(5622);
+const pathKey = __nccwpck_require__(539);
+
+const npmRunPath = options => {
+	options = {
+		cwd: process.cwd(),
+		path: process.env[pathKey()],
+		execPath: process.execPath,
+		...options
+	};
+
+	let previous;
+	let cwdPath = path.resolve(options.cwd);
+	const result = [];
+
+	while (previous !== cwdPath) {
+		result.push(path.join(cwdPath, 'node_modules/.bin'));
+		previous = cwdPath;
+		cwdPath = path.resolve(cwdPath, '..');
+	}
+
+	// Ensure the running `node` binary is used
+	const execPathDir = path.resolve(options.cwd, options.execPath, '..');
+	result.push(execPathDir);
+
+	return result.concat(options.path).join(path.delimiter);
+};
+
+module.exports = npmRunPath;
+// TODO: Remove this for the next major release
+module.exports.default = npmRunPath;
+
+module.exports.env = options => {
+	options = {
+		env: process.env,
+		...options
+	};
+
+	const env = {...options.env};
+	const path = pathKey({env});
+
+	options.path = env[path];
+	env[path] = module.exports(options);
+
+	return env;
+};
+
+
+/***/ }),
+
+/***/ 7426:
 /***/ ((module) => {
 
-module.exports = extractDescription
+"use strict";
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
 
-// Extracts description from contents of a readme file in markdown format
-function extractDescription (d) {
-  if (!d) return;
-  if (d === "ERROR: No README data found!") return;
-  // the first block of text before the first heading
-  // that isn't the first line heading
-  d = d.trim().split('\n')
-  for (var s = 0; d[s] && d[s].trim().match(/^(#|$)/); s ++);
-  var l = d.length
-  for (var e = s + 1; e < l && d[e].trim(); e ++);
-  return d.slice(s, e).join(' ').trim()
+
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
 }
 
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
 
-/***/ }),
+		// Detect buggy property enumeration order in older V8 versions.
 
-/***/ 3492:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
 
-var semver = __webpack_require__(5911)
-var validateLicense = __webpack_require__(2524);
-var hostedGitInfo = __webpack_require__(8869)
-var isBuiltinModule = __webpack_require__(5726).isCore
-var depTypes = ["dependencies","devDependencies","optionalDependencies"]
-var extractDescription = __webpack_require__(6976)
-var url = __webpack_require__(8835)
-var typos = __webpack_require__(9043)
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
 
-var fixer = module.exports = {
-  // default warning function
-  warn: function() {},
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
 
-  fixRepositoryField: function(data) {
-    if (data.repositories) {
-      this.warn("repositories");
-      data.repository = data.repositories[0]
-    }
-    if (!data.repository) return this.warn("missingRepository")
-    if (typeof data.repository === "string") {
-      data.repository = {
-        type: "git",
-        url: data.repository
-      }
-    }
-    var r = data.repository.url || ""
-    if (r) {
-      var hosted = hostedGitInfo.fromUrl(r)
-      if (hosted) {
-        r = data.repository.url
-          = hosted.getDefaultRepresentation() == "shortcut" ? hosted.https() : hosted.toString()
-      }
-    }
-
-    if (r.match(/github.com\/[^\/]+\/[^\/]+\.git\.git$/)) {
-      this.warn("brokenGitUrl", r)
-    }
-  }
-
-, fixTypos: function(data) {
-    Object.keys(typos.topLevel).forEach(function (d) {
-      if (data.hasOwnProperty(d)) {
-        this.warn("typo", d, typos.topLevel[d])
-      }
-    }, this)
-  }
-
-, fixScriptsField: function(data) {
-    if (!data.scripts) return
-    if (typeof data.scripts !== "object") {
-      this.warn("nonObjectScripts")
-      delete data.scripts
-      return
-    }
-    Object.keys(data.scripts).forEach(function (k) {
-      if (typeof data.scripts[k] !== "string") {
-        this.warn("nonStringScript")
-        delete data.scripts[k]
-      } else if (typos.script[k] && !data.scripts[typos.script[k]]) {
-        this.warn("typo", k, typos.script[k], "scripts")
-      }
-    }, this)
-  }
-
-, fixFilesField: function(data) {
-    var files = data.files
-    if (files && !Array.isArray(files)) {
-      this.warn("nonArrayFiles")
-      delete data.files
-    } else if (data.files) {
-      data.files = data.files.filter(function(file) {
-        if (!file || typeof file !== "string") {
-          this.warn("invalidFilename", file)
-          return false
-        } else {
-          return true
-        }
-      }, this)
-    }
-  }
-
-, fixBinField: function(data) {
-    if (!data.bin) return;
-    if (typeof data.bin === "string") {
-      var b = {}
-      var match
-      if (match = data.name.match(/^@[^/]+[/](.*)$/)) {
-        b[match[1]] = data.bin
-      } else {
-        b[data.name] = data.bin
-      }
-      data.bin = b
-    }
-  }
-
-, fixManField: function(data) {
-    if (!data.man) return;
-    if (typeof data.man === "string") {
-      data.man = [ data.man ]
-    }
-  }
-, fixBundleDependenciesField: function(data) {
-    var bdd = "bundledDependencies"
-    var bd = "bundleDependencies"
-    if (data[bdd] && !data[bd]) {
-      data[bd] = data[bdd]
-      delete data[bdd]
-    }
-    if (data[bd] && !Array.isArray(data[bd])) {
-      this.warn("nonArrayBundleDependencies")
-      delete data[bd]
-    } else if (data[bd]) {
-      data[bd] = data[bd].filter(function(bd) {
-        if (!bd || typeof bd !== 'string') {
-          this.warn("nonStringBundleDependency", bd)
-          return false
-        } else {
-          if (!data.dependencies) {
-            data.dependencies = {}
-          }
-          if (!data.dependencies.hasOwnProperty(bd)) {
-            this.warn("nonDependencyBundleDependency", bd)
-            data.dependencies[bd] = "*"
-          }
-          return true
-        }
-      }, this)
-    }
-  }
-
-, fixDependencies: function(data, strict) {
-    var loose = !strict
-    objectifyDeps(data, this.warn)
-    addOptionalDepsToDeps(data, this.warn)
-    this.fixBundleDependenciesField(data)
-
-    ;['dependencies','devDependencies'].forEach(function(deps) {
-      if (!(deps in data)) return
-      if (!data[deps] || typeof data[deps] !== "object") {
-        this.warn("nonObjectDependencies", deps)
-        delete data[deps]
-        return
-      }
-      Object.keys(data[deps]).forEach(function (d) {
-        var r = data[deps][d]
-        if (typeof r !== 'string') {
-          this.warn("nonStringDependency", d, JSON.stringify(r))
-          delete data[deps][d]
-        }
-        var hosted = hostedGitInfo.fromUrl(data[deps][d])
-        if (hosted) data[deps][d] = hosted.toString()
-      }, this)
-    }, this)
-  }
-
-, fixModulesField: function (data) {
-    if (data.modules) {
-      this.warn("deprecatedModules")
-      delete data.modules
-    }
-  }
-
-, fixKeywordsField: function (data) {
-    if (typeof data.keywords === "string") {
-      data.keywords = data.keywords.split(/,\s+/)
-    }
-    if (data.keywords && !Array.isArray(data.keywords)) {
-      delete data.keywords
-      this.warn("nonArrayKeywords")
-    } else if (data.keywords) {
-      data.keywords = data.keywords.filter(function(kw) {
-        if (typeof kw !== "string" || !kw) {
-          this.warn("nonStringKeyword");
-          return false
-        } else {
-          return true
-        }
-      }, this)
-    }
-  }
-
-, fixVersionField: function(data, strict) {
-    // allow "loose" semver 1.0 versions in non-strict mode
-    // enforce strict semver 2.0 compliance in strict mode
-    var loose = !strict
-    if (!data.version) {
-      data.version = ""
-      return true
-    }
-    if (!semver.valid(data.version, loose)) {
-      throw new Error('Invalid version: "'+ data.version + '"')
-    }
-    data.version = semver.clean(data.version, loose)
-    return true
-  }
-
-, fixPeople: function(data) {
-    modifyPeople(data, unParsePerson)
-    modifyPeople(data, parsePerson)
-  }
-
-, fixNameField: function(data, options) {
-    if (typeof options === "boolean") options = {strict: options}
-    else if (typeof options === "undefined") options = {}
-    var strict = options.strict
-    if (!data.name && !strict) {
-      data.name = ""
-      return
-    }
-    if (typeof data.name !== "string") {
-      throw new Error("name field must be a string.")
-    }
-    if (!strict)
-      data.name = data.name.trim()
-    ensureValidName(data.name, strict, options.allowLegacyCase)
-    if (isBuiltinModule(data.name))
-      this.warn("conflictingName", data.name)
-  }
-
-
-, fixDescriptionField: function (data) {
-    if (data.description && typeof data.description !== 'string') {
-      this.warn("nonStringDescription")
-      delete data.description
-    }
-    if (data.readme && !data.description)
-      data.description = extractDescription(data.readme)
-      if(data.description === undefined) delete data.description;
-    if (!data.description) this.warn("missingDescription")
-  }
-
-, fixReadmeField: function (data) {
-    if (!data.readme) {
-      this.warn("missingReadme")
-      data.readme = "ERROR: No README data found!"
-    }
-  }
-
-, fixBugsField: function(data) {
-    if (!data.bugs && data.repository && data.repository.url) {
-      var hosted = hostedGitInfo.fromUrl(data.repository.url)
-      if(hosted && hosted.bugs()) {
-        data.bugs = {url: hosted.bugs()}
-      }
-    }
-    else if(data.bugs) {
-      var emailRe = /^.+@.*\..+$/
-      if(typeof data.bugs == "string") {
-        if(emailRe.test(data.bugs))
-          data.bugs = {email:data.bugs}
-        else if(url.parse(data.bugs).protocol)
-          data.bugs = {url: data.bugs}
-        else
-          this.warn("nonEmailUrlBugsString")
-      }
-      else {
-        bugsTypos(data.bugs, this.warn)
-        var oldBugs = data.bugs
-        data.bugs = {}
-        if(oldBugs.url) {
-          if(typeof(oldBugs.url) == "string" && url.parse(oldBugs.url).protocol)
-            data.bugs.url = oldBugs.url
-          else
-            this.warn("nonUrlBugsUrlField")
-        }
-        if(oldBugs.email) {
-          if(typeof(oldBugs.email) == "string" && emailRe.test(oldBugs.email))
-            data.bugs.email = oldBugs.email
-          else
-            this.warn("nonEmailBugsEmailField")
-        }
-      }
-      if(!data.bugs.email && !data.bugs.url) {
-        delete data.bugs
-        this.warn("emptyNormalizedBugs")
-      }
-    }
-  }
-
-, fixHomepageField: function(data) {
-    if (!data.homepage && data.repository && data.repository.url) {
-      var hosted = hostedGitInfo.fromUrl(data.repository.url)
-      if (hosted && hosted.docs()) data.homepage = hosted.docs()
-    }
-    if (!data.homepage) return
-
-    if(typeof data.homepage !== "string") {
-      this.warn("nonUrlHomepage")
-      return delete data.homepage
-    }
-    if(!url.parse(data.homepage).protocol) {
-      data.homepage = "http://" + data.homepage
-    }
-  }
-
-, fixLicenseField: function(data) {
-    if (!data.license) {
-      return this.warn("missingLicense")
-    } else{
-      if (
-        typeof(data.license) !== 'string' ||
-        data.license.length < 1 ||
-        data.license.trim() === ''
-      ) {
-        this.warn("invalidLicense")
-      } else {
-        if (!validateLicense(data.license).validForNewPackages)
-          this.warn("invalidLicense")
-      }
-    }
-  }
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
 }
 
-function isValidScopedPackageName(spec) {
-  if (spec.charAt(0) !== '@') return false
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
 
-  var rest = spec.slice(1).split('/')
-  if (rest.length !== 2) return false
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
 
-  return rest[0] && rest[1] &&
-    rest[0] === encodeURIComponent(rest[0]) &&
-    rest[1] === encodeURIComponent(rest[1])
-}
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
 
-function isCorrectlyEncodedName(spec) {
-  return !spec.match(/[\/@\s\+%:]/) &&
-    spec === encodeURIComponent(spec)
-}
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
 
-function ensureValidName (name, strict, allowLegacyCase) {
-  if (name.charAt(0) === "." ||
-      !(isValidScopedPackageName(name) || isCorrectlyEncodedName(name)) ||
-      (strict && (!allowLegacyCase) && name !== name.toLowerCase()) ||
-      name.toLowerCase() === "node_modules" ||
-      name.toLowerCase() === "favicon.ico") {
-        throw new Error("Invalid name: " + JSON.stringify(name))
-  }
-}
-
-function modifyPeople (data, fn) {
-  if (data.author) data.author = fn(data.author)
-  ;["maintainers", "contributors"].forEach(function (set) {
-    if (!Array.isArray(data[set])) return;
-    data[set] = data[set].map(fn)
-  })
-  return data
-}
-
-function unParsePerson (person) {
-  if (typeof person === "string") return person
-  var name = person.name || ""
-  var u = person.url || person.web
-  var url = u ? (" ("+u+")") : ""
-  var e = person.email || person.mail
-  var email = e ? (" <"+e+">") : ""
-  return name+email+url
-}
-
-function parsePerson (person) {
-  if (typeof person !== "string") return person
-  var name = person.match(/^([^\(<]+)/)
-  var url = person.match(/\(([^\)]+)\)/)
-  var email = person.match(/<([^>]+)>/)
-  var obj = {}
-  if (name && name[0].trim()) obj.name = name[0].trim()
-  if (email) obj.email = email[1];
-  if (url) obj.url = url[1];
-  return obj
-}
-
-function addOptionalDepsToDeps (data, warn) {
-  var o = data.optionalDependencies
-  if (!o) return;
-  var d = data.dependencies || {}
-  Object.keys(o).forEach(function (k) {
-    d[k] = o[k]
-  })
-  data.dependencies = d
-}
-
-function depObjectify (deps, type, warn) {
-  if (!deps) return {}
-  if (typeof deps === "string") {
-    deps = deps.trim().split(/[\n\r\s\t ,]+/)
-  }
-  if (!Array.isArray(deps)) return deps
-  warn("deprecatedArrayDependencies", type)
-  var o = {}
-  deps.filter(function (d) {
-    return typeof d === "string"
-  }).forEach(function(d) {
-    d = d.trim().split(/(:?[@\s><=])/)
-    var dn = d.shift()
-    var dv = d.join("")
-    dv = dv.trim()
-    dv = dv.replace(/^@/, "")
-    o[dn] = dv
-  })
-  return o
-}
-
-function objectifyDeps (data, warn) {
-  depTypes.forEach(function (type) {
-    if (!data[type]) return;
-    data[type] = depObjectify(data[type], type, warn)
-  })
-}
-
-function bugsTypos(bugs, warn) {
-  if (!bugs) return
-  Object.keys(bugs).forEach(function (k) {
-    if (typos.bugs[k]) {
-      warn("typo", k, typos.bugs[k], "bugs")
-      bugs[typos.bugs[k]] = bugs[k]
-      delete bugs[k]
-    }
-  })
-}
-
-
-/***/ }),
-
-/***/ 9671:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var util = __webpack_require__(1669)
-var messages = __webpack_require__(8402)
-
-module.exports = function() {
-  var args = Array.prototype.slice.call(arguments, 0)
-  var warningName = args.shift()
-  if (warningName == "typo") {
-    return makeTypoWarning.apply(null,args)
-  }
-  else {
-    var msgTemplate = messages[warningName] ? messages[warningName] : warningName + ": '%s'"
-    args.unshift(msgTemplate)
-    return util.format.apply(null, args)
-  }
-}
-
-function makeTypoWarning (providedName, probableName, field) {
-  if (field) {
-    providedName = field + "['" + providedName + "']"
-    probableName = field + "['" + probableName + "']"
-  }
-  return util.format(messages.typo, providedName, probableName)
-}
-
-
-/***/ }),
-
-/***/ 3188:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-module.exports = normalize
-
-var fixer = __webpack_require__(3492)
-normalize.fixer = fixer
-
-var makeWarning = __webpack_require__(9671)
-
-var fieldsToFix = ['name','version','description','repository','modules','scripts'
-                  ,'files','bin','man','bugs','keywords','readme','homepage','license']
-var otherThingsToFix = ['dependencies','people', 'typos']
-
-var thingsToFix = fieldsToFix.map(function(fieldName) {
-  return ucFirst(fieldName) + "Field"
-})
-// two ways to do this in CoffeeScript on only one line, sub-70 chars:
-// thingsToFix = fieldsToFix.map (name) -> ucFirst(name) + "Field"
-// thingsToFix = (ucFirst(name) + "Field" for name in fieldsToFix)
-thingsToFix = thingsToFix.concat(otherThingsToFix)
-
-function normalize (data, warn, strict) {
-  if(warn === true) warn = null, strict = true
-  if(!strict) strict = false
-  if(!warn || data.private) warn = function(msg) { /* noop */ }
-
-  if (data.scripts &&
-      data.scripts.install === "node-gyp rebuild" &&
-      !data.scripts.preinstall) {
-    data.gypfile = true
-  }
-  fixer.warn = function() { warn(makeWarning.apply(null, arguments)) }
-  thingsToFix.forEach(function(thingName) {
-    fixer["fix" + ucFirst(thingName)](data, strict)
-  })
-  data._id = data.name + "@" + data.version
-}
-
-function ucFirst (string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+	return to;
+};
 
 
 /***/ }),
 
 /***/ 1223:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var wrappy = __webpack_require__(2940)
+var wrappy = __nccwpck_require__(2940)
 module.exports = wrappy(once)
 module.exports.strict = wrappy(onceStrict)
 
@@ -47108,11 +49559,11 @@ function onceStrict (fn) {
 /***/ }),
 
 /***/ 9082:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const mimicFn = __webpack_require__(6047);
+const mimicFn = __nccwpck_require__(6047);
 
 const calledFunctions = new WeakMap();
 
@@ -47190,11 +49641,11 @@ module.exports.default = pEachSeries;
 /***/ }),
 
 /***/ 7684:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const pTry = __webpack_require__(746);
+const pTry = __nccwpck_require__(746);
 
 const pLimit = concurrency => {
 	if (!((Number.isInteger(concurrency) || concurrency === Infinity) && concurrency > 0)) {
@@ -47255,11 +49706,11 @@ module.exports.default = pLimit;
 /***/ }),
 
 /***/ 104:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const pLimit = __webpack_require__(7684);
+const pLimit = __nccwpck_require__(7684);
 
 class EndError extends Error {
 	constructor(value) {
@@ -47368,11 +49819,11 @@ module.exports.default = pTry;
 /***/ }),
 
 /***/ 9069:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const callsites = __webpack_require__(5018);
+const callsites = __nccwpck_require__(5018);
 
 module.exports = filepath => {
 	const stacks = callsites();
@@ -47413,21 +49864,21 @@ module.exports = filepath => {
 /***/ }),
 
 /***/ 6615:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const errorEx = __webpack_require__(3505);
-const fallback = __webpack_require__(9062);
-const {default: LinesAndColumns} = __webpack_require__(6309);
-const {codeFrameColumns} = __webpack_require__(5211);
+const errorEx = __nccwpck_require__(3505);
+const fallback = __nccwpck_require__(9062);
+const {default: LinesAndColumns} = __nccwpck_require__(6309);
+const {codeFrameColumns} = __nccwpck_require__(5211);
 
 const JSONError = errorEx('JSONError', {
 	fileName: errorEx.append('in %s'),
 	codeFrame: errorEx.append('\n\n%s\n')
 });
 
-module.exports = (string, reviver, filename) => {
+const parseJson = (string, reviver, filename) => {
 	if (typeof reviver === 'string') {
 		filename = reviver;
 		reviver = null;
@@ -47467,30 +49918,64 @@ module.exports = (string, reviver, filename) => {
 	}
 };
 
+parseJson.JSONError = JSONError;
+
+module.exports = parseJson;
+
 
 /***/ }),
 
 /***/ 6978:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const fs = __webpack_require__(5747);
+const fs = __nccwpck_require__(5747);
+const {promisify} = __nccwpck_require__(1669);
 
-module.exports = fp => new Promise(resolve => {
-	fs.access(fp, err => {
-		resolve(!err);
-	});
-});
+const pAccess = promisify(fs.access);
 
-module.exports.sync = fp => {
+module.exports = async path => {
 	try {
-		fs.accessSync(fp);
+		await pAccess(path);
 		return true;
-	} catch (err) {
+	} catch (_) {
 		return false;
 	}
 };
+
+module.exports.sync = path => {
+	try {
+		fs.accessSync(path);
+		return true;
+	} catch (_) {
+		return false;
+	}
+};
+
+
+/***/ }),
+
+/***/ 539:
+/***/ ((module) => {
+
+"use strict";
+
+
+const pathKey = (options = {}) => {
+	const environment = options.env || process.env;
+	const platform = options.platform || process.platform;
+
+	if (platform !== 'win32') {
+		return 'PATH';
+	}
+
+	return Object.keys(environment).reverse().find(key => key.toUpperCase() === 'PATH') || 'Path';
+};
+
+module.exports = pathKey;
+// TODO: Remove this for the next major release
+module.exports.default = pathKey;
 
 
 /***/ }),
@@ -47503,29 +49988,14 @@ module.exports.sync = fp => {
 
 var isWindows = process.platform === 'win32';
 
-// Regex to split a windows path into three parts: [*, device, slash,
-// tail] windows-only
-var splitDeviceRe =
-    /^([a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/]+[^\\\/]+)?([\\\/])?([\s\S]*?)$/;
-
-// Regex to split the tail part of the above into [*, dir, basename, ext]
-var splitTailRe =
-    /^([\s\S]*?)((?:\.{1,2}|[^\\\/]+?|)(\.[^.\/\\]*|))(?:[\\\/]*)$/;
+// Regex to split a windows path into into [dir, root, basename, name, ext]
+var splitWindowsRe =
+    /^(((?:[a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/]+[^\\\/]+)?[\\\/]?)(?:[^\\\/]*[\\\/])*)((\.{1,2}|[^\\\/]+?|)(\.[^.\/\\]*|))[\\\/]*$/;
 
 var win32 = {};
 
-// Function to split a filename into [root, dir, basename, ext]
 function win32SplitPath(filename) {
-  // Separate device+slash from tail
-  var result = splitDeviceRe.exec(filename),
-      device = (result[1] || '') + (result[2] || ''),
-      tail = result[3] || '';
-  // Split the tail into dir, basename and extension
-  var result2 = splitTailRe.exec(tail),
-      dir = result2[1],
-      basename = result2[2],
-      ext = result2[3];
-  return [device, dir, basename, ext];
+  return splitWindowsRe.exec(filename).slice(1);
 }
 
 win32.parse = function(pathString) {
@@ -47535,24 +50005,24 @@ win32.parse = function(pathString) {
     );
   }
   var allParts = win32SplitPath(pathString);
-  if (!allParts || allParts.length !== 4) {
+  if (!allParts || allParts.length !== 5) {
     throw new TypeError("Invalid path '" + pathString + "'");
   }
   return {
-    root: allParts[0],
-    dir: allParts[0] + allParts[1].slice(0, -1),
+    root: allParts[1],
+    dir: allParts[0] === allParts[1] ? allParts[0] : allParts[0].slice(0, -1),
     base: allParts[2],
-    ext: allParts[3],
-    name: allParts[2].slice(0, allParts[2].length - allParts[3].length)
+    ext: allParts[4],
+    name: allParts[3]
   };
 };
 
 
 
-// Split a filename into [root, dir, basename, ext], unix version
+// Split a filename into [dir, root, basename, name, ext], unix version
 // 'root' is just a slash, or nothing.
 var splitPathRe =
-    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+    /^((\/?)(?:[^\/]*\/)*)((\.{1,2}|[^\/]+?|)(\.[^.\/]*|))[\/]*$/;
 var posix = {};
 
 
@@ -47568,19 +50038,16 @@ posix.parse = function(pathString) {
     );
   }
   var allParts = posixSplitPath(pathString);
-  if (!allParts || allParts.length !== 4) {
+  if (!allParts || allParts.length !== 5) {
     throw new TypeError("Invalid path '" + pathString + "'");
   }
-  allParts[1] = allParts[1] || '';
-  allParts[2] = allParts[2] || '';
-  allParts[3] = allParts[3] || '';
-
+  
   return {
-    root: allParts[0],
-    dir: allParts[0] + allParts[1].slice(0, -1),
+    root: allParts[1],
+    dir: allParts[0].slice(0, -1),
     base: allParts[2],
-    ext: allParts[3],
-    name: allParts[2].slice(0, allParts[2].length - allParts[3].length)
+    ext: allParts[4],
+    name: allParts[3],
   };
 };
 
@@ -47597,12 +50064,12 @@ module.exports.win32 = win32.parse;
 /***/ }),
 
 /***/ 3433:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-const {promisify} = __webpack_require__(1669);
-const fs = __webpack_require__(5747);
+const {promisify} = __nccwpck_require__(1669);
+const fs = __nccwpck_require__(5747);
 
 async function isType(fsStatType, statsMethodName, filePath) {
 	if (typeof filePath !== 'string') {
@@ -47648,23 +50115,23 @@ exports.isSymlinkSync = isTypeSync.bind(null, 'lstatSync', 'isSymbolicLink');
 /***/ }),
 
 /***/ 8569:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-module.exports = __webpack_require__(3322);
+module.exports = __nccwpck_require__(3322);
 
 
 /***/ }),
 
 /***/ 6099:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const path = __webpack_require__(5622);
+const path = __nccwpck_require__(5622);
 const WIN_SLASH = '\\\\/';
 const WIN_NO_SLASH = `[^${WIN_SLASH}]`;
 
@@ -47846,13 +50313,13 @@ module.exports = {
 /***/ }),
 
 /***/ 2139:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const constants = __webpack_require__(6099);
-const utils = __webpack_require__(479);
+const constants = __nccwpck_require__(6099);
+const utils = __nccwpck_require__(479);
 
 /**
  * Constants
@@ -47943,7 +50410,7 @@ const parse = (input, options) => {
     START_ANCHOR
   } = PLATFORM_CHARS;
 
-  const globstar = (opts) => {
+  const globstar = opts => {
     return `(${capture}(?:(?!${START_ANCHOR}${opts.dot ? DOTS_SLASH : DOT_LITERAL}).)*?)`;
   };
 
@@ -47993,12 +50460,13 @@ const parse = (input, options) => {
 
   const eos = () => state.index === len - 1;
   const peek = state.peek = (n = 1) => input[state.index + n];
-  const advance = state.advance = () => input[++state.index];
+  const advance = state.advance = () => input[++state.index] || '';
   const remaining = () => input.slice(state.index + 1);
   const consume = (value = '', num = 0) => {
     state.consumed += value;
     state.index += num;
   };
+
   const append = token => {
     state.output += token.output != null ? token.output : token.value;
     consume(token.value);
@@ -48054,7 +50522,7 @@ const parse = (input, options) => {
       }
     }
 
-    if (extglobs.length && tok.type !== 'paren' && !EXTGLOB_CHARS[tok.value]) {
+    if (extglobs.length && tok.type !== 'paren') {
       extglobs[extglobs.length - 1].inner += tok.value;
     }
 
@@ -48086,6 +50554,7 @@ const parse = (input, options) => {
 
   const extglobClose = token => {
     let output = token.close + (opts.capture ? ')' : '');
+    let rest;
 
     if (token.type === 'negate') {
       let extglobStar = star;
@@ -48098,7 +50567,11 @@ const parse = (input, options) => {
         output = token.close = `)$))${extglobStar}`;
       }
 
-      if (token.prev.type === 'bos' && eos()) {
+      if (token.inner.includes('*') && (rest = remaining()) && /^\.[^\\/.]+$/.test(rest)) {
+        output = token.close = `)${rest})${extglobStar})`;
+      }
+
+      if (token.prev.type === 'bos') {
         state.negatedExtglob = true;
       }
     }
@@ -48207,9 +50680,9 @@ const parse = (input, options) => {
       }
 
       if (opts.unescape === true) {
-        value = advance() || '';
+        value = advance();
       } else {
-        value += advance() || '';
+        value += advance();
       }
 
       if (state.brackets === 0) {
@@ -48873,7 +51346,7 @@ parse.fastpaths = (input, options) => {
     star = `(${star})`;
   }
 
-  const globstar = (opts) => {
+  const globstar = opts => {
     if (opts.noglobstar === true) return star;
     return `(${capture}(?:(?!${START_ANCHOR}${opts.dot ? DOTS_SLASH : DOT_LITERAL}).)*?)`;
   };
@@ -48932,16 +51405,16 @@ module.exports = parse;
 /***/ }),
 
 /***/ 3322:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const path = __webpack_require__(5622);
-const scan = __webpack_require__(2429);
-const parse = __webpack_require__(2139);
-const utils = __webpack_require__(479);
-const constants = __webpack_require__(6099);
+const path = __nccwpck_require__(5622);
+const scan = __nccwpck_require__(2429);
+const parse = __nccwpck_require__(2139);
+const utils = __nccwpck_require__(479);
+const constants = __nccwpck_require__(6099);
 const isObject = val => val && typeof val === 'object' && !Array.isArray(val);
 
 /**
@@ -49168,6 +51641,40 @@ picomatch.parse = (pattern, options) => {
 picomatch.scan = (input, options) => scan(input, options);
 
 /**
+ * Compile a regular expression from the `state` object returned by the
+ * [parse()](#parse) method.
+ *
+ * @param {Object} `state`
+ * @param {Object} `options`
+ * @param {Boolean} `returnOutput` Intended for implementors, this argument allows you to return the raw output from the parser.
+ * @param {Boolean} `returnState` Adds the state to a `state` property on the returned regex. Useful for implementors and debugging.
+ * @return {RegExp}
+ * @api public
+ */
+
+picomatch.compileRe = (state, options, returnOutput = false, returnState = false) => {
+  if (returnOutput === true) {
+    return state.output;
+  }
+
+  const opts = options || {};
+  const prepend = opts.contains ? '' : '^';
+  const append = opts.contains ? '' : '$';
+
+  let source = `${prepend}(?:${state.output})${append}`;
+  if (state && state.negated === true) {
+    source = `^(?!${source}).*$`;
+  }
+
+  const regex = picomatch.toRegex(source, options);
+  if (returnState === true) {
+    regex.state = state;
+  }
+
+  return regex;
+};
+
+/**
  * Create a regular expression from a parsed glob pattern.
  *
  * ```js
@@ -49180,56 +51687,25 @@ picomatch.scan = (input, options) => scan(input, options);
  * ```
  * @param {String} `state` The object returned from the `.parse` method.
  * @param {Object} `options`
+ * @param {Boolean} `returnOutput` Implementors may use this argument to return the compiled output, instead of a regular expression. This is not exposed on the options to prevent end-users from mutating the result.
+ * @param {Boolean} `returnState` Implementors may use this argument to return the state from the parsed glob with the returned regular expression.
  * @return {RegExp} Returns a regex created from the given pattern.
  * @api public
  */
 
-picomatch.compileRe = (parsed, options, returnOutput = false, returnState = false) => {
-  if (returnOutput === true) {
-    return parsed.output;
-  }
-
-  const opts = options || {};
-  const prepend = opts.contains ? '' : '^';
-  const append = opts.contains ? '' : '$';
-
-  let source = `${prepend}(?:${parsed.output})${append}`;
-  if (parsed && parsed.negated === true) {
-    source = `^(?!${source}).*$`;
-  }
-
-  const regex = picomatch.toRegex(source, options);
-  if (returnState === true) {
-    regex.state = parsed;
-  }
-
-  return regex;
-};
-
-picomatch.makeRe = (input, options, returnOutput = false, returnState = false) => {
+picomatch.makeRe = (input, options = {}, returnOutput = false, returnState = false) => {
   if (!input || typeof input !== 'string') {
     throw new TypeError('Expected a non-empty string');
   }
 
-  const opts = options || {};
   let parsed = { negated: false, fastpaths: true };
-  let prefix = '';
-  let output;
 
-  if (input.startsWith('./')) {
-    input = input.slice(2);
-    prefix = parsed.prefix = './';
+  if (options.fastpaths !== false && (input[0] === '.' || input[0] === '*')) {
+    parsed.output = parse.fastpaths(input, options);
   }
 
-  if (opts.fastpaths !== false && (input[0] === '.' || input[0] === '*')) {
-    output = parse.fastpaths(input, options);
-  }
-
-  if (output === undefined) {
+  if (!parsed.output) {
     parsed = parse(input, options);
-    parsed.prefix = prefix + (parsed.prefix || '');
-  } else {
-    parsed.output = output;
   }
 
   return picomatch.compileRe(parsed, options, returnOutput, returnState);
@@ -49279,12 +51755,12 @@ module.exports = picomatch;
 /***/ }),
 
 /***/ 2429:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const utils = __webpack_require__(479);
+const utils = __nccwpck_require__(479);
 const {
   CHAR_ASTERISK,             /* * */
   CHAR_AT,                   /* @ */
@@ -49301,7 +51777,7 @@ const {
   CHAR_RIGHT_CURLY_BRACE,    /* } */
   CHAR_RIGHT_PARENTHESES,    /* ) */
   CHAR_RIGHT_SQUARE_BRACKET  /* ] */
-} = __webpack_require__(6099);
+} = __nccwpck_require__(6099);
 
 const isPathSeparator = code => {
   return code === CHAR_FORWARD_SLASH || code === CHAR_BACKWARD_SLASH;
@@ -49316,7 +51792,8 @@ const depth = token => {
 /**
  * Quickly scans a glob pattern and returns an object with a handful of
  * useful properties, like `isGlob`, `path` (the leading non-glob, if it exists),
- * `glob` (the actual pattern), and `negated` (true if the path starts with `!`).
+ * `glob` (the actual pattern), `negated` (true if the path starts with `!` but not
+ * with `!(`) and `negatedExtglob` (true if the path starts with `!(`).
  *
  * ```js
  * const pm = require('picomatch');
@@ -49350,6 +51827,7 @@ const scan = (input, options) => {
   let braceEscaped = false;
   let backslashes = false;
   let negated = false;
+  let negatedExtglob = false;
   let finished = false;
   let braces = 0;
   let prev;
@@ -49461,6 +51939,9 @@ const scan = (input, options) => {
         isGlob = token.isGlob = true;
         isExtglob = token.isExtglob = true;
         finished = true;
+        if (code === CHAR_EXCLAMATION_MARK && index === start) {
+          negatedExtglob = true;
+        }
 
         if (scanToEnd === true) {
           while (eos() !== true && (code = advance())) {
@@ -49515,13 +51996,15 @@ const scan = (input, options) => {
           isBracket = token.isBracket = true;
           isGlob = token.isGlob = true;
           finished = true;
-
-          if (scanToEnd === true) {
-            continue;
-          }
           break;
         }
       }
+
+      if (scanToEnd === true) {
+        continue;
+      }
+
+      break;
     }
 
     if (opts.nonegate !== true && code === CHAR_EXCLAMATION_MARK && index === start) {
@@ -49612,7 +52095,8 @@ const scan = (input, options) => {
     isGlob,
     isExtglob,
     isGlobstar,
-    negated
+    negated,
+    negatedExtglob
   };
 
   if (opts.tokens === true) {
@@ -49670,19 +52154,19 @@ module.exports = scan;
 /***/ }),
 
 /***/ 479:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const path = __webpack_require__(5622);
+const path = __nccwpck_require__(5622);
 const win32 = process.platform === 'win32';
 const {
   REGEX_BACKSLASH,
   REGEX_REMOVE_BACKSLASH,
   REGEX_SPECIAL_CHARS,
   REGEX_SPECIAL_CHARS_GLOBAL
-} = __webpack_require__(6099);
+} = __nccwpck_require__(6099);
 
 exports.isObject = val => val !== null && typeof val === 'object' && !Array.isArray(val);
 exports.hasRegexChars = str => REGEX_SPECIAL_CHARS.test(str);
@@ -49741,14 +52225,106 @@ exports.wrapOutput = (input, state = {}, options = {}) => {
 
 /***/ }),
 
-/***/ 1235:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4810:
+/***/ ((module) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const findUp = __webpack_require__(6428);
-const loadJsonFile = __webpack_require__(5978);
+
+const processFn = (fn, opts) => function () {
+	const P = opts.promiseModule;
+	const args = new Array(arguments.length);
+
+	for (let i = 0; i < arguments.length; i++) {
+		args[i] = arguments[i];
+	}
+
+	return new P((resolve, reject) => {
+		if (opts.errorFirst) {
+			args.push(function (err, result) {
+				if (opts.multiArgs) {
+					const results = new Array(arguments.length - 1);
+
+					for (let i = 1; i < arguments.length; i++) {
+						results[i - 1] = arguments[i];
+					}
+
+					if (err) {
+						results.unshift(err);
+						reject(results);
+					} else {
+						resolve(results);
+					}
+				} else if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
+			});
+		} else {
+			args.push(function (result) {
+				if (opts.multiArgs) {
+					const results = new Array(arguments.length - 1);
+
+					for (let i = 0; i < arguments.length; i++) {
+						results[i] = arguments[i];
+					}
+
+					resolve(results);
+				} else {
+					resolve(result);
+				}
+			});
+		}
+
+		fn.apply(this, args);
+	});
+};
+
+module.exports = (obj, opts) => {
+	opts = Object.assign({
+		exclude: [/.+(Sync|Stream)$/],
+		errorFirst: true,
+		promiseModule: Promise
+	}, opts);
+
+	const filter = key => {
+		const match = pattern => typeof pattern === 'string' ? key === pattern : pattern.test(key);
+		return opts.include ? opts.include.some(match) : !opts.exclude.some(match);
+	};
+
+	let ret;
+	if (typeof obj === 'function') {
+		ret = function () {
+			if (opts.excludeMain) {
+				return obj.apply(this, arguments);
+			}
+
+			return processFn(obj, opts).apply(this, arguments);
+		};
+	} else {
+		ret = Object.create(Object.getPrototypeOf(obj));
+	}
+
+	for (const key in obj) { // eslint-disable-line guard-for-in
+		const x = obj[key];
+		ret[key] = typeof x === 'function' && filter(key) ? processFn(x, opts) : x;
+	}
+
+	return ret;
+};
+
+
+/***/ }),
+
+/***/ 1235:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const path = __nccwpck_require__(5622);
+const findUp = __nccwpck_require__(6428);
+const loadJsonFile = __nccwpck_require__(5978);
 
 const filepaths = new WeakMap();
 const filepath = conf => filepaths.get(conf);
@@ -49814,12 +52390,12 @@ module.exports.sync = sync;
 /***/ }),
 
 /***/ 6428:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const locatePath = __webpack_require__(7619);
+const path = __nccwpck_require__(5622);
+const locatePath = __nccwpck_require__(7619);
 
 module.exports = (filename, opts) => {
 	opts = opts || {};
@@ -49870,13 +52446,13 @@ module.exports.sync = (filename, opts) => {
 /***/ }),
 
 /***/ 7619:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const pathExists = __webpack_require__(6978);
-const pLocate = __webpack_require__(6566);
+const path = __nccwpck_require__(5622);
+const pathExists = __nccwpck_require__(652);
+const pLocate = __nccwpck_require__(6566);
 
 module.exports = (iterable, opts) => {
 	opts = Object.assign({
@@ -49902,11 +52478,11 @@ module.exports.sync = (iterable, opts) => {
 /***/ }),
 
 /***/ 1305:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const pTry = __webpack_require__(6897);
+const pTry = __nccwpck_require__(6897);
 
 module.exports = concurrency => {
 	if (concurrency < 1) {
@@ -49952,11 +52528,11 @@ module.exports = concurrency => {
 /***/ }),
 
 /***/ 6566:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const pLimit = __webpack_require__(1305);
+const pLimit = __nccwpck_require__(1305);
 
 class EndError extends Error {
 	constructor(value) {
@@ -49998,6 +52574,31 @@ module.exports = (iterable, tester, opts) => {
 module.exports = cb => new Promise(resolve => {
 	resolve(cb());
 });
+
+
+/***/ }),
+
+/***/ 652:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const fs = __nccwpck_require__(5747);
+
+module.exports = fp => new Promise(resolve => {
+	fs.access(fp, err => {
+		resolve(!err);
+	});
+});
+
+module.exports.sync = fp => {
+	try {
+		fs.accessSync(fp);
+		return true;
+	} catch (err) {
+		return false;
+	}
+};
 
 
 /***/ }),
@@ -50056,11 +52657,11 @@ function nextTick(fn, arg1, arg2, arg3) {
 /***/ }),
 
 /***/ 8341:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var once = __webpack_require__(1223)
-var eos = __webpack_require__(1205)
-var fs = __webpack_require__(5747) // we only need fs to get the ReadStream and WriteStream prototypes
+var once = __nccwpck_require__(1223)
+var eos = __nccwpck_require__(1205)
+var fs = __nccwpck_require__(5747) // we only need fs to get the ReadStream and WriteStream prototypes
 
 var noop = function () {}
 var ancient = /^v?\.0/.test(process.version)
@@ -50145,13 +52746,13 @@ module.exports = pump
 /***/ }),
 
 /***/ 5767:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const findUp = __webpack_require__(9486);
-const readPkg = __webpack_require__(3645);
+const path = __nccwpck_require__(5622);
+const findUp = __nccwpck_require__(9486);
+const readPkg = __nccwpck_require__(3645);
 
 module.exports = async options => {
 	const filePath = await findUp('package.json', options);
@@ -50183,14 +52784,14 @@ module.exports.sync = options => {
 /***/ }),
 
 /***/ 3645:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const {promisify} = __webpack_require__(1669);
-const fs = __webpack_require__(5747);
-const path = __webpack_require__(5622);
-const parseJson = __webpack_require__(6615);
+const {promisify} = __nccwpck_require__(1669);
+const fs = __nccwpck_require__(5747);
+const path = __nccwpck_require__(5622);
+const parseJson = __nccwpck_require__(6615);
 
 const readFileAsync = promisify(fs.readFile);
 
@@ -50205,7 +52806,7 @@ module.exports = async options => {
 	const json = parseJson(await readFileAsync(filePath, 'utf8'));
 
 	if (options.normalize) {
-		__webpack_require__(3188)(json);
+		__nccwpck_require__(5358)(json);
 	}
 
 	return json;
@@ -50222,7 +52823,7 @@ module.exports.sync = options => {
 	const json = parseJson(fs.readFileSync(filePath, 'utf8'));
 
 	if (options.normalize) {
-		__webpack_require__(3188)(json);
+		__nccwpck_require__(5358)(json);
 	}
 
 	return json;
@@ -50231,8 +52832,2427 @@ module.exports.sync = options => {
 
 /***/ }),
 
+/***/ 3213:
+/***/ ((module) => {
+
+"use strict";
+
+
+var gitHosts = module.exports = {
+  github: {
+    // First two are insecure and generally shouldn't be used any more, but
+    // they are still supported.
+    'protocols': [ 'git', 'http', 'git+ssh', 'git+https', 'ssh', 'https' ],
+    'domain': 'github.com',
+    'treepath': 'tree',
+    'filetemplate': 'https://{auth@}raw.githubusercontent.com/{user}/{project}/{committish}/{path}',
+    'bugstemplate': 'https://{domain}/{user}/{project}/issues',
+    'gittemplate': 'git://{auth@}{domain}/{user}/{project}.git{#committish}',
+    'tarballtemplate': 'https://codeload.{domain}/{user}/{project}/tar.gz/{committish}'
+  },
+  bitbucket: {
+    'protocols': [ 'git+ssh', 'git+https', 'ssh', 'https' ],
+    'domain': 'bitbucket.org',
+    'treepath': 'src',
+    'tarballtemplate': 'https://{domain}/{user}/{project}/get/{committish}.tar.gz'
+  },
+  gitlab: {
+    'protocols': [ 'git+ssh', 'git+https', 'ssh', 'https' ],
+    'domain': 'gitlab.com',
+    'treepath': 'tree',
+    'bugstemplate': 'https://{domain}/{user}/{project}/issues',
+    'httpstemplate': 'git+https://{auth@}{domain}/{user}/{projectPath}.git{#committish}',
+    'tarballtemplate': 'https://{domain}/{user}/{project}/repository/archive.tar.gz?ref={committish}',
+    'pathmatch': /^[/]([^/]+)[/]((?!.*(\/-\/|\/repository\/archive\.tar\.gz\?=.*|\/repository\/[^/]+\/archive.tar.gz$)).*?)(?:[.]git|[/])?$/
+  },
+  gist: {
+    'protocols': [ 'git', 'git+ssh', 'git+https', 'ssh', 'https' ],
+    'domain': 'gist.github.com',
+    'pathmatch': /^[/](?:([^/]+)[/])?([a-z0-9]{32,})(?:[.]git)?$/,
+    'filetemplate': 'https://gist.githubusercontent.com/{user}/{project}/raw{/committish}/{path}',
+    'bugstemplate': 'https://{domain}/{project}',
+    'gittemplate': 'git://{domain}/{project}.git{#committish}',
+    'sshtemplate': 'git@{domain}:/{project}.git{#committish}',
+    'sshurltemplate': 'git+ssh://git@{domain}/{project}.git{#committish}',
+    'browsetemplate': 'https://{domain}/{project}{/committish}',
+    'browsefiletemplate': 'https://{domain}/{project}{/committish}{#path}',
+    'docstemplate': 'https://{domain}/{project}{/committish}',
+    'httpstemplate': 'git+https://{domain}/{project}.git{#committish}',
+    'shortcuttemplate': '{type}:{project}{#committish}',
+    'pathtemplate': '{project}{#committish}',
+    'tarballtemplate': 'https://codeload.github.com/gist/{project}/tar.gz/{committish}',
+    'hashformat': function (fragment) {
+      return 'file-' + formatHashFragment(fragment)
+    }
+  }
+}
+
+var gitHostDefaults = {
+  'sshtemplate': 'git@{domain}:{user}/{project}.git{#committish}',
+  'sshurltemplate': 'git+ssh://git@{domain}/{user}/{project}.git{#committish}',
+  'browsetemplate': 'https://{domain}/{user}/{project}{/tree/committish}',
+  'browsefiletemplate': 'https://{domain}/{user}/{project}/{treepath}/{committish}/{path}{#fragment}',
+  'docstemplate': 'https://{domain}/{user}/{project}{/tree/committish}#readme',
+  'httpstemplate': 'git+https://{auth@}{domain}/{user}/{project}.git{#committish}',
+  'filetemplate': 'https://{domain}/{user}/{project}/raw/{committish}/{path}',
+  'shortcuttemplate': '{type}:{user}/{project}{#committish}',
+  'pathtemplate': '{user}/{project}{#committish}',
+  'pathmatch': /^[/]([^/]+)[/]([^/]+?)(?:[.]git|[/])?$/,
+  'hashformat': formatHashFragment
+}
+
+Object.keys(gitHosts).forEach(function (name) {
+  Object.keys(gitHostDefaults).forEach(function (key) {
+    if (gitHosts[name][key]) return
+    gitHosts[name][key] = gitHostDefaults[key]
+  })
+  gitHosts[name].protocols_re = RegExp('^(' +
+    gitHosts[name].protocols.map(function (protocol) {
+      return protocol.replace(/([\\+*{}()[\]$^|])/g, '\\$1')
+    }).join('|') + '):$')
+})
+
+function formatHashFragment (fragment) {
+  return fragment.toLowerCase().replace(/^\W+|\/|\W+$/g, '').replace(/\W+/g, '-')
+}
+
+
+/***/ }),
+
+/***/ 9718:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+var gitHosts = __nccwpck_require__(3213)
+/* eslint-disable node/no-deprecated-api */
+
+// copy-pasta util._extend from node's source, to avoid pulling
+// the whole util module into peoples' webpack bundles.
+/* istanbul ignore next */
+var extend = Object.assign || function _extend (target, source) {
+  // Don't do anything if source isn't an object
+  if (source === null || typeof source !== 'object') return target
+
+  var keys = Object.keys(source)
+  var i = keys.length
+  while (i--) {
+    target[keys[i]] = source[keys[i]]
+  }
+  return target
+}
+
+module.exports = GitHost
+function GitHost (type, user, auth, project, committish, defaultRepresentation, opts) {
+  var gitHostInfo = this
+  gitHostInfo.type = type
+  Object.keys(gitHosts[type]).forEach(function (key) {
+    gitHostInfo[key] = gitHosts[type][key]
+  })
+  gitHostInfo.user = user
+  gitHostInfo.auth = auth
+  gitHostInfo.project = project
+  gitHostInfo.committish = committish
+  gitHostInfo.default = defaultRepresentation
+  gitHostInfo.opts = opts || {}
+}
+
+GitHost.prototype.hash = function () {
+  return this.committish ? '#' + this.committish : ''
+}
+
+GitHost.prototype._fill = function (template, opts) {
+  if (!template) return
+  var vars = extend({}, opts)
+  vars.path = vars.path ? vars.path.replace(/^[/]+/g, '') : ''
+  opts = extend(extend({}, this.opts), opts)
+  var self = this
+  Object.keys(this).forEach(function (key) {
+    if (self[key] != null && vars[key] == null) vars[key] = self[key]
+  })
+  var rawAuth = vars.auth
+  var rawcommittish = vars.committish
+  var rawFragment = vars.fragment
+  var rawPath = vars.path
+  var rawProject = vars.project
+  Object.keys(vars).forEach(function (key) {
+    var value = vars[key]
+    if ((key === 'path' || key === 'project') && typeof value === 'string') {
+      vars[key] = value.split('/').map(function (pathComponent) {
+        return encodeURIComponent(pathComponent)
+      }).join('/')
+    } else {
+      vars[key] = encodeURIComponent(value)
+    }
+  })
+  vars['auth@'] = rawAuth ? rawAuth + '@' : ''
+  vars['#fragment'] = rawFragment ? '#' + this.hashformat(rawFragment) : ''
+  vars.fragment = vars.fragment ? vars.fragment : ''
+  vars['#path'] = rawPath ? '#' + this.hashformat(rawPath) : ''
+  vars['/path'] = vars.path ? '/' + vars.path : ''
+  vars.projectPath = rawProject.split('/').map(encodeURIComponent).join('/')
+  if (opts.noCommittish) {
+    vars['#committish'] = ''
+    vars['/tree/committish'] = ''
+    vars['/committish'] = ''
+    vars.committish = ''
+  } else {
+    vars['#committish'] = rawcommittish ? '#' + rawcommittish : ''
+    vars['/tree/committish'] = vars.committish
+      ? '/' + vars.treepath + '/' + vars.committish
+      : ''
+    vars['/committish'] = vars.committish ? '/' + vars.committish : ''
+    vars.committish = vars.committish || 'master'
+  }
+  var res = template
+  Object.keys(vars).forEach(function (key) {
+    res = res.replace(new RegExp('[{]' + key + '[}]', 'g'), vars[key])
+  })
+  if (opts.noGitPlus) {
+    return res.replace(/^git[+]/, '')
+  } else {
+    return res
+  }
+}
+
+GitHost.prototype.ssh = function (opts) {
+  return this._fill(this.sshtemplate, opts)
+}
+
+GitHost.prototype.sshurl = function (opts) {
+  return this._fill(this.sshurltemplate, opts)
+}
+
+GitHost.prototype.browse = function (P, F, opts) {
+  if (typeof P === 'string') {
+    if (typeof F !== 'string') {
+      opts = F
+      F = null
+    }
+    return this._fill(this.browsefiletemplate, extend({
+      fragment: F,
+      path: P
+    }, opts))
+  } else {
+    return this._fill(this.browsetemplate, P)
+  }
+}
+
+GitHost.prototype.docs = function (opts) {
+  return this._fill(this.docstemplate, opts)
+}
+
+GitHost.prototype.bugs = function (opts) {
+  return this._fill(this.bugstemplate, opts)
+}
+
+GitHost.prototype.https = function (opts) {
+  return this._fill(this.httpstemplate, opts)
+}
+
+GitHost.prototype.git = function (opts) {
+  return this._fill(this.gittemplate, opts)
+}
+
+GitHost.prototype.shortcut = function (opts) {
+  return this._fill(this.shortcuttemplate, opts)
+}
+
+GitHost.prototype.path = function (opts) {
+  return this._fill(this.pathtemplate, opts)
+}
+
+GitHost.prototype.tarball = function (opts_) {
+  var opts = extend({}, opts_, { noCommittish: false })
+  return this._fill(this.tarballtemplate, opts)
+}
+
+GitHost.prototype.file = function (P, opts) {
+  return this._fill(this.filetemplate, extend({ path: P }, opts))
+}
+
+GitHost.prototype.getDefaultRepresentation = function () {
+  return this.default
+}
+
+GitHost.prototype.toString = function (opts) {
+  if (this.default && typeof this[this.default] === 'function') return this[this.default](opts)
+  return this.sshurl(opts)
+}
+
+
+/***/ }),
+
+/***/ 8382:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+var url = __nccwpck_require__(8835)
+var gitHosts = __nccwpck_require__(3213)
+var GitHost = module.exports = __nccwpck_require__(9718)
+
+var protocolToRepresentationMap = {
+  'git+ssh:': 'sshurl',
+  'git+https:': 'https',
+  'ssh:': 'sshurl',
+  'git:': 'git'
+}
+
+function protocolToRepresentation (protocol) {
+  return protocolToRepresentationMap[protocol] || protocol.slice(0, -1)
+}
+
+var authProtocols = {
+  'git:': true,
+  'https:': true,
+  'git+https:': true,
+  'http:': true,
+  'git+http:': true
+}
+
+var cache = {}
+
+module.exports.fromUrl = function (giturl, opts) {
+  if (typeof giturl !== 'string') return
+  var key = giturl + JSON.stringify(opts || {})
+
+  if (!(key in cache)) {
+    cache[key] = fromUrl(giturl, opts)
+  }
+
+  return cache[key]
+}
+
+function fromUrl (giturl, opts) {
+  if (giturl == null || giturl === '') return
+  var url = fixupUnqualifiedGist(
+    isGitHubShorthand(giturl) ? 'github:' + giturl : giturl
+  )
+  var parsed = parseGitUrl(url)
+  var shortcutMatch = url.match(/^([^:]+):(?:[^@]+@)?(?:([^/]*)\/)?([^#]+)/)
+  var matches = Object.keys(gitHosts).map(function (gitHostName) {
+    try {
+      var gitHostInfo = gitHosts[gitHostName]
+      var auth = null
+      if (parsed.auth && authProtocols[parsed.protocol]) {
+        auth = parsed.auth
+      }
+      var committish = parsed.hash ? decodeURIComponent(parsed.hash.substr(1)) : null
+      var user = null
+      var project = null
+      var defaultRepresentation = null
+      if (shortcutMatch && shortcutMatch[1] === gitHostName) {
+        user = shortcutMatch[2] && decodeURIComponent(shortcutMatch[2])
+        project = decodeURIComponent(shortcutMatch[3].replace(/\.git$/, ''))
+        defaultRepresentation = 'shortcut'
+      } else {
+        if (parsed.host && parsed.host !== gitHostInfo.domain && parsed.host.replace(/^www[.]/, '') !== gitHostInfo.domain) return
+        if (!gitHostInfo.protocols_re.test(parsed.protocol)) return
+        if (!parsed.path) return
+        var pathmatch = gitHostInfo.pathmatch
+        var matched = parsed.path.match(pathmatch)
+        if (!matched) return
+        /* istanbul ignore else */
+        if (matched[1] !== null && matched[1] !== undefined) {
+          user = decodeURIComponent(matched[1].replace(/^:/, ''))
+        }
+        project = decodeURIComponent(matched[2])
+        defaultRepresentation = protocolToRepresentation(parsed.protocol)
+      }
+      return new GitHost(gitHostName, user, auth, project, committish, defaultRepresentation, opts)
+    } catch (ex) {
+      /* istanbul ignore else */
+      if (ex instanceof URIError) {
+      } else throw ex
+    }
+  }).filter(function (gitHostInfo) { return gitHostInfo })
+  if (matches.length !== 1) return
+  return matches[0]
+}
+
+function isGitHubShorthand (arg) {
+  // Note: This does not fully test the git ref format.
+  // See https://www.kernel.org/pub/software/scm/git/docs/git-check-ref-format.html
+  //
+  // The only way to do this properly would be to shell out to
+  // git-check-ref-format, and as this is a fast sync function,
+  // we don't want to do that.  Just let git fail if it turns
+  // out that the commit-ish is invalid.
+  // GH usernames cannot start with . or -
+  return /^[^:@%/\s.-][^:@%/\s]*[/][^:@\s/%]+(?:#.*)?$/.test(arg)
+}
+
+function fixupUnqualifiedGist (giturl) {
+  // necessary for round-tripping gists
+  var parsed = url.parse(giturl)
+  if (parsed.protocol === 'gist:' && parsed.host && !parsed.path) {
+    return parsed.protocol + '/' + parsed.host
+  } else {
+    return giturl
+  }
+}
+
+function parseGitUrl (giturl) {
+  var matched = giturl.match(/^([^@]+)@([^:/]+):[/]?((?:[^/]+[/])?[^/]+?)(?:[.]git)?(#.*)?$/)
+  if (!matched) {
+    var legacy = url.parse(giturl)
+    // If we don't have url.URL, then sorry, this is just not fixable.
+    // This affects Node <= 6.12.
+    if (legacy.auth && typeof url.URL === 'function') {
+      // git urls can be in the form of scp-style/ssh-connect strings, like
+      // git+ssh://user@host.com:some/path, which the legacy url parser
+      // supports, but WhatWG url.URL class does not.  However, the legacy
+      // parser de-urlencodes the username and password, so something like
+      // https://user%3An%40me:p%40ss%3Aword@x.com/ becomes
+      // https://user:n@me:p@ss:word@x.com/ which is all kinds of wrong.
+      // Pull off just the auth and host, so we dont' get the confusing
+      // scp-style URL, then pass that to the WhatWG parser to get the
+      // auth properly escaped.
+      var authmatch = giturl.match(/[^@]+@[^:/]+/)
+      /* istanbul ignore else - this should be impossible */
+      if (authmatch) {
+        var whatwg = new url.URL(authmatch[0])
+        legacy.auth = whatwg.username || ''
+        if (whatwg.password) legacy.auth += ':' + whatwg.password
+      }
+    }
+    return legacy
+  }
+  return {
+    protocol: 'git+ssh:',
+    slashes: true,
+    auth: matched[1],
+    host: matched[2],
+    port: null,
+    hostname: matched[2],
+    hash: matched[4],
+    search: null,
+    query: null,
+    pathname: '/' + matched[3],
+    path: '/' + matched[3],
+    href: 'git+ssh://' + matched[1] + '@' + matched[2] +
+          '/' + matched[3] + (matched[4] || '')
+  }
+}
+
+
+/***/ }),
+
+/***/ 5727:
+/***/ ((module) => {
+
+module.exports = extractDescription
+
+// Extracts description from contents of a readme file in markdown format
+function extractDescription (d) {
+  if (!d) return;
+  if (d === "ERROR: No README data found!") return;
+  // the first block of text before the first heading
+  // that isn't the first line heading
+  d = d.trim().split('\n')
+  for (var s = 0; d[s] && d[s].trim().match(/^(#|$)/); s ++);
+  var l = d.length
+  for (var e = s + 1; e < l && d[e].trim(); e ++);
+  return d.slice(s, e).join(' ').trim()
+}
+
+
+/***/ }),
+
+/***/ 3403:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var semver = __nccwpck_require__(8940)
+var validateLicense = __nccwpck_require__(2524);
+var hostedGitInfo = __nccwpck_require__(8382)
+var isBuiltinModule = __nccwpck_require__(5726).isCore
+var depTypes = ["dependencies","devDependencies","optionalDependencies"]
+var extractDescription = __nccwpck_require__(5727)
+var url = __nccwpck_require__(8835)
+var typos = __nccwpck_require__(6659)
+
+var fixer = module.exports = {
+  // default warning function
+  warn: function() {},
+
+  fixRepositoryField: function(data) {
+    if (data.repositories) {
+      this.warn("repositories");
+      data.repository = data.repositories[0]
+    }
+    if (!data.repository) return this.warn("missingRepository")
+    if (typeof data.repository === "string") {
+      data.repository = {
+        type: "git",
+        url: data.repository
+      }
+    }
+    var r = data.repository.url || ""
+    if (r) {
+      var hosted = hostedGitInfo.fromUrl(r)
+      if (hosted) {
+        r = data.repository.url
+          = hosted.getDefaultRepresentation() == "shortcut" ? hosted.https() : hosted.toString()
+      }
+    }
+
+    if (r.match(/github.com\/[^\/]+\/[^\/]+\.git\.git$/)) {
+      this.warn("brokenGitUrl", r)
+    }
+  }
+
+, fixTypos: function(data) {
+    Object.keys(typos.topLevel).forEach(function (d) {
+      if (data.hasOwnProperty(d)) {
+        this.warn("typo", d, typos.topLevel[d])
+      }
+    }, this)
+  }
+
+, fixScriptsField: function(data) {
+    if (!data.scripts) return
+    if (typeof data.scripts !== "object") {
+      this.warn("nonObjectScripts")
+      delete data.scripts
+      return
+    }
+    Object.keys(data.scripts).forEach(function (k) {
+      if (typeof data.scripts[k] !== "string") {
+        this.warn("nonStringScript")
+        delete data.scripts[k]
+      } else if (typos.script[k] && !data.scripts[typos.script[k]]) {
+        this.warn("typo", k, typos.script[k], "scripts")
+      }
+    }, this)
+  }
+
+, fixFilesField: function(data) {
+    var files = data.files
+    if (files && !Array.isArray(files)) {
+      this.warn("nonArrayFiles")
+      delete data.files
+    } else if (data.files) {
+      data.files = data.files.filter(function(file) {
+        if (!file || typeof file !== "string") {
+          this.warn("invalidFilename", file)
+          return false
+        } else {
+          return true
+        }
+      }, this)
+    }
+  }
+
+, fixBinField: function(data) {
+    if (!data.bin) return;
+    if (typeof data.bin === "string") {
+      var b = {}
+      var match
+      if (match = data.name.match(/^@[^/]+[/](.*)$/)) {
+        b[match[1]] = data.bin
+      } else {
+        b[data.name] = data.bin
+      }
+      data.bin = b
+    }
+  }
+
+, fixManField: function(data) {
+    if (!data.man) return;
+    if (typeof data.man === "string") {
+      data.man = [ data.man ]
+    }
+  }
+, fixBundleDependenciesField: function(data) {
+    var bdd = "bundledDependencies"
+    var bd = "bundleDependencies"
+    if (data[bdd] && !data[bd]) {
+      data[bd] = data[bdd]
+      delete data[bdd]
+    }
+    if (data[bd] && !Array.isArray(data[bd])) {
+      this.warn("nonArrayBundleDependencies")
+      delete data[bd]
+    } else if (data[bd]) {
+      data[bd] = data[bd].filter(function(bd) {
+        if (!bd || typeof bd !== 'string') {
+          this.warn("nonStringBundleDependency", bd)
+          return false
+        } else {
+          if (!data.dependencies) {
+            data.dependencies = {}
+          }
+          if (!data.dependencies.hasOwnProperty(bd)) {
+            this.warn("nonDependencyBundleDependency", bd)
+            data.dependencies[bd] = "*"
+          }
+          return true
+        }
+      }, this)
+    }
+  }
+
+, fixDependencies: function(data, strict) {
+    var loose = !strict
+    objectifyDeps(data, this.warn)
+    addOptionalDepsToDeps(data, this.warn)
+    this.fixBundleDependenciesField(data)
+
+    ;['dependencies','devDependencies'].forEach(function(deps) {
+      if (!(deps in data)) return
+      if (!data[deps] || typeof data[deps] !== "object") {
+        this.warn("nonObjectDependencies", deps)
+        delete data[deps]
+        return
+      }
+      Object.keys(data[deps]).forEach(function (d) {
+        var r = data[deps][d]
+        if (typeof r !== 'string') {
+          this.warn("nonStringDependency", d, JSON.stringify(r))
+          delete data[deps][d]
+        }
+        var hosted = hostedGitInfo.fromUrl(data[deps][d])
+        if (hosted) data[deps][d] = hosted.toString()
+      }, this)
+    }, this)
+  }
+
+, fixModulesField: function (data) {
+    if (data.modules) {
+      this.warn("deprecatedModules")
+      delete data.modules
+    }
+  }
+
+, fixKeywordsField: function (data) {
+    if (typeof data.keywords === "string") {
+      data.keywords = data.keywords.split(/,\s+/)
+    }
+    if (data.keywords && !Array.isArray(data.keywords)) {
+      delete data.keywords
+      this.warn("nonArrayKeywords")
+    } else if (data.keywords) {
+      data.keywords = data.keywords.filter(function(kw) {
+        if (typeof kw !== "string" || !kw) {
+          this.warn("nonStringKeyword");
+          return false
+        } else {
+          return true
+        }
+      }, this)
+    }
+  }
+
+, fixVersionField: function(data, strict) {
+    // allow "loose" semver 1.0 versions in non-strict mode
+    // enforce strict semver 2.0 compliance in strict mode
+    var loose = !strict
+    if (!data.version) {
+      data.version = ""
+      return true
+    }
+    if (!semver.valid(data.version, loose)) {
+      throw new Error('Invalid version: "'+ data.version + '"')
+    }
+    data.version = semver.clean(data.version, loose)
+    return true
+  }
+
+, fixPeople: function(data) {
+    modifyPeople(data, unParsePerson)
+    modifyPeople(data, parsePerson)
+  }
+
+, fixNameField: function(data, options) {
+    if (typeof options === "boolean") options = {strict: options}
+    else if (typeof options === "undefined") options = {}
+    var strict = options.strict
+    if (!data.name && !strict) {
+      data.name = ""
+      return
+    }
+    if (typeof data.name !== "string") {
+      throw new Error("name field must be a string.")
+    }
+    if (!strict)
+      data.name = data.name.trim()
+    ensureValidName(data.name, strict, options.allowLegacyCase)
+    if (isBuiltinModule(data.name))
+      this.warn("conflictingName", data.name)
+  }
+
+
+, fixDescriptionField: function (data) {
+    if (data.description && typeof data.description !== 'string') {
+      this.warn("nonStringDescription")
+      delete data.description
+    }
+    if (data.readme && !data.description)
+      data.description = extractDescription(data.readme)
+      if(data.description === undefined) delete data.description;
+    if (!data.description) this.warn("missingDescription")
+  }
+
+, fixReadmeField: function (data) {
+    if (!data.readme) {
+      this.warn("missingReadme")
+      data.readme = "ERROR: No README data found!"
+    }
+  }
+
+, fixBugsField: function(data) {
+    if (!data.bugs && data.repository && data.repository.url) {
+      var hosted = hostedGitInfo.fromUrl(data.repository.url)
+      if(hosted && hosted.bugs()) {
+        data.bugs = {url: hosted.bugs()}
+      }
+    }
+    else if(data.bugs) {
+      var emailRe = /^.+@.*\..+$/
+      if(typeof data.bugs == "string") {
+        if(emailRe.test(data.bugs))
+          data.bugs = {email:data.bugs}
+        else if(url.parse(data.bugs).protocol)
+          data.bugs = {url: data.bugs}
+        else
+          this.warn("nonEmailUrlBugsString")
+      }
+      else {
+        bugsTypos(data.bugs, this.warn)
+        var oldBugs = data.bugs
+        data.bugs = {}
+        if(oldBugs.url) {
+          if(typeof(oldBugs.url) == "string" && url.parse(oldBugs.url).protocol)
+            data.bugs.url = oldBugs.url
+          else
+            this.warn("nonUrlBugsUrlField")
+        }
+        if(oldBugs.email) {
+          if(typeof(oldBugs.email) == "string" && emailRe.test(oldBugs.email))
+            data.bugs.email = oldBugs.email
+          else
+            this.warn("nonEmailBugsEmailField")
+        }
+      }
+      if(!data.bugs.email && !data.bugs.url) {
+        delete data.bugs
+        this.warn("emptyNormalizedBugs")
+      }
+    }
+  }
+
+, fixHomepageField: function(data) {
+    if (!data.homepage && data.repository && data.repository.url) {
+      var hosted = hostedGitInfo.fromUrl(data.repository.url)
+      if (hosted && hosted.docs()) data.homepage = hosted.docs()
+    }
+    if (!data.homepage) return
+
+    if(typeof data.homepage !== "string") {
+      this.warn("nonUrlHomepage")
+      return delete data.homepage
+    }
+    if(!url.parse(data.homepage).protocol) {
+      data.homepage = "http://" + data.homepage
+    }
+  }
+
+, fixLicenseField: function(data) {
+    if (!data.license) {
+      return this.warn("missingLicense")
+    } else{
+      if (
+        typeof(data.license) !== 'string' ||
+        data.license.length < 1 ||
+        data.license.trim() === ''
+      ) {
+        this.warn("invalidLicense")
+      } else {
+        if (!validateLicense(data.license).validForNewPackages)
+          this.warn("invalidLicense")
+      }
+    }
+  }
+}
+
+function isValidScopedPackageName(spec) {
+  if (spec.charAt(0) !== '@') return false
+
+  var rest = spec.slice(1).split('/')
+  if (rest.length !== 2) return false
+
+  return rest[0] && rest[1] &&
+    rest[0] === encodeURIComponent(rest[0]) &&
+    rest[1] === encodeURIComponent(rest[1])
+}
+
+function isCorrectlyEncodedName(spec) {
+  return !spec.match(/[\/@\s\+%:]/) &&
+    spec === encodeURIComponent(spec)
+}
+
+function ensureValidName (name, strict, allowLegacyCase) {
+  if (name.charAt(0) === "." ||
+      !(isValidScopedPackageName(name) || isCorrectlyEncodedName(name)) ||
+      (strict && (!allowLegacyCase) && name !== name.toLowerCase()) ||
+      name.toLowerCase() === "node_modules" ||
+      name.toLowerCase() === "favicon.ico") {
+        throw new Error("Invalid name: " + JSON.stringify(name))
+  }
+}
+
+function modifyPeople (data, fn) {
+  if (data.author) data.author = fn(data.author)
+  ;["maintainers", "contributors"].forEach(function (set) {
+    if (!Array.isArray(data[set])) return;
+    data[set] = data[set].map(fn)
+  })
+  return data
+}
+
+function unParsePerson (person) {
+  if (typeof person === "string") return person
+  var name = person.name || ""
+  var u = person.url || person.web
+  var url = u ? (" ("+u+")") : ""
+  var e = person.email || person.mail
+  var email = e ? (" <"+e+">") : ""
+  return name+email+url
+}
+
+function parsePerson (person) {
+  if (typeof person !== "string") return person
+  var name = person.match(/^([^\(<]+)/)
+  var url = person.match(/\(([^\)]+)\)/)
+  var email = person.match(/<([^>]+)>/)
+  var obj = {}
+  if (name && name[0].trim()) obj.name = name[0].trim()
+  if (email) obj.email = email[1];
+  if (url) obj.url = url[1];
+  return obj
+}
+
+function addOptionalDepsToDeps (data, warn) {
+  var o = data.optionalDependencies
+  if (!o) return;
+  var d = data.dependencies || {}
+  Object.keys(o).forEach(function (k) {
+    d[k] = o[k]
+  })
+  data.dependencies = d
+}
+
+function depObjectify (deps, type, warn) {
+  if (!deps) return {}
+  if (typeof deps === "string") {
+    deps = deps.trim().split(/[\n\r\s\t ,]+/)
+  }
+  if (!Array.isArray(deps)) return deps
+  warn("deprecatedArrayDependencies", type)
+  var o = {}
+  deps.filter(function (d) {
+    return typeof d === "string"
+  }).forEach(function(d) {
+    d = d.trim().split(/(:?[@\s><=])/)
+    var dn = d.shift()
+    var dv = d.join("")
+    dv = dv.trim()
+    dv = dv.replace(/^@/, "")
+    o[dn] = dv
+  })
+  return o
+}
+
+function objectifyDeps (data, warn) {
+  depTypes.forEach(function (type) {
+    if (!data[type]) return;
+    data[type] = depObjectify(data[type], type, warn)
+  })
+}
+
+function bugsTypos(bugs, warn) {
+  if (!bugs) return
+  Object.keys(bugs).forEach(function (k) {
+    if (typos.bugs[k]) {
+      warn("typo", k, typos.bugs[k], "bugs")
+      bugs[typos.bugs[k]] = bugs[k]
+      delete bugs[k]
+    }
+  })
+}
+
+
+/***/ }),
+
+/***/ 3676:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var util = __nccwpck_require__(1669)
+var messages = __nccwpck_require__(4136)
+
+module.exports = function() {
+  var args = Array.prototype.slice.call(arguments, 0)
+  var warningName = args.shift()
+  if (warningName == "typo") {
+    return makeTypoWarning.apply(null,args)
+  }
+  else {
+    var msgTemplate = messages[warningName] ? messages[warningName] : warningName + ": '%s'"
+    args.unshift(msgTemplate)
+    return util.format.apply(null, args)
+  }
+}
+
+function makeTypoWarning (providedName, probableName, field) {
+  if (field) {
+    providedName = field + "['" + providedName + "']"
+    probableName = field + "['" + probableName + "']"
+  }
+  return util.format(messages.typo, providedName, probableName)
+}
+
+
+/***/ }),
+
+/***/ 5358:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+module.exports = normalize
+
+var fixer = __nccwpck_require__(3403)
+normalize.fixer = fixer
+
+var makeWarning = __nccwpck_require__(3676)
+
+var fieldsToFix = ['name','version','description','repository','modules','scripts'
+                  ,'files','bin','man','bugs','keywords','readme','homepage','license']
+var otherThingsToFix = ['dependencies','people', 'typos']
+
+var thingsToFix = fieldsToFix.map(function(fieldName) {
+  return ucFirst(fieldName) + "Field"
+})
+// two ways to do this in CoffeeScript on only one line, sub-70 chars:
+// thingsToFix = fieldsToFix.map (name) -> ucFirst(name) + "Field"
+// thingsToFix = (ucFirst(name) + "Field" for name in fieldsToFix)
+thingsToFix = thingsToFix.concat(otherThingsToFix)
+
+function normalize (data, warn, strict) {
+  if(warn === true) warn = null, strict = true
+  if(!strict) strict = false
+  if(!warn || data.private) warn = function(msg) { /* noop */ }
+
+  if (data.scripts &&
+      data.scripts.install === "node-gyp rebuild" &&
+      !data.scripts.preinstall) {
+    data.gypfile = true
+  }
+  fixer.warn = function() { warn(makeWarning.apply(null, arguments)) }
+  thingsToFix.forEach(function(thingName) {
+    fixer["fix" + ucFirst(thingName)](data, strict)
+  })
+  data._id = data.name + "@" + data.version
+}
+
+function ucFirst (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
+/***/ }),
+
+/***/ 8940:
+/***/ ((module, exports) => {
+
+exports = module.exports = SemVer
+
+var debug
+/* istanbul ignore next */
+if (typeof process === 'object' &&
+    process.env &&
+    process.env.NODE_DEBUG &&
+    /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
+  debug = function () {
+    var args = Array.prototype.slice.call(arguments, 0)
+    args.unshift('SEMVER')
+    console.log.apply(console, args)
+  }
+} else {
+  debug = function () {}
+}
+
+// Note: this is the semver.org version of the spec that it implements
+// Not necessarily the package version of this code.
+exports.SEMVER_SPEC_VERSION = '2.0.0'
+
+var MAX_LENGTH = 256
+var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
+  /* istanbul ignore next */ 9007199254740991
+
+// Max safe segment length for coercion.
+var MAX_SAFE_COMPONENT_LENGTH = 16
+
+// The actual regexps go on exports.re
+var re = exports.re = []
+var src = exports.src = []
+var R = 0
+
+// The following Regular Expressions can be used for tokenizing,
+// validating, and parsing SemVer version strings.
+
+// ## Numeric Identifier
+// A single `0`, or a non-zero digit followed by zero or more digits.
+
+var NUMERICIDENTIFIER = R++
+src[NUMERICIDENTIFIER] = '0|[1-9]\\d*'
+var NUMERICIDENTIFIERLOOSE = R++
+src[NUMERICIDENTIFIERLOOSE] = '[0-9]+'
+
+// ## Non-numeric Identifier
+// Zero or more digits, followed by a letter or hyphen, and then zero or
+// more letters, digits, or hyphens.
+
+var NONNUMERICIDENTIFIER = R++
+src[NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*'
+
+// ## Main Version
+// Three dot-separated numeric identifiers.
+
+var MAINVERSION = R++
+src[MAINVERSION] = '(' + src[NUMERICIDENTIFIER] + ')\\.' +
+                   '(' + src[NUMERICIDENTIFIER] + ')\\.' +
+                   '(' + src[NUMERICIDENTIFIER] + ')'
+
+var MAINVERSIONLOOSE = R++
+src[MAINVERSIONLOOSE] = '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
+                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
+                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')'
+
+// ## Pre-release Version Identifier
+// A numeric identifier, or a non-numeric identifier.
+
+var PRERELEASEIDENTIFIER = R++
+src[PRERELEASEIDENTIFIER] = '(?:' + src[NUMERICIDENTIFIER] +
+                            '|' + src[NONNUMERICIDENTIFIER] + ')'
+
+var PRERELEASEIDENTIFIERLOOSE = R++
+src[PRERELEASEIDENTIFIERLOOSE] = '(?:' + src[NUMERICIDENTIFIERLOOSE] +
+                                 '|' + src[NONNUMERICIDENTIFIER] + ')'
+
+// ## Pre-release Version
+// Hyphen, followed by one or more dot-separated pre-release version
+// identifiers.
+
+var PRERELEASE = R++
+src[PRERELEASE] = '(?:-(' + src[PRERELEASEIDENTIFIER] +
+                  '(?:\\.' + src[PRERELEASEIDENTIFIER] + ')*))'
+
+var PRERELEASELOOSE = R++
+src[PRERELEASELOOSE] = '(?:-?(' + src[PRERELEASEIDENTIFIERLOOSE] +
+                       '(?:\\.' + src[PRERELEASEIDENTIFIERLOOSE] + ')*))'
+
+// ## Build Metadata Identifier
+// Any combination of digits, letters, or hyphens.
+
+var BUILDIDENTIFIER = R++
+src[BUILDIDENTIFIER] = '[0-9A-Za-z-]+'
+
+// ## Build Metadata
+// Plus sign, followed by one or more period-separated build metadata
+// identifiers.
+
+var BUILD = R++
+src[BUILD] = '(?:\\+(' + src[BUILDIDENTIFIER] +
+             '(?:\\.' + src[BUILDIDENTIFIER] + ')*))'
+
+// ## Full Version String
+// A main version, followed optionally by a pre-release version and
+// build metadata.
+
+// Note that the only major, minor, patch, and pre-release sections of
+// the version string are capturing groups.  The build metadata is not a
+// capturing group, because it should not ever be used in version
+// comparison.
+
+var FULL = R++
+var FULLPLAIN = 'v?' + src[MAINVERSION] +
+                src[PRERELEASE] + '?' +
+                src[BUILD] + '?'
+
+src[FULL] = '^' + FULLPLAIN + '$'
+
+// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
+// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
+// common in the npm registry.
+var LOOSEPLAIN = '[v=\\s]*' + src[MAINVERSIONLOOSE] +
+                 src[PRERELEASELOOSE] + '?' +
+                 src[BUILD] + '?'
+
+var LOOSE = R++
+src[LOOSE] = '^' + LOOSEPLAIN + '$'
+
+var GTLT = R++
+src[GTLT] = '((?:<|>)?=?)'
+
+// Something like "2.*" or "1.2.x".
+// Note that "x.x" is a valid xRange identifer, meaning "any version"
+// Only the first item is strictly required.
+var XRANGEIDENTIFIERLOOSE = R++
+src[XRANGEIDENTIFIERLOOSE] = src[NUMERICIDENTIFIERLOOSE] + '|x|X|\\*'
+var XRANGEIDENTIFIER = R++
+src[XRANGEIDENTIFIER] = src[NUMERICIDENTIFIER] + '|x|X|\\*'
+
+var XRANGEPLAIN = R++
+src[XRANGEPLAIN] = '[v=\\s]*(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
+                   '(?:' + src[PRERELEASE] + ')?' +
+                   src[BUILD] + '?' +
+                   ')?)?'
+
+var XRANGEPLAINLOOSE = R++
+src[XRANGEPLAINLOOSE] = '[v=\\s]*(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:' + src[PRERELEASELOOSE] + ')?' +
+                        src[BUILD] + '?' +
+                        ')?)?'
+
+var XRANGE = R++
+src[XRANGE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAIN] + '$'
+var XRANGELOOSE = R++
+src[XRANGELOOSE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAINLOOSE] + '$'
+
+// Coercion.
+// Extract anything that could conceivably be a part of a valid semver
+var COERCE = R++
+src[COERCE] = '(?:^|[^\\d])' +
+              '(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '})' +
+              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
+              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
+              '(?:$|[^\\d])'
+
+// Tilde ranges.
+// Meaning is "reasonably at or greater than"
+var LONETILDE = R++
+src[LONETILDE] = '(?:~>?)'
+
+var TILDETRIM = R++
+src[TILDETRIM] = '(\\s*)' + src[LONETILDE] + '\\s+'
+re[TILDETRIM] = new RegExp(src[TILDETRIM], 'g')
+var tildeTrimReplace = '$1~'
+
+var TILDE = R++
+src[TILDE] = '^' + src[LONETILDE] + src[XRANGEPLAIN] + '$'
+var TILDELOOSE = R++
+src[TILDELOOSE] = '^' + src[LONETILDE] + src[XRANGEPLAINLOOSE] + '$'
+
+// Caret ranges.
+// Meaning is "at least and backwards compatible with"
+var LONECARET = R++
+src[LONECARET] = '(?:\\^)'
+
+var CARETTRIM = R++
+src[CARETTRIM] = '(\\s*)' + src[LONECARET] + '\\s+'
+re[CARETTRIM] = new RegExp(src[CARETTRIM], 'g')
+var caretTrimReplace = '$1^'
+
+var CARET = R++
+src[CARET] = '^' + src[LONECARET] + src[XRANGEPLAIN] + '$'
+var CARETLOOSE = R++
+src[CARETLOOSE] = '^' + src[LONECARET] + src[XRANGEPLAINLOOSE] + '$'
+
+// A simple gt/lt/eq thing, or just "" to indicate "any version"
+var COMPARATORLOOSE = R++
+src[COMPARATORLOOSE] = '^' + src[GTLT] + '\\s*(' + LOOSEPLAIN + ')$|^$'
+var COMPARATOR = R++
+src[COMPARATOR] = '^' + src[GTLT] + '\\s*(' + FULLPLAIN + ')$|^$'
+
+// An expression to strip any whitespace between the gtlt and the thing
+// it modifies, so that `> 1.2.3` ==> `>1.2.3`
+var COMPARATORTRIM = R++
+src[COMPARATORTRIM] = '(\\s*)' + src[GTLT] +
+                      '\\s*(' + LOOSEPLAIN + '|' + src[XRANGEPLAIN] + ')'
+
+// this one has to use the /g flag
+re[COMPARATORTRIM] = new RegExp(src[COMPARATORTRIM], 'g')
+var comparatorTrimReplace = '$1$2$3'
+
+// Something like `1.2.3 - 1.2.4`
+// Note that these all use the loose form, because they'll be
+// checked against either the strict or loose comparator form
+// later.
+var HYPHENRANGE = R++
+src[HYPHENRANGE] = '^\\s*(' + src[XRANGEPLAIN] + ')' +
+                   '\\s+-\\s+' +
+                   '(' + src[XRANGEPLAIN] + ')' +
+                   '\\s*$'
+
+var HYPHENRANGELOOSE = R++
+src[HYPHENRANGELOOSE] = '^\\s*(' + src[XRANGEPLAINLOOSE] + ')' +
+                        '\\s+-\\s+' +
+                        '(' + src[XRANGEPLAINLOOSE] + ')' +
+                        '\\s*$'
+
+// Star ranges basically just allow anything at all.
+var STAR = R++
+src[STAR] = '(<|>)?=?\\s*\\*'
+
+// Compile to actual regexp objects.
+// All are flag-free, unless they were created above with a flag.
+for (var i = 0; i < R; i++) {
+  debug(i, src[i])
+  if (!re[i]) {
+    re[i] = new RegExp(src[i])
+  }
+}
+
+exports.parse = parse
+function parse (version, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  if (version.length > MAX_LENGTH) {
+    return null
+  }
+
+  var r = options.loose ? re[LOOSE] : re[FULL]
+  if (!r.test(version)) {
+    return null
+  }
+
+  try {
+    return new SemVer(version, options)
+  } catch (er) {
+    return null
+  }
+}
+
+exports.valid = valid
+function valid (version, options) {
+  var v = parse(version, options)
+  return v ? v.version : null
+}
+
+exports.clean = clean
+function clean (version, options) {
+  var s = parse(version.trim().replace(/^[=v]+/, ''), options)
+  return s ? s.version : null
+}
+
+exports.SemVer = SemVer
+
+function SemVer (version, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+  if (version instanceof SemVer) {
+    if (version.loose === options.loose) {
+      return version
+    } else {
+      version = version.version
+    }
+  } else if (typeof version !== 'string') {
+    throw new TypeError('Invalid Version: ' + version)
+  }
+
+  if (version.length > MAX_LENGTH) {
+    throw new TypeError('version is longer than ' + MAX_LENGTH + ' characters')
+  }
+
+  if (!(this instanceof SemVer)) {
+    return new SemVer(version, options)
+  }
+
+  debug('SemVer', version, options)
+  this.options = options
+  this.loose = !!options.loose
+
+  var m = version.trim().match(options.loose ? re[LOOSE] : re[FULL])
+
+  if (!m) {
+    throw new TypeError('Invalid Version: ' + version)
+  }
+
+  this.raw = version
+
+  // these are actually numbers
+  this.major = +m[1]
+  this.minor = +m[2]
+  this.patch = +m[3]
+
+  if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
+    throw new TypeError('Invalid major version')
+  }
+
+  if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
+    throw new TypeError('Invalid minor version')
+  }
+
+  if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
+    throw new TypeError('Invalid patch version')
+  }
+
+  // numberify any prerelease numeric ids
+  if (!m[4]) {
+    this.prerelease = []
+  } else {
+    this.prerelease = m[4].split('.').map(function (id) {
+      if (/^[0-9]+$/.test(id)) {
+        var num = +id
+        if (num >= 0 && num < MAX_SAFE_INTEGER) {
+          return num
+        }
+      }
+      return id
+    })
+  }
+
+  this.build = m[5] ? m[5].split('.') : []
+  this.format()
+}
+
+SemVer.prototype.format = function () {
+  this.version = this.major + '.' + this.minor + '.' + this.patch
+  if (this.prerelease.length) {
+    this.version += '-' + this.prerelease.join('.')
+  }
+  return this.version
+}
+
+SemVer.prototype.toString = function () {
+  return this.version
+}
+
+SemVer.prototype.compare = function (other) {
+  debug('SemVer.compare', this.version, this.options, other)
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
+
+  return this.compareMain(other) || this.comparePre(other)
+}
+
+SemVer.prototype.compareMain = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
+
+  return compareIdentifiers(this.major, other.major) ||
+         compareIdentifiers(this.minor, other.minor) ||
+         compareIdentifiers(this.patch, other.patch)
+}
+
+SemVer.prototype.comparePre = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
+
+  // NOT having a prerelease is > having one
+  if (this.prerelease.length && !other.prerelease.length) {
+    return -1
+  } else if (!this.prerelease.length && other.prerelease.length) {
+    return 1
+  } else if (!this.prerelease.length && !other.prerelease.length) {
+    return 0
+  }
+
+  var i = 0
+  do {
+    var a = this.prerelease[i]
+    var b = other.prerelease[i]
+    debug('prerelease compare', i, a, b)
+    if (a === undefined && b === undefined) {
+      return 0
+    } else if (b === undefined) {
+      return 1
+    } else if (a === undefined) {
+      return -1
+    } else if (a === b) {
+      continue
+    } else {
+      return compareIdentifiers(a, b)
+    }
+  } while (++i)
+}
+
+// preminor will bump the version up to the next minor release, and immediately
+// down to pre-release. premajor and prepatch work the same way.
+SemVer.prototype.inc = function (release, identifier) {
+  switch (release) {
+    case 'premajor':
+      this.prerelease.length = 0
+      this.patch = 0
+      this.minor = 0
+      this.major++
+      this.inc('pre', identifier)
+      break
+    case 'preminor':
+      this.prerelease.length = 0
+      this.patch = 0
+      this.minor++
+      this.inc('pre', identifier)
+      break
+    case 'prepatch':
+      // If this is already a prerelease, it will bump to the next version
+      // drop any prereleases that might already exist, since they are not
+      // relevant at this point.
+      this.prerelease.length = 0
+      this.inc('patch', identifier)
+      this.inc('pre', identifier)
+      break
+    // If the input is a non-prerelease version, this acts the same as
+    // prepatch.
+    case 'prerelease':
+      if (this.prerelease.length === 0) {
+        this.inc('patch', identifier)
+      }
+      this.inc('pre', identifier)
+      break
+
+    case 'major':
+      // If this is a pre-major version, bump up to the same major version.
+      // Otherwise increment major.
+      // 1.0.0-5 bumps to 1.0.0
+      // 1.1.0 bumps to 2.0.0
+      if (this.minor !== 0 ||
+          this.patch !== 0 ||
+          this.prerelease.length === 0) {
+        this.major++
+      }
+      this.minor = 0
+      this.patch = 0
+      this.prerelease = []
+      break
+    case 'minor':
+      // If this is a pre-minor version, bump up to the same minor version.
+      // Otherwise increment minor.
+      // 1.2.0-5 bumps to 1.2.0
+      // 1.2.1 bumps to 1.3.0
+      if (this.patch !== 0 || this.prerelease.length === 0) {
+        this.minor++
+      }
+      this.patch = 0
+      this.prerelease = []
+      break
+    case 'patch':
+      // If this is not a pre-release version, it will increment the patch.
+      // If it is a pre-release it will bump up to the same patch version.
+      // 1.2.0-5 patches to 1.2.0
+      // 1.2.0 patches to 1.2.1
+      if (this.prerelease.length === 0) {
+        this.patch++
+      }
+      this.prerelease = []
+      break
+    // This probably shouldn't be used publicly.
+    // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
+    case 'pre':
+      if (this.prerelease.length === 0) {
+        this.prerelease = [0]
+      } else {
+        var i = this.prerelease.length
+        while (--i >= 0) {
+          if (typeof this.prerelease[i] === 'number') {
+            this.prerelease[i]++
+            i = -2
+          }
+        }
+        if (i === -1) {
+          // didn't increment anything
+          this.prerelease.push(0)
+        }
+      }
+      if (identifier) {
+        // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
+        // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
+        if (this.prerelease[0] === identifier) {
+          if (isNaN(this.prerelease[1])) {
+            this.prerelease = [identifier, 0]
+          }
+        } else {
+          this.prerelease = [identifier, 0]
+        }
+      }
+      break
+
+    default:
+      throw new Error('invalid increment argument: ' + release)
+  }
+  this.format()
+  this.raw = this.version
+  return this
+}
+
+exports.inc = inc
+function inc (version, release, loose, identifier) {
+  if (typeof (loose) === 'string') {
+    identifier = loose
+    loose = undefined
+  }
+
+  try {
+    return new SemVer(version, loose).inc(release, identifier).version
+  } catch (er) {
+    return null
+  }
+}
+
+exports.diff = diff
+function diff (version1, version2) {
+  if (eq(version1, version2)) {
+    return null
+  } else {
+    var v1 = parse(version1)
+    var v2 = parse(version2)
+    var prefix = ''
+    if (v1.prerelease.length || v2.prerelease.length) {
+      prefix = 'pre'
+      var defaultResult = 'prerelease'
+    }
+    for (var key in v1) {
+      if (key === 'major' || key === 'minor' || key === 'patch') {
+        if (v1[key] !== v2[key]) {
+          return prefix + key
+        }
+      }
+    }
+    return defaultResult // may be undefined
+  }
+}
+
+exports.compareIdentifiers = compareIdentifiers
+
+var numeric = /^[0-9]+$/
+function compareIdentifiers (a, b) {
+  var anum = numeric.test(a)
+  var bnum = numeric.test(b)
+
+  if (anum && bnum) {
+    a = +a
+    b = +b
+  }
+
+  return a === b ? 0
+    : (anum && !bnum) ? -1
+    : (bnum && !anum) ? 1
+    : a < b ? -1
+    : 1
+}
+
+exports.rcompareIdentifiers = rcompareIdentifiers
+function rcompareIdentifiers (a, b) {
+  return compareIdentifiers(b, a)
+}
+
+exports.major = major
+function major (a, loose) {
+  return new SemVer(a, loose).major
+}
+
+exports.minor = minor
+function minor (a, loose) {
+  return new SemVer(a, loose).minor
+}
+
+exports.patch = patch
+function patch (a, loose) {
+  return new SemVer(a, loose).patch
+}
+
+exports.compare = compare
+function compare (a, b, loose) {
+  return new SemVer(a, loose).compare(new SemVer(b, loose))
+}
+
+exports.compareLoose = compareLoose
+function compareLoose (a, b) {
+  return compare(a, b, true)
+}
+
+exports.rcompare = rcompare
+function rcompare (a, b, loose) {
+  return compare(b, a, loose)
+}
+
+exports.sort = sort
+function sort (list, loose) {
+  return list.sort(function (a, b) {
+    return exports.compare(a, b, loose)
+  })
+}
+
+exports.rsort = rsort
+function rsort (list, loose) {
+  return list.sort(function (a, b) {
+    return exports.rcompare(a, b, loose)
+  })
+}
+
+exports.gt = gt
+function gt (a, b, loose) {
+  return compare(a, b, loose) > 0
+}
+
+exports.lt = lt
+function lt (a, b, loose) {
+  return compare(a, b, loose) < 0
+}
+
+exports.eq = eq
+function eq (a, b, loose) {
+  return compare(a, b, loose) === 0
+}
+
+exports.neq = neq
+function neq (a, b, loose) {
+  return compare(a, b, loose) !== 0
+}
+
+exports.gte = gte
+function gte (a, b, loose) {
+  return compare(a, b, loose) >= 0
+}
+
+exports.lte = lte
+function lte (a, b, loose) {
+  return compare(a, b, loose) <= 0
+}
+
+exports.cmp = cmp
+function cmp (a, op, b, loose) {
+  switch (op) {
+    case '===':
+      if (typeof a === 'object')
+        a = a.version
+      if (typeof b === 'object')
+        b = b.version
+      return a === b
+
+    case '!==':
+      if (typeof a === 'object')
+        a = a.version
+      if (typeof b === 'object')
+        b = b.version
+      return a !== b
+
+    case '':
+    case '=':
+    case '==':
+      return eq(a, b, loose)
+
+    case '!=':
+      return neq(a, b, loose)
+
+    case '>':
+      return gt(a, b, loose)
+
+    case '>=':
+      return gte(a, b, loose)
+
+    case '<':
+      return lt(a, b, loose)
+
+    case '<=':
+      return lte(a, b, loose)
+
+    default:
+      throw new TypeError('Invalid operator: ' + op)
+  }
+}
+
+exports.Comparator = Comparator
+function Comparator (comp, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  if (comp instanceof Comparator) {
+    if (comp.loose === !!options.loose) {
+      return comp
+    } else {
+      comp = comp.value
+    }
+  }
+
+  if (!(this instanceof Comparator)) {
+    return new Comparator(comp, options)
+  }
+
+  debug('comparator', comp, options)
+  this.options = options
+  this.loose = !!options.loose
+  this.parse(comp)
+
+  if (this.semver === ANY) {
+    this.value = ''
+  } else {
+    this.value = this.operator + this.semver.version
+  }
+
+  debug('comp', this)
+}
+
+var ANY = {}
+Comparator.prototype.parse = function (comp) {
+  var r = this.options.loose ? re[COMPARATORLOOSE] : re[COMPARATOR]
+  var m = comp.match(r)
+
+  if (!m) {
+    throw new TypeError('Invalid comparator: ' + comp)
+  }
+
+  this.operator = m[1]
+  if (this.operator === '=') {
+    this.operator = ''
+  }
+
+  // if it literally is just '>' or '' then allow anything.
+  if (!m[2]) {
+    this.semver = ANY
+  } else {
+    this.semver = new SemVer(m[2], this.options.loose)
+  }
+}
+
+Comparator.prototype.toString = function () {
+  return this.value
+}
+
+Comparator.prototype.test = function (version) {
+  debug('Comparator.test', version, this.options.loose)
+
+  if (this.semver === ANY) {
+    return true
+  }
+
+  if (typeof version === 'string') {
+    version = new SemVer(version, this.options)
+  }
+
+  return cmp(version, this.operator, this.semver, this.options)
+}
+
+Comparator.prototype.intersects = function (comp, options) {
+  if (!(comp instanceof Comparator)) {
+    throw new TypeError('a Comparator is required')
+  }
+
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  var rangeTmp
+
+  if (this.operator === '') {
+    rangeTmp = new Range(comp.value, options)
+    return satisfies(this.value, rangeTmp, options)
+  } else if (comp.operator === '') {
+    rangeTmp = new Range(this.value, options)
+    return satisfies(comp.semver, rangeTmp, options)
+  }
+
+  var sameDirectionIncreasing =
+    (this.operator === '>=' || this.operator === '>') &&
+    (comp.operator === '>=' || comp.operator === '>')
+  var sameDirectionDecreasing =
+    (this.operator === '<=' || this.operator === '<') &&
+    (comp.operator === '<=' || comp.operator === '<')
+  var sameSemVer = this.semver.version === comp.semver.version
+  var differentDirectionsInclusive =
+    (this.operator === '>=' || this.operator === '<=') &&
+    (comp.operator === '>=' || comp.operator === '<=')
+  var oppositeDirectionsLessThan =
+    cmp(this.semver, '<', comp.semver, options) &&
+    ((this.operator === '>=' || this.operator === '>') &&
+    (comp.operator === '<=' || comp.operator === '<'))
+  var oppositeDirectionsGreaterThan =
+    cmp(this.semver, '>', comp.semver, options) &&
+    ((this.operator === '<=' || this.operator === '<') &&
+    (comp.operator === '>=' || comp.operator === '>'))
+
+  return sameDirectionIncreasing || sameDirectionDecreasing ||
+    (sameSemVer && differentDirectionsInclusive) ||
+    oppositeDirectionsLessThan || oppositeDirectionsGreaterThan
+}
+
+exports.Range = Range
+function Range (range, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  if (range instanceof Range) {
+    if (range.loose === !!options.loose &&
+        range.includePrerelease === !!options.includePrerelease) {
+      return range
+    } else {
+      return new Range(range.raw, options)
+    }
+  }
+
+  if (range instanceof Comparator) {
+    return new Range(range.value, options)
+  }
+
+  if (!(this instanceof Range)) {
+    return new Range(range, options)
+  }
+
+  this.options = options
+  this.loose = !!options.loose
+  this.includePrerelease = !!options.includePrerelease
+
+  // First, split based on boolean or ||
+  this.raw = range
+  this.set = range.split(/\s*\|\|\s*/).map(function (range) {
+    return this.parseRange(range.trim())
+  }, this).filter(function (c) {
+    // throw out any that are not relevant for whatever reason
+    return c.length
+  })
+
+  if (!this.set.length) {
+    throw new TypeError('Invalid SemVer Range: ' + range)
+  }
+
+  this.format()
+}
+
+Range.prototype.format = function () {
+  this.range = this.set.map(function (comps) {
+    return comps.join(' ').trim()
+  }).join('||').trim()
+  return this.range
+}
+
+Range.prototype.toString = function () {
+  return this.range
+}
+
+Range.prototype.parseRange = function (range) {
+  var loose = this.options.loose
+  range = range.trim()
+  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
+  var hr = loose ? re[HYPHENRANGELOOSE] : re[HYPHENRANGE]
+  range = range.replace(hr, hyphenReplace)
+  debug('hyphen replace', range)
+  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
+  range = range.replace(re[COMPARATORTRIM], comparatorTrimReplace)
+  debug('comparator trim', range, re[COMPARATORTRIM])
+
+  // `~ 1.2.3` => `~1.2.3`
+  range = range.replace(re[TILDETRIM], tildeTrimReplace)
+
+  // `^ 1.2.3` => `^1.2.3`
+  range = range.replace(re[CARETTRIM], caretTrimReplace)
+
+  // normalize spaces
+  range = range.split(/\s+/).join(' ')
+
+  // At this point, the range is completely trimmed and
+  // ready to be split into comparators.
+
+  var compRe = loose ? re[COMPARATORLOOSE] : re[COMPARATOR]
+  var set = range.split(' ').map(function (comp) {
+    return parseComparator(comp, this.options)
+  }, this).join(' ').split(/\s+/)
+  if (this.options.loose) {
+    // in loose mode, throw out any that are not valid comparators
+    set = set.filter(function (comp) {
+      return !!comp.match(compRe)
+    })
+  }
+  set = set.map(function (comp) {
+    return new Comparator(comp, this.options)
+  }, this)
+
+  return set
+}
+
+Range.prototype.intersects = function (range, options) {
+  if (!(range instanceof Range)) {
+    throw new TypeError('a Range is required')
+  }
+
+  return this.set.some(function (thisComparators) {
+    return thisComparators.every(function (thisComparator) {
+      return range.set.some(function (rangeComparators) {
+        return rangeComparators.every(function (rangeComparator) {
+          return thisComparator.intersects(rangeComparator, options)
+        })
+      })
+    })
+  })
+}
+
+// Mostly just for testing and legacy API reasons
+exports.toComparators = toComparators
+function toComparators (range, options) {
+  return new Range(range, options).set.map(function (comp) {
+    return comp.map(function (c) {
+      return c.value
+    }).join(' ').trim().split(' ')
+  })
+}
+
+// comprised of xranges, tildes, stars, and gtlt's at this point.
+// already replaced the hyphen ranges
+// turn into a set of JUST comparators.
+function parseComparator (comp, options) {
+  debug('comp', comp, options)
+  comp = replaceCarets(comp, options)
+  debug('caret', comp)
+  comp = replaceTildes(comp, options)
+  debug('tildes', comp)
+  comp = replaceXRanges(comp, options)
+  debug('xrange', comp)
+  comp = replaceStars(comp, options)
+  debug('stars', comp)
+  return comp
+}
+
+function isX (id) {
+  return !id || id.toLowerCase() === 'x' || id === '*'
+}
+
+// ~, ~> --> * (any, kinda silly)
+// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0
+// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0
+// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0
+// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
+// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
+function replaceTildes (comp, options) {
+  return comp.trim().split(/\s+/).map(function (comp) {
+    return replaceTilde(comp, options)
+  }).join(' ')
+}
+
+function replaceTilde (comp, options) {
+  var r = options.loose ? re[TILDELOOSE] : re[TILDE]
+  return comp.replace(r, function (_, M, m, p, pr) {
+    debug('tilde', comp, _, M, m, p, pr)
+    var ret
+
+    if (isX(M)) {
+      ret = ''
+    } else if (isX(m)) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
+    } else if (isX(p)) {
+      // ~1.2 == >=1.2.0 <1.3.0
+      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
+    } else if (pr) {
+      debug('replaceTilde pr', pr)
+      ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+            ' <' + M + '.' + (+m + 1) + '.0'
+    } else {
+      // ~1.2.3 == >=1.2.3 <1.3.0
+      ret = '>=' + M + '.' + m + '.' + p +
+            ' <' + M + '.' + (+m + 1) + '.0'
+    }
+
+    debug('tilde return', ret)
+    return ret
+  })
+}
+
+// ^ --> * (any, kinda silly)
+// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0
+// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0
+// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0
+// ^1.2.3 --> >=1.2.3 <2.0.0
+// ^1.2.0 --> >=1.2.0 <2.0.0
+function replaceCarets (comp, options) {
+  return comp.trim().split(/\s+/).map(function (comp) {
+    return replaceCaret(comp, options)
+  }).join(' ')
+}
+
+function replaceCaret (comp, options) {
+  debug('caret', comp, options)
+  var r = options.loose ? re[CARETLOOSE] : re[CARET]
+  return comp.replace(r, function (_, M, m, p, pr) {
+    debug('caret', comp, _, M, m, p, pr)
+    var ret
+
+    if (isX(M)) {
+      ret = ''
+    } else if (isX(m)) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
+    } else if (isX(p)) {
+      if (M === '0') {
+        ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
+      } else {
+        ret = '>=' + M + '.' + m + '.0 <' + (+M + 1) + '.0.0'
+      }
+    } else if (pr) {
+      debug('replaceCaret pr', pr)
+      if (M === '0') {
+        if (m === '0') {
+          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+                ' <' + M + '.' + m + '.' + (+p + 1)
+        } else {
+          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+                ' <' + M + '.' + (+m + 1) + '.0'
+        }
+      } else {
+        ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+              ' <' + (+M + 1) + '.0.0'
+      }
+    } else {
+      debug('no pr')
+      if (M === '0') {
+        if (m === '0') {
+          ret = '>=' + M + '.' + m + '.' + p +
+                ' <' + M + '.' + m + '.' + (+p + 1)
+        } else {
+          ret = '>=' + M + '.' + m + '.' + p +
+                ' <' + M + '.' + (+m + 1) + '.0'
+        }
+      } else {
+        ret = '>=' + M + '.' + m + '.' + p +
+              ' <' + (+M + 1) + '.0.0'
+      }
+    }
+
+    debug('caret return', ret)
+    return ret
+  })
+}
+
+function replaceXRanges (comp, options) {
+  debug('replaceXRanges', comp, options)
+  return comp.split(/\s+/).map(function (comp) {
+    return replaceXRange(comp, options)
+  }).join(' ')
+}
+
+function replaceXRange (comp, options) {
+  comp = comp.trim()
+  var r = options.loose ? re[XRANGELOOSE] : re[XRANGE]
+  return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
+    debug('xRange', comp, ret, gtlt, M, m, p, pr)
+    var xM = isX(M)
+    var xm = xM || isX(m)
+    var xp = xm || isX(p)
+    var anyX = xp
+
+    if (gtlt === '=' && anyX) {
+      gtlt = ''
+    }
+
+    if (xM) {
+      if (gtlt === '>' || gtlt === '<') {
+        // nothing is allowed
+        ret = '<0.0.0'
+      } else {
+        // nothing is forbidden
+        ret = '*'
+      }
+    } else if (gtlt && anyX) {
+      // we know patch is an x, because we have any x at all.
+      // replace X with 0
+      if (xm) {
+        m = 0
+      }
+      p = 0
+
+      if (gtlt === '>') {
+        // >1 => >=2.0.0
+        // >1.2 => >=1.3.0
+        // >1.2.3 => >= 1.2.4
+        gtlt = '>='
+        if (xm) {
+          M = +M + 1
+          m = 0
+          p = 0
+        } else {
+          m = +m + 1
+          p = 0
+        }
+      } else if (gtlt === '<=') {
+        // <=0.7.x is actually <0.8.0, since any 0.7.x should
+        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
+        gtlt = '<'
+        if (xm) {
+          M = +M + 1
+        } else {
+          m = +m + 1
+        }
+      }
+
+      ret = gtlt + M + '.' + m + '.' + p
+    } else if (xm) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
+    } else if (xp) {
+      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
+    }
+
+    debug('xRange return', ret)
+
+    return ret
+  })
+}
+
+// Because * is AND-ed with everything else in the comparator,
+// and '' means "any version", just remove the *s entirely.
+function replaceStars (comp, options) {
+  debug('replaceStars', comp, options)
+  // Looseness is ignored here.  star is always as loose as it gets!
+  return comp.trim().replace(re[STAR], '')
+}
+
+// This function is passed to string.replace(re[HYPHENRANGE])
+// M, m, patch, prerelease, build
+// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
+// 1.2.3 - 3.4 => >=1.2.0 <3.5.0 Any 3.4.x will do
+// 1.2 - 3.4 => >=1.2.0 <3.5.0
+function hyphenReplace ($0,
+  from, fM, fm, fp, fpr, fb,
+  to, tM, tm, tp, tpr, tb) {
+  if (isX(fM)) {
+    from = ''
+  } else if (isX(fm)) {
+    from = '>=' + fM + '.0.0'
+  } else if (isX(fp)) {
+    from = '>=' + fM + '.' + fm + '.0'
+  } else {
+    from = '>=' + from
+  }
+
+  if (isX(tM)) {
+    to = ''
+  } else if (isX(tm)) {
+    to = '<' + (+tM + 1) + '.0.0'
+  } else if (isX(tp)) {
+    to = '<' + tM + '.' + (+tm + 1) + '.0'
+  } else if (tpr) {
+    to = '<=' + tM + '.' + tm + '.' + tp + '-' + tpr
+  } else {
+    to = '<=' + to
+  }
+
+  return (from + ' ' + to).trim()
+}
+
+// if ANY of the sets match ALL of its comparators, then pass
+Range.prototype.test = function (version) {
+  if (!version) {
+    return false
+  }
+
+  if (typeof version === 'string') {
+    version = new SemVer(version, this.options)
+  }
+
+  for (var i = 0; i < this.set.length; i++) {
+    if (testSet(this.set[i], version, this.options)) {
+      return true
+    }
+  }
+  return false
+}
+
+function testSet (set, version, options) {
+  for (var i = 0; i < set.length; i++) {
+    if (!set[i].test(version)) {
+      return false
+    }
+  }
+
+  if (version.prerelease.length && !options.includePrerelease) {
+    // Find the set of versions that are allowed to have prereleases
+    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
+    // That should allow `1.2.3-pr.2` to pass.
+    // However, `1.2.4-alpha.notready` should NOT be allowed,
+    // even though it's within the range set by the comparators.
+    for (i = 0; i < set.length; i++) {
+      debug(set[i].semver)
+      if (set[i].semver === ANY) {
+        continue
+      }
+
+      if (set[i].semver.prerelease.length > 0) {
+        var allowed = set[i].semver
+        if (allowed.major === version.major &&
+            allowed.minor === version.minor &&
+            allowed.patch === version.patch) {
+          return true
+        }
+      }
+    }
+
+    // Version has a -pre, but it's not one of the ones we like.
+    return false
+  }
+
+  return true
+}
+
+exports.satisfies = satisfies
+function satisfies (version, range, options) {
+  try {
+    range = new Range(range, options)
+  } catch (er) {
+    return false
+  }
+  return range.test(version)
+}
+
+exports.maxSatisfying = maxSatisfying
+function maxSatisfying (versions, range, options) {
+  var max = null
+  var maxSV = null
+  try {
+    var rangeObj = new Range(range, options)
+  } catch (er) {
+    return null
+  }
+  versions.forEach(function (v) {
+    if (rangeObj.test(v)) {
+      // satisfies(v, range, options)
+      if (!max || maxSV.compare(v) === -1) {
+        // compare(max, v, true)
+        max = v
+        maxSV = new SemVer(max, options)
+      }
+    }
+  })
+  return max
+}
+
+exports.minSatisfying = minSatisfying
+function minSatisfying (versions, range, options) {
+  var min = null
+  var minSV = null
+  try {
+    var rangeObj = new Range(range, options)
+  } catch (er) {
+    return null
+  }
+  versions.forEach(function (v) {
+    if (rangeObj.test(v)) {
+      // satisfies(v, range, options)
+      if (!min || minSV.compare(v) === 1) {
+        // compare(min, v, true)
+        min = v
+        minSV = new SemVer(min, options)
+      }
+    }
+  })
+  return min
+}
+
+exports.minVersion = minVersion
+function minVersion (range, loose) {
+  range = new Range(range, loose)
+
+  var minver = new SemVer('0.0.0')
+  if (range.test(minver)) {
+    return minver
+  }
+
+  minver = new SemVer('0.0.0-0')
+  if (range.test(minver)) {
+    return minver
+  }
+
+  minver = null
+  for (var i = 0; i < range.set.length; ++i) {
+    var comparators = range.set[i]
+
+    comparators.forEach(function (comparator) {
+      // Clone to avoid manipulating the comparator's semver object.
+      var compver = new SemVer(comparator.semver.version)
+      switch (comparator.operator) {
+        case '>':
+          if (compver.prerelease.length === 0) {
+            compver.patch++
+          } else {
+            compver.prerelease.push(0)
+          }
+          compver.raw = compver.format()
+          /* fallthrough */
+        case '':
+        case '>=':
+          if (!minver || gt(minver, compver)) {
+            minver = compver
+          }
+          break
+        case '<':
+        case '<=':
+          /* Ignore maximum versions */
+          break
+        /* istanbul ignore next */
+        default:
+          throw new Error('Unexpected operation: ' + comparator.operator)
+      }
+    })
+  }
+
+  if (minver && range.test(minver)) {
+    return minver
+  }
+
+  return null
+}
+
+exports.validRange = validRange
+function validRange (range, options) {
+  try {
+    // Return '*' instead of '' so that truthiness works.
+    // This will throw if it's invalid anyway
+    return new Range(range, options).range || '*'
+  } catch (er) {
+    return null
+  }
+}
+
+// Determine if version is less than all the versions possible in the range
+exports.ltr = ltr
+function ltr (version, range, options) {
+  return outside(version, range, '<', options)
+}
+
+// Determine if version is greater than all the versions possible in the range.
+exports.gtr = gtr
+function gtr (version, range, options) {
+  return outside(version, range, '>', options)
+}
+
+exports.outside = outside
+function outside (version, range, hilo, options) {
+  version = new SemVer(version, options)
+  range = new Range(range, options)
+
+  var gtfn, ltefn, ltfn, comp, ecomp
+  switch (hilo) {
+    case '>':
+      gtfn = gt
+      ltefn = lte
+      ltfn = lt
+      comp = '>'
+      ecomp = '>='
+      break
+    case '<':
+      gtfn = lt
+      ltefn = gte
+      ltfn = gt
+      comp = '<'
+      ecomp = '<='
+      break
+    default:
+      throw new TypeError('Must provide a hilo val of "<" or ">"')
+  }
+
+  // If it satisifes the range it is not outside
+  if (satisfies(version, range, options)) {
+    return false
+  }
+
+  // From now on, variable terms are as if we're in "gtr" mode.
+  // but note that everything is flipped for the "ltr" function.
+
+  for (var i = 0; i < range.set.length; ++i) {
+    var comparators = range.set[i]
+
+    var high = null
+    var low = null
+
+    comparators.forEach(function (comparator) {
+      if (comparator.semver === ANY) {
+        comparator = new Comparator('>=0.0.0')
+      }
+      high = high || comparator
+      low = low || comparator
+      if (gtfn(comparator.semver, high.semver, options)) {
+        high = comparator
+      } else if (ltfn(comparator.semver, low.semver, options)) {
+        low = comparator
+      }
+    })
+
+    // If the edge version comparator has a operator then our version
+    // isn't outside it
+    if (high.operator === comp || high.operator === ecomp) {
+      return false
+    }
+
+    // If the lowest version comparator has an operator and our version
+    // is less than it then it isn't higher than the range
+    if ((!low.operator || low.operator === comp) &&
+        ltefn(version, low.semver)) {
+      return false
+    } else if (low.operator === ecomp && ltfn(version, low.semver)) {
+      return false
+    }
+  }
+  return true
+}
+
+exports.prerelease = prerelease
+function prerelease (version, options) {
+  var parsed = parse(version, options)
+  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
+}
+
+exports.intersects = intersects
+function intersects (r1, r2, options) {
+  r1 = new Range(r1, options)
+  r2 = new Range(r2, options)
+  return r1.intersects(r2)
+}
+
+exports.coerce = coerce
+function coerce (version) {
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  var match = version.match(re[COERCE])
+
+  if (match == null) {
+    return null
+  }
+
+  return parse(match[1] +
+    '.' + (match[2] || '0') +
+    '.' + (match[3] || '0'))
+}
+
+
+/***/ }),
+
 /***/ 1359:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 // Copyright Joyent, Inc. and other Node contributors.
@@ -50265,7 +55285,7 @@ module.exports.sync = options => {
 
 /*<replacement>*/
 
-var pna = __webpack_require__(7810);
+var pna = __nccwpck_require__(7810);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -50280,12 +55300,12 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(5898));
-util.inherits = __webpack_require__(4124);
+var util = Object.create(__nccwpck_require__(5898));
+util.inherits = __nccwpck_require__(4124);
 /*</replacement>*/
 
-var Readable = __webpack_require__(2852);
-var Writable = __webpack_require__(6993);
+var Readable = __nccwpck_require__(2852);
+var Writable = __nccwpck_require__(6993);
 
 util.inherits(Duplex, Readable);
 
@@ -50370,7 +55390,7 @@ Duplex.prototype._destroy = function (err, cb) {
 /***/ }),
 
 /***/ 1542:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 // Copyright Joyent, Inc. and other Node contributors.
@@ -50402,11 +55422,11 @@ Duplex.prototype._destroy = function (err, cb) {
 
 module.exports = PassThrough;
 
-var Transform = __webpack_require__(4415);
+var Transform = __nccwpck_require__(4415);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(5898));
-util.inherits = __webpack_require__(4124);
+var util = Object.create(__nccwpck_require__(5898));
+util.inherits = __nccwpck_require__(4124);
 /*</replacement>*/
 
 util.inherits(PassThrough, Transform);
@@ -50424,7 +55444,7 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 /***/ }),
 
 /***/ 2852:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 // Copyright Joyent, Inc. and other Node contributors.
@@ -50452,13 +55472,13 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 
 /*<replacement>*/
 
-var pna = __webpack_require__(7810);
+var pna = __nccwpck_require__(7810);
 /*</replacement>*/
 
 module.exports = Readable;
 
 /*<replacement>*/
-var isArray = __webpack_require__(893);
+var isArray = __nccwpck_require__(893);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -50468,7 +55488,7 @@ var Duplex;
 Readable.ReadableState = ReadableState;
 
 /*<replacement>*/
-var EE = __webpack_require__(8614).EventEmitter;
+var EE = __nccwpck_require__(8614).EventEmitter;
 
 var EElistenerCount = function (emitter, type) {
   return emitter.listeners(type).length;
@@ -50476,12 +55496,12 @@ var EElistenerCount = function (emitter, type) {
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream = __webpack_require__(2387);
+var Stream = __nccwpck_require__(2387);
 /*</replacement>*/
 
 /*<replacement>*/
 
-var Buffer = __webpack_require__(110).Buffer;
+var Buffer = __nccwpck_require__(1867).Buffer;
 var OurUint8Array = global.Uint8Array || function () {};
 function _uint8ArrayToBuffer(chunk) {
   return Buffer.from(chunk);
@@ -50493,12 +55513,12 @@ function _isUint8Array(obj) {
 /*</replacement>*/
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(5898));
-util.inherits = __webpack_require__(4124);
+var util = Object.create(__nccwpck_require__(5898));
+util.inherits = __nccwpck_require__(4124);
 /*</replacement>*/
 
 /*<replacement>*/
-var debugUtil = __webpack_require__(1669);
+var debugUtil = __nccwpck_require__(1669);
 var debug = void 0;
 if (debugUtil && debugUtil.debuglog) {
   debug = debugUtil.debuglog('stream');
@@ -50507,8 +55527,8 @@ if (debugUtil && debugUtil.debuglog) {
 }
 /*</replacement>*/
 
-var BufferList = __webpack_require__(7053);
-var destroyImpl = __webpack_require__(7049);
+var BufferList = __nccwpck_require__(7053);
+var destroyImpl = __nccwpck_require__(7049);
 var StringDecoder;
 
 util.inherits(Readable, Stream);
@@ -50528,7 +55548,7 @@ function prependListener(emitter, event, fn) {
 }
 
 function ReadableState(options, stream) {
-  Duplex = Duplex || __webpack_require__(1359);
+  Duplex = Duplex || __nccwpck_require__(1359);
 
   options = options || {};
 
@@ -50598,14 +55618,14 @@ function ReadableState(options, stream) {
   this.decoder = null;
   this.encoding = null;
   if (options.encoding) {
-    if (!StringDecoder) StringDecoder = __webpack_require__(4841)/* .StringDecoder */ .s;
+    if (!StringDecoder) StringDecoder = __nccwpck_require__(4841)/* .StringDecoder */ .s;
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
 }
 
 function Readable(options) {
-  Duplex = Duplex || __webpack_require__(1359);
+  Duplex = Duplex || __nccwpck_require__(1359);
 
   if (!(this instanceof Readable)) return new Readable(options);
 
@@ -50754,7 +55774,7 @@ Readable.prototype.isPaused = function () {
 
 // backwards compatibility.
 Readable.prototype.setEncoding = function (enc) {
-  if (!StringDecoder) StringDecoder = __webpack_require__(4841)/* .StringDecoder */ .s;
+  if (!StringDecoder) StringDecoder = __nccwpck_require__(4841)/* .StringDecoder */ .s;
   this._readableState.decoder = new StringDecoder(enc);
   this._readableState.encoding = enc;
   return this;
@@ -51450,7 +56470,7 @@ function indexOf(xs, x) {
 /***/ }),
 
 /***/ 4415:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 // Copyright Joyent, Inc. and other Node contributors.
@@ -51520,11 +56540,11 @@ function indexOf(xs, x) {
 
 module.exports = Transform;
 
-var Duplex = __webpack_require__(1359);
+var Duplex = __nccwpck_require__(1359);
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(5898));
-util.inherits = __webpack_require__(4124);
+var util = Object.create(__nccwpck_require__(5898));
+util.inherits = __nccwpck_require__(4124);
 /*</replacement>*/
 
 util.inherits(Transform, Duplex);
@@ -51671,7 +56691,7 @@ function done(stream, er, data) {
 /***/ }),
 
 /***/ 6993:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 // Copyright Joyent, Inc. and other Node contributors.
@@ -51703,7 +56723,7 @@ function done(stream, er, data) {
 
 /*<replacement>*/
 
-var pna = __webpack_require__(7810);
+var pna = __nccwpck_require__(7810);
 /*</replacement>*/
 
 module.exports = Writable;
@@ -51740,23 +56760,23 @@ var Duplex;
 Writable.WritableState = WritableState;
 
 /*<replacement>*/
-var util = Object.create(__webpack_require__(5898));
-util.inherits = __webpack_require__(4124);
+var util = Object.create(__nccwpck_require__(5898));
+util.inherits = __nccwpck_require__(4124);
 /*</replacement>*/
 
 /*<replacement>*/
 var internalUtil = {
-  deprecate: __webpack_require__(7127)
+  deprecate: __nccwpck_require__(7127)
 };
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream = __webpack_require__(2387);
+var Stream = __nccwpck_require__(2387);
 /*</replacement>*/
 
 /*<replacement>*/
 
-var Buffer = __webpack_require__(110).Buffer;
+var Buffer = __nccwpck_require__(1867).Buffer;
 var OurUint8Array = global.Uint8Array || function () {};
 function _uint8ArrayToBuffer(chunk) {
   return Buffer.from(chunk);
@@ -51767,14 +56787,14 @@ function _isUint8Array(obj) {
 
 /*</replacement>*/
 
-var destroyImpl = __webpack_require__(7049);
+var destroyImpl = __nccwpck_require__(7049);
 
 util.inherits(Writable, Stream);
 
 function nop() {}
 
 function WritableState(options, stream) {
-  Duplex = Duplex || __webpack_require__(1359);
+  Duplex = Duplex || __nccwpck_require__(1359);
 
   options = options || {};
 
@@ -51924,7 +56944,7 @@ if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.protot
 }
 
 function Writable(options) {
-  Duplex = Duplex || __webpack_require__(1359);
+  Duplex = Duplex || __nccwpck_require__(1359);
 
   // Writable ctor is applied to Duplexes, too.
   // `realHasInstance` is necessary because using plain `instanceof`
@@ -52365,15 +57385,15 @@ Writable.prototype._destroy = function (err, cb) {
 /***/ }),
 
 /***/ 7053:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Buffer = __webpack_require__(110).Buffer;
-var util = __webpack_require__(1669);
+var Buffer = __nccwpck_require__(1867).Buffer;
+var util = __nccwpck_require__(1669);
 
 function copyBuffer(src, target, offset) {
   src.copy(target, offset);
@@ -52451,14 +57471,14 @@ if (util && util.inspect && util.inspect.custom) {
 /***/ }),
 
 /***/ 7049:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 /*<replacement>*/
 
-var pna = __webpack_require__(7810);
+var pna = __nccwpck_require__(7810);
 /*</replacement>*/
 
 // undocumented cb() API, needed for core, not for public API
@@ -52532,86 +57552,17 @@ module.exports = {
 /***/ }),
 
 /***/ 2387:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __webpack_require__(2413);
-
-
-/***/ }),
-
-/***/ 110:
-/***/ ((module, exports, __webpack_require__) => {
-
-/* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(4293)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
+module.exports = __nccwpck_require__(2413);
 
 
 /***/ }),
 
 /***/ 1642:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ ((module, exports, __nccwpck_require__) => {
 
-var Stream = __webpack_require__(2413);
+var Stream = __nccwpck_require__(2413);
 if (process.env.READABLE_STREAM === 'disable' && Stream) {
   module.exports = Stream;
   exports = module.exports = Stream.Readable;
@@ -52622,20 +57573,20 @@ if (process.env.READABLE_STREAM === 'disable' && Stream) {
   exports.PassThrough = Stream.PassThrough;
   exports.Stream = Stream;
 } else {
-  exports = module.exports = __webpack_require__(2852);
+  exports = module.exports = __nccwpck_require__(2852);
   exports.Stream = Stream || exports;
   exports.Readable = exports;
-  exports.Writable = __webpack_require__(6993);
-  exports.Duplex = __webpack_require__(1359);
-  exports.Transform = __webpack_require__(4415);
-  exports.PassThrough = __webpack_require__(1542);
+  exports.Writable = __nccwpck_require__(6993);
+  exports.Duplex = __nccwpck_require__(1359);
+  exports.Transform = __nccwpck_require__(4415);
+  exports.PassThrough = __nccwpck_require__(1542);
 }
 
 
 /***/ }),
 
 /***/ 6818:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 ;(function() {
 'use strict'
@@ -52647,7 +57598,7 @@ var toString = Object.prototype.toString
 
 if ( true && typeof module.exports === 'object' && "function" === 'function') {
   // server side
-  esprima = __webpack_require__(8823)
+  esprima = __nccwpck_require__(8823)
   exportFn = function(redeyed) { module.exports = redeyed }
   bootstrap(esprima, exportFn)
 } else if (typeof define === 'function' && define.amd) {
@@ -52955,13 +57906,13 @@ function bootstrap(esprima, exportFn) {
 /***/ }),
 
 /***/ 4417:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const path = __webpack_require__(5622);
-const Module = __webpack_require__(2282);
-const fs = __webpack_require__(5747);
+const path = __nccwpck_require__(5622);
+const Module = __nccwpck_require__(2282);
+const fs = __nccwpck_require__(5747);
 
 const resolveFrom = (fromDirectory, moduleId, silent) => {
 	if (typeof fromDirectory !== 'string') {
@@ -53010,12 +57961,12 @@ module.exports.silent = (fromDirectory, moduleId) => resolveFrom(fromDirectory, 
 /***/ }),
 
 /***/ 5726:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var async = __webpack_require__(2125);
-async.core = __webpack_require__(6226);
-async.isCore = __webpack_require__(8115);
-async.sync = __webpack_require__(5284);
+var async = __nccwpck_require__(2125);
+async.core = __nccwpck_require__(6226);
+async.isCore = __nccwpck_require__(8115);
+async.sync = __nccwpck_require__(5284);
 
 module.exports = async;
 
@@ -53023,14 +57974,14 @@ module.exports = async;
 /***/ }),
 
 /***/ 2125:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var fs = __webpack_require__(5747);
-var path = __webpack_require__(5622);
-var caller = __webpack_require__(6155);
-var nodeModulesPaths = __webpack_require__(1433);
-var normalizeOptions = __webpack_require__(7990);
-var isCore = __webpack_require__(6873);
+var fs = __nccwpck_require__(5747);
+var path = __nccwpck_require__(5622);
+var caller = __nccwpck_require__(6155);
+var nodeModulesPaths = __nccwpck_require__(1433);
+var normalizeOptions = __nccwpck_require__(7990);
+var isCore = __nccwpck_require__(6873);
 
 var realpathFS = fs.realpath && typeof fs.realpath.native === 'function' ? fs.realpath.native : fs.realpath;
 
@@ -53069,6 +58020,20 @@ var maybeRealpath = function maybeRealpath(realpath, x, opts, cb) {
     }
 };
 
+var defaultReadPackage = function defaultReadPackage(readFile, pkgfile, cb) {
+    readFile(pkgfile, function (readFileErr, body) {
+        if (readFileErr) cb(readFileErr);
+        else {
+            try {
+                var pkg = JSON.parse(body);
+                cb(null, pkg);
+            } catch (jsonErr) {
+                cb(null);
+            }
+        }
+    });
+};
+
 var getPackageCandidates = function getPackageCandidates(x, start, opts) {
     var dirs = nodeModulesPaths(start, opts, x);
     for (var i = 0; i < dirs.length; i++) {
@@ -53097,6 +58062,13 @@ module.exports = function resolve(x, options, callback) {
     var isDirectory = opts.isDirectory || defaultIsDir;
     var readFile = opts.readFile || fs.readFile;
     var realpath = opts.realpath || defaultRealpath;
+    var readPackage = opts.readPackage || defaultReadPackage;
+    if (opts.readFile && opts.readPackage) {
+        var conflictErr = new TypeError('`readFile` and `readPackage` are mutually exclusive.');
+        return process.nextTick(function () {
+            cb(conflictErr);
+        });
+    }
     var packageIterator = opts.packageIterator;
 
     var extensions = opts.extensions || ['.js'];
@@ -53224,9 +58196,10 @@ module.exports = function resolve(x, options, callback) {
                 // on err, ex is false
                 if (!ex) return loadpkg(path.dirname(dir), cb);
 
-                readFile(pkgfile, function (err, body) {
+                readPackage(readFile, pkgfile, function (err, pkgParam) {
                     if (err) cb(err);
-                    try { var pkg = JSON.parse(body); } catch (jsonErr) {}
+
+                    var pkg = pkgParam;
 
                     if (pkg && opts.packageFilter) {
                         pkg = opts.packageFilter(pkg, pkgfile);
@@ -53252,11 +58225,10 @@ module.exports = function resolve(x, options, callback) {
                 if (err) return cb(err);
                 if (!ex) return loadAsFile(path.join(x, 'index'), fpkg, cb);
 
-                readFile(pkgfile, function (err, body) {
+                readPackage(readFile, pkgfile, function (err, pkgParam) {
                     if (err) return cb(err);
-                    try {
-                        var pkg = JSON.parse(body);
-                    } catch (jsonErr) {}
+
+                    var pkg = pkgParam;
 
                     if (pkg && opts.packageFilter) {
                         pkg = opts.packageFilter(pkg, pkgfile);
@@ -53344,7 +58316,7 @@ module.exports = function () {
 /***/ }),
 
 /***/ 6226:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 var current = (process.versions && process.versions.node && process.versions.node.split('.')) || [];
 
@@ -53390,7 +58362,7 @@ function versionIncluded(specifierValue) {
     return matchesRange(specifierValue);
 }
 
-var data = __webpack_require__(5537);
+var data = __nccwpck_require__(5537);
 
 var core = {};
 for (var mod in data) { // eslint-disable-line no-restricted-syntax
@@ -53404,9 +58376,9 @@ module.exports = core;
 /***/ }),
 
 /***/ 8115:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var isCoreModule = __webpack_require__(6873);
+var isCoreModule = __nccwpck_require__(6873);
 
 module.exports = function isCore(x) {
     return isCoreModule(x);
@@ -53416,10 +58388,10 @@ module.exports = function isCore(x) {
 /***/ }),
 
 /***/ 1433:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var path = __webpack_require__(5622);
-var parse = path.parse || __webpack_require__(5980);
+var path = __nccwpck_require__(5622);
+var parse = path.parse || __nccwpck_require__(5980);
 
 var getNodeModulesDirs = function getNodeModulesDirs(absoluteStart, modules) {
     var prefix = '/';
@@ -53482,14 +58454,14 @@ module.exports = function (x, opts) {
 /***/ }),
 
 /***/ 5284:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var isCore = __webpack_require__(6873);
-var fs = __webpack_require__(5747);
-var path = __webpack_require__(5622);
-var caller = __webpack_require__(6155);
-var nodeModulesPaths = __webpack_require__(1433);
-var normalizeOptions = __webpack_require__(7990);
+var isCore = __nccwpck_require__(6873);
+var fs = __nccwpck_require__(5747);
+var path = __nccwpck_require__(5622);
+var caller = __nccwpck_require__(6155);
+var nodeModulesPaths = __nccwpck_require__(1433);
+var normalizeOptions = __nccwpck_require__(7990);
 
 var realpathFS = fs.realpathSync && typeof fs.realpathSync.native === 'function' ? fs.realpathSync.native : fs.realpathSync;
 
@@ -53531,6 +58503,14 @@ var maybeRealpathSync = function maybeRealpathSync(realpathSync, x, opts) {
     return x;
 };
 
+var defaultReadPackageSync = function defaultReadPackageSync(readFileSync, pkgfile) {
+    var body = readFileSync(pkgfile);
+    try {
+        var pkg = JSON.parse(body);
+        return pkg;
+    } catch (jsonErr) {}
+};
+
 var getPackageCandidates = function getPackageCandidates(x, start, opts) {
     var dirs = nodeModulesPaths(start, opts, x);
     for (var i = 0; i < dirs.length; i++) {
@@ -53549,6 +58529,10 @@ module.exports = function resolveSync(x, options) {
     var readFileSync = opts.readFileSync || fs.readFileSync;
     var isDirectory = opts.isDirectory || defaultIsDir;
     var realpathSync = opts.realpathSync || defaultRealpathSync;
+    var readPackageSync = opts.readPackageSync || defaultReadPackageSync;
+    if (opts.readFileSync && opts.readPackageSync) {
+        throw new TypeError('`readFileSync` and `readPackageSync` are mutually exclusive.');
+    }
     var packageIterator = opts.packageIterator;
 
     var extensions = opts.extensions || ['.js'];
@@ -53613,11 +58597,7 @@ module.exports = function resolveSync(x, options) {
             return loadpkg(path.dirname(dir));
         }
 
-        var body = readFileSync(pkgfile);
-
-        try {
-            var pkg = JSON.parse(body);
-        } catch (jsonErr) {}
+        var pkg = readPackageSync(readFileSync, pkgfile);
 
         if (pkg && opts.packageFilter) {
             // v2 will pass pkgfile
@@ -53631,8 +58611,7 @@ module.exports = function resolveSync(x, options) {
         var pkgfile = path.join(maybeRealpathSync(realpathSync, x, opts), '/package.json');
         if (isFile(pkgfile)) {
             try {
-                var body = readFileSync(pkgfile, 'UTF8');
-                var pkg = JSON.parse(body);
+                var pkg = readPackageSync(readFileSync, pkgfile);
             } catch (e) {}
 
             if (pkg && opts.packageFilter) {
@@ -53680,31 +58659,100 @@ module.exports = function resolveSync(x, options) {
 
 /***/ }),
 
-/***/ 9017:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 1867:
+/***/ ((module, exports, __nccwpck_require__) => {
 
-const {pick} = __webpack_require__(250);
-const marked = __webpack_require__(4223);
-const TerminalRenderer = __webpack_require__(8138);
-const envCi = __webpack_require__(7686);
-const hookStd = __webpack_require__(3580);
-const semver = __webpack_require__(1776);
-const AggregateError = __webpack_require__(1231);
-const pkg = __webpack_require__(6034);
-const hideSensitive = __webpack_require__(7394);
-const getConfig = __webpack_require__(173);
-const verify = __webpack_require__(4488);
-const getNextVersion = __webpack_require__(8853);
-const getCommits = __webpack_require__(2243);
-const getLastRelease = __webpack_require__(2769);
-const getReleaseToAdd = __webpack_require__(646);
-const {extractErrors, makeTag} = __webpack_require__(8820);
-const getGitAuthUrl = __webpack_require__(2970);
-const getBranches = __webpack_require__(5832);
-const getLogger = __webpack_require__(2302);
-const {verifyAuth, isBranchUpToDate, getGitHead, tag, push, pushNotes, getTagHead, addNote} = __webpack_require__(8887);
-const getError = __webpack_require__(2976);
-const {COMMIT_NAME, COMMIT_EMAIL} = __webpack_require__(2978);
+/* eslint-disable node/no-deprecated-api */
+var buffer = __nccwpck_require__(4293)
+var Buffer = buffer.Buffer
+
+// alternative to using Object.keys for old browsers
+function copyProps (src, dst) {
+  for (var key in src) {
+    dst[key] = src[key]
+  }
+}
+if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
+  module.exports = buffer
+} else {
+  // Copy properties from require('buffer')
+  copyProps(buffer, exports)
+  exports.Buffer = SafeBuffer
+}
+
+function SafeBuffer (arg, encodingOrOffset, length) {
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+// Copy static methods from Buffer
+copyProps(Buffer, SafeBuffer)
+
+SafeBuffer.from = function (arg, encodingOrOffset, length) {
+  if (typeof arg === 'number') {
+    throw new TypeError('Argument must not be a number')
+  }
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+SafeBuffer.alloc = function (size, fill, encoding) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  var buf = Buffer(size)
+  if (fill !== undefined) {
+    if (typeof encoding === 'string') {
+      buf.fill(fill, encoding)
+    } else {
+      buf.fill(fill)
+    }
+  } else {
+    buf.fill(0)
+  }
+  return buf
+}
+
+SafeBuffer.allocUnsafe = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return Buffer(size)
+}
+
+SafeBuffer.allocUnsafeSlow = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return buffer.SlowBuffer(size)
+}
+
+
+/***/ }),
+
+/***/ 9017:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const {pick} = __nccwpck_require__(250);
+const marked = __nccwpck_require__(4223);
+const TerminalRenderer = __nccwpck_require__(8138);
+const envCi = __nccwpck_require__(7686);
+const hookStd = __nccwpck_require__(3580);
+const semver = __nccwpck_require__(1383);
+const AggregateError = __nccwpck_require__(1231);
+const pkg = __nccwpck_require__(6034);
+const hideSensitive = __nccwpck_require__(7394);
+const getConfig = __nccwpck_require__(173);
+const verify = __nccwpck_require__(4488);
+const getNextVersion = __nccwpck_require__(8853);
+const getCommits = __nccwpck_require__(2243);
+const getLastRelease = __nccwpck_require__(2769);
+const getReleaseToAdd = __nccwpck_require__(646);
+const {extractErrors, makeTag} = __nccwpck_require__(8820);
+const getGitAuthUrl = __nccwpck_require__(2970);
+const getBranches = __nccwpck_require__(5832);
+const getLogger = __nccwpck_require__(2302);
+const {verifyAuth, isBranchUpToDate, getGitHead, tag, push, pushNotes, getTagHead, addNote} = __nccwpck_require__(8887);
+const getError = __nccwpck_require__(2976);
+const {COMMIT_NAME, COMMIT_EMAIL} = __nccwpck_require__(2978);
 
 marked.setOptions({renderer: new TerminalRenderer()});
 
@@ -53960,11 +59008,11 @@ module.exports = async (cliOptions = {}, {cwd = process.cwd(), env = process.env
 /***/ }),
 
 /***/ 3598:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {isString, remove, omit, mapValues, template} = __webpack_require__(250);
-const micromatch = __webpack_require__(6228);
-const {getBranches} = __webpack_require__(8887);
+const {isString, remove, omit, mapValues, template} = __nccwpck_require__(250);
+const micromatch = __nccwpck_require__(6228);
+const {getBranches} = __nccwpck_require__(8887);
 
 module.exports = async (repositoryUrl, {cwd}, branches) => {
   const gitBranches = await getBranches(repositoryUrl, {cwd});
@@ -53985,13 +59033,13 @@ module.exports = async (repositoryUrl, {cwd}, branches) => {
 /***/ }),
 
 /***/ 3911:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {template, escapeRegExp} = __webpack_require__(250);
-const semver = __webpack_require__(1776);
-const pReduce = __webpack_require__(7970);
-const debug = __webpack_require__(8237)('semantic-release:get-tags');
-const {getTags, getNote} = __webpack_require__(8887);
+const {template, escapeRegExp} = __nccwpck_require__(250);
+const semver = __nccwpck_require__(1383);
+const pReduce = __nccwpck_require__(7970);
+const debug = __nccwpck_require__(8237)('semantic-release:get-tags');
+const {getTags, getNote} = __nccwpck_require__(8887);
 
 module.exports = async ({cwd, env, options: {tagFormat}}, branches) => {
   // Generate a regex to parse tags formatted with `tagFormat`
@@ -54025,17 +59073,17 @@ module.exports = async ({cwd, env, options: {tagFormat}}, branches) => {
 /***/ }),
 
 /***/ 5832:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {isString, isRegExp} = __webpack_require__(250);
-const AggregateError = __webpack_require__(1231);
-const pEachSeries = __webpack_require__(7433);
-const DEFINITIONS = __webpack_require__(7910);
-const getError = __webpack_require__(2976);
-const {fetch, fetchNotes, verifyBranchName} = __webpack_require__(8887);
-const expand = __webpack_require__(3598);
-const getTags = __webpack_require__(3911);
-const normalize = __webpack_require__(4001);
+const {isString, isRegExp} = __nccwpck_require__(250);
+const AggregateError = __nccwpck_require__(1231);
+const pEachSeries = __nccwpck_require__(7433);
+const DEFINITIONS = __nccwpck_require__(7910);
+const getError = __nccwpck_require__(2976);
+const {fetch, fetchNotes, verifyBranchName} = __nccwpck_require__(8887);
+const expand = __nccwpck_require__(3598);
+const getTags = __nccwpck_require__(3911);
+const normalize = __nccwpck_require__(4001);
 
 module.exports = async (repositoryUrl, ciBranch, context) => {
   const {cwd, env} = context;
@@ -54102,11 +59150,11 @@ module.exports = async (repositoryUrl, ciBranch, context) => {
 /***/ }),
 
 /***/ 4001:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {sortBy, isNil} = __webpack_require__(250);
-const semverDiff = __webpack_require__(6154);
-const {FIRST_RELEASE, RELEASE_TYPE} = __webpack_require__(2978);
+const {sortBy, isNil} = __nccwpck_require__(250);
+const semverDiff = __nccwpck_require__(6154);
+const {FIRST_RELEASE, RELEASE_TYPE} = __nccwpck_require__(2978);
 const {
   tagsToVersions,
   isMajorRange,
@@ -54117,7 +59165,7 @@ const {
   getLatestVersion,
   getFirstVersion,
   getRange,
-} = __webpack_require__(8820);
+} = __nccwpck_require__(8820);
 
 function maintenance({maintenance, release}) {
   return sortBy(
@@ -54215,11 +59263,11 @@ module.exports = {maintenance, release, prerelease};
 /***/ }),
 
 /***/ 7910:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {isNil, uniqBy} = __webpack_require__(250);
-const semver = __webpack_require__(1776);
-const {isMaintenanceRange} = __webpack_require__(8820);
+const {isNil, uniqBy} = __nccwpck_require__(250);
+const semver = __nccwpck_require__(1383);
+const {isMaintenanceRange} = __nccwpck_require__(8820);
 
 const maintenance = {
   filter: ({name, range}) => (!isNil(range) && range !== false) || isMaintenanceRange(name),
@@ -54281,12 +59329,12 @@ module.exports = {
 /***/ }),
 
 /***/ 6636:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {inspect} = __webpack_require__(1669);
-const {toLower, isString, trim} = __webpack_require__(250);
-const pkg = __webpack_require__(6034);
-const {RELEASE_TYPE} = __webpack_require__(2978);
+const {inspect} = __nccwpck_require__(1669);
+const {toLower, isString, trim} = __nccwpck_require__(250);
+const pkg = __nccwpck_require__(6034);
+const {RELEASE_TYPE} = __nccwpck_require__(2978);
 
 const [homepage] = pkg.homepage.split('#');
 const stringify = (object) =>
@@ -54345,7 +59393,7 @@ Your configuration for the \`tagFormat\` option is \`${stringify(tagFormat)}\`.`
     message: `The \`${type}\` plugin configuration is invalid.`,
     details: `The [${type} plugin configuration](${linkify(`docs/usage/plugins.md#${toLower(type)}-plugin`)}) ${
       required ? 'is required and ' : ''
-    } must be a single or an array of plugins definition. A plugin definition is an npm module name, optionnaly wrapped in an array with an object.
+    } must be a single or an array of plugins definition. A plugin definition is an npm module name, optionally wrapped in an array with an object.
 
 Your configuration for the \`${type}\` plugin is \`${stringify(pluginConf)}\`.`,
   }),
@@ -54353,7 +59401,7 @@ Your configuration for the \`${type}\` plugin is \`${stringify(pluginConf)}\`.`,
     message: 'The `plugins` configuration is invalid.',
     details: `The [plugins](${linkify(
       'docs/usage/configuration.md#plugins'
-    )}) option must be an array of plugin definions. A plugin definition is an npm module name, optionnaly wrapped in an array with an object.
+    )}) option must be an array of plugin definions. A plugin definition is an npm module name, optionally wrapped in an array with an object.
 
 The invalid configuration is \`${stringify(plugin)}\`.`,
   }),
@@ -54520,15 +59568,15 @@ See the [workflow configuration documentation](${linkify('docs/usage/workflow-co
 /***/ }),
 
 /***/ 5595:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /* eslint require-atomic-updates: off */
 
-const {isString, isPlainObject} = __webpack_require__(250);
-const {getGitHead} = __webpack_require__(8887);
-const hideSensitive = __webpack_require__(7394);
-const {hideSensitiveValues} = __webpack_require__(8820);
-const {RELEASE_TYPE, RELEASE_NOTES_SEPARATOR} = __webpack_require__(2978);
+const {isString, isPlainObject} = __nccwpck_require__(250);
+const {getGitHead} = __nccwpck_require__(8887);
+const hideSensitive = __nccwpck_require__(7394);
+const {hideSensitiveValues} = __nccwpck_require__(8820);
+const {RELEASE_TYPE, RELEASE_NOTES_SEPARATOR} = __nccwpck_require__(2978);
 
 module.exports = {
   verifyConditions: {
@@ -54635,10 +59683,10 @@ module.exports = {
 /***/ }),
 
 /***/ 2243:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const debug = __webpack_require__(8237)('semantic-release:get-commits');
-const {getCommits} = __webpack_require__(8887);
+const debug = __nccwpck_require__(8237)('semantic-release:get-commits');
+const {getCommits} = __nccwpck_require__(8887);
 
 /**
  * Retrieve the list of commits on the current branch since the commit sha associated with the last release, or all the commits of the current branch if there is no last released version.
@@ -54665,40 +59713,28 @@ module.exports = async ({cwd, env, lastRelease: {gitHead: from}, nextRelease: {g
 /***/ }),
 
 /***/ 173:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {castArray, pickBy, isNil, isString, isPlainObject} = __webpack_require__(250);
-const readPkgUp = __webpack_require__(5767);
-const {cosmiconfig} = __webpack_require__(4066);
-const resolveFrom = __webpack_require__(4417);
-const debug = __webpack_require__(8237)('semantic-release:config');
-const {repoUrl} = __webpack_require__(8887);
-const PLUGINS_DEFINITIONS = __webpack_require__(5595);
-const plugins = __webpack_require__(4677);
-const {validatePlugin, parseConfig} = __webpack_require__(8459);
+const {castArray, pickBy, isNil, isString, isPlainObject} = __nccwpck_require__(250);
+const readPkgUp = __nccwpck_require__(5767);
+const {cosmiconfig} = __nccwpck_require__(4066);
+const resolveFrom = __nccwpck_require__(4417);
+const debug = __nccwpck_require__(8237)('semantic-release:config');
+const {repoUrl} = __nccwpck_require__(8887);
+const PLUGINS_DEFINITIONS = __nccwpck_require__(5595);
+const plugins = __nccwpck_require__(4677);
+const {validatePlugin, parseConfig} = __nccwpck_require__(8459);
 
 const CONFIG_NAME = 'release';
-const CONFIG_FILES = [
-  'package.json',
-  `.${CONFIG_NAME}rc`,
-  `.${CONFIG_NAME}rc.json`,
-  `.${CONFIG_NAME}rc.yaml`,
-  `.${CONFIG_NAME}rc.yml`,
-  `.${CONFIG_NAME}rc.js`,
-  `${CONFIG_NAME}.config.js`,
-];
 
 module.exports = async (context, cliOptions) => {
   const {cwd, env} = context;
-  const {config, filepath} = (await cosmiconfig(CONFIG_NAME, {searchPlaces: CONFIG_FILES}).search(cwd)) || {};
+  const {config, filepath} = (await cosmiconfig(CONFIG_NAME).search(cwd)) || {};
 
   debug('load config from: %s', filepath);
 
   // Merge config file options and CLI/API options
   let options = {...config, ...cliOptions};
-  if (options.ci === false) {
-    options.noCi = true;
-  }
 
   const pluginsPath = {};
   let extendPaths;
@@ -54756,6 +59792,10 @@ module.exports = async (context, cliOptions) => {
     ...(options.branches ? {branches: castArray(options.branches)} : {}),
   };
 
+  if (options.ci === false) {
+    options.noCi = true;
+  }
+
   debug('options values: %O', options);
 
   return {options, plugins: await plugins({...context, options}, pluginsPath)};
@@ -54770,10 +59810,10 @@ async function pkgRepoUrl(options) {
 /***/ }),
 
 /***/ 2976:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const SemanticReleaseError = __webpack_require__(5192);
-const ERROR_DEFINITIONS = __webpack_require__(6636);
+const SemanticReleaseError = __nccwpck_require__(4393);
+const ERROR_DEFINITIONS = __nccwpck_require__(6636);
 
 module.exports = (code, ctx = {}) => {
   const {message, details} = ERROR_DEFINITIONS[code](ctx);
@@ -54784,13 +59824,13 @@ module.exports = (code, ctx = {}) => {
 /***/ }),
 
 /***/ 2970:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {parse, format} = __webpack_require__(8835); // eslint-disable-line node/no-deprecated-api
-const {isNil} = __webpack_require__(250);
-const hostedGitInfo = __webpack_require__(3149);
-const {verifyAuth} = __webpack_require__(8887);
-const debug = __webpack_require__(8237)('semantic-release:get-git-auth-url');
+const {parse, format} = __nccwpck_require__(8835); // eslint-disable-line node/no-deprecated-api
+const {isNil} = __nccwpck_require__(250);
+const hostedGitInfo = __nccwpck_require__(8869);
+const {verifyAuth} = __nccwpck_require__(8887);
+const debug = __nccwpck_require__(8237)('semantic-release:get-git-auth-url');
 
 /**
  * Machinery to format a repository URL with the given credentials
@@ -54913,11 +59953,11 @@ module.exports = async (context) => {
 /***/ }),
 
 /***/ 2769:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {isUndefined} = __webpack_require__(250);
-const semver = __webpack_require__(1776);
-const {makeTag, isSameChannel} = __webpack_require__(8820);
+const {isUndefined} = __nccwpck_require__(250);
+const semver = __nccwpck_require__(1383);
+const {makeTag, isSameChannel} = __nccwpck_require__(8820);
 
 /**
  * Last release.
@@ -54964,10 +60004,10 @@ module.exports = ({branch, options: {tagFormat}}, {before} = {}) => {
 /***/ }),
 
 /***/ 2302:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {Signale} = __webpack_require__(528);
-const figures = __webpack_require__(7099);
+const {Signale} = __nccwpck_require__(528);
+const figures = __nccwpck_require__(7099);
 
 module.exports = ({stdout, stderr}) =>
   new Signale({
@@ -54987,11 +60027,11 @@ module.exports = ({stdout, stderr}) =>
 /***/ }),
 
 /***/ 8853:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const semver = __webpack_require__(1776);
-const {FIRST_RELEASE, FIRSTPRERELEASE} = __webpack_require__(2978);
-const {isSameChannel, getLatestVersion, tagsToVersions, highest} = __webpack_require__(8820);
+const semver = __nccwpck_require__(1383);
+const {FIRST_RELEASE, FIRSTPRERELEASE} = __nccwpck_require__(2978);
+const {isSameChannel, getLatestVersion, tagsToVersions, highest} = __nccwpck_require__(8820);
 
 module.exports = ({branch, nextRelease: {type, channel}, lastRelease, logger}) => {
   let version;
@@ -55029,13 +60069,13 @@ module.exports = ({branch, nextRelease: {type, channel}, lastRelease, logger}) =
 /***/ }),
 
 /***/ 646:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {uniqBy, intersection} = __webpack_require__(250);
-const semver = __webpack_require__(1776);
-const semverDiff = __webpack_require__(6154);
-const getLastRelease = __webpack_require__(2769);
-const {makeTag, getLowerBound} = __webpack_require__(8820);
+const {uniqBy, intersection} = __nccwpck_require__(250);
+const semver = __nccwpck_require__(1383);
+const semverDiff = __nccwpck_require__(6154);
+const getLastRelease = __nccwpck_require__(2769);
+const {makeTag, getLowerBound} = __nccwpck_require__(8820);
 
 /**
  * Find releases that have been merged from from a higher branch but not added on the channel of the current branch.
@@ -55096,13 +60136,13 @@ module.exports = (context) => {
 /***/ }),
 
 /***/ 8887:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const gitLogParser = __webpack_require__(886);
-const getStream = __webpack_require__(9617);
-const execa = __webpack_require__(5447);
-const debug = __webpack_require__(8237)('semantic-release:git');
-const {GIT_NOTE_REF} = __webpack_require__(2978);
+const gitLogParser = __nccwpck_require__(886);
+const getStream = __nccwpck_require__(1766);
+const execa = __nccwpck_require__(5447);
+const debug = __nccwpck_require__(8237)('semantic-release:git');
+const {GIT_NOTE_REF} = __nccwpck_require__(2978);
 
 Object.assign(gitLogParser.fields, {hash: 'H', message: 'B', gitTags: 'd', committerDate: {key: 'ci', type: Date}});
 
@@ -55418,7 +60458,7 @@ async function getNote(ref, execaOptions) {
 }
 
 /**
- * Get and parse the JSON note of a given reference.
+ * Add JSON note to a given reference.
  *
  * @param {Object} note The object to save in the reference note.
  * @param {String} ref The Git reference to add the note to.
@@ -55454,10 +60494,10 @@ module.exports = {
 /***/ }),
 
 /***/ 7394:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {escapeRegExp, size, isString} = __webpack_require__(250);
-const {SECRET_REPLACEMENT, SECRET_MIN_SIZE} = __webpack_require__(2978);
+const {escapeRegExp, size, isString} = __nccwpck_require__(250);
+const {SECRET_REPLACEMENT, SECRET_MIN_SIZE} = __nccwpck_require__(2978);
 
 module.exports = (env) => {
   const toReplace = Object.keys(env).filter((envVar) => {
@@ -55481,15 +60521,15 @@ module.exports = (env) => {
 /***/ }),
 
 /***/ 4677:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {identity, isPlainObject, omit, castArray, isNil, isString} = __webpack_require__(250);
-const AggregateError = __webpack_require__(1231);
-const getError = __webpack_require__(2976);
-const PLUGINS_DEFINITIONS = __webpack_require__(5595);
-const {validatePlugin, validateStep, loadPlugin, parseConfig} = __webpack_require__(8459);
-const pipeline = __webpack_require__(6644);
-const normalize = __webpack_require__(9661);
+const {identity, isPlainObject, omit, castArray, isNil, isString} = __nccwpck_require__(250);
+const AggregateError = __nccwpck_require__(1231);
+const getError = __nccwpck_require__(2976);
+const PLUGINS_DEFINITIONS = __nccwpck_require__(5595);
+const {validatePlugin, validateStep, loadPlugin, parseConfig} = __nccwpck_require__(8459);
+const pipeline = __nccwpck_require__(6644);
+const normalize = __nccwpck_require__(9661);
 
 module.exports = (context, pluginsPath) => {
   let {options, logger} = context;
@@ -55581,14 +60621,14 @@ module.exports = (context, pluginsPath) => {
 /***/ }),
 
 /***/ 9661:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {isPlainObject, isFunction, noop, cloneDeep, omit} = __webpack_require__(250);
-const debug = __webpack_require__(8237)('semantic-release:plugins');
-const getError = __webpack_require__(2976);
-const {extractErrors} = __webpack_require__(8820);
-const PLUGINS_DEFINITIONS = __webpack_require__(5595);
-const {loadPlugin, parseConfig} = __webpack_require__(8459);
+const {isPlainObject, isFunction, noop, cloneDeep, omit} = __nccwpck_require__(250);
+const debug = __nccwpck_require__(8237)('semantic-release:plugins');
+const getError = __nccwpck_require__(2976);
+const {extractErrors} = __nccwpck_require__(8820);
+const PLUGINS_DEFINITIONS = __nccwpck_require__(5595);
+const {loadPlugin, parseConfig} = __nccwpck_require__(8459);
 
 module.exports = (context, type, pluginOpt, pluginsPath) => {
   const {stdout, stderr, options, logger} = context;
@@ -55655,12 +60695,12 @@ module.exports = (context, type, pluginOpt, pluginsPath) => {
 /***/ }),
 
 /***/ 6644:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {identity} = __webpack_require__(250);
-const pReduce = __webpack_require__(7970);
-const AggregateError = __webpack_require__(1231);
-const {extractErrors} = __webpack_require__(8820);
+const {identity} = __nccwpck_require__(250);
+const pReduce = __nccwpck_require__(7970);
+const AggregateError = __nccwpck_require__(1231);
+const {extractErrors} = __nccwpck_require__(8820);
 
 /**
  * A Function that execute a list of function sequencially. If at least one Function ins the pipeline throws an Error or rejects, the pipeline function rejects as well.
@@ -55720,11 +60760,11 @@ module.exports = (steps, {settleAll = false, getNextInput = identity, transform 
 /***/ }),
 
 /***/ 8459:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {dirname} = __webpack_require__(5622);
-const {isString, isFunction, castArray, isArray, isPlainObject, isNil} = __webpack_require__(250);
-const resolveFrom = __webpack_require__(4417);
+const {dirname} = __nccwpck_require__(5622);
+const {isString, isFunction, castArray, isArray, isPlainObject, isNil} = __nccwpck_require__(250);
+const resolveFrom = __nccwpck_require__(4417);
 
 const validateSteps = (conf) => {
   return conf.every((conf) => {
@@ -55795,11 +60835,11 @@ module.exports = {validatePlugin, validateStep, loadPlugin, parseConfig};
 /***/ }),
 
 /***/ 8820:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {isFunction, union, template} = __webpack_require__(250);
-const semver = __webpack_require__(1776);
-const hideSensitive = __webpack_require__(7394);
+const {isFunction, union, template} = __nccwpck_require__(250);
+const semver = __nccwpck_require__(1383);
+const hideSensitive = __nccwpck_require__(7394);
 
 function extractErrors(err) {
   return err && isFunction(err[Symbol.iterator]) ? [...err] : [err];
@@ -55903,12 +60943,12 @@ module.exports = {
 /***/ }),
 
 /***/ 4488:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {template, isString, isPlainObject} = __webpack_require__(250);
-const AggregateError = __webpack_require__(1231);
-const {isGitRepo, verifyTagName} = __webpack_require__(8887);
-const getError = __webpack_require__(2976);
+const {template, isString, isPlainObject} = __nccwpck_require__(250);
+const AggregateError = __nccwpck_require__(1231);
+const {isGitRepo, verifyTagName} = __nccwpck_require__(8887);
+const getError = __nccwpck_require__(2976);
 
 module.exports = async (context) => {
   const {
@@ -55952,3545 +60992,29 @@ module.exports = async (context) => {
 
 /***/ }),
 
-/***/ 704:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 4393:
+/***/ ((module) => {
 
-"use strict";
-
-const {PassThrough: PassThroughStream} = __webpack_require__(2413);
-
-module.exports = options => {
-	options = {...options};
-
-	const {array} = options;
-	let {encoding} = options;
-	const isBuffer = encoding === 'buffer';
-	let objectMode = false;
-
-	if (array) {
-		objectMode = !(encoding || isBuffer);
-	} else {
-		encoding = encoding || 'utf8';
-	}
-
-	if (isBuffer) {
-		encoding = null;
-	}
-
-	const stream = new PassThroughStream({objectMode});
-
-	if (encoding) {
-		stream.setEncoding(encoding);
-	}
-
-	let length = 0;
-	const chunks = [];
-
-	stream.on('data', chunk => {
-		chunks.push(chunk);
-
-		if (objectMode) {
-			length = chunks.length;
-		} else {
-			length += chunk.length;
-		}
-	});
-
-	stream.getBufferedValue = () => {
-		if (array) {
-			return chunks;
-		}
-
-		return isBuffer ? Buffer.concat(chunks, length) : chunks.join('');
-	};
-
-	stream.getBufferedLength = () => length;
-
-	return stream;
+module.exports = class SemanticReleaseError extends Error {
+  constructor(message, code, details) {
+    super(message);
+    Error.captureStackTrace(this, this.constructor);
+    this.name = 'SemanticReleaseError';
+    this.code = code;
+    this.details = details;
+    this.semanticRelease = true;
+  }
 };
 
 
 /***/ }),
 
-/***/ 9617:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-const {constants: BufferConstants} = __webpack_require__(4293);
-const pump = __webpack_require__(8341);
-const bufferStream = __webpack_require__(704);
-
-class MaxBufferError extends Error {
-	constructor() {
-		super('maxBuffer exceeded');
-		this.name = 'MaxBufferError';
-	}
-}
-
-async function getStream(inputStream, options) {
-	if (!inputStream) {
-		return Promise.reject(new Error('Expected a stream'));
-	}
-
-	options = {
-		maxBuffer: Infinity,
-		...options
-	};
-
-	const {maxBuffer} = options;
-
-	let stream;
-	await new Promise((resolve, reject) => {
-		const rejectPromise = error => {
-			// Don't retrieve an oversized buffer.
-			if (error && stream.getBufferedLength() <= BufferConstants.MAX_LENGTH) {
-				error.bufferedData = stream.getBufferedValue();
-			}
-
-			reject(error);
-		};
-
-		stream = pump(inputStream, bufferStream(options), error => {
-			if (error) {
-				rejectPromise(error);
-				return;
-			}
-
-			resolve();
-		});
-
-		stream.on('data', () => {
-			if (stream.getBufferedLength() > maxBuffer) {
-				rejectPromise(new MaxBufferError());
-			}
-		});
-	});
-
-	return stream.getBufferedValue();
-}
-
-module.exports = getStream;
-// TODO: Remove this for the next major release
-module.exports.default = getStream;
-module.exports.buffer = (stream, options) => getStream(stream, {...options, encoding: 'buffer'});
-module.exports.array = (stream, options) => getStream(stream, {...options, array: true});
-module.exports.MaxBufferError = MaxBufferError;
-
-
-/***/ }),
-
-/***/ 670:
-/***/ ((module) => {
-
-"use strict";
-
-
-var gitHosts = module.exports = {
-  github: {
-    // First two are insecure and generally shouldn't be used any more, but
-    // they are still supported.
-    'protocols': [ 'git', 'http', 'git+ssh', 'git+https', 'ssh', 'https' ],
-    'domain': 'github.com',
-    'treepath': 'tree',
-    'filetemplate': 'https://{auth@}raw.githubusercontent.com/{user}/{project}/{committish}/{path}',
-    'bugstemplate': 'https://{domain}/{user}/{project}/issues',
-    'gittemplate': 'git://{auth@}{domain}/{user}/{project}.git{#committish}',
-    'tarballtemplate': 'https://codeload.{domain}/{user}/{project}/tar.gz/{committish}'
-  },
-  bitbucket: {
-    'protocols': [ 'git+ssh', 'git+https', 'ssh', 'https' ],
-    'domain': 'bitbucket.org',
-    'treepath': 'src',
-    'tarballtemplate': 'https://{domain}/{user}/{project}/get/{committish}.tar.gz'
-  },
-  gitlab: {
-    'protocols': [ 'git+ssh', 'git+https', 'ssh', 'https' ],
-    'domain': 'gitlab.com',
-    'treepath': 'tree',
-    'bugstemplate': 'https://{domain}/{user}/{project}/issues',
-    'httpstemplate': 'git+https://{auth@}{domain}/{user}/{projectPath}.git{#committish}',
-    'tarballtemplate': 'https://{domain}/{user}/{project}/repository/archive.tar.gz?ref={committish}',
-    'pathmatch': /^\/([^/]+)\/((?!.*(\/-\/|\/repository(\/[^/]+)?\/archive\.tar\.gz)).*?)(?:\.git|\/)?$/
-  },
-  gist: {
-    'protocols': [ 'git', 'git+ssh', 'git+https', 'ssh', 'https' ],
-    'domain': 'gist.github.com',
-    'pathmatch': /^[/](?:([^/]+)[/])?([a-z0-9]{7,})(?:[.]git)?$/,
-    'filetemplate': 'https://gist.githubusercontent.com/{user}/{project}/raw{/committish}/{path}',
-    'bugstemplate': 'https://{domain}/{project}',
-    'gittemplate': 'git://{domain}/{project}.git{#committish}',
-    'sshtemplate': 'git@{domain}:/{project}.git{#committish}',
-    'sshurltemplate': 'git+ssh://git@{domain}/{project}.git{#committish}',
-    'browsetemplate': 'https://{domain}/{project}{/committish}',
-    'browsefiletemplate': 'https://{domain}/{project}{/committish}{#path}',
-    'docstemplate': 'https://{domain}/{project}{/committish}',
-    'httpstemplate': 'git+https://{domain}/{project}.git{#committish}',
-    'shortcuttemplate': '{type}:{project}{#committish}',
-    'pathtemplate': '{project}{#committish}',
-    'tarballtemplate': 'https://codeload.github.com/gist/{project}/tar.gz/{committish}',
-    'hashformat': function (fragment) {
-      return 'file-' + formatHashFragment(fragment)
-    }
-  }
-}
-
-var gitHostDefaults = {
-  'sshtemplate': 'git@{domain}:{user}/{project}.git{#committish}',
-  'sshurltemplate': 'git+ssh://git@{domain}/{user}/{project}.git{#committish}',
-  'browsetemplate': 'https://{domain}/{user}/{project}{/tree/committish}',
-  'browsefiletemplate': 'https://{domain}/{user}/{project}/{treepath}/{committish}/{path}{#fragment}',
-  'docstemplate': 'https://{domain}/{user}/{project}{/tree/committish}#readme',
-  'httpstemplate': 'git+https://{auth@}{domain}/{user}/{project}.git{#committish}',
-  'filetemplate': 'https://{domain}/{user}/{project}/raw/{committish}/{path}',
-  'shortcuttemplate': '{type}:{user}/{project}{#committish}',
-  'pathtemplate': '{user}/{project}{#committish}',
-  'pathmatch': /^[/]([^/]+)[/]([^/]+?)(?:[.]git|[/])?$/,
-  'hashformat': formatHashFragment
-}
-
-Object.keys(gitHosts).forEach(function (name) {
-  Object.keys(gitHostDefaults).forEach(function (key) {
-    if (gitHosts[name][key]) return
-    gitHosts[name][key] = gitHostDefaults[key]
-  })
-  gitHosts[name].protocols_re = RegExp('^(' +
-    gitHosts[name].protocols.map(function (protocol) {
-      return protocol.replace(/([\\+*{}()[\]$^|])/g, '\\$1')
-    }).join('|') + '):$')
-})
-
-function formatHashFragment (fragment) {
-  return fragment.toLowerCase().replace(/^\W+|\/|\W+$/g, '').replace(/\W+/g, '-')
-}
-
-
-/***/ }),
-
-/***/ 3953:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var gitHosts = __webpack_require__(670)
-/* eslint-disable node/no-deprecated-api */
-
-// copy-pasta util._extend from node's source, to avoid pulling
-// the whole util module into peoples' webpack bundles.
-/* istanbul ignore next */
-var extend = Object.assign || function _extend (target, source) {
-  // Don't do anything if source isn't an object
-  if (source === null || typeof source !== 'object') return target
-
-  const keys = Object.keys(source)
-  let i = keys.length
-  while (i--) {
-    target[keys[i]] = source[keys[i]]
-  }
-  return target
-}
-
-module.exports = GitHost
-function GitHost (type, user, auth, project, committish, defaultRepresentation, opts) {
-  var gitHostInfo = this
-  gitHostInfo.type = type
-  Object.keys(gitHosts[type]).forEach(function (key) {
-    gitHostInfo[key] = gitHosts[type][key]
-  })
-  gitHostInfo.user = user
-  gitHostInfo.auth = auth
-  gitHostInfo.project = project
-  gitHostInfo.committish = committish
-  gitHostInfo.default = defaultRepresentation
-  gitHostInfo.opts = opts || {}
-}
-
-GitHost.prototype.hash = function () {
-  return this.committish ? '#' + this.committish : ''
-}
-
-GitHost.prototype._fill = function (template, opts) {
-  if (!template) return
-  var vars = extend({}, opts)
-  vars.path = vars.path ? vars.path.replace(/^[/]+/g, '') : ''
-  opts = extend(extend({}, this.opts), opts)
-  var self = this
-  Object.keys(this).forEach(function (key) {
-    if (self[key] != null && vars[key] == null) vars[key] = self[key]
-  })
-  var rawAuth = vars.auth
-  var rawcommittish = vars.committish
-  var rawFragment = vars.fragment
-  var rawPath = vars.path
-  var rawProject = vars.project
-  Object.keys(vars).forEach(function (key) {
-    var value = vars[key]
-    if ((key === 'path' || key === 'project') && typeof value === 'string') {
-      vars[key] = value.split('/').map(function (pathComponent) {
-        return encodeURIComponent(pathComponent)
-      }).join('/')
-    } else if (key !== 'domain') {
-      vars[key] = encodeURIComponent(value)
-    }
-  })
-  vars['auth@'] = rawAuth ? rawAuth + '@' : ''
-  vars['#fragment'] = rawFragment ? '#' + this.hashformat(rawFragment) : ''
-  vars.fragment = vars.fragment ? vars.fragment : ''
-  vars['#path'] = rawPath ? '#' + this.hashformat(rawPath) : ''
-  vars['/path'] = vars.path ? '/' + vars.path : ''
-  vars.projectPath = rawProject.split('/').map(encodeURIComponent).join('/')
-  if (opts.noCommittish) {
-    vars['#committish'] = ''
-    vars['/tree/committish'] = ''
-    vars['/committish'] = ''
-    vars.committish = ''
-  } else {
-    vars['#committish'] = rawcommittish ? '#' + rawcommittish : ''
-    vars['/tree/committish'] = vars.committish
-      ? '/' + vars.treepath + '/' + vars.committish
-      : ''
-    vars['/committish'] = vars.committish ? '/' + vars.committish : ''
-    vars.committish = vars.committish || 'master'
-  }
-  var res = template
-  Object.keys(vars).forEach(function (key) {
-    res = res.replace(new RegExp('[{]' + key + '[}]', 'g'), vars[key])
-  })
-  if (opts.noGitPlus) {
-    return res.replace(/^git[+]/, '')
-  } else {
-    return res
-  }
-}
-
-GitHost.prototype.ssh = function (opts) {
-  return this._fill(this.sshtemplate, opts)
-}
-
-GitHost.prototype.sshurl = function (opts) {
-  return this._fill(this.sshurltemplate, opts)
-}
-
-GitHost.prototype.browse = function (P, F, opts) {
-  if (typeof P === 'string') {
-    if (typeof F !== 'string') {
-      opts = F
-      F = null
-    }
-    return this._fill(this.browsefiletemplate, extend({
-      fragment: F,
-      path: P
-    }, opts))
-  } else {
-    return this._fill(this.browsetemplate, P)
-  }
-}
-
-GitHost.prototype.docs = function (opts) {
-  return this._fill(this.docstemplate, opts)
-}
-
-GitHost.prototype.bugs = function (opts) {
-  return this._fill(this.bugstemplate, opts)
-}
-
-GitHost.prototype.https = function (opts) {
-  return this._fill(this.httpstemplate, opts)
-}
-
-GitHost.prototype.git = function (opts) {
-  return this._fill(this.gittemplate, opts)
-}
-
-GitHost.prototype.shortcut = function (opts) {
-  return this._fill(this.shortcuttemplate, opts)
-}
-
-GitHost.prototype.path = function (opts) {
-  return this._fill(this.pathtemplate, opts)
-}
-
-GitHost.prototype.tarball = function (opts_) {
-  var opts = extend({}, opts_, { noCommittish: false })
-  return this._fill(this.tarballtemplate, opts)
-}
-
-GitHost.prototype.file = function (P, opts) {
-  return this._fill(this.filetemplate, extend({ path: P }, opts))
-}
-
-GitHost.prototype.getDefaultRepresentation = function () {
-  return this.default
-}
-
-GitHost.prototype.toString = function (opts) {
-  if (this.default && typeof this[this.default] === 'function') return this[this.default](opts)
-  return this.sshurl(opts)
-}
-
-
-/***/ }),
-
-/***/ 3149:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var url = __webpack_require__(8835)
-var gitHosts = __webpack_require__(670)
-var GitHost = module.exports = __webpack_require__(3953)
-var LRU = __webpack_require__(3274)
-var cache = new LRU({max: 1000})
-
-var protocolToRepresentationMap = {
-  'git+ssh:': 'sshurl',
-  'git+https:': 'https',
-  'ssh:': 'sshurl',
-  'git:': 'git'
-}
-
-function protocolToRepresentation (protocol) {
-  return protocolToRepresentationMap[protocol] || protocol.slice(0, -1)
-}
-
-var authProtocols = {
-  'git:': true,
-  'https:': true,
-  'git+https:': true,
-  'http:': true,
-  'git+http:': true
-}
-
-module.exports.fromUrl = function (giturl, opts) {
-  if (typeof giturl !== 'string') return
-  var key = giturl + JSON.stringify(opts || {})
-
-  if (!cache.has(key)) {
-    cache.set(key, fromUrl(giturl, opts))
-  }
-
-  return cache.get(key)
-}
-
-function fromUrl (giturl, opts) {
-  if (giturl == null || giturl === '') return
-  var url = fixupUnqualifiedGist(
-    isGitHubShorthand(giturl) ? 'github:' + giturl : giturl
-  )
-  var parsed = parseGitUrl(url)
-  var shortcutMatch = url.match(new RegExp('^([^:]+):(?:(?:[^@:]+(?:[^@]+)?@)?([^/]*))[/](.+?)(?:[.]git)?($|#)'))
-  var matches = Object.keys(gitHosts).map(function (gitHostName) {
-    try {
-      var gitHostInfo = gitHosts[gitHostName]
-      var auth = null
-      if (parsed.auth && authProtocols[parsed.protocol]) {
-        auth = parsed.auth
-      }
-      var committish = parsed.hash ? decodeURIComponent(parsed.hash.substr(1)) : null
-      var user = null
-      var project = null
-      var defaultRepresentation = null
-      if (shortcutMatch && shortcutMatch[1] === gitHostName) {
-        user = shortcutMatch[2] && decodeURIComponent(shortcutMatch[2])
-        project = decodeURIComponent(shortcutMatch[3])
-        defaultRepresentation = 'shortcut'
-      } else {
-        if (parsed.host && parsed.host !== gitHostInfo.domain && parsed.host.replace(/^www[.]/, '') !== gitHostInfo.domain) return
-        if (!gitHostInfo.protocols_re.test(parsed.protocol)) return
-        if (!parsed.path) return
-        var pathmatch = gitHostInfo.pathmatch
-        var matched = parsed.path.match(pathmatch)
-        if (!matched) return
-        /* istanbul ignore else */
-        if (matched[1] !== null && matched[1] !== undefined) {
-          user = decodeURIComponent(matched[1].replace(/^:/, ''))
-        }
-        project = decodeURIComponent(matched[2])
-        defaultRepresentation = protocolToRepresentation(parsed.protocol)
-      }
-      return new GitHost(gitHostName, user, auth, project, committish, defaultRepresentation, opts)
-    } catch (ex) {
-      /* istanbul ignore else */
-      if (ex instanceof URIError) {
-      } else throw ex
-    }
-  }).filter(function (gitHostInfo) { return gitHostInfo })
-  if (matches.length !== 1) return
-  return matches[0]
-}
-
-function isGitHubShorthand (arg) {
-  // Note: This does not fully test the git ref format.
-  // See https://www.kernel.org/pub/software/scm/git/docs/git-check-ref-format.html
-  //
-  // The only way to do this properly would be to shell out to
-  // git-check-ref-format, and as this is a fast sync function,
-  // we don't want to do that.  Just let git fail if it turns
-  // out that the commit-ish is invalid.
-  // GH usernames cannot start with . or -
-  return /^[^:@%/\s.-][^:@%/\s]*[/][^:@\s/%]+(?:#.*)?$/.test(arg)
-}
-
-function fixupUnqualifiedGist (giturl) {
-  // necessary for round-tripping gists
-  var parsed = url.parse(giturl)
-  if (parsed.protocol === 'gist:' && parsed.host && !parsed.path) {
-    return parsed.protocol + '/' + parsed.host
-  } else {
-    return giturl
-  }
-}
-
-function parseGitUrl (giturl) {
-  var matched = giturl.match(/^([^@]+)@([^:/]+):[/]?((?:[^/]+[/])?[^/]+?)(?:[.]git)?(#.*)?$/)
-  if (!matched) {
-    var legacy = url.parse(giturl)
-    if (legacy.auth) {
-      // git urls can be in the form of scp-style/ssh-connect strings, like
-      // git+ssh://user@host.com:some/path, which the legacy url parser
-      // supports, but WhatWG url.URL class does not.  However, the legacy
-      // parser de-urlencodes the username and password, so something like
-      // https://user%3An%40me:p%40ss%3Aword@x.com/ becomes
-      // https://user:n@me:p@ss:word@x.com/ which is all kinds of wrong.
-      // Pull off just the auth and host, so we dont' get the confusing
-      // scp-style URL, then pass that to the WhatWG parser to get the
-      // auth properly escaped.
-      const authmatch = giturl.match(/[^@]+@[^:/]+/)
-      /* istanbul ignore else - this should be impossible */
-      if (authmatch) {
-        var whatwg = new url.URL(authmatch[0])
-        legacy.auth = whatwg.username || ''
-        if (whatwg.password) legacy.auth += ':' + whatwg.password
-      }
-    }
-    return legacy
-  }
-  return {
-    protocol: 'git+ssh:',
-    slashes: true,
-    auth: matched[1],
-    host: matched[2],
-    port: null,
-    hostname: matched[2],
-    hash: matched[4],
-    search: null,
-    query: null,
-    pathname: '/' + matched[3],
-    path: '/' + matched[3],
-    href: 'git+ssh://' + matched[1] + '@' + matched[2] +
-          '/' + matched[3] + (matched[4] || '')
-  }
-}
-
-
-/***/ }),
-
-/***/ 3274:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-// A linked list to keep track of recently-used-ness
-const Yallist = __webpack_require__(7719)
-
-const MAX = Symbol('max')
-const LENGTH = Symbol('length')
-const LENGTH_CALCULATOR = Symbol('lengthCalculator')
-const ALLOW_STALE = Symbol('allowStale')
-const MAX_AGE = Symbol('maxAge')
-const DISPOSE = Symbol('dispose')
-const NO_DISPOSE_ON_SET = Symbol('noDisposeOnSet')
-const LRU_LIST = Symbol('lruList')
-const CACHE = Symbol('cache')
-const UPDATE_AGE_ON_GET = Symbol('updateAgeOnGet')
-
-const naiveLength = () => 1
-
-// lruList is a yallist where the head is the youngest
-// item, and the tail is the oldest.  the list contains the Hit
-// objects as the entries.
-// Each Hit object has a reference to its Yallist.Node.  This
-// never changes.
-//
-// cache is a Map (or PseudoMap) that matches the keys to
-// the Yallist.Node object.
-class LRUCache {
-  constructor (options) {
-    if (typeof options === 'number')
-      options = { max: options }
-
-    if (!options)
-      options = {}
-
-    if (options.max && (typeof options.max !== 'number' || options.max < 0))
-      throw new TypeError('max must be a non-negative number')
-    // Kind of weird to have a default max of Infinity, but oh well.
-    const max = this[MAX] = options.max || Infinity
-
-    const lc = options.length || naiveLength
-    this[LENGTH_CALCULATOR] = (typeof lc !== 'function') ? naiveLength : lc
-    this[ALLOW_STALE] = options.stale || false
-    if (options.maxAge && typeof options.maxAge !== 'number')
-      throw new TypeError('maxAge must be a number')
-    this[MAX_AGE] = options.maxAge || 0
-    this[DISPOSE] = options.dispose
-    this[NO_DISPOSE_ON_SET] = options.noDisposeOnSet || false
-    this[UPDATE_AGE_ON_GET] = options.updateAgeOnGet || false
-    this.reset()
-  }
-
-  // resize the cache when the max changes.
-  set max (mL) {
-    if (typeof mL !== 'number' || mL < 0)
-      throw new TypeError('max must be a non-negative number')
-
-    this[MAX] = mL || Infinity
-    trim(this)
-  }
-  get max () {
-    return this[MAX]
-  }
-
-  set allowStale (allowStale) {
-    this[ALLOW_STALE] = !!allowStale
-  }
-  get allowStale () {
-    return this[ALLOW_STALE]
-  }
-
-  set maxAge (mA) {
-    if (typeof mA !== 'number')
-      throw new TypeError('maxAge must be a non-negative number')
-
-    this[MAX_AGE] = mA
-    trim(this)
-  }
-  get maxAge () {
-    return this[MAX_AGE]
-  }
-
-  // resize the cache when the lengthCalculator changes.
-  set lengthCalculator (lC) {
-    if (typeof lC !== 'function')
-      lC = naiveLength
-
-    if (lC !== this[LENGTH_CALCULATOR]) {
-      this[LENGTH_CALCULATOR] = lC
-      this[LENGTH] = 0
-      this[LRU_LIST].forEach(hit => {
-        hit.length = this[LENGTH_CALCULATOR](hit.value, hit.key)
-        this[LENGTH] += hit.length
-      })
-    }
-    trim(this)
-  }
-  get lengthCalculator () { return this[LENGTH_CALCULATOR] }
-
-  get length () { return this[LENGTH] }
-  get itemCount () { return this[LRU_LIST].length }
-
-  rforEach (fn, thisp) {
-    thisp = thisp || this
-    for (let walker = this[LRU_LIST].tail; walker !== null;) {
-      const prev = walker.prev
-      forEachStep(this, fn, walker, thisp)
-      walker = prev
-    }
-  }
-
-  forEach (fn, thisp) {
-    thisp = thisp || this
-    for (let walker = this[LRU_LIST].head; walker !== null;) {
-      const next = walker.next
-      forEachStep(this, fn, walker, thisp)
-      walker = next
-    }
-  }
-
-  keys () {
-    return this[LRU_LIST].toArray().map(k => k.key)
-  }
-
-  values () {
-    return this[LRU_LIST].toArray().map(k => k.value)
-  }
-
-  reset () {
-    if (this[DISPOSE] &&
-        this[LRU_LIST] &&
-        this[LRU_LIST].length) {
-      this[LRU_LIST].forEach(hit => this[DISPOSE](hit.key, hit.value))
-    }
-
-    this[CACHE] = new Map() // hash of items by key
-    this[LRU_LIST] = new Yallist() // list of items in order of use recency
-    this[LENGTH] = 0 // length of items in the list
-  }
-
-  dump () {
-    return this[LRU_LIST].map(hit =>
-      isStale(this, hit) ? false : {
-        k: hit.key,
-        v: hit.value,
-        e: hit.now + (hit.maxAge || 0)
-      }).toArray().filter(h => h)
-  }
-
-  dumpLru () {
-    return this[LRU_LIST]
-  }
-
-  set (key, value, maxAge) {
-    maxAge = maxAge || this[MAX_AGE]
-
-    if (maxAge && typeof maxAge !== 'number')
-      throw new TypeError('maxAge must be a number')
-
-    const now = maxAge ? Date.now() : 0
-    const len = this[LENGTH_CALCULATOR](value, key)
-
-    if (this[CACHE].has(key)) {
-      if (len > this[MAX]) {
-        del(this, this[CACHE].get(key))
-        return false
-      }
-
-      const node = this[CACHE].get(key)
-      const item = node.value
-
-      // dispose of the old one before overwriting
-      // split out into 2 ifs for better coverage tracking
-      if (this[DISPOSE]) {
-        if (!this[NO_DISPOSE_ON_SET])
-          this[DISPOSE](key, item.value)
-      }
-
-      item.now = now
-      item.maxAge = maxAge
-      item.value = value
-      this[LENGTH] += len - item.length
-      item.length = len
-      this.get(key)
-      trim(this)
-      return true
-    }
-
-    const hit = new Entry(key, value, len, now, maxAge)
-
-    // oversized objects fall out of cache automatically.
-    if (hit.length > this[MAX]) {
-      if (this[DISPOSE])
-        this[DISPOSE](key, value)
-
-      return false
-    }
-
-    this[LENGTH] += hit.length
-    this[LRU_LIST].unshift(hit)
-    this[CACHE].set(key, this[LRU_LIST].head)
-    trim(this)
-    return true
-  }
-
-  has (key) {
-    if (!this[CACHE].has(key)) return false
-    const hit = this[CACHE].get(key).value
-    return !isStale(this, hit)
-  }
-
-  get (key) {
-    return get(this, key, true)
-  }
-
-  peek (key) {
-    return get(this, key, false)
-  }
-
-  pop () {
-    const node = this[LRU_LIST].tail
-    if (!node)
-      return null
-
-    del(this, node)
-    return node.value
-  }
-
-  del (key) {
-    del(this, this[CACHE].get(key))
-  }
-
-  load (arr) {
-    // reset the cache
-    this.reset()
-
-    const now = Date.now()
-    // A previous serialized cache has the most recent items first
-    for (let l = arr.length - 1; l >= 0; l--) {
-      const hit = arr[l]
-      const expiresAt = hit.e || 0
-      if (expiresAt === 0)
-        // the item was created without expiration in a non aged cache
-        this.set(hit.k, hit.v)
-      else {
-        const maxAge = expiresAt - now
-        // dont add already expired items
-        if (maxAge > 0) {
-          this.set(hit.k, hit.v, maxAge)
-        }
-      }
-    }
-  }
-
-  prune () {
-    this[CACHE].forEach((value, key) => get(this, key, false))
-  }
-}
-
-const get = (self, key, doUse) => {
-  const node = self[CACHE].get(key)
-  if (node) {
-    const hit = node.value
-    if (isStale(self, hit)) {
-      del(self, node)
-      if (!self[ALLOW_STALE])
-        return undefined
-    } else {
-      if (doUse) {
-        if (self[UPDATE_AGE_ON_GET])
-          node.value.now = Date.now()
-        self[LRU_LIST].unshiftNode(node)
-      }
-    }
-    return hit.value
-  }
-}
-
-const isStale = (self, hit) => {
-  if (!hit || (!hit.maxAge && !self[MAX_AGE]))
-    return false
-
-  const diff = Date.now() - hit.now
-  return hit.maxAge ? diff > hit.maxAge
-    : self[MAX_AGE] && (diff > self[MAX_AGE])
-}
-
-const trim = self => {
-  if (self[LENGTH] > self[MAX]) {
-    for (let walker = self[LRU_LIST].tail;
-      self[LENGTH] > self[MAX] && walker !== null;) {
-      // We know that we're about to delete this one, and also
-      // what the next least recently used key will be, so just
-      // go ahead and set it now.
-      const prev = walker.prev
-      del(self, walker)
-      walker = prev
-    }
-  }
-}
-
-const del = (self, node) => {
-  if (node) {
-    const hit = node.value
-    if (self[DISPOSE])
-      self[DISPOSE](hit.key, hit.value)
-
-    self[LENGTH] -= hit.length
-    self[CACHE].delete(hit.key)
-    self[LRU_LIST].removeNode(node)
-  }
-}
-
-class Entry {
-  constructor (key, value, length, now, maxAge) {
-    this.key = key
-    this.value = value
-    this.length = length
-    this.now = now
-    this.maxAge = maxAge || 0
-  }
-}
-
-const forEachStep = (self, fn, node, thisp) => {
-  let hit = node.value
-  if (isStale(self, hit)) {
-    del(self, node)
-    if (!self[ALLOW_STALE])
-      hit = undefined
-  }
-  if (hit)
-    fn.call(thisp, hit.value, hit.key, self)
-}
-
-module.exports = LRUCache
-
-
-/***/ }),
-
-/***/ 3704:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const ANY = Symbol('SemVer ANY')
-// hoisted class for cyclic dependency
-class Comparator {
-  static get ANY () {
-    return ANY
-  }
-  constructor (comp, options) {
-    options = parseOptions(options)
-
-    if (comp instanceof Comparator) {
-      if (comp.loose === !!options.loose) {
-        return comp
-      } else {
-        comp = comp.value
-      }
-    }
-
-    debug('comparator', comp, options)
-    this.options = options
-    this.loose = !!options.loose
-    this.parse(comp)
-
-    if (this.semver === ANY) {
-      this.value = ''
-    } else {
-      this.value = this.operator + this.semver.version
-    }
-
-    debug('comp', this)
-  }
-
-  parse (comp) {
-    const r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
-    const m = comp.match(r)
-
-    if (!m) {
-      throw new TypeError(`Invalid comparator: ${comp}`)
-    }
-
-    this.operator = m[1] !== undefined ? m[1] : ''
-    if (this.operator === '=') {
-      this.operator = ''
-    }
-
-    // if it literally is just '>' or '' then allow anything.
-    if (!m[2]) {
-      this.semver = ANY
-    } else {
-      this.semver = new SemVer(m[2], this.options.loose)
-    }
-  }
-
-  toString () {
-    return this.value
-  }
-
-  test (version) {
-    debug('Comparator.test', version, this.options.loose)
-
-    if (this.semver === ANY || version === ANY) {
-      return true
-    }
-
-    if (typeof version === 'string') {
-      try {
-        version = new SemVer(version, this.options)
-      } catch (er) {
-        return false
-      }
-    }
-
-    return cmp(version, this.operator, this.semver, this.options)
-  }
-
-  intersects (comp, options) {
-    if (!(comp instanceof Comparator)) {
-      throw new TypeError('a Comparator is required')
-    }
-
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      }
-    }
-
-    if (this.operator === '') {
-      if (this.value === '') {
-        return true
-      }
-      return new Range(comp.value, options).test(this.value)
-    } else if (comp.operator === '') {
-      if (comp.value === '') {
-        return true
-      }
-      return new Range(this.value, options).test(comp.semver)
-    }
-
-    const sameDirectionIncreasing =
-      (this.operator === '>=' || this.operator === '>') &&
-      (comp.operator === '>=' || comp.operator === '>')
-    const sameDirectionDecreasing =
-      (this.operator === '<=' || this.operator === '<') &&
-      (comp.operator === '<=' || comp.operator === '<')
-    const sameSemVer = this.semver.version === comp.semver.version
-    const differentDirectionsInclusive =
-      (this.operator === '>=' || this.operator === '<=') &&
-      (comp.operator === '>=' || comp.operator === '<=')
-    const oppositeDirectionsLessThan =
-      cmp(this.semver, '<', comp.semver, options) &&
-      (this.operator === '>=' || this.operator === '>') &&
-        (comp.operator === '<=' || comp.operator === '<')
-    const oppositeDirectionsGreaterThan =
-      cmp(this.semver, '>', comp.semver, options) &&
-      (this.operator === '<=' || this.operator === '<') &&
-        (comp.operator === '>=' || comp.operator === '>')
-
-    return (
-      sameDirectionIncreasing ||
-      sameDirectionDecreasing ||
-      (sameSemVer && differentDirectionsInclusive) ||
-      oppositeDirectionsLessThan ||
-      oppositeDirectionsGreaterThan
-    )
-  }
-}
-
-module.exports = Comparator
-
-const parseOptions = __webpack_require__(455)
-const {re, t} = __webpack_require__(3059)
-const cmp = __webpack_require__(8624)
-const debug = __webpack_require__(4863)
-const SemVer = __webpack_require__(4297)
-const Range = __webpack_require__(845)
-
-
-/***/ }),
-
-/***/ 845:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-// hoisted class for cyclic dependency
-class Range {
-  constructor (range, options) {
-    options = parseOptions(options)
-
-    if (range instanceof Range) {
-      if (
-        range.loose === !!options.loose &&
-        range.includePrerelease === !!options.includePrerelease
-      ) {
-        return range
-      } else {
-        return new Range(range.raw, options)
-      }
-    }
-
-    if (range instanceof Comparator) {
-      // just put it in the set and return
-      this.raw = range.value
-      this.set = [[range]]
-      this.format()
-      return this
-    }
-
-    this.options = options
-    this.loose = !!options.loose
-    this.includePrerelease = !!options.includePrerelease
-
-    // First, split based on boolean or ||
-    this.raw = range
-    this.set = range
-      .split(/\s*\|\|\s*/)
-      // map the range to a 2d array of comparators
-      .map(range => this.parseRange(range.trim()))
-      // throw out any comparator lists that are empty
-      // this generally means that it was not a valid range, which is allowed
-      // in loose mode, but will still throw if the WHOLE range is invalid.
-      .filter(c => c.length)
-
-    if (!this.set.length) {
-      throw new TypeError(`Invalid SemVer Range: ${range}`)
-    }
-
-    // if we have any that are not the null set, throw out null sets.
-    if (this.set.length > 1) {
-      // keep the first one, in case they're all null sets
-      const first = this.set[0]
-      this.set = this.set.filter(c => !isNullSet(c[0]))
-      if (this.set.length === 0)
-        this.set = [first]
-      else if (this.set.length > 1) {
-        // if we have any that are *, then the range is just *
-        for (const c of this.set) {
-          if (c.length === 1 && isAny(c[0])) {
-            this.set = [c]
-            break
-          }
-        }
-      }
-    }
-
-    this.format()
-  }
-
-  format () {
-    this.range = this.set
-      .map((comps) => {
-        return comps.join(' ').trim()
-      })
-      .join('||')
-      .trim()
-    return this.range
-  }
-
-  toString () {
-    return this.range
-  }
-
-  parseRange (range) {
-    range = range.trim()
-
-    // memoize range parsing for performance.
-    // this is a very hot path, and fully deterministic.
-    const memoOpts = Object.keys(this.options).join(',')
-    const memoKey = `parseRange:${memoOpts}:${range}`
-    const cached = cache.get(memoKey)
-    if (cached)
-      return cached
-
-    const loose = this.options.loose
-    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-    const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]
-    range = range.replace(hr, hyphenReplace(this.options.includePrerelease))
-    debug('hyphen replace', range)
-    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-    range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace)
-    debug('comparator trim', range, re[t.COMPARATORTRIM])
-
-    // `~ 1.2.3` => `~1.2.3`
-    range = range.replace(re[t.TILDETRIM], tildeTrimReplace)
-
-    // `^ 1.2.3` => `^1.2.3`
-    range = range.replace(re[t.CARETTRIM], caretTrimReplace)
-
-    // normalize spaces
-    range = range.split(/\s+/).join(' ')
-
-    // At this point, the range is completely trimmed and
-    // ready to be split into comparators.
-
-    const compRe = loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
-    const rangeList = range
-      .split(' ')
-      .map(comp => parseComparator(comp, this.options))
-      .join(' ')
-      .split(/\s+/)
-      // >=0.0.0 is equivalent to *
-      .map(comp => replaceGTE0(comp, this.options))
-      // in loose mode, throw out any that are not valid comparators
-      .filter(this.options.loose ? comp => !!comp.match(compRe) : () => true)
-      .map(comp => new Comparator(comp, this.options))
-
-    // if any comparators are the null set, then replace with JUST null set
-    // if more than one comparator, remove any * comparators
-    // also, don't include the same comparator more than once
-    const l = rangeList.length
-    const rangeMap = new Map()
-    for (const comp of rangeList) {
-      if (isNullSet(comp))
-        return [comp]
-      rangeMap.set(comp.value, comp)
-    }
-    if (rangeMap.size > 1 && rangeMap.has(''))
-      rangeMap.delete('')
-
-    const result = [...rangeMap.values()]
-    cache.set(memoKey, result)
-    return result
-  }
-
-  intersects (range, options) {
-    if (!(range instanceof Range)) {
-      throw new TypeError('a Range is required')
-    }
-
-    return this.set.some((thisComparators) => {
-      return (
-        isSatisfiable(thisComparators, options) &&
-        range.set.some((rangeComparators) => {
-          return (
-            isSatisfiable(rangeComparators, options) &&
-            thisComparators.every((thisComparator) => {
-              return rangeComparators.every((rangeComparator) => {
-                return thisComparator.intersects(rangeComparator, options)
-              })
-            })
-          )
-        })
-      )
-    })
-  }
-
-  // if ANY of the sets match ALL of its comparators, then pass
-  test (version) {
-    if (!version) {
-      return false
-    }
-
-    if (typeof version === 'string') {
-      try {
-        version = new SemVer(version, this.options)
-      } catch (er) {
-        return false
-      }
-    }
-
-    for (let i = 0; i < this.set.length; i++) {
-      if (testSet(this.set[i], version, this.options)) {
-        return true
-      }
-    }
-    return false
-  }
-}
-module.exports = Range
-
-const LRU = __webpack_require__(3274)
-const cache = new LRU({ max: 1000 })
-
-const parseOptions = __webpack_require__(455)
-const Comparator = __webpack_require__(3704)
-const debug = __webpack_require__(4863)
-const SemVer = __webpack_require__(4297)
-const {
-  re,
-  t,
-  comparatorTrimReplace,
-  tildeTrimReplace,
-  caretTrimReplace
-} = __webpack_require__(3059)
-
-const isNullSet = c => c.value === '<0.0.0-0'
-const isAny = c => c.value === ''
-
-// take a set of comparators and determine whether there
-// exists a version which can satisfy it
-const isSatisfiable = (comparators, options) => {
-  let result = true
-  const remainingComparators = comparators.slice()
-  let testComparator = remainingComparators.pop()
-
-  while (result && remainingComparators.length) {
-    result = remainingComparators.every((otherComparator) => {
-      return testComparator.intersects(otherComparator, options)
-    })
-
-    testComparator = remainingComparators.pop()
-  }
-
-  return result
-}
-
-// comprised of xranges, tildes, stars, and gtlt's at this point.
-// already replaced the hyphen ranges
-// turn into a set of JUST comparators.
-const parseComparator = (comp, options) => {
-  debug('comp', comp, options)
-  comp = replaceCarets(comp, options)
-  debug('caret', comp)
-  comp = replaceTildes(comp, options)
-  debug('tildes', comp)
-  comp = replaceXRanges(comp, options)
-  debug('xrange', comp)
-  comp = replaceStars(comp, options)
-  debug('stars', comp)
-  return comp
-}
-
-const isX = id => !id || id.toLowerCase() === 'x' || id === '*'
-
-// ~, ~> --> * (any, kinda silly)
-// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0
-// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0
-// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0
-// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0
-// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0
-const replaceTildes = (comp, options) =>
-  comp.trim().split(/\s+/).map((comp) => {
-    return replaceTilde(comp, options)
-  }).join(' ')
-
-const replaceTilde = (comp, options) => {
-  const r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE]
-  return comp.replace(r, (_, M, m, p, pr) => {
-    debug('tilde', comp, _, M, m, p, pr)
-    let ret
-
-    if (isX(M)) {
-      ret = ''
-    } else if (isX(m)) {
-      ret = `>=${M}.0.0 <${+M + 1}.0.0-0`
-    } else if (isX(p)) {
-      // ~1.2 == >=1.2.0 <1.3.0-0
-      ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`
-    } else if (pr) {
-      debug('replaceTilde pr', pr)
-      ret = `>=${M}.${m}.${p}-${pr
-      } <${M}.${+m + 1}.0-0`
-    } else {
-      // ~1.2.3 == >=1.2.3 <1.3.0-0
-      ret = `>=${M}.${m}.${p
-      } <${M}.${+m + 1}.0-0`
-    }
-
-    debug('tilde return', ret)
-    return ret
-  })
-}
-
-// ^ --> * (any, kinda silly)
-// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0
-// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0
-// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0
-// ^1.2.3 --> >=1.2.3 <2.0.0-0
-// ^1.2.0 --> >=1.2.0 <2.0.0-0
-const replaceCarets = (comp, options) =>
-  comp.trim().split(/\s+/).map((comp) => {
-    return replaceCaret(comp, options)
-  }).join(' ')
-
-const replaceCaret = (comp, options) => {
-  debug('caret', comp, options)
-  const r = options.loose ? re[t.CARETLOOSE] : re[t.CARET]
-  const z = options.includePrerelease ? '-0' : ''
-  return comp.replace(r, (_, M, m, p, pr) => {
-    debug('caret', comp, _, M, m, p, pr)
-    let ret
-
-    if (isX(M)) {
-      ret = ''
-    } else if (isX(m)) {
-      ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`
-    } else if (isX(p)) {
-      if (M === '0') {
-        ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`
-      } else {
-        ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`
-      }
-    } else if (pr) {
-      debug('replaceCaret pr', pr)
-      if (M === '0') {
-        if (m === '0') {
-          ret = `>=${M}.${m}.${p}-${pr
-          } <${M}.${m}.${+p + 1}-0`
-        } else {
-          ret = `>=${M}.${m}.${p}-${pr
-          } <${M}.${+m + 1}.0-0`
-        }
-      } else {
-        ret = `>=${M}.${m}.${p}-${pr
-        } <${+M + 1}.0.0-0`
-      }
-    } else {
-      debug('no pr')
-      if (M === '0') {
-        if (m === '0') {
-          ret = `>=${M}.${m}.${p
-          }${z} <${M}.${m}.${+p + 1}-0`
-        } else {
-          ret = `>=${M}.${m}.${p
-          }${z} <${M}.${+m + 1}.0-0`
-        }
-      } else {
-        ret = `>=${M}.${m}.${p
-        } <${+M + 1}.0.0-0`
-      }
-    }
-
-    debug('caret return', ret)
-    return ret
-  })
-}
-
-const replaceXRanges = (comp, options) => {
-  debug('replaceXRanges', comp, options)
-  return comp.split(/\s+/).map((comp) => {
-    return replaceXRange(comp, options)
-  }).join(' ')
-}
-
-const replaceXRange = (comp, options) => {
-  comp = comp.trim()
-  const r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE]
-  return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
-    debug('xRange', comp, ret, gtlt, M, m, p, pr)
-    const xM = isX(M)
-    const xm = xM || isX(m)
-    const xp = xm || isX(p)
-    const anyX = xp
-
-    if (gtlt === '=' && anyX) {
-      gtlt = ''
-    }
-
-    // if we're including prereleases in the match, then we need
-    // to fix this to -0, the lowest possible prerelease value
-    pr = options.includePrerelease ? '-0' : ''
-
-    if (xM) {
-      if (gtlt === '>' || gtlt === '<') {
-        // nothing is allowed
-        ret = '<0.0.0-0'
-      } else {
-        // nothing is forbidden
-        ret = '*'
-      }
-    } else if (gtlt && anyX) {
-      // we know patch is an x, because we have any x at all.
-      // replace X with 0
-      if (xm) {
-        m = 0
-      }
-      p = 0
-
-      if (gtlt === '>') {
-        // >1 => >=2.0.0
-        // >1.2 => >=1.3.0
-        gtlt = '>='
-        if (xm) {
-          M = +M + 1
-          m = 0
-          p = 0
-        } else {
-          m = +m + 1
-          p = 0
-        }
-      } else if (gtlt === '<=') {
-        // <=0.7.x is actually <0.8.0, since any 0.7.x should
-        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
-        gtlt = '<'
-        if (xm) {
-          M = +M + 1
-        } else {
-          m = +m + 1
-        }
-      }
-
-      if (gtlt === '<')
-        pr = '-0'
-
-      ret = `${gtlt + M}.${m}.${p}${pr}`
-    } else if (xm) {
-      ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`
-    } else if (xp) {
-      ret = `>=${M}.${m}.0${pr
-      } <${M}.${+m + 1}.0-0`
-    }
-
-    debug('xRange return', ret)
-
-    return ret
-  })
-}
-
-// Because * is AND-ed with everything else in the comparator,
-// and '' means "any version", just remove the *s entirely.
-const replaceStars = (comp, options) => {
-  debug('replaceStars', comp, options)
-  // Looseness is ignored here.  star is always as loose as it gets!
-  return comp.trim().replace(re[t.STAR], '')
-}
-
-const replaceGTE0 = (comp, options) => {
-  debug('replaceGTE0', comp, options)
-  return comp.trim()
-    .replace(re[options.includePrerelease ? t.GTE0PRE : t.GTE0], '')
-}
-
-// This function is passed to string.replace(re[t.HYPHENRANGE])
-// M, m, patch, prerelease, build
-// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
-// 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do
-// 1.2 - 3.4 => >=1.2.0 <3.5.0-0
-const hyphenReplace = incPr => ($0,
-  from, fM, fm, fp, fpr, fb,
-  to, tM, tm, tp, tpr, tb) => {
-  if (isX(fM)) {
-    from = ''
-  } else if (isX(fm)) {
-    from = `>=${fM}.0.0${incPr ? '-0' : ''}`
-  } else if (isX(fp)) {
-    from = `>=${fM}.${fm}.0${incPr ? '-0' : ''}`
-  } else if (fpr) {
-    from = `>=${from}`
-  } else {
-    from = `>=${from}${incPr ? '-0' : ''}`
-  }
-
-  if (isX(tM)) {
-    to = ''
-  } else if (isX(tm)) {
-    to = `<${+tM + 1}.0.0-0`
-  } else if (isX(tp)) {
-    to = `<${tM}.${+tm + 1}.0-0`
-  } else if (tpr) {
-    to = `<=${tM}.${tm}.${tp}-${tpr}`
-  } else if (incPr) {
-    to = `<${tM}.${tm}.${+tp + 1}-0`
-  } else {
-    to = `<=${to}`
-  }
-
-  return (`${from} ${to}`).trim()
-}
-
-const testSet = (set, version, options) => {
-  for (let i = 0; i < set.length; i++) {
-    if (!set[i].test(version)) {
-      return false
-    }
-  }
-
-  if (version.prerelease.length && !options.includePrerelease) {
-    // Find the set of versions that are allowed to have prereleases
-    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
-    // That should allow `1.2.3-pr.2` to pass.
-    // However, `1.2.4-alpha.notready` should NOT be allowed,
-    // even though it's within the range set by the comparators.
-    for (let i = 0; i < set.length; i++) {
-      debug(set[i].semver)
-      if (set[i].semver === Comparator.ANY) {
-        continue
-      }
-
-      if (set[i].semver.prerelease.length > 0) {
-        const allowed = set[i].semver
-        if (allowed.major === version.major &&
-            allowed.minor === version.minor &&
-            allowed.patch === version.patch) {
-          return true
-        }
-      }
-    }
-
-    // Version has a -pre, but it's not one of the ones we like.
-    return false
-  }
-
-  return true
-}
-
-
-/***/ }),
-
-/***/ 4297:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const debug = __webpack_require__(4863)
-const { MAX_LENGTH, MAX_SAFE_INTEGER } = __webpack_require__(7106)
-const { re, t } = __webpack_require__(3059)
-
-const parseOptions = __webpack_require__(455)
-const { compareIdentifiers } = __webpack_require__(6682)
-class SemVer {
-  constructor (version, options) {
-    options = parseOptions(options)
-
-    if (version instanceof SemVer) {
-      if (version.loose === !!options.loose &&
-          version.includePrerelease === !!options.includePrerelease) {
-        return version
-      } else {
-        version = version.version
-      }
-    } else if (typeof version !== 'string') {
-      throw new TypeError(`Invalid Version: ${version}`)
-    }
-
-    if (version.length > MAX_LENGTH) {
-      throw new TypeError(
-        `version is longer than ${MAX_LENGTH} characters`
-      )
-    }
-
-    debug('SemVer', version, options)
-    this.options = options
-    this.loose = !!options.loose
-    // this isn't actually relevant for versions, but keep it so that we
-    // don't run into trouble passing this.options around.
-    this.includePrerelease = !!options.includePrerelease
-
-    const m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL])
-
-    if (!m) {
-      throw new TypeError(`Invalid Version: ${version}`)
-    }
-
-    this.raw = version
-
-    // these are actually numbers
-    this.major = +m[1]
-    this.minor = +m[2]
-    this.patch = +m[3]
-
-    if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
-      throw new TypeError('Invalid major version')
-    }
-
-    if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
-      throw new TypeError('Invalid minor version')
-    }
-
-    if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
-      throw new TypeError('Invalid patch version')
-    }
-
-    // numberify any prerelease numeric ids
-    if (!m[4]) {
-      this.prerelease = []
-    } else {
-      this.prerelease = m[4].split('.').map((id) => {
-        if (/^[0-9]+$/.test(id)) {
-          const num = +id
-          if (num >= 0 && num < MAX_SAFE_INTEGER) {
-            return num
-          }
-        }
-        return id
-      })
-    }
-
-    this.build = m[5] ? m[5].split('.') : []
-    this.format()
-  }
-
-  format () {
-    this.version = `${this.major}.${this.minor}.${this.patch}`
-    if (this.prerelease.length) {
-      this.version += `-${this.prerelease.join('.')}`
-    }
-    return this.version
-  }
-
-  toString () {
-    return this.version
-  }
-
-  compare (other) {
-    debug('SemVer.compare', this.version, this.options, other)
-    if (!(other instanceof SemVer)) {
-      if (typeof other === 'string' && other === this.version) {
-        return 0
-      }
-      other = new SemVer(other, this.options)
-    }
-
-    if (other.version === this.version) {
-      return 0
-    }
-
-    return this.compareMain(other) || this.comparePre(other)
-  }
-
-  compareMain (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options)
-    }
-
-    return (
-      compareIdentifiers(this.major, other.major) ||
-      compareIdentifiers(this.minor, other.minor) ||
-      compareIdentifiers(this.patch, other.patch)
-    )
-  }
-
-  comparePre (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options)
-    }
-
-    // NOT having a prerelease is > having one
-    if (this.prerelease.length && !other.prerelease.length) {
-      return -1
-    } else if (!this.prerelease.length && other.prerelease.length) {
-      return 1
-    } else if (!this.prerelease.length && !other.prerelease.length) {
-      return 0
-    }
-
-    let i = 0
-    do {
-      const a = this.prerelease[i]
-      const b = other.prerelease[i]
-      debug('prerelease compare', i, a, b)
-      if (a === undefined && b === undefined) {
-        return 0
-      } else if (b === undefined) {
-        return 1
-      } else if (a === undefined) {
-        return -1
-      } else if (a === b) {
-        continue
-      } else {
-        return compareIdentifiers(a, b)
-      }
-    } while (++i)
-  }
-
-  compareBuild (other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options)
-    }
-
-    let i = 0
-    do {
-      const a = this.build[i]
-      const b = other.build[i]
-      debug('prerelease compare', i, a, b)
-      if (a === undefined && b === undefined) {
-        return 0
-      } else if (b === undefined) {
-        return 1
-      } else if (a === undefined) {
-        return -1
-      } else if (a === b) {
-        continue
-      } else {
-        return compareIdentifiers(a, b)
-      }
-    } while (++i)
-  }
-
-  // preminor will bump the version up to the next minor release, and immediately
-  // down to pre-release. premajor and prepatch work the same way.
-  inc (release, identifier) {
-    switch (release) {
-      case 'premajor':
-        this.prerelease.length = 0
-        this.patch = 0
-        this.minor = 0
-        this.major++
-        this.inc('pre', identifier)
-        break
-      case 'preminor':
-        this.prerelease.length = 0
-        this.patch = 0
-        this.minor++
-        this.inc('pre', identifier)
-        break
-      case 'prepatch':
-        // If this is already a prerelease, it will bump to the next version
-        // drop any prereleases that might already exist, since they are not
-        // relevant at this point.
-        this.prerelease.length = 0
-        this.inc('patch', identifier)
-        this.inc('pre', identifier)
-        break
-      // If the input is a non-prerelease version, this acts the same as
-      // prepatch.
-      case 'prerelease':
-        if (this.prerelease.length === 0) {
-          this.inc('patch', identifier)
-        }
-        this.inc('pre', identifier)
-        break
-
-      case 'major':
-        // If this is a pre-major version, bump up to the same major version.
-        // Otherwise increment major.
-        // 1.0.0-5 bumps to 1.0.0
-        // 1.1.0 bumps to 2.0.0
-        if (
-          this.minor !== 0 ||
-          this.patch !== 0 ||
-          this.prerelease.length === 0
-        ) {
-          this.major++
-        }
-        this.minor = 0
-        this.patch = 0
-        this.prerelease = []
-        break
-      case 'minor':
-        // If this is a pre-minor version, bump up to the same minor version.
-        // Otherwise increment minor.
-        // 1.2.0-5 bumps to 1.2.0
-        // 1.2.1 bumps to 1.3.0
-        if (this.patch !== 0 || this.prerelease.length === 0) {
-          this.minor++
-        }
-        this.patch = 0
-        this.prerelease = []
-        break
-      case 'patch':
-        // If this is not a pre-release version, it will increment the patch.
-        // If it is a pre-release it will bump up to the same patch version.
-        // 1.2.0-5 patches to 1.2.0
-        // 1.2.0 patches to 1.2.1
-        if (this.prerelease.length === 0) {
-          this.patch++
-        }
-        this.prerelease = []
-        break
-      // This probably shouldn't be used publicly.
-      // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
-      case 'pre':
-        if (this.prerelease.length === 0) {
-          this.prerelease = [0]
-        } else {
-          let i = this.prerelease.length
-          while (--i >= 0) {
-            if (typeof this.prerelease[i] === 'number') {
-              this.prerelease[i]++
-              i = -2
-            }
-          }
-          if (i === -1) {
-            // didn't increment anything
-            this.prerelease.push(0)
-          }
-        }
-        if (identifier) {
-          // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
-          // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
-          if (this.prerelease[0] === identifier) {
-            if (isNaN(this.prerelease[1])) {
-              this.prerelease = [identifier, 0]
-            }
-          } else {
-            this.prerelease = [identifier, 0]
-          }
-        }
-        break
-
-      default:
-        throw new Error(`invalid increment argument: ${release}`)
-    }
-    this.format()
-    this.raw = this.version
-    return this
-  }
-}
-
-module.exports = SemVer
-
-
-/***/ }),
-
-/***/ 8277:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const parse = __webpack_require__(7287)
-const clean = (version, options) => {
-  const s = parse(version.trim().replace(/^[=v]+/, ''), options)
-  return s ? s.version : null
-}
-module.exports = clean
-
-
-/***/ }),
-
-/***/ 8624:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const eq = __webpack_require__(6907)
-const neq = __webpack_require__(4136)
-const gt = __webpack_require__(4826)
-const gte = __webpack_require__(1984)
-const lt = __webpack_require__(1806)
-const lte = __webpack_require__(5861)
-
-const cmp = (a, op, b, loose) => {
-  switch (op) {
-    case '===':
-      if (typeof a === 'object')
-        a = a.version
-      if (typeof b === 'object')
-        b = b.version
-      return a === b
-
-    case '!==':
-      if (typeof a === 'object')
-        a = a.version
-      if (typeof b === 'object')
-        b = b.version
-      return a !== b
-
-    case '':
-    case '=':
-    case '==':
-      return eq(a, b, loose)
-
-    case '!=':
-      return neq(a, b, loose)
-
-    case '>':
-      return gt(a, b, loose)
-
-    case '>=':
-      return gte(a, b, loose)
-
-    case '<':
-      return lt(a, b, loose)
-
-    case '<=':
-      return lte(a, b, loose)
-
-    default:
-      throw new TypeError(`Invalid operator: ${op}`)
-  }
-}
-module.exports = cmp
-
-
-/***/ }),
-
-/***/ 2532:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const parse = __webpack_require__(7287)
-const {re, t} = __webpack_require__(3059)
-
-const coerce = (version, options) => {
-  if (version instanceof SemVer) {
-    return version
-  }
-
-  if (typeof version === 'number') {
-    version = String(version)
-  }
-
-  if (typeof version !== 'string') {
-    return null
-  }
-
-  options = options || {}
-
-  let match = null
-  if (!options.rtl) {
-    match = version.match(re[t.COERCE])
-  } else {
-    // Find the right-most coercible string that does not share
-    // a terminus with a more left-ward coercible string.
-    // Eg, '1.2.3.4' wants to coerce '2.3.4', not '3.4' or '4'
-    //
-    // Walk through the string checking with a /g regexp
-    // Manually set the index so as to pick up overlapping matches.
-    // Stop when we get a match that ends at the string end, since no
-    // coercible string can be more right-ward without the same terminus.
-    let next
-    while ((next = re[t.COERCERTL].exec(version)) &&
-        (!match || match.index + match[0].length !== version.length)
-    ) {
-      if (!match ||
-            next.index + next[0].length !== match.index + match[0].length) {
-        match = next
-      }
-      re[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
-    }
-    // leave it in a clean state
-    re[t.COERCERTL].lastIndex = -1
-  }
-
-  if (match === null)
-    return null
-
-  return parse(`${match[2]}.${match[3] || '0'}.${match[4] || '0'}`, options)
-}
-module.exports = coerce
-
-
-/***/ }),
-
-/***/ 5303:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const compareBuild = (a, b, loose) => {
-  const versionA = new SemVer(a, loose)
-  const versionB = new SemVer(b, loose)
-  return versionA.compare(versionB) || versionA.compareBuild(versionB)
-}
-module.exports = compareBuild
-
-
-/***/ }),
-
-/***/ 938:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compare = __webpack_require__(4441)
-const compareLoose = (a, b) => compare(a, b, true)
-module.exports = compareLoose
-
-
-/***/ }),
-
-/***/ 4441:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const compare = (a, b, loose) =>
-  new SemVer(a, loose).compare(new SemVer(b, loose))
-
-module.exports = compare
-
-
-/***/ }),
-
-/***/ 8280:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const parse = __webpack_require__(7287)
-const eq = __webpack_require__(6907)
-
-const diff = (version1, version2) => {
-  if (eq(version1, version2)) {
-    return null
-  } else {
-    const v1 = parse(version1)
-    const v2 = parse(version2)
-    const hasPre = v1.prerelease.length || v2.prerelease.length
-    const prefix = hasPre ? 'pre' : ''
-    const defaultResult = hasPre ? 'prerelease' : ''
-    for (const key in v1) {
-      if (key === 'major' || key === 'minor' || key === 'patch') {
-        if (v1[key] !== v2[key]) {
-          return prefix + key
-        }
-      }
-    }
-    return defaultResult // may be undefined
-  }
-}
-module.exports = diff
-
-
-/***/ }),
-
-/***/ 6907:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compare = __webpack_require__(4441)
-const eq = (a, b, loose) => compare(a, b, loose) === 0
-module.exports = eq
-
-
-/***/ }),
-
-/***/ 4826:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compare = __webpack_require__(4441)
-const gt = (a, b, loose) => compare(a, b, loose) > 0
-module.exports = gt
-
-
-/***/ }),
-
-/***/ 1984:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compare = __webpack_require__(4441)
-const gte = (a, b, loose) => compare(a, b, loose) >= 0
-module.exports = gte
-
-
-/***/ }),
-
-/***/ 3448:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-
-const inc = (version, release, options, identifier) => {
-  if (typeof (options) === 'string') {
-    identifier = options
-    options = undefined
-  }
-
-  try {
-    return new SemVer(version, options).inc(release, identifier).version
-  } catch (er) {
-    return null
-  }
-}
-module.exports = inc
-
-
-/***/ }),
-
-/***/ 1806:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compare = __webpack_require__(4441)
-const lt = (a, b, loose) => compare(a, b, loose) < 0
-module.exports = lt
-
-
-/***/ }),
-
-/***/ 5861:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compare = __webpack_require__(4441)
-const lte = (a, b, loose) => compare(a, b, loose) <= 0
-module.exports = lte
-
-
-/***/ }),
-
-/***/ 2894:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const major = (a, loose) => new SemVer(a, loose).major
-module.exports = major
-
-
-/***/ }),
-
-/***/ 6246:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const minor = (a, loose) => new SemVer(a, loose).minor
-module.exports = minor
-
-
-/***/ }),
-
-/***/ 4136:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compare = __webpack_require__(4441)
-const neq = (a, b, loose) => compare(a, b, loose) !== 0
-module.exports = neq
-
-
-/***/ }),
-
-/***/ 7287:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const {MAX_LENGTH} = __webpack_require__(7106)
-const { re, t } = __webpack_require__(3059)
-const SemVer = __webpack_require__(4297)
-
-const parseOptions = __webpack_require__(455)
-const parse = (version, options) => {
-  options = parseOptions(options)
-
-  if (version instanceof SemVer) {
-    return version
-  }
-
-  if (typeof version !== 'string') {
-    return null
-  }
-
-  if (version.length > MAX_LENGTH) {
-    return null
-  }
-
-  const r = options.loose ? re[t.LOOSE] : re[t.FULL]
-  if (!r.test(version)) {
-    return null
-  }
-
-  try {
-    return new SemVer(version, options)
-  } catch (er) {
-    return null
-  }
-}
-
-module.exports = parse
-
-
-/***/ }),
-
-/***/ 8439:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const patch = (a, loose) => new SemVer(a, loose).patch
-module.exports = patch
-
-
-/***/ }),
-
-/***/ 6898:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const parse = __webpack_require__(7287)
-const prerelease = (version, options) => {
-  const parsed = parse(version, options)
-  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
-}
-module.exports = prerelease
-
-
-/***/ }),
-
-/***/ 9091:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compare = __webpack_require__(4441)
-const rcompare = (a, b, loose) => compare(b, a, loose)
-module.exports = rcompare
-
-
-/***/ }),
-
-/***/ 3974:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compareBuild = __webpack_require__(5303)
-const rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose))
-module.exports = rsort
-
-
-/***/ }),
-
-/***/ 9457:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const Range = __webpack_require__(845)
-const satisfies = (version, range, options) => {
-  try {
-    range = new Range(range, options)
-  } catch (er) {
-    return false
-  }
-  return range.test(version)
-}
-module.exports = satisfies
-
-
-/***/ }),
-
-/***/ 5351:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const compareBuild = __webpack_require__(5303)
-const sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose))
-module.exports = sort
-
-
-/***/ }),
-
-/***/ 4074:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const parse = __webpack_require__(7287)
-const valid = (version, options) => {
-  const v = parse(version, options)
-  return v ? v.version : null
-}
-module.exports = valid
-
-
-/***/ }),
-
-/***/ 1776:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-// just pre-load all the stuff that index.js lazily exports
-const internalRe = __webpack_require__(3059)
-module.exports = {
-  re: internalRe.re,
-  src: internalRe.src,
-  tokens: internalRe.t,
-  SEMVER_SPEC_VERSION: __webpack_require__(7106).SEMVER_SPEC_VERSION,
-  SemVer: __webpack_require__(4297),
-  compareIdentifiers: __webpack_require__(6682).compareIdentifiers,
-  rcompareIdentifiers: __webpack_require__(6682).rcompareIdentifiers,
-  parse: __webpack_require__(7287),
-  valid: __webpack_require__(4074),
-  clean: __webpack_require__(8277),
-  inc: __webpack_require__(3448),
-  diff: __webpack_require__(8280),
-  major: __webpack_require__(2894),
-  minor: __webpack_require__(6246),
-  patch: __webpack_require__(8439),
-  prerelease: __webpack_require__(6898),
-  compare: __webpack_require__(4441),
-  rcompare: __webpack_require__(9091),
-  compareLoose: __webpack_require__(938),
-  compareBuild: __webpack_require__(5303),
-  sort: __webpack_require__(5351),
-  rsort: __webpack_require__(3974),
-  gt: __webpack_require__(4826),
-  lt: __webpack_require__(1806),
-  eq: __webpack_require__(6907),
-  neq: __webpack_require__(4136),
-  gte: __webpack_require__(1984),
-  lte: __webpack_require__(5861),
-  cmp: __webpack_require__(8624),
-  coerce: __webpack_require__(2532),
-  Comparator: __webpack_require__(3704),
-  Range: __webpack_require__(845),
-  satisfies: __webpack_require__(9457),
-  toComparators: __webpack_require__(9528),
-  maxSatisfying: __webpack_require__(2878),
-  minSatisfying: __webpack_require__(3946),
-  minVersion: __webpack_require__(94),
-  validRange: __webpack_require__(9374),
-  outside: __webpack_require__(4982),
-  gtr: __webpack_require__(8782),
-  ltr: __webpack_require__(8551),
-  intersects: __webpack_require__(8922),
-  simplifyRange: __webpack_require__(6840),
-  subset: __webpack_require__(1),
-}
-
-
-/***/ }),
-
-/***/ 7106:
-/***/ ((module) => {
-
-// Note: this is the semver.org version of the spec that it implements
-// Not necessarily the package version of this code.
-const SEMVER_SPEC_VERSION = '2.0.0'
-
-const MAX_LENGTH = 256
-const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
-  /* istanbul ignore next */ 9007199254740991
-
-// Max safe segment length for coercion.
-const MAX_SAFE_COMPONENT_LENGTH = 16
-
-module.exports = {
-  SEMVER_SPEC_VERSION,
-  MAX_LENGTH,
-  MAX_SAFE_INTEGER,
-  MAX_SAFE_COMPONENT_LENGTH
-}
-
-
-/***/ }),
-
-/***/ 4863:
-/***/ ((module) => {
-
-const debug = (
-  typeof process === 'object' &&
-  process.env &&
-  process.env.NODE_DEBUG &&
-  /\bsemver\b/i.test(process.env.NODE_DEBUG)
-) ? (...args) => console.error('SEMVER', ...args)
-  : () => {}
-
-module.exports = debug
-
-
-/***/ }),
-
-/***/ 6682:
-/***/ ((module) => {
-
-const numeric = /^[0-9]+$/
-const compareIdentifiers = (a, b) => {
-  const anum = numeric.test(a)
-  const bnum = numeric.test(b)
-
-  if (anum && bnum) {
-    a = +a
-    b = +b
-  }
-
-  return a === b ? 0
-    : (anum && !bnum) ? -1
-    : (bnum && !anum) ? 1
-    : a < b ? -1
-    : 1
-}
-
-const rcompareIdentifiers = (a, b) => compareIdentifiers(b, a)
-
-module.exports = {
-  compareIdentifiers,
-  rcompareIdentifiers
-}
-
-
-/***/ }),
-
-/***/ 455:
-/***/ ((module) => {
-
-// parse out just the options we care about so we always get a consistent
-// obj with keys in a consistent order.
-const opts = ['includePrerelease', 'loose', 'rtl']
-const parseOptions = options =>
-  !options ? {}
-  : typeof options !== 'object' ? { loose: true }
-  : opts.filter(k => options[k]).reduce((options, k) => {
-    options[k] = true
-    return options
-  }, {})
-module.exports = parseOptions
-
-
-/***/ }),
-
-/***/ 3059:
-/***/ ((module, exports, __webpack_require__) => {
-
-const { MAX_SAFE_COMPONENT_LENGTH } = __webpack_require__(7106)
-const debug = __webpack_require__(4863)
-exports = module.exports = {}
-
-// The actual regexps go on exports.re
-const re = exports.re = []
-const src = exports.src = []
-const t = exports.t = {}
-let R = 0
-
-const createToken = (name, value, isGlobal) => {
-  const index = R++
-  debug(index, value)
-  t[name] = index
-  src[index] = value
-  re[index] = new RegExp(value, isGlobal ? 'g' : undefined)
-}
-
-// The following Regular Expressions can be used for tokenizing,
-// validating, and parsing SemVer version strings.
-
-// ## Numeric Identifier
-// A single `0`, or a non-zero digit followed by zero or more digits.
-
-createToken('NUMERICIDENTIFIER', '0|[1-9]\\d*')
-createToken('NUMERICIDENTIFIERLOOSE', '[0-9]+')
-
-// ## Non-numeric Identifier
-// Zero or more digits, followed by a letter or hyphen, and then zero or
-// more letters, digits, or hyphens.
-
-createToken('NONNUMERICIDENTIFIER', '\\d*[a-zA-Z-][a-zA-Z0-9-]*')
-
-// ## Main Version
-// Three dot-separated numeric identifiers.
-
-createToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\.` +
-                   `(${src[t.NUMERICIDENTIFIER]})\\.` +
-                   `(${src[t.NUMERICIDENTIFIER]})`)
-
-createToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
-                        `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
-                        `(${src[t.NUMERICIDENTIFIERLOOSE]})`)
-
-// ## Pre-release Version Identifier
-// A numeric identifier, or a non-numeric identifier.
-
-createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NUMERICIDENTIFIER]
-}|${src[t.NONNUMERICIDENTIFIER]})`)
-
-createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NUMERICIDENTIFIERLOOSE]
-}|${src[t.NONNUMERICIDENTIFIER]})`)
-
-// ## Pre-release Version
-// Hyphen, followed by one or more dot-separated pre-release version
-// identifiers.
-
-createToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]
-}(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`)
-
-createToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]
-}(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`)
-
-// ## Build Metadata Identifier
-// Any combination of digits, letters, or hyphens.
-
-createToken('BUILDIDENTIFIER', '[0-9A-Za-z-]+')
-
-// ## Build Metadata
-// Plus sign, followed by one or more period-separated build metadata
-// identifiers.
-
-createToken('BUILD', `(?:\\+(${src[t.BUILDIDENTIFIER]
-}(?:\\.${src[t.BUILDIDENTIFIER]})*))`)
-
-// ## Full Version String
-// A main version, followed optionally by a pre-release version and
-// build metadata.
-
-// Note that the only major, minor, patch, and pre-release sections of
-// the version string are capturing groups.  The build metadata is not a
-// capturing group, because it should not ever be used in version
-// comparison.
-
-createToken('FULLPLAIN', `v?${src[t.MAINVERSION]
-}${src[t.PRERELEASE]}?${
-  src[t.BUILD]}?`)
-
-createToken('FULL', `^${src[t.FULLPLAIN]}$`)
-
-// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
-// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
-// common in the npm registry.
-createToken('LOOSEPLAIN', `[v=\\s]*${src[t.MAINVERSIONLOOSE]
-}${src[t.PRERELEASELOOSE]}?${
-  src[t.BUILD]}?`)
-
-createToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`)
-
-createToken('GTLT', '((?:<|>)?=?)')
-
-// Something like "2.*" or "1.2.x".
-// Note that "x.x" is a valid xRange identifer, meaning "any version"
-// Only the first item is strictly required.
-createToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`)
-createToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`)
-
-createToken('XRANGEPLAIN', `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
-                   `(?:${src[t.PRERELEASE]})?${
-                     src[t.BUILD]}?` +
-                   `)?)?`)
-
-createToken('XRANGEPLAINLOOSE', `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
-                        `(?:${src[t.PRERELEASELOOSE]})?${
-                          src[t.BUILD]}?` +
-                        `)?)?`)
-
-createToken('XRANGE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`)
-createToken('XRANGELOOSE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`)
-
-// Coercion.
-// Extract anything that could conceivably be a part of a valid semver
-createToken('COERCE', `${'(^|[^\\d])' +
-              '(\\d{1,'}${MAX_SAFE_COMPONENT_LENGTH}})` +
-              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
-              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
-              `(?:$|[^\\d])`)
-createToken('COERCERTL', src[t.COERCE], true)
-
-// Tilde ranges.
-// Meaning is "reasonably at or greater than"
-createToken('LONETILDE', '(?:~>?)')
-
-createToken('TILDETRIM', `(\\s*)${src[t.LONETILDE]}\\s+`, true)
-exports.tildeTrimReplace = '$1~'
-
-createToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`)
-createToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`)
-
-// Caret ranges.
-// Meaning is "at least and backwards compatible with"
-createToken('LONECARET', '(?:\\^)')
-
-createToken('CARETTRIM', `(\\s*)${src[t.LONECARET]}\\s+`, true)
-exports.caretTrimReplace = '$1^'
-
-createToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`)
-createToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`)
-
-// A simple gt/lt/eq thing, or just "" to indicate "any version"
-createToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`)
-createToken('COMPARATOR', `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`)
-
-// An expression to strip any whitespace between the gtlt and the thing
-// it modifies, so that `> 1.2.3` ==> `>1.2.3`
-createToken('COMPARATORTRIM', `(\\s*)${src[t.GTLT]
-}\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true)
-exports.comparatorTrimReplace = '$1$2$3'
-
-// Something like `1.2.3 - 1.2.4`
-// Note that these all use the loose form, because they'll be
-// checked against either the strict or loose comparator form
-// later.
-createToken('HYPHENRANGE', `^\\s*(${src[t.XRANGEPLAIN]})` +
-                   `\\s+-\\s+` +
-                   `(${src[t.XRANGEPLAIN]})` +
-                   `\\s*$`)
-
-createToken('HYPHENRANGELOOSE', `^\\s*(${src[t.XRANGEPLAINLOOSE]})` +
-                        `\\s+-\\s+` +
-                        `(${src[t.XRANGEPLAINLOOSE]})` +
-                        `\\s*$`)
-
-// Star ranges basically just allow anything at all.
-createToken('STAR', '(<|>)?=?\\s*\\*')
-// >=0.0.0 is like a star
-createToken('GTE0', '^\\s*>=\\s*0\.0\.0\\s*$')
-createToken('GTE0PRE', '^\\s*>=\\s*0\.0\.0-0\\s*$')
-
-
-/***/ }),
-
-/***/ 8782:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-// Determine if version is greater than all the versions possible in the range.
-const outside = __webpack_require__(4982)
-const gtr = (version, range, options) => outside(version, range, '>', options)
-module.exports = gtr
-
-
-/***/ }),
-
-/***/ 8922:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const Range = __webpack_require__(845)
-const intersects = (r1, r2, options) => {
-  r1 = new Range(r1, options)
-  r2 = new Range(r2, options)
-  return r1.intersects(r2)
-}
-module.exports = intersects
-
-
-/***/ }),
-
-/***/ 8551:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const outside = __webpack_require__(4982)
-// Determine if version is less than all the versions possible in the range
-const ltr = (version, range, options) => outside(version, range, '<', options)
-module.exports = ltr
-
-
-/***/ }),
-
-/***/ 2878:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const Range = __webpack_require__(845)
-
-const maxSatisfying = (versions, range, options) => {
-  let max = null
-  let maxSV = null
-  let rangeObj = null
-  try {
-    rangeObj = new Range(range, options)
-  } catch (er) {
-    return null
-  }
-  versions.forEach((v) => {
-    if (rangeObj.test(v)) {
-      // satisfies(v, range, options)
-      if (!max || maxSV.compare(v) === -1) {
-        // compare(max, v, true)
-        max = v
-        maxSV = new SemVer(max, options)
-      }
-    }
-  })
-  return max
-}
-module.exports = maxSatisfying
-
-
-/***/ }),
-
-/***/ 3946:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const Range = __webpack_require__(845)
-const minSatisfying = (versions, range, options) => {
-  let min = null
-  let minSV = null
-  let rangeObj = null
-  try {
-    rangeObj = new Range(range, options)
-  } catch (er) {
-    return null
-  }
-  versions.forEach((v) => {
-    if (rangeObj.test(v)) {
-      // satisfies(v, range, options)
-      if (!min || minSV.compare(v) === 1) {
-        // compare(min, v, true)
-        min = v
-        minSV = new SemVer(min, options)
-      }
-    }
-  })
-  return min
-}
-module.exports = minSatisfying
-
-
-/***/ }),
-
-/***/ 94:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const Range = __webpack_require__(845)
-const gt = __webpack_require__(4826)
-
-const minVersion = (range, loose) => {
-  range = new Range(range, loose)
-
-  let minver = new SemVer('0.0.0')
-  if (range.test(minver)) {
-    return minver
-  }
-
-  minver = new SemVer('0.0.0-0')
-  if (range.test(minver)) {
-    return minver
-  }
-
-  minver = null
-  for (let i = 0; i < range.set.length; ++i) {
-    const comparators = range.set[i]
-
-    let setMin = null
-    comparators.forEach((comparator) => {
-      // Clone to avoid manipulating the comparator's semver object.
-      const compver = new SemVer(comparator.semver.version)
-      switch (comparator.operator) {
-        case '>':
-          if (compver.prerelease.length === 0) {
-            compver.patch++
-          } else {
-            compver.prerelease.push(0)
-          }
-          compver.raw = compver.format()
-          /* fallthrough */
-        case '':
-        case '>=':
-          if (!setMin || gt(compver, setMin)) {
-            setMin = compver
-          }
-          break
-        case '<':
-        case '<=':
-          /* Ignore maximum versions */
-          break
-        /* istanbul ignore next */
-        default:
-          throw new Error(`Unexpected operation: ${comparator.operator}`)
-      }
-    })
-    if (setMin && (!minver || gt(minver, setMin)))
-      minver = setMin
-  }
-
-  if (minver && range.test(minver)) {
-    return minver
-  }
-
-  return null
-}
-module.exports = minVersion
-
-
-/***/ }),
-
-/***/ 4982:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const SemVer = __webpack_require__(4297)
-const Comparator = __webpack_require__(3704)
-const {ANY} = Comparator
-const Range = __webpack_require__(845)
-const satisfies = __webpack_require__(9457)
-const gt = __webpack_require__(4826)
-const lt = __webpack_require__(1806)
-const lte = __webpack_require__(5861)
-const gte = __webpack_require__(1984)
-
-const outside = (version, range, hilo, options) => {
-  version = new SemVer(version, options)
-  range = new Range(range, options)
-
-  let gtfn, ltefn, ltfn, comp, ecomp
-  switch (hilo) {
-    case '>':
-      gtfn = gt
-      ltefn = lte
-      ltfn = lt
-      comp = '>'
-      ecomp = '>='
-      break
-    case '<':
-      gtfn = lt
-      ltefn = gte
-      ltfn = gt
-      comp = '<'
-      ecomp = '<='
-      break
-    default:
-      throw new TypeError('Must provide a hilo val of "<" or ">"')
-  }
-
-  // If it satisfies the range it is not outside
-  if (satisfies(version, range, options)) {
-    return false
-  }
-
-  // From now on, variable terms are as if we're in "gtr" mode.
-  // but note that everything is flipped for the "ltr" function.
-
-  for (let i = 0; i < range.set.length; ++i) {
-    const comparators = range.set[i]
-
-    let high = null
-    let low = null
-
-    comparators.forEach((comparator) => {
-      if (comparator.semver === ANY) {
-        comparator = new Comparator('>=0.0.0')
-      }
-      high = high || comparator
-      low = low || comparator
-      if (gtfn(comparator.semver, high.semver, options)) {
-        high = comparator
-      } else if (ltfn(comparator.semver, low.semver, options)) {
-        low = comparator
-      }
-    })
-
-    // If the edge version comparator has a operator then our version
-    // isn't outside it
-    if (high.operator === comp || high.operator === ecomp) {
-      return false
-    }
-
-    // If the lowest version comparator has an operator and our version
-    // is less than it then it isn't higher than the range
-    if ((!low.operator || low.operator === comp) &&
-        ltefn(version, low.semver)) {
-      return false
-    } else if (low.operator === ecomp && ltfn(version, low.semver)) {
-      return false
-    }
-  }
-  return true
-}
-
-module.exports = outside
-
-
-/***/ }),
-
-/***/ 6840:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-// given a set of versions and a range, create a "simplified" range
-// that includes the same versions that the original range does
-// If the original range is shorter than the simplified one, return that.
-const satisfies = __webpack_require__(9457)
-const compare = __webpack_require__(4441)
-module.exports = (versions, range, options) => {
-  const set = []
-  let min = null
-  let prev = null
-  const v = versions.sort((a, b) => compare(a, b, options))
-  for (const version of v) {
-    const included = satisfies(version, range, options)
-    if (included) {
-      prev = version
-      if (!min)
-        min = version
-    } else {
-      if (prev) {
-        set.push([min, prev])
-      }
-      prev = null
-      min = null
-    }
-  }
-  if (min)
-    set.push([min, null])
-
-  const ranges = []
-  for (const [min, max] of set) {
-    if (min === max)
-      ranges.push(min)
-    else if (!max && min === v[0])
-      ranges.push('*')
-    else if (!max)
-      ranges.push(`>=${min}`)
-    else if (min === v[0])
-      ranges.push(`<=${max}`)
-    else
-      ranges.push(`${min} - ${max}`)
-  }
-  const simplified = ranges.join(' || ')
-  const original = typeof range.raw === 'string' ? range.raw : String(range)
-  return simplified.length < original.length ? simplified : range
-}
-
-
-/***/ }),
-
-/***/ 1:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const Range = __webpack_require__(845)
-const { ANY } = __webpack_require__(3704)
-const satisfies = __webpack_require__(9457)
-const compare = __webpack_require__(4441)
-
-// Complex range `r1 || r2 || ...` is a subset of `R1 || R2 || ...` iff:
-// - Every simple range `r1, r2, ...` is a subset of some `R1, R2, ...`
-//
-// Simple range `c1 c2 ...` is a subset of simple range `C1 C2 ...` iff:
-// - If c is only the ANY comparator
-//   - If C is only the ANY comparator, return true
-//   - Else return false
-// - Let EQ be the set of = comparators in c
-// - If EQ is more than one, return true (null set)
-// - Let GT be the highest > or >= comparator in c
-// - Let LT be the lowest < or <= comparator in c
-// - If GT and LT, and GT.semver > LT.semver, return true (null set)
-// - If EQ
-//   - If GT, and EQ does not satisfy GT, return true (null set)
-//   - If LT, and EQ does not satisfy LT, return true (null set)
-//   - If EQ satisfies every C, return true
-//   - Else return false
-// - If GT
-//   - If GT.semver is lower than any > or >= comp in C, return false
-//   - If GT is >=, and GT.semver does not satisfy every C, return false
-// - If LT
-//   - If LT.semver is greater than any < or <= comp in C, return false
-//   - If LT is <=, and LT.semver does not satisfy every C, return false
-// - If any C is a = range, and GT or LT are set, return false
-// - Else return true
-
-const subset = (sub, dom, options) => {
-  if (sub === dom)
-    return true
-
-  sub = new Range(sub, options)
-  dom = new Range(dom, options)
-  let sawNonNull = false
-
-  OUTER: for (const simpleSub of sub.set) {
-    for (const simpleDom of dom.set) {
-      const isSub = simpleSubset(simpleSub, simpleDom, options)
-      sawNonNull = sawNonNull || isSub !== null
-      if (isSub)
-        continue OUTER
-    }
-    // the null set is a subset of everything, but null simple ranges in
-    // a complex range should be ignored.  so if we saw a non-null range,
-    // then we know this isn't a subset, but if EVERY simple range was null,
-    // then it is a subset.
-    if (sawNonNull)
-      return false
-  }
-  return true
-}
-
-const simpleSubset = (sub, dom, options) => {
-  if (sub === dom)
-    return true
-
-  if (sub.length === 1 && sub[0].semver === ANY)
-    return dom.length === 1 && dom[0].semver === ANY
-
-  const eqSet = new Set()
-  let gt, lt
-  for (const c of sub) {
-    if (c.operator === '>' || c.operator === '>=')
-      gt = higherGT(gt, c, options)
-    else if (c.operator === '<' || c.operator === '<=')
-      lt = lowerLT(lt, c, options)
-    else
-      eqSet.add(c.semver)
-  }
-
-  if (eqSet.size > 1)
-    return null
-
-  let gtltComp
-  if (gt && lt) {
-    gtltComp = compare(gt.semver, lt.semver, options)
-    if (gtltComp > 0)
-      return null
-    else if (gtltComp === 0 && (gt.operator !== '>=' || lt.operator !== '<='))
-      return null
-  }
-
-  // will iterate one or zero times
-  for (const eq of eqSet) {
-    if (gt && !satisfies(eq, String(gt), options))
-      return null
-
-    if (lt && !satisfies(eq, String(lt), options))
-      return null
-
-    for (const c of dom) {
-      if (!satisfies(eq, String(c), options))
-        return false
-    }
-
-    return true
-  }
-
-  let higher, lower
-  let hasDomLT, hasDomGT
-  for (const c of dom) {
-    hasDomGT = hasDomGT || c.operator === '>' || c.operator === '>='
-    hasDomLT = hasDomLT || c.operator === '<' || c.operator === '<='
-    if (gt) {
-      if (c.operator === '>' || c.operator === '>=') {
-        higher = higherGT(gt, c, options)
-        if (higher === c && higher !== gt)
-          return false
-      } else if (gt.operator === '>=' && !satisfies(gt.semver, String(c), options))
-        return false
-    }
-    if (lt) {
-      if (c.operator === '<' || c.operator === '<=') {
-        lower = lowerLT(lt, c, options)
-        if (lower === c && lower !== lt)
-          return false
-      } else if (lt.operator === '<=' && !satisfies(lt.semver, String(c), options))
-        return false
-    }
-    if (!c.operator && (lt || gt) && gtltComp !== 0)
-      return false
-  }
-
-  // if there was a < or >, and nothing in the dom, then must be false
-  // UNLESS it was limited by another range in the other direction.
-  // Eg, >1.0.0 <1.0.1 is still a subset of <2.0.0
-  if (gt && hasDomLT && !lt && gtltComp !== 0)
-    return false
-
-  if (lt && hasDomGT && !gt && gtltComp !== 0)
-    return false
-
-  return true
-}
-
-// >=1.2.3 is lower than >1.2.3
-const higherGT = (a, b, options) => {
-  if (!a)
-    return b
-  const comp = compare(a.semver, b.semver, options)
-  return comp > 0 ? a
-    : comp < 0 ? b
-    : b.operator === '>' && a.operator === '>=' ? b
-    : a
-}
-
-// <=1.2.3 is higher than <1.2.3
-const lowerLT = (a, b, options) => {
-  if (!a)
-    return b
-  const comp = compare(a.semver, b.semver, options)
-  return comp < 0 ? a
-    : comp > 0 ? b
-    : b.operator === '<' && a.operator === '<=' ? b
-    : a
-}
-
-module.exports = subset
-
-
-/***/ }),
-
-/***/ 9528:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const Range = __webpack_require__(845)
-
-// Mostly just for testing and legacy API reasons
-const toComparators = (range, options) =>
-  new Range(range, options).set
-    .map(comp => comp.map(c => c.value).join(' ').trim().split(' '))
-
-module.exports = toComparators
-
-
-/***/ }),
-
-/***/ 9374:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const Range = __webpack_require__(845)
-const validRange = (range, options) => {
-  try {
-    // Return '*' instead of '' so that truthiness works.
-    // This will throw if it's invalid anyway
-    return new Range(range, options).range || '*'
-  } catch (er) {
-    return null
-  }
-}
-module.exports = validRange
-
-
-/***/ }),
-
-/***/ 9822:
-/***/ ((module) => {
-
-"use strict";
-
-module.exports = function (Yallist) {
-  Yallist.prototype[Symbol.iterator] = function* () {
-    for (let walker = this.head; walker; walker = walker.next) {
-      yield walker.value
-    }
-  }
-}
-
-
-/***/ }),
-
-/***/ 7719:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-module.exports = Yallist
-
-Yallist.Node = Node
-Yallist.create = Yallist
-
-function Yallist (list) {
-  var self = this
-  if (!(self instanceof Yallist)) {
-    self = new Yallist()
-  }
-
-  self.tail = null
-  self.head = null
-  self.length = 0
-
-  if (list && typeof list.forEach === 'function') {
-    list.forEach(function (item) {
-      self.push(item)
-    })
-  } else if (arguments.length > 0) {
-    for (var i = 0, l = arguments.length; i < l; i++) {
-      self.push(arguments[i])
-    }
-  }
-
-  return self
-}
-
-Yallist.prototype.removeNode = function (node) {
-  if (node.list !== this) {
-    throw new Error('removing node which does not belong to this list')
-  }
-
-  var next = node.next
-  var prev = node.prev
-
-  if (next) {
-    next.prev = prev
-  }
-
-  if (prev) {
-    prev.next = next
-  }
-
-  if (node === this.head) {
-    this.head = next
-  }
-  if (node === this.tail) {
-    this.tail = prev
-  }
-
-  node.list.length--
-  node.next = null
-  node.prev = null
-  node.list = null
-
-  return next
-}
-
-Yallist.prototype.unshiftNode = function (node) {
-  if (node === this.head) {
-    return
-  }
-
-  if (node.list) {
-    node.list.removeNode(node)
-  }
-
-  var head = this.head
-  node.list = this
-  node.next = head
-  if (head) {
-    head.prev = node
-  }
-
-  this.head = node
-  if (!this.tail) {
-    this.tail = node
-  }
-  this.length++
-}
-
-Yallist.prototype.pushNode = function (node) {
-  if (node === this.tail) {
-    return
-  }
-
-  if (node.list) {
-    node.list.removeNode(node)
-  }
-
-  var tail = this.tail
-  node.list = this
-  node.prev = tail
-  if (tail) {
-    tail.next = node
-  }
-
-  this.tail = node
-  if (!this.head) {
-    this.head = node
-  }
-  this.length++
-}
-
-Yallist.prototype.push = function () {
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    push(this, arguments[i])
-  }
-  return this.length
-}
-
-Yallist.prototype.unshift = function () {
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    unshift(this, arguments[i])
-  }
-  return this.length
-}
-
-Yallist.prototype.pop = function () {
-  if (!this.tail) {
-    return undefined
-  }
-
-  var res = this.tail.value
-  this.tail = this.tail.prev
-  if (this.tail) {
-    this.tail.next = null
-  } else {
-    this.head = null
-  }
-  this.length--
-  return res
-}
-
-Yallist.prototype.shift = function () {
-  if (!this.head) {
-    return undefined
-  }
-
-  var res = this.head.value
-  this.head = this.head.next
-  if (this.head) {
-    this.head.prev = null
-  } else {
-    this.tail = null
-  }
-  this.length--
-  return res
-}
-
-Yallist.prototype.forEach = function (fn, thisp) {
-  thisp = thisp || this
-  for (var walker = this.head, i = 0; walker !== null; i++) {
-    fn.call(thisp, walker.value, i, this)
-    walker = walker.next
-  }
-}
-
-Yallist.prototype.forEachReverse = function (fn, thisp) {
-  thisp = thisp || this
-  for (var walker = this.tail, i = this.length - 1; walker !== null; i--) {
-    fn.call(thisp, walker.value, i, this)
-    walker = walker.prev
-  }
-}
-
-Yallist.prototype.get = function (n) {
-  for (var i = 0, walker = this.head; walker !== null && i < n; i++) {
-    // abort out of the list early if we hit a cycle
-    walker = walker.next
-  }
-  if (i === n && walker !== null) {
-    return walker.value
-  }
-}
-
-Yallist.prototype.getReverse = function (n) {
-  for (var i = 0, walker = this.tail; walker !== null && i < n; i++) {
-    // abort out of the list early if we hit a cycle
-    walker = walker.prev
-  }
-  if (i === n && walker !== null) {
-    return walker.value
-  }
-}
-
-Yallist.prototype.map = function (fn, thisp) {
-  thisp = thisp || this
-  var res = new Yallist()
-  for (var walker = this.head; walker !== null;) {
-    res.push(fn.call(thisp, walker.value, this))
-    walker = walker.next
-  }
-  return res
-}
-
-Yallist.prototype.mapReverse = function (fn, thisp) {
-  thisp = thisp || this
-  var res = new Yallist()
-  for (var walker = this.tail; walker !== null;) {
-    res.push(fn.call(thisp, walker.value, this))
-    walker = walker.prev
-  }
-  return res
-}
-
-Yallist.prototype.reduce = function (fn, initial) {
-  var acc
-  var walker = this.head
-  if (arguments.length > 1) {
-    acc = initial
-  } else if (this.head) {
-    walker = this.head.next
-    acc = this.head.value
-  } else {
-    throw new TypeError('Reduce of empty list with no initial value')
-  }
-
-  for (var i = 0; walker !== null; i++) {
-    acc = fn(acc, walker.value, i)
-    walker = walker.next
-  }
-
-  return acc
-}
-
-Yallist.prototype.reduceReverse = function (fn, initial) {
-  var acc
-  var walker = this.tail
-  if (arguments.length > 1) {
-    acc = initial
-  } else if (this.tail) {
-    walker = this.tail.prev
-    acc = this.tail.value
-  } else {
-    throw new TypeError('Reduce of empty list with no initial value')
-  }
-
-  for (var i = this.length - 1; walker !== null; i--) {
-    acc = fn(acc, walker.value, i)
-    walker = walker.prev
-  }
-
-  return acc
-}
-
-Yallist.prototype.toArray = function () {
-  var arr = new Array(this.length)
-  for (var i = 0, walker = this.head; walker !== null; i++) {
-    arr[i] = walker.value
-    walker = walker.next
-  }
-  return arr
-}
-
-Yallist.prototype.toArrayReverse = function () {
-  var arr = new Array(this.length)
-  for (var i = 0, walker = this.tail; walker !== null; i++) {
-    arr[i] = walker.value
-    walker = walker.prev
-  }
-  return arr
-}
-
-Yallist.prototype.slice = function (from, to) {
-  to = to || this.length
-  if (to < 0) {
-    to += this.length
-  }
-  from = from || 0
-  if (from < 0) {
-    from += this.length
-  }
-  var ret = new Yallist()
-  if (to < from || to < 0) {
-    return ret
-  }
-  if (from < 0) {
-    from = 0
-  }
-  if (to > this.length) {
-    to = this.length
-  }
-  for (var i = 0, walker = this.head; walker !== null && i < from; i++) {
-    walker = walker.next
-  }
-  for (; walker !== null && i < to; i++, walker = walker.next) {
-    ret.push(walker.value)
-  }
-  return ret
-}
-
-Yallist.prototype.sliceReverse = function (from, to) {
-  to = to || this.length
-  if (to < 0) {
-    to += this.length
-  }
-  from = from || 0
-  if (from < 0) {
-    from += this.length
-  }
-  var ret = new Yallist()
-  if (to < from || to < 0) {
-    return ret
-  }
-  if (from < 0) {
-    from = 0
-  }
-  if (to > this.length) {
-    to = this.length
-  }
-  for (var i = this.length, walker = this.tail; walker !== null && i > to; i--) {
-    walker = walker.prev
-  }
-  for (; walker !== null && i > from; i--, walker = walker.prev) {
-    ret.push(walker.value)
-  }
-  return ret
-}
-
-Yallist.prototype.splice = function (start, deleteCount, ...nodes) {
-  if (start > this.length) {
-    start = this.length - 1
-  }
-  if (start < 0) {
-    start = this.length + start;
-  }
-
-  for (var i = 0, walker = this.head; walker !== null && i < start; i++) {
-    walker = walker.next
-  }
-
-  var ret = []
-  for (var i = 0; walker && i < deleteCount; i++) {
-    ret.push(walker.value)
-    walker = this.removeNode(walker)
-  }
-  if (walker === null) {
-    walker = this.tail
-  }
-
-  if (walker !== this.head && walker !== this.tail) {
-    walker = walker.prev
-  }
-
-  for (var i = 0; i < nodes.length; i++) {
-    walker = insert(this, walker, nodes[i])
-  }
-  return ret;
-}
-
-Yallist.prototype.reverse = function () {
-  var head = this.head
-  var tail = this.tail
-  for (var walker = head; walker !== null; walker = walker.prev) {
-    var p = walker.prev
-    walker.prev = walker.next
-    walker.next = p
-  }
-  this.head = tail
-  this.tail = head
-  return this
-}
-
-function insert (self, node, value) {
-  var inserted = node === self.head ?
-    new Node(value, null, node, self) :
-    new Node(value, node, node.next, self)
-
-  if (inserted.next === null) {
-    self.tail = inserted
-  }
-  if (inserted.prev === null) {
-    self.head = inserted
-  }
-
-  self.length++
-
-  return inserted
-}
-
-function push (self, item) {
-  self.tail = new Node(item, self.tail, null, self)
-  if (!self.head) {
-    self.head = self.tail
-  }
-  self.length++
-}
-
-function unshift (self, item) {
-  self.head = new Node(item, null, self.head, self)
-  if (!self.tail) {
-    self.tail = self.head
-  }
-  self.length++
-}
-
-function Node (value, prev, next, list) {
-  if (!(this instanceof Node)) {
-    return new Node(value, prev, next, list)
-  }
-
-  this.list = list
-  this.value = value
-
-  if (prev) {
-    prev.next = this
-    this.prev = prev
-  } else {
-    this.prev = null
-  }
-
-  if (next) {
-    next.prev = this
-    this.next = next
-  } else {
-    this.next = null
-  }
-}
-
-try {
-  // add if support for Symbol.iterator is present
-  __webpack_require__(9822)(Yallist)
-} catch (er) {}
-
-
-/***/ }),
-
 /***/ 6154:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const semver = __webpack_require__(987);
+const semver = __nccwpck_require__(987);
 
 module.exports = (versionA, versionB) => {
 	versionA = semver.parse(versionA);
@@ -61109,681 +62633,983 @@ function coerce (version, options) {
 
 /***/ }),
 
-/***/ 5911:
-/***/ ((module, exports) => {
+/***/ 1532:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-exports = module.exports = SemVer
-
-var debug
-/* istanbul ignore next */
-if (typeof process === 'object' &&
-    process.env &&
-    process.env.NODE_DEBUG &&
-    /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
-  debug = function () {
-    var args = Array.prototype.slice.call(arguments, 0)
-    args.unshift('SEMVER')
-    console.log.apply(console, args)
+const ANY = Symbol('SemVer ANY')
+// hoisted class for cyclic dependency
+class Comparator {
+  static get ANY () {
+    return ANY
   }
-} else {
-  debug = function () {}
-}
+  constructor (comp, options) {
+    options = parseOptions(options)
 
-// Note: this is the semver.org version of the spec that it implements
-// Not necessarily the package version of this code.
-exports.SEMVER_SPEC_VERSION = '2.0.0'
-
-var MAX_LENGTH = 256
-var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
-  /* istanbul ignore next */ 9007199254740991
-
-// Max safe segment length for coercion.
-var MAX_SAFE_COMPONENT_LENGTH = 16
-
-// The actual regexps go on exports.re
-var re = exports.re = []
-var src = exports.src = []
-var R = 0
-
-// The following Regular Expressions can be used for tokenizing,
-// validating, and parsing SemVer version strings.
-
-// ## Numeric Identifier
-// A single `0`, or a non-zero digit followed by zero or more digits.
-
-var NUMERICIDENTIFIER = R++
-src[NUMERICIDENTIFIER] = '0|[1-9]\\d*'
-var NUMERICIDENTIFIERLOOSE = R++
-src[NUMERICIDENTIFIERLOOSE] = '[0-9]+'
-
-// ## Non-numeric Identifier
-// Zero or more digits, followed by a letter or hyphen, and then zero or
-// more letters, digits, or hyphens.
-
-var NONNUMERICIDENTIFIER = R++
-src[NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*'
-
-// ## Main Version
-// Three dot-separated numeric identifiers.
-
-var MAINVERSION = R++
-src[MAINVERSION] = '(' + src[NUMERICIDENTIFIER] + ')\\.' +
-                   '(' + src[NUMERICIDENTIFIER] + ')\\.' +
-                   '(' + src[NUMERICIDENTIFIER] + ')'
-
-var MAINVERSIONLOOSE = R++
-src[MAINVERSIONLOOSE] = '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
-                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')\\.' +
-                        '(' + src[NUMERICIDENTIFIERLOOSE] + ')'
-
-// ## Pre-release Version Identifier
-// A numeric identifier, or a non-numeric identifier.
-
-var PRERELEASEIDENTIFIER = R++
-src[PRERELEASEIDENTIFIER] = '(?:' + src[NUMERICIDENTIFIER] +
-                            '|' + src[NONNUMERICIDENTIFIER] + ')'
-
-var PRERELEASEIDENTIFIERLOOSE = R++
-src[PRERELEASEIDENTIFIERLOOSE] = '(?:' + src[NUMERICIDENTIFIERLOOSE] +
-                                 '|' + src[NONNUMERICIDENTIFIER] + ')'
-
-// ## Pre-release Version
-// Hyphen, followed by one or more dot-separated pre-release version
-// identifiers.
-
-var PRERELEASE = R++
-src[PRERELEASE] = '(?:-(' + src[PRERELEASEIDENTIFIER] +
-                  '(?:\\.' + src[PRERELEASEIDENTIFIER] + ')*))'
-
-var PRERELEASELOOSE = R++
-src[PRERELEASELOOSE] = '(?:-?(' + src[PRERELEASEIDENTIFIERLOOSE] +
-                       '(?:\\.' + src[PRERELEASEIDENTIFIERLOOSE] + ')*))'
-
-// ## Build Metadata Identifier
-// Any combination of digits, letters, or hyphens.
-
-var BUILDIDENTIFIER = R++
-src[BUILDIDENTIFIER] = '[0-9A-Za-z-]+'
-
-// ## Build Metadata
-// Plus sign, followed by one or more period-separated build metadata
-// identifiers.
-
-var BUILD = R++
-src[BUILD] = '(?:\\+(' + src[BUILDIDENTIFIER] +
-             '(?:\\.' + src[BUILDIDENTIFIER] + ')*))'
-
-// ## Full Version String
-// A main version, followed optionally by a pre-release version and
-// build metadata.
-
-// Note that the only major, minor, patch, and pre-release sections of
-// the version string are capturing groups.  The build metadata is not a
-// capturing group, because it should not ever be used in version
-// comparison.
-
-var FULL = R++
-var FULLPLAIN = 'v?' + src[MAINVERSION] +
-                src[PRERELEASE] + '?' +
-                src[BUILD] + '?'
-
-src[FULL] = '^' + FULLPLAIN + '$'
-
-// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
-// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
-// common in the npm registry.
-var LOOSEPLAIN = '[v=\\s]*' + src[MAINVERSIONLOOSE] +
-                 src[PRERELEASELOOSE] + '?' +
-                 src[BUILD] + '?'
-
-var LOOSE = R++
-src[LOOSE] = '^' + LOOSEPLAIN + '$'
-
-var GTLT = R++
-src[GTLT] = '((?:<|>)?=?)'
-
-// Something like "2.*" or "1.2.x".
-// Note that "x.x" is a valid xRange identifer, meaning "any version"
-// Only the first item is strictly required.
-var XRANGEIDENTIFIERLOOSE = R++
-src[XRANGEIDENTIFIERLOOSE] = src[NUMERICIDENTIFIERLOOSE] + '|x|X|\\*'
-var XRANGEIDENTIFIER = R++
-src[XRANGEIDENTIFIER] = src[NUMERICIDENTIFIER] + '|x|X|\\*'
-
-var XRANGEPLAIN = R++
-src[XRANGEPLAIN] = '[v=\\s]*(' + src[XRANGEIDENTIFIER] + ')' +
-                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
-                   '(?:\\.(' + src[XRANGEIDENTIFIER] + ')' +
-                   '(?:' + src[PRERELEASE] + ')?' +
-                   src[BUILD] + '?' +
-                   ')?)?'
-
-var XRANGEPLAINLOOSE = R++
-src[XRANGEPLAINLOOSE] = '[v=\\s]*(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-                        '(?:\\.(' + src[XRANGEIDENTIFIERLOOSE] + ')' +
-                        '(?:' + src[PRERELEASELOOSE] + ')?' +
-                        src[BUILD] + '?' +
-                        ')?)?'
-
-var XRANGE = R++
-src[XRANGE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAIN] + '$'
-var XRANGELOOSE = R++
-src[XRANGELOOSE] = '^' + src[GTLT] + '\\s*' + src[XRANGEPLAINLOOSE] + '$'
-
-// Coercion.
-// Extract anything that could conceivably be a part of a valid semver
-var COERCE = R++
-src[COERCE] = '(?:^|[^\\d])' +
-              '(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '})' +
-              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
-              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
-              '(?:$|[^\\d])'
-
-// Tilde ranges.
-// Meaning is "reasonably at or greater than"
-var LONETILDE = R++
-src[LONETILDE] = '(?:~>?)'
-
-var TILDETRIM = R++
-src[TILDETRIM] = '(\\s*)' + src[LONETILDE] + '\\s+'
-re[TILDETRIM] = new RegExp(src[TILDETRIM], 'g')
-var tildeTrimReplace = '$1~'
-
-var TILDE = R++
-src[TILDE] = '^' + src[LONETILDE] + src[XRANGEPLAIN] + '$'
-var TILDELOOSE = R++
-src[TILDELOOSE] = '^' + src[LONETILDE] + src[XRANGEPLAINLOOSE] + '$'
-
-// Caret ranges.
-// Meaning is "at least and backwards compatible with"
-var LONECARET = R++
-src[LONECARET] = '(?:\\^)'
-
-var CARETTRIM = R++
-src[CARETTRIM] = '(\\s*)' + src[LONECARET] + '\\s+'
-re[CARETTRIM] = new RegExp(src[CARETTRIM], 'g')
-var caretTrimReplace = '$1^'
-
-var CARET = R++
-src[CARET] = '^' + src[LONECARET] + src[XRANGEPLAIN] + '$'
-var CARETLOOSE = R++
-src[CARETLOOSE] = '^' + src[LONECARET] + src[XRANGEPLAINLOOSE] + '$'
-
-// A simple gt/lt/eq thing, or just "" to indicate "any version"
-var COMPARATORLOOSE = R++
-src[COMPARATORLOOSE] = '^' + src[GTLT] + '\\s*(' + LOOSEPLAIN + ')$|^$'
-var COMPARATOR = R++
-src[COMPARATOR] = '^' + src[GTLT] + '\\s*(' + FULLPLAIN + ')$|^$'
-
-// An expression to strip any whitespace between the gtlt and the thing
-// it modifies, so that `> 1.2.3` ==> `>1.2.3`
-var COMPARATORTRIM = R++
-src[COMPARATORTRIM] = '(\\s*)' + src[GTLT] +
-                      '\\s*(' + LOOSEPLAIN + '|' + src[XRANGEPLAIN] + ')'
-
-// this one has to use the /g flag
-re[COMPARATORTRIM] = new RegExp(src[COMPARATORTRIM], 'g')
-var comparatorTrimReplace = '$1$2$3'
-
-// Something like `1.2.3 - 1.2.4`
-// Note that these all use the loose form, because they'll be
-// checked against either the strict or loose comparator form
-// later.
-var HYPHENRANGE = R++
-src[HYPHENRANGE] = '^\\s*(' + src[XRANGEPLAIN] + ')' +
-                   '\\s+-\\s+' +
-                   '(' + src[XRANGEPLAIN] + ')' +
-                   '\\s*$'
-
-var HYPHENRANGELOOSE = R++
-src[HYPHENRANGELOOSE] = '^\\s*(' + src[XRANGEPLAINLOOSE] + ')' +
-                        '\\s+-\\s+' +
-                        '(' + src[XRANGEPLAINLOOSE] + ')' +
-                        '\\s*$'
-
-// Star ranges basically just allow anything at all.
-var STAR = R++
-src[STAR] = '(<|>)?=?\\s*\\*'
-
-// Compile to actual regexp objects.
-// All are flag-free, unless they were created above with a flag.
-for (var i = 0; i < R; i++) {
-  debug(i, src[i])
-  if (!re[i]) {
-    re[i] = new RegExp(src[i])
-  }
-}
-
-exports.parse = parse
-function parse (version, options) {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
+    if (comp instanceof Comparator) {
+      if (comp.loose === !!options.loose) {
+        return comp
+      } else {
+        comp = comp.value
+      }
     }
-  }
 
-  if (version instanceof SemVer) {
-    return version
-  }
+    debug('comparator', comp, options)
+    this.options = options
+    this.loose = !!options.loose
+    this.parse(comp)
 
-  if (typeof version !== 'string') {
-    return null
-  }
-
-  if (version.length > MAX_LENGTH) {
-    return null
-  }
-
-  var r = options.loose ? re[LOOSE] : re[FULL]
-  if (!r.test(version)) {
-    return null
-  }
-
-  try {
-    return new SemVer(version, options)
-  } catch (er) {
-    return null
-  }
-}
-
-exports.valid = valid
-function valid (version, options) {
-  var v = parse(version, options)
-  return v ? v.version : null
-}
-
-exports.clean = clean
-function clean (version, options) {
-  var s = parse(version.trim().replace(/^[=v]+/, ''), options)
-  return s ? s.version : null
-}
-
-exports.SemVer = SemVer
-
-function SemVer (version, options) {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
-  if (version instanceof SemVer) {
-    if (version.loose === options.loose) {
-      return version
+    if (this.semver === ANY) {
+      this.value = ''
     } else {
-      version = version.version
+      this.value = this.operator + this.semver.version
     }
-  } else if (typeof version !== 'string') {
-    throw new TypeError('Invalid Version: ' + version)
+
+    debug('comp', this)
   }
 
-  if (version.length > MAX_LENGTH) {
-    throw new TypeError('version is longer than ' + MAX_LENGTH + ' characters')
+  parse (comp) {
+    const r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
+    const m = comp.match(r)
+
+    if (!m) {
+      throw new TypeError(`Invalid comparator: ${comp}`)
+    }
+
+    this.operator = m[1] !== undefined ? m[1] : ''
+    if (this.operator === '=') {
+      this.operator = ''
+    }
+
+    // if it literally is just '>' or '' then allow anything.
+    if (!m[2]) {
+      this.semver = ANY
+    } else {
+      this.semver = new SemVer(m[2], this.options.loose)
+    }
   }
 
-  if (!(this instanceof SemVer)) {
-    return new SemVer(version, options)
+  toString () {
+    return this.value
   }
 
-  debug('SemVer', version, options)
-  this.options = options
-  this.loose = !!options.loose
+  test (version) {
+    debug('Comparator.test', version, this.options.loose)
 
-  var m = version.trim().match(options.loose ? re[LOOSE] : re[FULL])
+    if (this.semver === ANY || version === ANY) {
+      return true
+    }
 
-  if (!m) {
-    throw new TypeError('Invalid Version: ' + version)
+    if (typeof version === 'string') {
+      try {
+        version = new SemVer(version, this.options)
+      } catch (er) {
+        return false
+      }
+    }
+
+    return cmp(version, this.operator, this.semver, this.options)
   }
 
-  this.raw = version
+  intersects (comp, options) {
+    if (!(comp instanceof Comparator)) {
+      throw new TypeError('a Comparator is required')
+    }
 
-  // these are actually numbers
-  this.major = +m[1]
-  this.minor = +m[2]
-  this.patch = +m[3]
+    if (!options || typeof options !== 'object') {
+      options = {
+        loose: !!options,
+        includePrerelease: false
+      }
+    }
 
-  if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
-    throw new TypeError('Invalid major version')
+    if (this.operator === '') {
+      if (this.value === '') {
+        return true
+      }
+      return new Range(comp.value, options).test(this.value)
+    } else if (comp.operator === '') {
+      if (comp.value === '') {
+        return true
+      }
+      return new Range(this.value, options).test(comp.semver)
+    }
+
+    const sameDirectionIncreasing =
+      (this.operator === '>=' || this.operator === '>') &&
+      (comp.operator === '>=' || comp.operator === '>')
+    const sameDirectionDecreasing =
+      (this.operator === '<=' || this.operator === '<') &&
+      (comp.operator === '<=' || comp.operator === '<')
+    const sameSemVer = this.semver.version === comp.semver.version
+    const differentDirectionsInclusive =
+      (this.operator === '>=' || this.operator === '<=') &&
+      (comp.operator === '>=' || comp.operator === '<=')
+    const oppositeDirectionsLessThan =
+      cmp(this.semver, '<', comp.semver, options) &&
+      (this.operator === '>=' || this.operator === '>') &&
+        (comp.operator === '<=' || comp.operator === '<')
+    const oppositeDirectionsGreaterThan =
+      cmp(this.semver, '>', comp.semver, options) &&
+      (this.operator === '<=' || this.operator === '<') &&
+        (comp.operator === '>=' || comp.operator === '>')
+
+    return (
+      sameDirectionIncreasing ||
+      sameDirectionDecreasing ||
+      (sameSemVer && differentDirectionsInclusive) ||
+      oppositeDirectionsLessThan ||
+      oppositeDirectionsGreaterThan
+    )
   }
+}
 
-  if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
-    throw new TypeError('Invalid minor version')
-  }
+module.exports = Comparator
 
-  if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
-    throw new TypeError('Invalid patch version')
-  }
+const parseOptions = __nccwpck_require__(785)
+const {re, t} = __nccwpck_require__(9523)
+const cmp = __nccwpck_require__(5098)
+const debug = __nccwpck_require__(427)
+const SemVer = __nccwpck_require__(8088)
+const Range = __nccwpck_require__(9828)
 
-  // numberify any prerelease numeric ids
-  if (!m[4]) {
-    this.prerelease = []
-  } else {
-    this.prerelease = m[4].split('.').map(function (id) {
-      if (/^[0-9]+$/.test(id)) {
-        var num = +id
-        if (num >= 0 && num < MAX_SAFE_INTEGER) {
-          return num
+
+/***/ }),
+
+/***/ 9828:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+// hoisted class for cyclic dependency
+class Range {
+  constructor (range, options) {
+    options = parseOptions(options)
+
+    if (range instanceof Range) {
+      if (
+        range.loose === !!options.loose &&
+        range.includePrerelease === !!options.includePrerelease
+      ) {
+        return range
+      } else {
+        return new Range(range.raw, options)
+      }
+    }
+
+    if (range instanceof Comparator) {
+      // just put it in the set and return
+      this.raw = range.value
+      this.set = [[range]]
+      this.format()
+      return this
+    }
+
+    this.options = options
+    this.loose = !!options.loose
+    this.includePrerelease = !!options.includePrerelease
+
+    // First, split based on boolean or ||
+    this.raw = range
+    this.set = range
+      .split(/\s*\|\|\s*/)
+      // map the range to a 2d array of comparators
+      .map(range => this.parseRange(range.trim()))
+      // throw out any comparator lists that are empty
+      // this generally means that it was not a valid range, which is allowed
+      // in loose mode, but will still throw if the WHOLE range is invalid.
+      .filter(c => c.length)
+
+    if (!this.set.length) {
+      throw new TypeError(`Invalid SemVer Range: ${range}`)
+    }
+
+    // if we have any that are not the null set, throw out null sets.
+    if (this.set.length > 1) {
+      // keep the first one, in case they're all null sets
+      const first = this.set[0]
+      this.set = this.set.filter(c => !isNullSet(c[0]))
+      if (this.set.length === 0)
+        this.set = [first]
+      else if (this.set.length > 1) {
+        // if we have any that are *, then the range is just *
+        for (const c of this.set) {
+          if (c.length === 1 && isAny(c[0])) {
+            this.set = [c]
+            break
+          }
         }
       }
-      return id
+    }
+
+    this.format()
+  }
+
+  format () {
+    this.range = this.set
+      .map((comps) => {
+        return comps.join(' ').trim()
+      })
+      .join('||')
+      .trim()
+    return this.range
+  }
+
+  toString () {
+    return this.range
+  }
+
+  parseRange (range) {
+    range = range.trim()
+
+    // memoize range parsing for performance.
+    // this is a very hot path, and fully deterministic.
+    const memoOpts = Object.keys(this.options).join(',')
+    const memoKey = `parseRange:${memoOpts}:${range}`
+    const cached = cache.get(memoKey)
+    if (cached)
+      return cached
+
+    const loose = this.options.loose
+    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
+    const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]
+    range = range.replace(hr, hyphenReplace(this.options.includePrerelease))
+    debug('hyphen replace', range)
+    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
+    range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace)
+    debug('comparator trim', range, re[t.COMPARATORTRIM])
+
+    // `~ 1.2.3` => `~1.2.3`
+    range = range.replace(re[t.TILDETRIM], tildeTrimReplace)
+
+    // `^ 1.2.3` => `^1.2.3`
+    range = range.replace(re[t.CARETTRIM], caretTrimReplace)
+
+    // normalize spaces
+    range = range.split(/\s+/).join(' ')
+
+    // At this point, the range is completely trimmed and
+    // ready to be split into comparators.
+
+    const compRe = loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
+    const rangeList = range
+      .split(' ')
+      .map(comp => parseComparator(comp, this.options))
+      .join(' ')
+      .split(/\s+/)
+      // >=0.0.0 is equivalent to *
+      .map(comp => replaceGTE0(comp, this.options))
+      // in loose mode, throw out any that are not valid comparators
+      .filter(this.options.loose ? comp => !!comp.match(compRe) : () => true)
+      .map(comp => new Comparator(comp, this.options))
+
+    // if any comparators are the null set, then replace with JUST null set
+    // if more than one comparator, remove any * comparators
+    // also, don't include the same comparator more than once
+    const l = rangeList.length
+    const rangeMap = new Map()
+    for (const comp of rangeList) {
+      if (isNullSet(comp))
+        return [comp]
+      rangeMap.set(comp.value, comp)
+    }
+    if (rangeMap.size > 1 && rangeMap.has(''))
+      rangeMap.delete('')
+
+    const result = [...rangeMap.values()]
+    cache.set(memoKey, result)
+    return result
+  }
+
+  intersects (range, options) {
+    if (!(range instanceof Range)) {
+      throw new TypeError('a Range is required')
+    }
+
+    return this.set.some((thisComparators) => {
+      return (
+        isSatisfiable(thisComparators, options) &&
+        range.set.some((rangeComparators) => {
+          return (
+            isSatisfiable(rangeComparators, options) &&
+            thisComparators.every((thisComparator) => {
+              return rangeComparators.every((rangeComparator) => {
+                return thisComparator.intersects(rangeComparator, options)
+              })
+            })
+          )
+        })
+      )
     })
   }
 
-  this.build = m[5] ? m[5].split('.') : []
-  this.format()
-}
-
-SemVer.prototype.format = function () {
-  this.version = this.major + '.' + this.minor + '.' + this.patch
-  if (this.prerelease.length) {
-    this.version += '-' + this.prerelease.join('.')
-  }
-  return this.version
-}
-
-SemVer.prototype.toString = function () {
-  return this.version
-}
-
-SemVer.prototype.compare = function (other) {
-  debug('SemVer.compare', this.version, this.options, other)
-  if (!(other instanceof SemVer)) {
-    other = new SemVer(other, this.options)
-  }
-
-  return this.compareMain(other) || this.comparePre(other)
-}
-
-SemVer.prototype.compareMain = function (other) {
-  if (!(other instanceof SemVer)) {
-    other = new SemVer(other, this.options)
-  }
-
-  return compareIdentifiers(this.major, other.major) ||
-         compareIdentifiers(this.minor, other.minor) ||
-         compareIdentifiers(this.patch, other.patch)
-}
-
-SemVer.prototype.comparePre = function (other) {
-  if (!(other instanceof SemVer)) {
-    other = new SemVer(other, this.options)
-  }
-
-  // NOT having a prerelease is > having one
-  if (this.prerelease.length && !other.prerelease.length) {
-    return -1
-  } else if (!this.prerelease.length && other.prerelease.length) {
-    return 1
-  } else if (!this.prerelease.length && !other.prerelease.length) {
-    return 0
-  }
-
-  var i = 0
-  do {
-    var a = this.prerelease[i]
-    var b = other.prerelease[i]
-    debug('prerelease compare', i, a, b)
-    if (a === undefined && b === undefined) {
-      return 0
-    } else if (b === undefined) {
-      return 1
-    } else if (a === undefined) {
-      return -1
-    } else if (a === b) {
-      continue
-    } else {
-      return compareIdentifiers(a, b)
+  // if ANY of the sets match ALL of its comparators, then pass
+  test (version) {
+    if (!version) {
+      return false
     }
-  } while (++i)
+
+    if (typeof version === 'string') {
+      try {
+        version = new SemVer(version, this.options)
+      } catch (er) {
+        return false
+      }
+    }
+
+    for (let i = 0; i < this.set.length; i++) {
+      if (testSet(this.set[i], version, this.options)) {
+        return true
+      }
+    }
+    return false
+  }
+}
+module.exports = Range
+
+const LRU = __nccwpck_require__(7129)
+const cache = new LRU({ max: 1000 })
+
+const parseOptions = __nccwpck_require__(785)
+const Comparator = __nccwpck_require__(1532)
+const debug = __nccwpck_require__(427)
+const SemVer = __nccwpck_require__(8088)
+const {
+  re,
+  t,
+  comparatorTrimReplace,
+  tildeTrimReplace,
+  caretTrimReplace
+} = __nccwpck_require__(9523)
+
+const isNullSet = c => c.value === '<0.0.0-0'
+const isAny = c => c.value === ''
+
+// take a set of comparators and determine whether there
+// exists a version which can satisfy it
+const isSatisfiable = (comparators, options) => {
+  let result = true
+  const remainingComparators = comparators.slice()
+  let testComparator = remainingComparators.pop()
+
+  while (result && remainingComparators.length) {
+    result = remainingComparators.every((otherComparator) => {
+      return testComparator.intersects(otherComparator, options)
+    })
+
+    testComparator = remainingComparators.pop()
+  }
+
+  return result
 }
 
-// preminor will bump the version up to the next minor release, and immediately
-// down to pre-release. premajor and prepatch work the same way.
-SemVer.prototype.inc = function (release, identifier) {
-  switch (release) {
-    case 'premajor':
-      this.prerelease.length = 0
-      this.patch = 0
-      this.minor = 0
-      this.major++
-      this.inc('pre', identifier)
-      break
-    case 'preminor':
-      this.prerelease.length = 0
-      this.patch = 0
-      this.minor++
-      this.inc('pre', identifier)
-      break
-    case 'prepatch':
-      // If this is already a prerelease, it will bump to the next version
-      // drop any prereleases that might already exist, since they are not
-      // relevant at this point.
-      this.prerelease.length = 0
-      this.inc('patch', identifier)
-      this.inc('pre', identifier)
-      break
-    // If the input is a non-prerelease version, this acts the same as
-    // prepatch.
-    case 'prerelease':
-      if (this.prerelease.length === 0) {
-        this.inc('patch', identifier)
-      }
-      this.inc('pre', identifier)
-      break
+// comprised of xranges, tildes, stars, and gtlt's at this point.
+// already replaced the hyphen ranges
+// turn into a set of JUST comparators.
+const parseComparator = (comp, options) => {
+  debug('comp', comp, options)
+  comp = replaceCarets(comp, options)
+  debug('caret', comp)
+  comp = replaceTildes(comp, options)
+  debug('tildes', comp)
+  comp = replaceXRanges(comp, options)
+  debug('xrange', comp)
+  comp = replaceStars(comp, options)
+  debug('stars', comp)
+  return comp
+}
 
-    case 'major':
-      // If this is a pre-major version, bump up to the same major version.
-      // Otherwise increment major.
-      // 1.0.0-5 bumps to 1.0.0
-      // 1.1.0 bumps to 2.0.0
-      if (this.minor !== 0 ||
-          this.patch !== 0 ||
-          this.prerelease.length === 0) {
-        this.major++
-      }
-      this.minor = 0
-      this.patch = 0
-      this.prerelease = []
-      break
-    case 'minor':
-      // If this is a pre-minor version, bump up to the same minor version.
-      // Otherwise increment minor.
-      // 1.2.0-5 bumps to 1.2.0
-      // 1.2.1 bumps to 1.3.0
-      if (this.patch !== 0 || this.prerelease.length === 0) {
-        this.minor++
-      }
-      this.patch = 0
-      this.prerelease = []
-      break
-    case 'patch':
-      // If this is not a pre-release version, it will increment the patch.
-      // If it is a pre-release it will bump up to the same patch version.
-      // 1.2.0-5 patches to 1.2.0
-      // 1.2.0 patches to 1.2.1
-      if (this.prerelease.length === 0) {
-        this.patch++
-      }
-      this.prerelease = []
-      break
-    // This probably shouldn't be used publicly.
-    // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
-    case 'pre':
-      if (this.prerelease.length === 0) {
-        this.prerelease = [0]
+const isX = id => !id || id.toLowerCase() === 'x' || id === '*'
+
+// ~, ~> --> * (any, kinda silly)
+// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0
+// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0
+// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0
+// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0
+// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0
+const replaceTildes = (comp, options) =>
+  comp.trim().split(/\s+/).map((comp) => {
+    return replaceTilde(comp, options)
+  }).join(' ')
+
+const replaceTilde = (comp, options) => {
+  const r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE]
+  return comp.replace(r, (_, M, m, p, pr) => {
+    debug('tilde', comp, _, M, m, p, pr)
+    let ret
+
+    if (isX(M)) {
+      ret = ''
+    } else if (isX(m)) {
+      ret = `>=${M}.0.0 <${+M + 1}.0.0-0`
+    } else if (isX(p)) {
+      // ~1.2 == >=1.2.0 <1.3.0-0
+      ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`
+    } else if (pr) {
+      debug('replaceTilde pr', pr)
+      ret = `>=${M}.${m}.${p}-${pr
+      } <${M}.${+m + 1}.0-0`
+    } else {
+      // ~1.2.3 == >=1.2.3 <1.3.0-0
+      ret = `>=${M}.${m}.${p
+      } <${M}.${+m + 1}.0-0`
+    }
+
+    debug('tilde return', ret)
+    return ret
+  })
+}
+
+// ^ --> * (any, kinda silly)
+// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0
+// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0
+// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0
+// ^1.2.3 --> >=1.2.3 <2.0.0-0
+// ^1.2.0 --> >=1.2.0 <2.0.0-0
+const replaceCarets = (comp, options) =>
+  comp.trim().split(/\s+/).map((comp) => {
+    return replaceCaret(comp, options)
+  }).join(' ')
+
+const replaceCaret = (comp, options) => {
+  debug('caret', comp, options)
+  const r = options.loose ? re[t.CARETLOOSE] : re[t.CARET]
+  const z = options.includePrerelease ? '-0' : ''
+  return comp.replace(r, (_, M, m, p, pr) => {
+    debug('caret', comp, _, M, m, p, pr)
+    let ret
+
+    if (isX(M)) {
+      ret = ''
+    } else if (isX(m)) {
+      ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`
+    } else if (isX(p)) {
+      if (M === '0') {
+        ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`
       } else {
-        var i = this.prerelease.length
-        while (--i >= 0) {
-          if (typeof this.prerelease[i] === 'number') {
-            this.prerelease[i]++
-            i = -2
+        ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`
+      }
+    } else if (pr) {
+      debug('replaceCaret pr', pr)
+      if (M === '0') {
+        if (m === '0') {
+          ret = `>=${M}.${m}.${p}-${pr
+          } <${M}.${m}.${+p + 1}-0`
+        } else {
+          ret = `>=${M}.${m}.${p}-${pr
+          } <${M}.${+m + 1}.0-0`
+        }
+      } else {
+        ret = `>=${M}.${m}.${p}-${pr
+        } <${+M + 1}.0.0-0`
+      }
+    } else {
+      debug('no pr')
+      if (M === '0') {
+        if (m === '0') {
+          ret = `>=${M}.${m}.${p
+          }${z} <${M}.${m}.${+p + 1}-0`
+        } else {
+          ret = `>=${M}.${m}.${p
+          }${z} <${M}.${+m + 1}.0-0`
+        }
+      } else {
+        ret = `>=${M}.${m}.${p
+        } <${+M + 1}.0.0-0`
+      }
+    }
+
+    debug('caret return', ret)
+    return ret
+  })
+}
+
+const replaceXRanges = (comp, options) => {
+  debug('replaceXRanges', comp, options)
+  return comp.split(/\s+/).map((comp) => {
+    return replaceXRange(comp, options)
+  }).join(' ')
+}
+
+const replaceXRange = (comp, options) => {
+  comp = comp.trim()
+  const r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE]
+  return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
+    debug('xRange', comp, ret, gtlt, M, m, p, pr)
+    const xM = isX(M)
+    const xm = xM || isX(m)
+    const xp = xm || isX(p)
+    const anyX = xp
+
+    if (gtlt === '=' && anyX) {
+      gtlt = ''
+    }
+
+    // if we're including prereleases in the match, then we need
+    // to fix this to -0, the lowest possible prerelease value
+    pr = options.includePrerelease ? '-0' : ''
+
+    if (xM) {
+      if (gtlt === '>' || gtlt === '<') {
+        // nothing is allowed
+        ret = '<0.0.0-0'
+      } else {
+        // nothing is forbidden
+        ret = '*'
+      }
+    } else if (gtlt && anyX) {
+      // we know patch is an x, because we have any x at all.
+      // replace X with 0
+      if (xm) {
+        m = 0
+      }
+      p = 0
+
+      if (gtlt === '>') {
+        // >1 => >=2.0.0
+        // >1.2 => >=1.3.0
+        gtlt = '>='
+        if (xm) {
+          M = +M + 1
+          m = 0
+          p = 0
+        } else {
+          m = +m + 1
+          p = 0
+        }
+      } else if (gtlt === '<=') {
+        // <=0.7.x is actually <0.8.0, since any 0.7.x should
+        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
+        gtlt = '<'
+        if (xm) {
+          M = +M + 1
+        } else {
+          m = +m + 1
+        }
+      }
+
+      if (gtlt === '<')
+        pr = '-0'
+
+      ret = `${gtlt + M}.${m}.${p}${pr}`
+    } else if (xm) {
+      ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`
+    } else if (xp) {
+      ret = `>=${M}.${m}.0${pr
+      } <${M}.${+m + 1}.0-0`
+    }
+
+    debug('xRange return', ret)
+
+    return ret
+  })
+}
+
+// Because * is AND-ed with everything else in the comparator,
+// and '' means "any version", just remove the *s entirely.
+const replaceStars = (comp, options) => {
+  debug('replaceStars', comp, options)
+  // Looseness is ignored here.  star is always as loose as it gets!
+  return comp.trim().replace(re[t.STAR], '')
+}
+
+const replaceGTE0 = (comp, options) => {
+  debug('replaceGTE0', comp, options)
+  return comp.trim()
+    .replace(re[options.includePrerelease ? t.GTE0PRE : t.GTE0], '')
+}
+
+// This function is passed to string.replace(re[t.HYPHENRANGE])
+// M, m, patch, prerelease, build
+// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
+// 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do
+// 1.2 - 3.4 => >=1.2.0 <3.5.0-0
+const hyphenReplace = incPr => ($0,
+  from, fM, fm, fp, fpr, fb,
+  to, tM, tm, tp, tpr, tb) => {
+  if (isX(fM)) {
+    from = ''
+  } else if (isX(fm)) {
+    from = `>=${fM}.0.0${incPr ? '-0' : ''}`
+  } else if (isX(fp)) {
+    from = `>=${fM}.${fm}.0${incPr ? '-0' : ''}`
+  } else if (fpr) {
+    from = `>=${from}`
+  } else {
+    from = `>=${from}${incPr ? '-0' : ''}`
+  }
+
+  if (isX(tM)) {
+    to = ''
+  } else if (isX(tm)) {
+    to = `<${+tM + 1}.0.0-0`
+  } else if (isX(tp)) {
+    to = `<${tM}.${+tm + 1}.0-0`
+  } else if (tpr) {
+    to = `<=${tM}.${tm}.${tp}-${tpr}`
+  } else if (incPr) {
+    to = `<${tM}.${tm}.${+tp + 1}-0`
+  } else {
+    to = `<=${to}`
+  }
+
+  return (`${from} ${to}`).trim()
+}
+
+const testSet = (set, version, options) => {
+  for (let i = 0; i < set.length; i++) {
+    if (!set[i].test(version)) {
+      return false
+    }
+  }
+
+  if (version.prerelease.length && !options.includePrerelease) {
+    // Find the set of versions that are allowed to have prereleases
+    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
+    // That should allow `1.2.3-pr.2` to pass.
+    // However, `1.2.4-alpha.notready` should NOT be allowed,
+    // even though it's within the range set by the comparators.
+    for (let i = 0; i < set.length; i++) {
+      debug(set[i].semver)
+      if (set[i].semver === Comparator.ANY) {
+        continue
+      }
+
+      if (set[i].semver.prerelease.length > 0) {
+        const allowed = set[i].semver
+        if (allowed.major === version.major &&
+            allowed.minor === version.minor &&
+            allowed.patch === version.patch) {
+          return true
+        }
+      }
+    }
+
+    // Version has a -pre, but it's not one of the ones we like.
+    return false
+  }
+
+  return true
+}
+
+
+/***/ }),
+
+/***/ 8088:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const debug = __nccwpck_require__(427)
+const { MAX_LENGTH, MAX_SAFE_INTEGER } = __nccwpck_require__(2293)
+const { re, t } = __nccwpck_require__(9523)
+
+const parseOptions = __nccwpck_require__(785)
+const { compareIdentifiers } = __nccwpck_require__(2463)
+class SemVer {
+  constructor (version, options) {
+    options = parseOptions(options)
+
+    if (version instanceof SemVer) {
+      if (version.loose === !!options.loose &&
+          version.includePrerelease === !!options.includePrerelease) {
+        return version
+      } else {
+        version = version.version
+      }
+    } else if (typeof version !== 'string') {
+      throw new TypeError(`Invalid Version: ${version}`)
+    }
+
+    if (version.length > MAX_LENGTH) {
+      throw new TypeError(
+        `version is longer than ${MAX_LENGTH} characters`
+      )
+    }
+
+    debug('SemVer', version, options)
+    this.options = options
+    this.loose = !!options.loose
+    // this isn't actually relevant for versions, but keep it so that we
+    // don't run into trouble passing this.options around.
+    this.includePrerelease = !!options.includePrerelease
+
+    const m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL])
+
+    if (!m) {
+      throw new TypeError(`Invalid Version: ${version}`)
+    }
+
+    this.raw = version
+
+    // these are actually numbers
+    this.major = +m[1]
+    this.minor = +m[2]
+    this.patch = +m[3]
+
+    if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
+      throw new TypeError('Invalid major version')
+    }
+
+    if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
+      throw new TypeError('Invalid minor version')
+    }
+
+    if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
+      throw new TypeError('Invalid patch version')
+    }
+
+    // numberify any prerelease numeric ids
+    if (!m[4]) {
+      this.prerelease = []
+    } else {
+      this.prerelease = m[4].split('.').map((id) => {
+        if (/^[0-9]+$/.test(id)) {
+          const num = +id
+          if (num >= 0 && num < MAX_SAFE_INTEGER) {
+            return num
           }
         }
-        if (i === -1) {
-          // didn't increment anything
-          this.prerelease.push(0)
-        }
+        return id
+      })
+    }
+
+    this.build = m[5] ? m[5].split('.') : []
+    this.format()
+  }
+
+  format () {
+    this.version = `${this.major}.${this.minor}.${this.patch}`
+    if (this.prerelease.length) {
+      this.version += `-${this.prerelease.join('.')}`
+    }
+    return this.version
+  }
+
+  toString () {
+    return this.version
+  }
+
+  compare (other) {
+    debug('SemVer.compare', this.version, this.options, other)
+    if (!(other instanceof SemVer)) {
+      if (typeof other === 'string' && other === this.version) {
+        return 0
       }
-      if (identifier) {
-        // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
-        // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
-        if (this.prerelease[0] === identifier) {
-          if (isNaN(this.prerelease[1])) {
+      other = new SemVer(other, this.options)
+    }
+
+    if (other.version === this.version) {
+      return 0
+    }
+
+    return this.compareMain(other) || this.comparePre(other)
+  }
+
+  compareMain (other) {
+    if (!(other instanceof SemVer)) {
+      other = new SemVer(other, this.options)
+    }
+
+    return (
+      compareIdentifiers(this.major, other.major) ||
+      compareIdentifiers(this.minor, other.minor) ||
+      compareIdentifiers(this.patch, other.patch)
+    )
+  }
+
+  comparePre (other) {
+    if (!(other instanceof SemVer)) {
+      other = new SemVer(other, this.options)
+    }
+
+    // NOT having a prerelease is > having one
+    if (this.prerelease.length && !other.prerelease.length) {
+      return -1
+    } else if (!this.prerelease.length && other.prerelease.length) {
+      return 1
+    } else if (!this.prerelease.length && !other.prerelease.length) {
+      return 0
+    }
+
+    let i = 0
+    do {
+      const a = this.prerelease[i]
+      const b = other.prerelease[i]
+      debug('prerelease compare', i, a, b)
+      if (a === undefined && b === undefined) {
+        return 0
+      } else if (b === undefined) {
+        return 1
+      } else if (a === undefined) {
+        return -1
+      } else if (a === b) {
+        continue
+      } else {
+        return compareIdentifiers(a, b)
+      }
+    } while (++i)
+  }
+
+  compareBuild (other) {
+    if (!(other instanceof SemVer)) {
+      other = new SemVer(other, this.options)
+    }
+
+    let i = 0
+    do {
+      const a = this.build[i]
+      const b = other.build[i]
+      debug('prerelease compare', i, a, b)
+      if (a === undefined && b === undefined) {
+        return 0
+      } else if (b === undefined) {
+        return 1
+      } else if (a === undefined) {
+        return -1
+      } else if (a === b) {
+        continue
+      } else {
+        return compareIdentifiers(a, b)
+      }
+    } while (++i)
+  }
+
+  // preminor will bump the version up to the next minor release, and immediately
+  // down to pre-release. premajor and prepatch work the same way.
+  inc (release, identifier) {
+    switch (release) {
+      case 'premajor':
+        this.prerelease.length = 0
+        this.patch = 0
+        this.minor = 0
+        this.major++
+        this.inc('pre', identifier)
+        break
+      case 'preminor':
+        this.prerelease.length = 0
+        this.patch = 0
+        this.minor++
+        this.inc('pre', identifier)
+        break
+      case 'prepatch':
+        // If this is already a prerelease, it will bump to the next version
+        // drop any prereleases that might already exist, since they are not
+        // relevant at this point.
+        this.prerelease.length = 0
+        this.inc('patch', identifier)
+        this.inc('pre', identifier)
+        break
+      // If the input is a non-prerelease version, this acts the same as
+      // prepatch.
+      case 'prerelease':
+        if (this.prerelease.length === 0) {
+          this.inc('patch', identifier)
+        }
+        this.inc('pre', identifier)
+        break
+
+      case 'major':
+        // If this is a pre-major version, bump up to the same major version.
+        // Otherwise increment major.
+        // 1.0.0-5 bumps to 1.0.0
+        // 1.1.0 bumps to 2.0.0
+        if (
+          this.minor !== 0 ||
+          this.patch !== 0 ||
+          this.prerelease.length === 0
+        ) {
+          this.major++
+        }
+        this.minor = 0
+        this.patch = 0
+        this.prerelease = []
+        break
+      case 'minor':
+        // If this is a pre-minor version, bump up to the same minor version.
+        // Otherwise increment minor.
+        // 1.2.0-5 bumps to 1.2.0
+        // 1.2.1 bumps to 1.3.0
+        if (this.patch !== 0 || this.prerelease.length === 0) {
+          this.minor++
+        }
+        this.patch = 0
+        this.prerelease = []
+        break
+      case 'patch':
+        // If this is not a pre-release version, it will increment the patch.
+        // If it is a pre-release it will bump up to the same patch version.
+        // 1.2.0-5 patches to 1.2.0
+        // 1.2.0 patches to 1.2.1
+        if (this.prerelease.length === 0) {
+          this.patch++
+        }
+        this.prerelease = []
+        break
+      // This probably shouldn't be used publicly.
+      // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
+      case 'pre':
+        if (this.prerelease.length === 0) {
+          this.prerelease = [0]
+        } else {
+          let i = this.prerelease.length
+          while (--i >= 0) {
+            if (typeof this.prerelease[i] === 'number') {
+              this.prerelease[i]++
+              i = -2
+            }
+          }
+          if (i === -1) {
+            // didn't increment anything
+            this.prerelease.push(0)
+          }
+        }
+        if (identifier) {
+          // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
+          // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
+          if (this.prerelease[0] === identifier) {
+            if (isNaN(this.prerelease[1])) {
+              this.prerelease = [identifier, 0]
+            }
+          } else {
             this.prerelease = [identifier, 0]
           }
-        } else {
-          this.prerelease = [identifier, 0]
         }
-      }
-      break
+        break
 
-    default:
-      throw new Error('invalid increment argument: ' + release)
-  }
-  this.format()
-  this.raw = this.version
-  return this
-}
-
-exports.inc = inc
-function inc (version, release, loose, identifier) {
-  if (typeof (loose) === 'string') {
-    identifier = loose
-    loose = undefined
-  }
-
-  try {
-    return new SemVer(version, loose).inc(release, identifier).version
-  } catch (er) {
-    return null
-  }
-}
-
-exports.diff = diff
-function diff (version1, version2) {
-  if (eq(version1, version2)) {
-    return null
-  } else {
-    var v1 = parse(version1)
-    var v2 = parse(version2)
-    var prefix = ''
-    if (v1.prerelease.length || v2.prerelease.length) {
-      prefix = 'pre'
-      var defaultResult = 'prerelease'
+      default:
+        throw new Error(`invalid increment argument: ${release}`)
     }
-    for (var key in v1) {
-      if (key === 'major' || key === 'minor' || key === 'patch') {
-        if (v1[key] !== v2[key]) {
-          return prefix + key
-        }
-      }
-    }
-    return defaultResult // may be undefined
+    this.format()
+    this.raw = this.version
+    return this
   }
 }
 
-exports.compareIdentifiers = compareIdentifiers
+module.exports = SemVer
 
-var numeric = /^[0-9]+$/
-function compareIdentifiers (a, b) {
-  var anum = numeric.test(a)
-  var bnum = numeric.test(b)
 
-  if (anum && bnum) {
-    a = +a
-    b = +b
-  }
+/***/ }),
 
-  return a === b ? 0
-    : (anum && !bnum) ? -1
-    : (bnum && !anum) ? 1
-    : a < b ? -1
-    : 1
+/***/ 8848:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const parse = __nccwpck_require__(5925)
+const clean = (version, options) => {
+  const s = parse(version.trim().replace(/^[=v]+/, ''), options)
+  return s ? s.version : null
 }
+module.exports = clean
 
-exports.rcompareIdentifiers = rcompareIdentifiers
-function rcompareIdentifiers (a, b) {
-  return compareIdentifiers(b, a)
-}
 
-exports.major = major
-function major (a, loose) {
-  return new SemVer(a, loose).major
-}
+/***/ }),
 
-exports.minor = minor
-function minor (a, loose) {
-  return new SemVer(a, loose).minor
-}
+/***/ 5098:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-exports.patch = patch
-function patch (a, loose) {
-  return new SemVer(a, loose).patch
-}
+const eq = __nccwpck_require__(1898)
+const neq = __nccwpck_require__(6017)
+const gt = __nccwpck_require__(4123)
+const gte = __nccwpck_require__(5522)
+const lt = __nccwpck_require__(194)
+const lte = __nccwpck_require__(7520)
 
-exports.compare = compare
-function compare (a, b, loose) {
-  return new SemVer(a, loose).compare(new SemVer(b, loose))
-}
-
-exports.compareLoose = compareLoose
-function compareLoose (a, b) {
-  return compare(a, b, true)
-}
-
-exports.rcompare = rcompare
-function rcompare (a, b, loose) {
-  return compare(b, a, loose)
-}
-
-exports.sort = sort
-function sort (list, loose) {
-  return list.sort(function (a, b) {
-    return exports.compare(a, b, loose)
-  })
-}
-
-exports.rsort = rsort
-function rsort (list, loose) {
-  return list.sort(function (a, b) {
-    return exports.rcompare(a, b, loose)
-  })
-}
-
-exports.gt = gt
-function gt (a, b, loose) {
-  return compare(a, b, loose) > 0
-}
-
-exports.lt = lt
-function lt (a, b, loose) {
-  return compare(a, b, loose) < 0
-}
-
-exports.eq = eq
-function eq (a, b, loose) {
-  return compare(a, b, loose) === 0
-}
-
-exports.neq = neq
-function neq (a, b, loose) {
-  return compare(a, b, loose) !== 0
-}
-
-exports.gte = gte
-function gte (a, b, loose) {
-  return compare(a, b, loose) >= 0
-}
-
-exports.lte = lte
-function lte (a, b, loose) {
-  return compare(a, b, loose) <= 0
-}
-
-exports.cmp = cmp
-function cmp (a, op, b, loose) {
+const cmp = (a, op, b, loose) => {
   switch (op) {
     case '===':
       if (typeof a === 'object')
@@ -61820,549 +63646,328 @@ function cmp (a, op, b, loose) {
       return lte(a, b, loose)
 
     default:
-      throw new TypeError('Invalid operator: ' + op)
+      throw new TypeError(`Invalid operator: ${op}`)
   }
 }
+module.exports = cmp
 
-exports.Comparator = Comparator
-function Comparator (comp, options) {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
+
+/***/ }),
+
+/***/ 3466:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+const parse = __nccwpck_require__(5925)
+const {re, t} = __nccwpck_require__(9523)
+
+const coerce = (version, options) => {
+  if (version instanceof SemVer) {
+    return version
   }
 
-  if (comp instanceof Comparator) {
-    if (comp.loose === !!options.loose) {
-      return comp
-    } else {
-      comp = comp.value
-    }
+  if (typeof version === 'number') {
+    version = String(version)
   }
 
-  if (!(this instanceof Comparator)) {
-    return new Comparator(comp, options)
+  if (typeof version !== 'string') {
+    return null
   }
 
-  debug('comparator', comp, options)
-  this.options = options
-  this.loose = !!options.loose
-  this.parse(comp)
+  options = options || {}
 
-  if (this.semver === ANY) {
-    this.value = ''
+  let match = null
+  if (!options.rtl) {
+    match = version.match(re[t.COERCE])
   } else {
-    this.value = this.operator + this.semver.version
+    // Find the right-most coercible string that does not share
+    // a terminus with a more left-ward coercible string.
+    // Eg, '1.2.3.4' wants to coerce '2.3.4', not '3.4' or '4'
+    //
+    // Walk through the string checking with a /g regexp
+    // Manually set the index so as to pick up overlapping matches.
+    // Stop when we get a match that ends at the string end, since no
+    // coercible string can be more right-ward without the same terminus.
+    let next
+    while ((next = re[t.COERCERTL].exec(version)) &&
+        (!match || match.index + match[0].length !== version.length)
+    ) {
+      if (!match ||
+            next.index + next[0].length !== match.index + match[0].length) {
+        match = next
+      }
+      re[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
+    }
+    // leave it in a clean state
+    re[t.COERCERTL].lastIndex = -1
   }
 
-  debug('comp', this)
+  if (match === null)
+    return null
+
+  return parse(`${match[2]}.${match[3] || '0'}.${match[4] || '0'}`, options)
 }
+module.exports = coerce
 
-var ANY = {}
-Comparator.prototype.parse = function (comp) {
-  var r = this.options.loose ? re[COMPARATORLOOSE] : re[COMPARATOR]
-  var m = comp.match(r)
 
-  if (!m) {
-    throw new TypeError('Invalid comparator: ' + comp)
-  }
+/***/ }),
 
-  this.operator = m[1]
-  if (this.operator === '=') {
-    this.operator = ''
-  }
+/***/ 2156:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-  // if it literally is just '>' or '' then allow anything.
-  if (!m[2]) {
-    this.semver = ANY
+const SemVer = __nccwpck_require__(8088)
+const compareBuild = (a, b, loose) => {
+  const versionA = new SemVer(a, loose)
+  const versionB = new SemVer(b, loose)
+  return versionA.compare(versionB) || versionA.compareBuild(versionB)
+}
+module.exports = compareBuild
+
+
+/***/ }),
+
+/***/ 2804:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compare = __nccwpck_require__(4309)
+const compareLoose = (a, b) => compare(a, b, true)
+module.exports = compareLoose
+
+
+/***/ }),
+
+/***/ 4309:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+const compare = (a, b, loose) =>
+  new SemVer(a, loose).compare(new SemVer(b, loose))
+
+module.exports = compare
+
+
+/***/ }),
+
+/***/ 4297:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const parse = __nccwpck_require__(5925)
+const eq = __nccwpck_require__(1898)
+
+const diff = (version1, version2) => {
+  if (eq(version1, version2)) {
+    return null
   } else {
-    this.semver = new SemVer(m[2], this.options.loose)
-  }
-}
-
-Comparator.prototype.toString = function () {
-  return this.value
-}
-
-Comparator.prototype.test = function (version) {
-  debug('Comparator.test', version, this.options.loose)
-
-  if (this.semver === ANY) {
-    return true
-  }
-
-  if (typeof version === 'string') {
-    version = new SemVer(version, this.options)
-  }
-
-  return cmp(version, this.operator, this.semver, this.options)
-}
-
-Comparator.prototype.intersects = function (comp, options) {
-  if (!(comp instanceof Comparator)) {
-    throw new TypeError('a Comparator is required')
-  }
-
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
-
-  var rangeTmp
-
-  if (this.operator === '') {
-    rangeTmp = new Range(comp.value, options)
-    return satisfies(this.value, rangeTmp, options)
-  } else if (comp.operator === '') {
-    rangeTmp = new Range(this.value, options)
-    return satisfies(comp.semver, rangeTmp, options)
-  }
-
-  var sameDirectionIncreasing =
-    (this.operator === '>=' || this.operator === '>') &&
-    (comp.operator === '>=' || comp.operator === '>')
-  var sameDirectionDecreasing =
-    (this.operator === '<=' || this.operator === '<') &&
-    (comp.operator === '<=' || comp.operator === '<')
-  var sameSemVer = this.semver.version === comp.semver.version
-  var differentDirectionsInclusive =
-    (this.operator === '>=' || this.operator === '<=') &&
-    (comp.operator === '>=' || comp.operator === '<=')
-  var oppositeDirectionsLessThan =
-    cmp(this.semver, '<', comp.semver, options) &&
-    ((this.operator === '>=' || this.operator === '>') &&
-    (comp.operator === '<=' || comp.operator === '<'))
-  var oppositeDirectionsGreaterThan =
-    cmp(this.semver, '>', comp.semver, options) &&
-    ((this.operator === '<=' || this.operator === '<') &&
-    (comp.operator === '>=' || comp.operator === '>'))
-
-  return sameDirectionIncreasing || sameDirectionDecreasing ||
-    (sameSemVer && differentDirectionsInclusive) ||
-    oppositeDirectionsLessThan || oppositeDirectionsGreaterThan
-}
-
-exports.Range = Range
-function Range (range, options) {
-  if (!options || typeof options !== 'object') {
-    options = {
-      loose: !!options,
-      includePrerelease: false
-    }
-  }
-
-  if (range instanceof Range) {
-    if (range.loose === !!options.loose &&
-        range.includePrerelease === !!options.includePrerelease) {
-      return range
-    } else {
-      return new Range(range.raw, options)
-    }
-  }
-
-  if (range instanceof Comparator) {
-    return new Range(range.value, options)
-  }
-
-  if (!(this instanceof Range)) {
-    return new Range(range, options)
-  }
-
-  this.options = options
-  this.loose = !!options.loose
-  this.includePrerelease = !!options.includePrerelease
-
-  // First, split based on boolean or ||
-  this.raw = range
-  this.set = range.split(/\s*\|\|\s*/).map(function (range) {
-    return this.parseRange(range.trim())
-  }, this).filter(function (c) {
-    // throw out any that are not relevant for whatever reason
-    return c.length
-  })
-
-  if (!this.set.length) {
-    throw new TypeError('Invalid SemVer Range: ' + range)
-  }
-
-  this.format()
-}
-
-Range.prototype.format = function () {
-  this.range = this.set.map(function (comps) {
-    return comps.join(' ').trim()
-  }).join('||').trim()
-  return this.range
-}
-
-Range.prototype.toString = function () {
-  return this.range
-}
-
-Range.prototype.parseRange = function (range) {
-  var loose = this.options.loose
-  range = range.trim()
-  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-  var hr = loose ? re[HYPHENRANGELOOSE] : re[HYPHENRANGE]
-  range = range.replace(hr, hyphenReplace)
-  debug('hyphen replace', range)
-  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-  range = range.replace(re[COMPARATORTRIM], comparatorTrimReplace)
-  debug('comparator trim', range, re[COMPARATORTRIM])
-
-  // `~ 1.2.3` => `~1.2.3`
-  range = range.replace(re[TILDETRIM], tildeTrimReplace)
-
-  // `^ 1.2.3` => `^1.2.3`
-  range = range.replace(re[CARETTRIM], caretTrimReplace)
-
-  // normalize spaces
-  range = range.split(/\s+/).join(' ')
-
-  // At this point, the range is completely trimmed and
-  // ready to be split into comparators.
-
-  var compRe = loose ? re[COMPARATORLOOSE] : re[COMPARATOR]
-  var set = range.split(' ').map(function (comp) {
-    return parseComparator(comp, this.options)
-  }, this).join(' ').split(/\s+/)
-  if (this.options.loose) {
-    // in loose mode, throw out any that are not valid comparators
-    set = set.filter(function (comp) {
-      return !!comp.match(compRe)
-    })
-  }
-  set = set.map(function (comp) {
-    return new Comparator(comp, this.options)
-  }, this)
-
-  return set
-}
-
-Range.prototype.intersects = function (range, options) {
-  if (!(range instanceof Range)) {
-    throw new TypeError('a Range is required')
-  }
-
-  return this.set.some(function (thisComparators) {
-    return thisComparators.every(function (thisComparator) {
-      return range.set.some(function (rangeComparators) {
-        return rangeComparators.every(function (rangeComparator) {
-          return thisComparator.intersects(rangeComparator, options)
-        })
-      })
-    })
-  })
-}
-
-// Mostly just for testing and legacy API reasons
-exports.toComparators = toComparators
-function toComparators (range, options) {
-  return new Range(range, options).set.map(function (comp) {
-    return comp.map(function (c) {
-      return c.value
-    }).join(' ').trim().split(' ')
-  })
-}
-
-// comprised of xranges, tildes, stars, and gtlt's at this point.
-// already replaced the hyphen ranges
-// turn into a set of JUST comparators.
-function parseComparator (comp, options) {
-  debug('comp', comp, options)
-  comp = replaceCarets(comp, options)
-  debug('caret', comp)
-  comp = replaceTildes(comp, options)
-  debug('tildes', comp)
-  comp = replaceXRanges(comp, options)
-  debug('xrange', comp)
-  comp = replaceStars(comp, options)
-  debug('stars', comp)
-  return comp
-}
-
-function isX (id) {
-  return !id || id.toLowerCase() === 'x' || id === '*'
-}
-
-// ~, ~> --> * (any, kinda silly)
-// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0
-// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0
-// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0
-// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
-// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
-function replaceTildes (comp, options) {
-  return comp.trim().split(/\s+/).map(function (comp) {
-    return replaceTilde(comp, options)
-  }).join(' ')
-}
-
-function replaceTilde (comp, options) {
-  var r = options.loose ? re[TILDELOOSE] : re[TILDE]
-  return comp.replace(r, function (_, M, m, p, pr) {
-    debug('tilde', comp, _, M, m, p, pr)
-    var ret
-
-    if (isX(M)) {
-      ret = ''
-    } else if (isX(m)) {
-      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
-    } else if (isX(p)) {
-      // ~1.2 == >=1.2.0 <1.3.0
-      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
-    } else if (pr) {
-      debug('replaceTilde pr', pr)
-      ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-            ' <' + M + '.' + (+m + 1) + '.0'
-    } else {
-      // ~1.2.3 == >=1.2.3 <1.3.0
-      ret = '>=' + M + '.' + m + '.' + p +
-            ' <' + M + '.' + (+m + 1) + '.0'
-    }
-
-    debug('tilde return', ret)
-    return ret
-  })
-}
-
-// ^ --> * (any, kinda silly)
-// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0
-// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0
-// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0
-// ^1.2.3 --> >=1.2.3 <2.0.0
-// ^1.2.0 --> >=1.2.0 <2.0.0
-function replaceCarets (comp, options) {
-  return comp.trim().split(/\s+/).map(function (comp) {
-    return replaceCaret(comp, options)
-  }).join(' ')
-}
-
-function replaceCaret (comp, options) {
-  debug('caret', comp, options)
-  var r = options.loose ? re[CARETLOOSE] : re[CARET]
-  return comp.replace(r, function (_, M, m, p, pr) {
-    debug('caret', comp, _, M, m, p, pr)
-    var ret
-
-    if (isX(M)) {
-      ret = ''
-    } else if (isX(m)) {
-      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
-    } else if (isX(p)) {
-      if (M === '0') {
-        ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
-      } else {
-        ret = '>=' + M + '.' + m + '.0 <' + (+M + 1) + '.0.0'
-      }
-    } else if (pr) {
-      debug('replaceCaret pr', pr)
-      if (M === '0') {
-        if (m === '0') {
-          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-                ' <' + M + '.' + m + '.' + (+p + 1)
-        } else {
-          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-                ' <' + M + '.' + (+m + 1) + '.0'
-        }
-      } else {
-        ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
-              ' <' + (+M + 1) + '.0.0'
-      }
-    } else {
-      debug('no pr')
-      if (M === '0') {
-        if (m === '0') {
-          ret = '>=' + M + '.' + m + '.' + p +
-                ' <' + M + '.' + m + '.' + (+p + 1)
-        } else {
-          ret = '>=' + M + '.' + m + '.' + p +
-                ' <' + M + '.' + (+m + 1) + '.0'
-        }
-      } else {
-        ret = '>=' + M + '.' + m + '.' + p +
-              ' <' + (+M + 1) + '.0.0'
-      }
-    }
-
-    debug('caret return', ret)
-    return ret
-  })
-}
-
-function replaceXRanges (comp, options) {
-  debug('replaceXRanges', comp, options)
-  return comp.split(/\s+/).map(function (comp) {
-    return replaceXRange(comp, options)
-  }).join(' ')
-}
-
-function replaceXRange (comp, options) {
-  comp = comp.trim()
-  var r = options.loose ? re[XRANGELOOSE] : re[XRANGE]
-  return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
-    debug('xRange', comp, ret, gtlt, M, m, p, pr)
-    var xM = isX(M)
-    var xm = xM || isX(m)
-    var xp = xm || isX(p)
-    var anyX = xp
-
-    if (gtlt === '=' && anyX) {
-      gtlt = ''
-    }
-
-    if (xM) {
-      if (gtlt === '>' || gtlt === '<') {
-        // nothing is allowed
-        ret = '<0.0.0'
-      } else {
-        // nothing is forbidden
-        ret = '*'
-      }
-    } else if (gtlt && anyX) {
-      // we know patch is an x, because we have any x at all.
-      // replace X with 0
-      if (xm) {
-        m = 0
-      }
-      p = 0
-
-      if (gtlt === '>') {
-        // >1 => >=2.0.0
-        // >1.2 => >=1.3.0
-        // >1.2.3 => >= 1.2.4
-        gtlt = '>='
-        if (xm) {
-          M = +M + 1
-          m = 0
-          p = 0
-        } else {
-          m = +m + 1
-          p = 0
-        }
-      } else if (gtlt === '<=') {
-        // <=0.7.x is actually <0.8.0, since any 0.7.x should
-        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
-        gtlt = '<'
-        if (xm) {
-          M = +M + 1
-        } else {
-          m = +m + 1
-        }
-      }
-
-      ret = gtlt + M + '.' + m + '.' + p
-    } else if (xm) {
-      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
-    } else if (xp) {
-      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
-    }
-
-    debug('xRange return', ret)
-
-    return ret
-  })
-}
-
-// Because * is AND-ed with everything else in the comparator,
-// and '' means "any version", just remove the *s entirely.
-function replaceStars (comp, options) {
-  debug('replaceStars', comp, options)
-  // Looseness is ignored here.  star is always as loose as it gets!
-  return comp.trim().replace(re[STAR], '')
-}
-
-// This function is passed to string.replace(re[HYPHENRANGE])
-// M, m, patch, prerelease, build
-// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
-// 1.2.3 - 3.4 => >=1.2.0 <3.5.0 Any 3.4.x will do
-// 1.2 - 3.4 => >=1.2.0 <3.5.0
-function hyphenReplace ($0,
-  from, fM, fm, fp, fpr, fb,
-  to, tM, tm, tp, tpr, tb) {
-  if (isX(fM)) {
-    from = ''
-  } else if (isX(fm)) {
-    from = '>=' + fM + '.0.0'
-  } else if (isX(fp)) {
-    from = '>=' + fM + '.' + fm + '.0'
-  } else {
-    from = '>=' + from
-  }
-
-  if (isX(tM)) {
-    to = ''
-  } else if (isX(tm)) {
-    to = '<' + (+tM + 1) + '.0.0'
-  } else if (isX(tp)) {
-    to = '<' + tM + '.' + (+tm + 1) + '.0'
-  } else if (tpr) {
-    to = '<=' + tM + '.' + tm + '.' + tp + '-' + tpr
-  } else {
-    to = '<=' + to
-  }
-
-  return (from + ' ' + to).trim()
-}
-
-// if ANY of the sets match ALL of its comparators, then pass
-Range.prototype.test = function (version) {
-  if (!version) {
-    return false
-  }
-
-  if (typeof version === 'string') {
-    version = new SemVer(version, this.options)
-  }
-
-  for (var i = 0; i < this.set.length; i++) {
-    if (testSet(this.set[i], version, this.options)) {
-      return true
-    }
-  }
-  return false
-}
-
-function testSet (set, version, options) {
-  for (var i = 0; i < set.length; i++) {
-    if (!set[i].test(version)) {
-      return false
-    }
-  }
-
-  if (version.prerelease.length && !options.includePrerelease) {
-    // Find the set of versions that are allowed to have prereleases
-    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
-    // That should allow `1.2.3-pr.2` to pass.
-    // However, `1.2.4-alpha.notready` should NOT be allowed,
-    // even though it's within the range set by the comparators.
-    for (i = 0; i < set.length; i++) {
-      debug(set[i].semver)
-      if (set[i].semver === ANY) {
-        continue
-      }
-
-      if (set[i].semver.prerelease.length > 0) {
-        var allowed = set[i].semver
-        if (allowed.major === version.major &&
-            allowed.minor === version.minor &&
-            allowed.patch === version.patch) {
-          return true
+    const v1 = parse(version1)
+    const v2 = parse(version2)
+    const hasPre = v1.prerelease.length || v2.prerelease.length
+    const prefix = hasPre ? 'pre' : ''
+    const defaultResult = hasPre ? 'prerelease' : ''
+    for (const key in v1) {
+      if (key === 'major' || key === 'minor' || key === 'patch') {
+        if (v1[key] !== v2[key]) {
+          return prefix + key
         }
       }
     }
+    return defaultResult // may be undefined
+  }
+}
+module.exports = diff
 
-    // Version has a -pre, but it's not one of the ones we like.
-    return false
+
+/***/ }),
+
+/***/ 1898:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compare = __nccwpck_require__(4309)
+const eq = (a, b, loose) => compare(a, b, loose) === 0
+module.exports = eq
+
+
+/***/ }),
+
+/***/ 4123:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compare = __nccwpck_require__(4309)
+const gt = (a, b, loose) => compare(a, b, loose) > 0
+module.exports = gt
+
+
+/***/ }),
+
+/***/ 5522:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compare = __nccwpck_require__(4309)
+const gte = (a, b, loose) => compare(a, b, loose) >= 0
+module.exports = gte
+
+
+/***/ }),
+
+/***/ 900:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+
+const inc = (version, release, options, identifier) => {
+  if (typeof (options) === 'string') {
+    identifier = options
+    options = undefined
   }
 
-  return true
+  try {
+    return new SemVer(version, options).inc(release, identifier).version
+  } catch (er) {
+    return null
+  }
+}
+module.exports = inc
+
+
+/***/ }),
+
+/***/ 194:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compare = __nccwpck_require__(4309)
+const lt = (a, b, loose) => compare(a, b, loose) < 0
+module.exports = lt
+
+
+/***/ }),
+
+/***/ 7520:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compare = __nccwpck_require__(4309)
+const lte = (a, b, loose) => compare(a, b, loose) <= 0
+module.exports = lte
+
+
+/***/ }),
+
+/***/ 5831:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+const major = (a, loose) => new SemVer(a, loose).major
+module.exports = major
+
+
+/***/ }),
+
+/***/ 8447:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+const minor = (a, loose) => new SemVer(a, loose).minor
+module.exports = minor
+
+
+/***/ }),
+
+/***/ 6017:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compare = __nccwpck_require__(4309)
+const neq = (a, b, loose) => compare(a, b, loose) !== 0
+module.exports = neq
+
+
+/***/ }),
+
+/***/ 5925:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const {MAX_LENGTH} = __nccwpck_require__(2293)
+const { re, t } = __nccwpck_require__(9523)
+const SemVer = __nccwpck_require__(8088)
+
+const parseOptions = __nccwpck_require__(785)
+const parse = (version, options) => {
+  options = parseOptions(options)
+
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  if (version.length > MAX_LENGTH) {
+    return null
+  }
+
+  const r = options.loose ? re[t.LOOSE] : re[t.FULL]
+  if (!r.test(version)) {
+    return null
+  }
+
+  try {
+    return new SemVer(version, options)
+  } catch (er) {
+    return null
+  }
 }
 
-exports.satisfies = satisfies
-function satisfies (version, range, options) {
+module.exports = parse
+
+
+/***/ }),
+
+/***/ 2866:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+const patch = (a, loose) => new SemVer(a, loose).patch
+module.exports = patch
+
+
+/***/ }),
+
+/***/ 6014:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const parse = __nccwpck_require__(5925)
+const prerelease = (version, options) => {
+  const parsed = parse(version, options)
+  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
+}
+module.exports = prerelease
+
+
+/***/ }),
+
+/***/ 6417:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compare = __nccwpck_require__(4309)
+const rcompare = (a, b, loose) => compare(b, a, loose)
+module.exports = rcompare
+
+
+/***/ }),
+
+/***/ 8701:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compareBuild = __nccwpck_require__(2156)
+const rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose))
+module.exports = rsort
+
+
+/***/ }),
+
+/***/ 6055:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const Range = __nccwpck_require__(9828)
+const satisfies = (version, range, options) => {
   try {
     range = new Range(range, options)
   } catch (er) {
@@ -62370,17 +63975,418 @@ function satisfies (version, range, options) {
   }
   return range.test(version)
 }
+module.exports = satisfies
 
-exports.maxSatisfying = maxSatisfying
-function maxSatisfying (versions, range, options) {
-  var max = null
-  var maxSV = null
+
+/***/ }),
+
+/***/ 1426:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const compareBuild = __nccwpck_require__(2156)
+const sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose))
+module.exports = sort
+
+
+/***/ }),
+
+/***/ 9601:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const parse = __nccwpck_require__(5925)
+const valid = (version, options) => {
+  const v = parse(version, options)
+  return v ? v.version : null
+}
+module.exports = valid
+
+
+/***/ }),
+
+/***/ 1383:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+// just pre-load all the stuff that index.js lazily exports
+const internalRe = __nccwpck_require__(9523)
+module.exports = {
+  re: internalRe.re,
+  src: internalRe.src,
+  tokens: internalRe.t,
+  SEMVER_SPEC_VERSION: __nccwpck_require__(2293).SEMVER_SPEC_VERSION,
+  SemVer: __nccwpck_require__(8088),
+  compareIdentifiers: __nccwpck_require__(2463).compareIdentifiers,
+  rcompareIdentifiers: __nccwpck_require__(2463).rcompareIdentifiers,
+  parse: __nccwpck_require__(5925),
+  valid: __nccwpck_require__(9601),
+  clean: __nccwpck_require__(8848),
+  inc: __nccwpck_require__(900),
+  diff: __nccwpck_require__(4297),
+  major: __nccwpck_require__(5831),
+  minor: __nccwpck_require__(8447),
+  patch: __nccwpck_require__(2866),
+  prerelease: __nccwpck_require__(6014),
+  compare: __nccwpck_require__(4309),
+  rcompare: __nccwpck_require__(6417),
+  compareLoose: __nccwpck_require__(2804),
+  compareBuild: __nccwpck_require__(2156),
+  sort: __nccwpck_require__(1426),
+  rsort: __nccwpck_require__(8701),
+  gt: __nccwpck_require__(4123),
+  lt: __nccwpck_require__(194),
+  eq: __nccwpck_require__(1898),
+  neq: __nccwpck_require__(6017),
+  gte: __nccwpck_require__(5522),
+  lte: __nccwpck_require__(7520),
+  cmp: __nccwpck_require__(5098),
+  coerce: __nccwpck_require__(3466),
+  Comparator: __nccwpck_require__(1532),
+  Range: __nccwpck_require__(9828),
+  satisfies: __nccwpck_require__(6055),
+  toComparators: __nccwpck_require__(2706),
+  maxSatisfying: __nccwpck_require__(579),
+  minSatisfying: __nccwpck_require__(832),
+  minVersion: __nccwpck_require__(4179),
+  validRange: __nccwpck_require__(2098),
+  outside: __nccwpck_require__(420),
+  gtr: __nccwpck_require__(9380),
+  ltr: __nccwpck_require__(3323),
+  intersects: __nccwpck_require__(7008),
+  simplifyRange: __nccwpck_require__(5297),
+  subset: __nccwpck_require__(3807),
+}
+
+
+/***/ }),
+
+/***/ 2293:
+/***/ ((module) => {
+
+// Note: this is the semver.org version of the spec that it implements
+// Not necessarily the package version of this code.
+const SEMVER_SPEC_VERSION = '2.0.0'
+
+const MAX_LENGTH = 256
+const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
+  /* istanbul ignore next */ 9007199254740991
+
+// Max safe segment length for coercion.
+const MAX_SAFE_COMPONENT_LENGTH = 16
+
+module.exports = {
+  SEMVER_SPEC_VERSION,
+  MAX_LENGTH,
+  MAX_SAFE_INTEGER,
+  MAX_SAFE_COMPONENT_LENGTH
+}
+
+
+/***/ }),
+
+/***/ 427:
+/***/ ((module) => {
+
+const debug = (
+  typeof process === 'object' &&
+  process.env &&
+  process.env.NODE_DEBUG &&
+  /\bsemver\b/i.test(process.env.NODE_DEBUG)
+) ? (...args) => console.error('SEMVER', ...args)
+  : () => {}
+
+module.exports = debug
+
+
+/***/ }),
+
+/***/ 2463:
+/***/ ((module) => {
+
+const numeric = /^[0-9]+$/
+const compareIdentifiers = (a, b) => {
+  const anum = numeric.test(a)
+  const bnum = numeric.test(b)
+
+  if (anum && bnum) {
+    a = +a
+    b = +b
+  }
+
+  return a === b ? 0
+    : (anum && !bnum) ? -1
+    : (bnum && !anum) ? 1
+    : a < b ? -1
+    : 1
+}
+
+const rcompareIdentifiers = (a, b) => compareIdentifiers(b, a)
+
+module.exports = {
+  compareIdentifiers,
+  rcompareIdentifiers
+}
+
+
+/***/ }),
+
+/***/ 785:
+/***/ ((module) => {
+
+// parse out just the options we care about so we always get a consistent
+// obj with keys in a consistent order.
+const opts = ['includePrerelease', 'loose', 'rtl']
+const parseOptions = options =>
+  !options ? {}
+  : typeof options !== 'object' ? { loose: true }
+  : opts.filter(k => options[k]).reduce((options, k) => {
+    options[k] = true
+    return options
+  }, {})
+module.exports = parseOptions
+
+
+/***/ }),
+
+/***/ 9523:
+/***/ ((module, exports, __nccwpck_require__) => {
+
+const { MAX_SAFE_COMPONENT_LENGTH } = __nccwpck_require__(2293)
+const debug = __nccwpck_require__(427)
+exports = module.exports = {}
+
+// The actual regexps go on exports.re
+const re = exports.re = []
+const src = exports.src = []
+const t = exports.t = {}
+let R = 0
+
+const createToken = (name, value, isGlobal) => {
+  const index = R++
+  debug(index, value)
+  t[name] = index
+  src[index] = value
+  re[index] = new RegExp(value, isGlobal ? 'g' : undefined)
+}
+
+// The following Regular Expressions can be used for tokenizing,
+// validating, and parsing SemVer version strings.
+
+// ## Numeric Identifier
+// A single `0`, or a non-zero digit followed by zero or more digits.
+
+createToken('NUMERICIDENTIFIER', '0|[1-9]\\d*')
+createToken('NUMERICIDENTIFIERLOOSE', '[0-9]+')
+
+// ## Non-numeric Identifier
+// Zero or more digits, followed by a letter or hyphen, and then zero or
+// more letters, digits, or hyphens.
+
+createToken('NONNUMERICIDENTIFIER', '\\d*[a-zA-Z-][a-zA-Z0-9-]*')
+
+// ## Main Version
+// Three dot-separated numeric identifiers.
+
+createToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\.` +
+                   `(${src[t.NUMERICIDENTIFIER]})\\.` +
+                   `(${src[t.NUMERICIDENTIFIER]})`)
+
+createToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
+                        `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
+                        `(${src[t.NUMERICIDENTIFIERLOOSE]})`)
+
+// ## Pre-release Version Identifier
+// A numeric identifier, or a non-numeric identifier.
+
+createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NUMERICIDENTIFIER]
+}|${src[t.NONNUMERICIDENTIFIER]})`)
+
+createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NUMERICIDENTIFIERLOOSE]
+}|${src[t.NONNUMERICIDENTIFIER]})`)
+
+// ## Pre-release Version
+// Hyphen, followed by one or more dot-separated pre-release version
+// identifiers.
+
+createToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]
+}(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`)
+
+createToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]
+}(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`)
+
+// ## Build Metadata Identifier
+// Any combination of digits, letters, or hyphens.
+
+createToken('BUILDIDENTIFIER', '[0-9A-Za-z-]+')
+
+// ## Build Metadata
+// Plus sign, followed by one or more period-separated build metadata
+// identifiers.
+
+createToken('BUILD', `(?:\\+(${src[t.BUILDIDENTIFIER]
+}(?:\\.${src[t.BUILDIDENTIFIER]})*))`)
+
+// ## Full Version String
+// A main version, followed optionally by a pre-release version and
+// build metadata.
+
+// Note that the only major, minor, patch, and pre-release sections of
+// the version string are capturing groups.  The build metadata is not a
+// capturing group, because it should not ever be used in version
+// comparison.
+
+createToken('FULLPLAIN', `v?${src[t.MAINVERSION]
+}${src[t.PRERELEASE]}?${
+  src[t.BUILD]}?`)
+
+createToken('FULL', `^${src[t.FULLPLAIN]}$`)
+
+// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
+// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
+// common in the npm registry.
+createToken('LOOSEPLAIN', `[v=\\s]*${src[t.MAINVERSIONLOOSE]
+}${src[t.PRERELEASELOOSE]}?${
+  src[t.BUILD]}?`)
+
+createToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`)
+
+createToken('GTLT', '((?:<|>)?=?)')
+
+// Something like "2.*" or "1.2.x".
+// Note that "x.x" is a valid xRange identifer, meaning "any version"
+// Only the first item is strictly required.
+createToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`)
+createToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`)
+
+createToken('XRANGEPLAIN', `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})` +
+                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
+                   `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
+                   `(?:${src[t.PRERELEASE]})?${
+                     src[t.BUILD]}?` +
+                   `)?)?`)
+
+createToken('XRANGEPLAINLOOSE', `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +
+                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
+                        `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
+                        `(?:${src[t.PRERELEASELOOSE]})?${
+                          src[t.BUILD]}?` +
+                        `)?)?`)
+
+createToken('XRANGE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`)
+createToken('XRANGELOOSE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`)
+
+// Coercion.
+// Extract anything that could conceivably be a part of a valid semver
+createToken('COERCE', `${'(^|[^\\d])' +
+              '(\\d{1,'}${MAX_SAFE_COMPONENT_LENGTH}})` +
+              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
+              `(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +
+              `(?:$|[^\\d])`)
+createToken('COERCERTL', src[t.COERCE], true)
+
+// Tilde ranges.
+// Meaning is "reasonably at or greater than"
+createToken('LONETILDE', '(?:~>?)')
+
+createToken('TILDETRIM', `(\\s*)${src[t.LONETILDE]}\\s+`, true)
+exports.tildeTrimReplace = '$1~'
+
+createToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`)
+createToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`)
+
+// Caret ranges.
+// Meaning is "at least and backwards compatible with"
+createToken('LONECARET', '(?:\\^)')
+
+createToken('CARETTRIM', `(\\s*)${src[t.LONECARET]}\\s+`, true)
+exports.caretTrimReplace = '$1^'
+
+createToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`)
+createToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`)
+
+// A simple gt/lt/eq thing, or just "" to indicate "any version"
+createToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`)
+createToken('COMPARATOR', `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`)
+
+// An expression to strip any whitespace between the gtlt and the thing
+// it modifies, so that `> 1.2.3` ==> `>1.2.3`
+createToken('COMPARATORTRIM', `(\\s*)${src[t.GTLT]
+}\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true)
+exports.comparatorTrimReplace = '$1$2$3'
+
+// Something like `1.2.3 - 1.2.4`
+// Note that these all use the loose form, because they'll be
+// checked against either the strict or loose comparator form
+// later.
+createToken('HYPHENRANGE', `^\\s*(${src[t.XRANGEPLAIN]})` +
+                   `\\s+-\\s+` +
+                   `(${src[t.XRANGEPLAIN]})` +
+                   `\\s*$`)
+
+createToken('HYPHENRANGELOOSE', `^\\s*(${src[t.XRANGEPLAINLOOSE]})` +
+                        `\\s+-\\s+` +
+                        `(${src[t.XRANGEPLAINLOOSE]})` +
+                        `\\s*$`)
+
+// Star ranges basically just allow anything at all.
+createToken('STAR', '(<|>)?=?\\s*\\*')
+// >=0.0.0 is like a star
+createToken('GTE0', '^\\s*>=\\s*0\.0\.0\\s*$')
+createToken('GTE0PRE', '^\\s*>=\\s*0\.0\.0-0\\s*$')
+
+
+/***/ }),
+
+/***/ 9380:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+// Determine if version is greater than all the versions possible in the range.
+const outside = __nccwpck_require__(420)
+const gtr = (version, range, options) => outside(version, range, '>', options)
+module.exports = gtr
+
+
+/***/ }),
+
+/***/ 7008:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const Range = __nccwpck_require__(9828)
+const intersects = (r1, r2, options) => {
+  r1 = new Range(r1, options)
+  r2 = new Range(r2, options)
+  return r1.intersects(r2)
+}
+module.exports = intersects
+
+
+/***/ }),
+
+/***/ 3323:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const outside = __nccwpck_require__(420)
+// Determine if version is less than all the versions possible in the range
+const ltr = (version, range, options) => outside(version, range, '<', options)
+module.exports = ltr
+
+
+/***/ }),
+
+/***/ 579:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+const Range = __nccwpck_require__(9828)
+
+const maxSatisfying = (versions, range, options) => {
+  let max = null
+  let maxSV = null
+  let rangeObj = null
   try {
-    var rangeObj = new Range(range, options)
+    rangeObj = new Range(range, options)
   } catch (er) {
     return null
   }
-  versions.forEach(function (v) {
+  versions.forEach((v) => {
     if (rangeObj.test(v)) {
       // satisfies(v, range, options)
       if (!max || maxSV.compare(v) === -1) {
@@ -62392,17 +64398,26 @@ function maxSatisfying (versions, range, options) {
   })
   return max
 }
+module.exports = maxSatisfying
 
-exports.minSatisfying = minSatisfying
-function minSatisfying (versions, range, options) {
-  var min = null
-  var minSV = null
+
+/***/ }),
+
+/***/ 832:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+const Range = __nccwpck_require__(9828)
+const minSatisfying = (versions, range, options) => {
+  let min = null
+  let minSV = null
+  let rangeObj = null
   try {
-    var rangeObj = new Range(range, options)
+    rangeObj = new Range(range, options)
   } catch (er) {
     return null
   }
-  versions.forEach(function (v) {
+  versions.forEach((v) => {
     if (rangeObj.test(v)) {
       // satisfies(v, range, options)
       if (!min || minSV.compare(v) === 1) {
@@ -62414,12 +64429,22 @@ function minSatisfying (versions, range, options) {
   })
   return min
 }
+module.exports = minSatisfying
 
-exports.minVersion = minVersion
-function minVersion (range, loose) {
+
+/***/ }),
+
+/***/ 4179:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(8088)
+const Range = __nccwpck_require__(9828)
+const gt = __nccwpck_require__(4123)
+
+const minVersion = (range, loose) => {
   range = new Range(range, loose)
 
-  var minver = new SemVer('0.0.0')
+  let minver = new SemVer('0.0.0')
   if (range.test(minver)) {
     return minver
   }
@@ -62430,12 +64455,13 @@ function minVersion (range, loose) {
   }
 
   minver = null
-  for (var i = 0; i < range.set.length; ++i) {
-    var comparators = range.set[i]
+  for (let i = 0; i < range.set.length; ++i) {
+    const comparators = range.set[i]
 
-    comparators.forEach(function (comparator) {
+    let setMin = null
+    comparators.forEach((comparator) => {
       // Clone to avoid manipulating the comparator's semver object.
-      var compver = new SemVer(comparator.semver.version)
+      const compver = new SemVer(comparator.semver.version)
       switch (comparator.operator) {
         case '>':
           if (compver.prerelease.length === 0) {
@@ -62447,8 +64473,8 @@ function minVersion (range, loose) {
           /* fallthrough */
         case '':
         case '>=':
-          if (!minver || gt(minver, compver)) {
-            minver = compver
+          if (!setMin || gt(compver, setMin)) {
+            setMin = compver
           }
           break
         case '<':
@@ -62457,9 +64483,11 @@ function minVersion (range, loose) {
           break
         /* istanbul ignore next */
         default:
-          throw new Error('Unexpected operation: ' + comparator.operator)
+          throw new Error(`Unexpected operation: ${comparator.operator}`)
       }
     })
+    if (setMin && (!minver || gt(minver, setMin)))
+      minver = setMin
   }
 
   if (minver && range.test(minver)) {
@@ -62468,36 +64496,29 @@ function minVersion (range, loose) {
 
   return null
 }
+module.exports = minVersion
 
-exports.validRange = validRange
-function validRange (range, options) {
-  try {
-    // Return '*' instead of '' so that truthiness works.
-    // This will throw if it's invalid anyway
-    return new Range(range, options).range || '*'
-  } catch (er) {
-    return null
-  }
-}
 
-// Determine if version is less than all the versions possible in the range
-exports.ltr = ltr
-function ltr (version, range, options) {
-  return outside(version, range, '<', options)
-}
+/***/ }),
 
-// Determine if version is greater than all the versions possible in the range.
-exports.gtr = gtr
-function gtr (version, range, options) {
-  return outside(version, range, '>', options)
-}
+/***/ 420:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-exports.outside = outside
-function outside (version, range, hilo, options) {
+const SemVer = __nccwpck_require__(8088)
+const Comparator = __nccwpck_require__(1532)
+const {ANY} = Comparator
+const Range = __nccwpck_require__(9828)
+const satisfies = __nccwpck_require__(6055)
+const gt = __nccwpck_require__(4123)
+const lt = __nccwpck_require__(194)
+const lte = __nccwpck_require__(7520)
+const gte = __nccwpck_require__(5522)
+
+const outside = (version, range, hilo, options) => {
   version = new SemVer(version, options)
   range = new Range(range, options)
 
-  var gtfn, ltefn, ltfn, comp, ecomp
+  let gtfn, ltefn, ltfn, comp, ecomp
   switch (hilo) {
     case '>':
       gtfn = gt
@@ -62517,7 +64538,7 @@ function outside (version, range, hilo, options) {
       throw new TypeError('Must provide a hilo val of "<" or ">"')
   }
 
-  // If it satisifes the range it is not outside
+  // If it satisfies the range it is not outside
   if (satisfies(version, range, options)) {
     return false
   }
@@ -62525,13 +64546,13 @@ function outside (version, range, hilo, options) {
   // From now on, variable terms are as if we're in "gtr" mode.
   // but note that everything is flipped for the "ltr" function.
 
-  for (var i = 0; i < range.set.length; ++i) {
-    var comparators = range.set[i]
+  for (let i = 0; i < range.set.length; ++i) {
+    const comparators = range.set[i]
 
-    var high = null
-    var low = null
+    let high = null
+    let low = null
 
-    comparators.forEach(function (comparator) {
+    comparators.forEach((comparator) => {
       if (comparator.semver === ANY) {
         comparator = new Comparator('>=0.0.0')
       }
@@ -62562,207 +64583,540 @@ function outside (version, range, hilo, options) {
   return true
 }
 
-exports.prerelease = prerelease
-function prerelease (version, options) {
-  var parsed = parse(version, options)
-  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
-}
+module.exports = outside
 
-exports.intersects = intersects
-function intersects (r1, r2, options) {
-  r1 = new Range(r1, options)
-  r2 = new Range(r2, options)
-  return r1.intersects(r2)
-}
 
-exports.coerce = coerce
-function coerce (version) {
-  if (version instanceof SemVer) {
-    return version
+/***/ }),
+
+/***/ 5297:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+// given a set of versions and a range, create a "simplified" range
+// that includes the same versions that the original range does
+// If the original range is shorter than the simplified one, return that.
+const satisfies = __nccwpck_require__(6055)
+const compare = __nccwpck_require__(4309)
+module.exports = (versions, range, options) => {
+  const set = []
+  let min = null
+  let prev = null
+  const v = versions.sort((a, b) => compare(a, b, options))
+  for (const version of v) {
+    const included = satisfies(version, range, options)
+    if (included) {
+      prev = version
+      if (!min)
+        min = version
+    } else {
+      if (prev) {
+        set.push([min, prev])
+      }
+      prev = null
+      min = null
+    }
   }
+  if (min)
+    set.push([min, null])
 
-  if (typeof version !== 'string') {
-    return null
+  const ranges = []
+  for (const [min, max] of set) {
+    if (min === max)
+      ranges.push(min)
+    else if (!max && min === v[0])
+      ranges.push('*')
+    else if (!max)
+      ranges.push(`>=${min}`)
+    else if (min === v[0])
+      ranges.push(`<=${max}`)
+    else
+      ranges.push(`${min} - ${max}`)
   }
-
-  var match = version.match(re[COERCE])
-
-  if (match == null) {
-    return null
-  }
-
-  return parse(match[1] +
-    '.' + (match[2] || '0') +
-    '.' + (match[3] || '0'))
+  const simplified = ranges.join(' || ')
+  const original = typeof range.raw === 'string' ? range.raw : String(range)
+  return simplified.length < original.length ? simplified : range
 }
 
 
 /***/ }),
 
+/***/ 3807:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const Range = __nccwpck_require__(9828)
+const Comparator = __nccwpck_require__(1532)
+const { ANY } = Comparator
+const satisfies = __nccwpck_require__(6055)
+const compare = __nccwpck_require__(4309)
+
+// Complex range `r1 || r2 || ...` is a subset of `R1 || R2 || ...` iff:
+// - Every simple range `r1, r2, ...` is a null set, OR
+// - Every simple range `r1, r2, ...` which is not a null set is a subset of
+//   some `R1, R2, ...`
+//
+// Simple range `c1 c2 ...` is a subset of simple range `C1 C2 ...` iff:
+// - If c is only the ANY comparator
+//   - If C is only the ANY comparator, return true
+//   - Else if in prerelease mode, return false
+//   - else replace c with `[>=0.0.0]`
+// - If C is only the ANY comparator
+//   - if in prerelease mode, return true
+//   - else replace C with `[>=0.0.0]`
+// - Let EQ be the set of = comparators in c
+// - If EQ is more than one, return true (null set)
+// - Let GT be the highest > or >= comparator in c
+// - Let LT be the lowest < or <= comparator in c
+// - If GT and LT, and GT.semver > LT.semver, return true (null set)
+// - If any C is a = range, and GT or LT are set, return false
+// - If EQ
+//   - If GT, and EQ does not satisfy GT, return true (null set)
+//   - If LT, and EQ does not satisfy LT, return true (null set)
+//   - If EQ satisfies every C, return true
+//   - Else return false
+// - If GT
+//   - If GT.semver is lower than any > or >= comp in C, return false
+//   - If GT is >=, and GT.semver does not satisfy every C, return false
+//   - If GT.semver has a prerelease, and not in prerelease mode
+//     - If no C has a prerelease and the GT.semver tuple, return false
+// - If LT
+//   - If LT.semver is greater than any < or <= comp in C, return false
+//   - If LT is <=, and LT.semver does not satisfy every C, return false
+//   - If GT.semver has a prerelease, and not in prerelease mode
+//     - If no C has a prerelease and the LT.semver tuple, return false
+// - Else return true
+
+const subset = (sub, dom, options = {}) => {
+  if (sub === dom)
+    return true
+
+  sub = new Range(sub, options)
+  dom = new Range(dom, options)
+  let sawNonNull = false
+
+  OUTER: for (const simpleSub of sub.set) {
+    for (const simpleDom of dom.set) {
+      const isSub = simpleSubset(simpleSub, simpleDom, options)
+      sawNonNull = sawNonNull || isSub !== null
+      if (isSub)
+        continue OUTER
+    }
+    // the null set is a subset of everything, but null simple ranges in
+    // a complex range should be ignored.  so if we saw a non-null range,
+    // then we know this isn't a subset, but if EVERY simple range was null,
+    // then it is a subset.
+    if (sawNonNull)
+      return false
+  }
+  return true
+}
+
+const simpleSubset = (sub, dom, options) => {
+  if (sub === dom)
+    return true
+
+  if (sub.length === 1 && sub[0].semver === ANY) {
+    if (dom.length === 1 && dom[0].semver === ANY)
+      return true
+    else if (options.includePrerelease)
+      sub = [ new Comparator('>=0.0.0-0') ]
+    else
+      sub = [ new Comparator('>=0.0.0') ]
+  }
+
+  if (dom.length === 1 && dom[0].semver === ANY) {
+    if (options.includePrerelease)
+      return true
+    else
+      dom = [ new Comparator('>=0.0.0') ]
+  }
+
+  const eqSet = new Set()
+  let gt, lt
+  for (const c of sub) {
+    if (c.operator === '>' || c.operator === '>=')
+      gt = higherGT(gt, c, options)
+    else if (c.operator === '<' || c.operator === '<=')
+      lt = lowerLT(lt, c, options)
+    else
+      eqSet.add(c.semver)
+  }
+
+  if (eqSet.size > 1)
+    return null
+
+  let gtltComp
+  if (gt && lt) {
+    gtltComp = compare(gt.semver, lt.semver, options)
+    if (gtltComp > 0)
+      return null
+    else if (gtltComp === 0 && (gt.operator !== '>=' || lt.operator !== '<='))
+      return null
+  }
+
+  // will iterate one or zero times
+  for (const eq of eqSet) {
+    if (gt && !satisfies(eq, String(gt), options))
+      return null
+
+    if (lt && !satisfies(eq, String(lt), options))
+      return null
+
+    for (const c of dom) {
+      if (!satisfies(eq, String(c), options))
+        return false
+    }
+
+    return true
+  }
+
+  let higher, lower
+  let hasDomLT, hasDomGT
+  // if the subset has a prerelease, we need a comparator in the superset
+  // with the same tuple and a prerelease, or it's not a subset
+  let needDomLTPre = lt &&
+    !options.includePrerelease &&
+    lt.semver.prerelease.length ? lt.semver : false
+  let needDomGTPre = gt &&
+    !options.includePrerelease &&
+    gt.semver.prerelease.length ? gt.semver : false
+  // exception: <1.2.3-0 is the same as <1.2.3
+  if (needDomLTPre && needDomLTPre.prerelease.length === 1 &&
+      lt.operator === '<' && needDomLTPre.prerelease[0] === 0) {
+    needDomLTPre = false
+  }
+
+  for (const c of dom) {
+    hasDomGT = hasDomGT || c.operator === '>' || c.operator === '>='
+    hasDomLT = hasDomLT || c.operator === '<' || c.operator === '<='
+    if (gt) {
+      if (needDomGTPre) {
+        if (c.semver.prerelease && c.semver.prerelease.length &&
+            c.semver.major === needDomGTPre.major &&
+            c.semver.minor === needDomGTPre.minor &&
+            c.semver.patch === needDomGTPre.patch) {
+          needDomGTPre = false
+        }
+      }
+      if (c.operator === '>' || c.operator === '>=') {
+        higher = higherGT(gt, c, options)
+        if (higher === c && higher !== gt)
+          return false
+      } else if (gt.operator === '>=' && !satisfies(gt.semver, String(c), options))
+        return false
+    }
+    if (lt) {
+      if (needDomLTPre) {
+        if (c.semver.prerelease && c.semver.prerelease.length &&
+            c.semver.major === needDomLTPre.major &&
+            c.semver.minor === needDomLTPre.minor &&
+            c.semver.patch === needDomLTPre.patch) {
+          needDomLTPre = false
+        }
+      }
+      if (c.operator === '<' || c.operator === '<=') {
+        lower = lowerLT(lt, c, options)
+        if (lower === c && lower !== lt)
+          return false
+      } else if (lt.operator === '<=' && !satisfies(lt.semver, String(c), options))
+        return false
+    }
+    if (!c.operator && (lt || gt) && gtltComp !== 0)
+      return false
+  }
+
+  // if there was a < or >, and nothing in the dom, then must be false
+  // UNLESS it was limited by another range in the other direction.
+  // Eg, >1.0.0 <1.0.1 is still a subset of <2.0.0
+  if (gt && hasDomLT && !lt && gtltComp !== 0)
+    return false
+
+  if (lt && hasDomGT && !gt && gtltComp !== 0)
+    return false
+
+  // we needed a prerelease range in a specific tuple, but didn't get one
+  // then this isn't a subset.  eg >=1.2.3-pre is not a subset of >=1.0.0,
+  // because it includes prereleases in the 1.2.3 tuple
+  if (needDomGTPre || needDomLTPre)
+    return false
+
+  return true
+}
+
+// >=1.2.3 is lower than >1.2.3
+const higherGT = (a, b, options) => {
+  if (!a)
+    return b
+  const comp = compare(a.semver, b.semver, options)
+  return comp > 0 ? a
+    : comp < 0 ? b
+    : b.operator === '>' && a.operator === '>=' ? b
+    : a
+}
+
+// <=1.2.3 is higher than <1.2.3
+const lowerLT = (a, b, options) => {
+  if (!a)
+    return b
+  const comp = compare(a.semver, b.semver, options)
+  return comp < 0 ? a
+    : comp > 0 ? b
+    : b.operator === '<' && a.operator === '<=' ? b
+    : a
+}
+
+module.exports = subset
+
+
+/***/ }),
+
+/***/ 2706:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const Range = __nccwpck_require__(9828)
+
+// Mostly just for testing and legacy API reasons
+const toComparators = (range, options) =>
+  new Range(range, options).set
+    .map(comp => comp.map(c => c.value).join(' ').trim().split(' '))
+
+module.exports = toComparators
+
+
+/***/ }),
+
+/***/ 2098:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const Range = __nccwpck_require__(9828)
+const validRange = (range, options) => {
+  try {
+    // Return '*' instead of '' so that truthiness works.
+    // This will throw if it's invalid anyway
+    return new Range(range, options).range || '*'
+  } catch (er) {
+    return null
+  }
+}
+module.exports = validRange
+
+
+/***/ }),
+
+/***/ 7032:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const shebangRegex = __nccwpck_require__(2638);
+
+module.exports = (string = '') => {
+	const match = string.match(shebangRegex);
+
+	if (!match) {
+		return null;
+	}
+
+	const [path, argument] = match[0].replace(/#! ?/, '').split(' ');
+	const binary = path.split('/').pop();
+
+	if (binary === 'env') {
+		return argument;
+	}
+
+	return argument ? `${binary} ${argument}` : binary;
+};
+
+
+/***/ }),
+
+/***/ 2638:
+/***/ ((module) => {
+
+"use strict";
+
+module.exports = /^#!(.*)/;
+
+
+/***/ }),
+
 /***/ 4931:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // Note: since nyc uses this module to output coverage, any lines
 // that are in the direct sync flow of nyc's outputCoverage are
 // ignored, since we can never get coverage for them.
-var assert = __webpack_require__(2357)
-var signals = __webpack_require__(3710)
-var isWin = /^win/i.test(process.platform)
-
-var EE = __webpack_require__(8614)
-/* istanbul ignore if */
-if (typeof EE !== 'function') {
-  EE = EE.EventEmitter
-}
-
-var emitter
-if (process.__signal_exit_emitter__) {
-  emitter = process.__signal_exit_emitter__
+// grab a reference to node's real process object right away
+var process = global.process
+// some kind of non-node environment, just no-op
+if (typeof process !== 'object' || !process) {
+  module.exports = function () {}
 } else {
-  emitter = process.__signal_exit_emitter__ = new EE()
-  emitter.count = 0
-  emitter.emitted = {}
-}
+  var assert = __nccwpck_require__(2357)
+  var signals = __nccwpck_require__(3710)
+  var isWin = /^win/i.test(process.platform)
 
-// Because this emitter is a global, we have to check to see if a
-// previous version of this library failed to enable infinite listeners.
-// I know what you're about to say.  But literally everything about
-// signal-exit is a compromise with evil.  Get used to it.
-if (!emitter.infinite) {
-  emitter.setMaxListeners(Infinity)
-  emitter.infinite = true
-}
-
-module.exports = function (cb, opts) {
-  assert.equal(typeof cb, 'function', 'a callback must be provided for exit handler')
-
-  if (loaded === false) {
-    load()
+  var EE = __nccwpck_require__(8614)
+  /* istanbul ignore if */
+  if (typeof EE !== 'function') {
+    EE = EE.EventEmitter
   }
 
-  var ev = 'exit'
-  if (opts && opts.alwaysLast) {
-    ev = 'afterexit'
+  var emitter
+  if (process.__signal_exit_emitter__) {
+    emitter = process.__signal_exit_emitter__
+  } else {
+    emitter = process.__signal_exit_emitter__ = new EE()
+    emitter.count = 0
+    emitter.emitted = {}
   }
 
-  var remove = function () {
-    emitter.removeListener(ev, cb)
-    if (emitter.listeners('exit').length === 0 &&
-        emitter.listeners('afterexit').length === 0) {
-      unload()
+  // Because this emitter is a global, we have to check to see if a
+  // previous version of this library failed to enable infinite listeners.
+  // I know what you're about to say.  But literally everything about
+  // signal-exit is a compromise with evil.  Get used to it.
+  if (!emitter.infinite) {
+    emitter.setMaxListeners(Infinity)
+    emitter.infinite = true
+  }
+
+  module.exports = function (cb, opts) {
+    if (global.process !== process) {
+      return
     }
-  }
-  emitter.on(ev, cb)
+    assert.equal(typeof cb, 'function', 'a callback must be provided for exit handler')
 
-  return remove
-}
+    if (loaded === false) {
+      load()
+    }
 
-module.exports.unload = unload
-function unload () {
-  if (!loaded) {
-    return
-  }
-  loaded = false
+    var ev = 'exit'
+    if (opts && opts.alwaysLast) {
+      ev = 'afterexit'
+    }
 
-  signals.forEach(function (sig) {
-    try {
-      process.removeListener(sig, sigListeners[sig])
-    } catch (er) {}
-  })
-  process.emit = originalProcessEmit
-  process.reallyExit = originalProcessReallyExit
-  emitter.count -= 1
-}
-
-function emit (event, code, signal) {
-  if (emitter.emitted[event]) {
-    return
-  }
-  emitter.emitted[event] = true
-  emitter.emit(event, code, signal)
-}
-
-// { <signal>: <listener fn>, ... }
-var sigListeners = {}
-signals.forEach(function (sig) {
-  sigListeners[sig] = function listener () {
-    // If there are no other listeners, an exit is coming!
-    // Simplest way: remove us and then re-send the signal.
-    // We know that this will kill the process, so we can
-    // safely emit now.
-    var listeners = process.listeners(sig)
-    if (listeners.length === emitter.count) {
-      unload()
-      emit('exit', null, sig)
-      /* istanbul ignore next */
-      emit('afterexit', null, sig)
-      /* istanbul ignore next */
-      if (isWin && sig === 'SIGHUP') {
-        // "SIGHUP" throws an `ENOSYS` error on Windows,
-        // so use a supported signal instead
-        sig = 'SIGINT'
+    var remove = function () {
+      emitter.removeListener(ev, cb)
+      if (emitter.listeners('exit').length === 0 &&
+          emitter.listeners('afterexit').length === 0) {
+        unload()
       }
-      process.kill(process.pid, sig)
     }
+    emitter.on(ev, cb)
+
+    return remove
   }
-})
 
-module.exports.signals = function () {
-  return signals
-}
+  var unload = function unload () {
+    if (!loaded || global.process !== process) {
+      return
+    }
+    loaded = false
 
-module.exports.load = load
-
-var loaded = false
-
-function load () {
-  if (loaded) {
-    return
+    signals.forEach(function (sig) {
+      try {
+        process.removeListener(sig, sigListeners[sig])
+      } catch (er) {}
+    })
+    process.emit = originalProcessEmit
+    process.reallyExit = originalProcessReallyExit
+    emitter.count -= 1
   }
-  loaded = true
+  module.exports.unload = unload
 
-  // This is the number of onSignalExit's that are in play.
-  // It's important so that we can count the correct number of
-  // listeners on signals, and don't wait for the other one to
-  // handle it instead of us.
-  emitter.count += 1
+  var emit = function emit (event, code, signal) {
+    if (emitter.emitted[event]) {
+      return
+    }
+    emitter.emitted[event] = true
+    emitter.emit(event, code, signal)
+  }
 
-  signals = signals.filter(function (sig) {
-    try {
-      process.on(sig, sigListeners[sig])
-      return true
-    } catch (er) {
-      return false
+  // { <signal>: <listener fn>, ... }
+  var sigListeners = {}
+  signals.forEach(function (sig) {
+    sigListeners[sig] = function listener () {
+      if (process !== global.process) {
+        return
+      }
+      // If there are no other listeners, an exit is coming!
+      // Simplest way: remove us and then re-send the signal.
+      // We know that this will kill the process, so we can
+      // safely emit now.
+      var listeners = process.listeners(sig)
+      if (listeners.length === emitter.count) {
+        unload()
+        emit('exit', null, sig)
+        /* istanbul ignore next */
+        emit('afterexit', null, sig)
+        /* istanbul ignore next */
+        if (isWin && sig === 'SIGHUP') {
+          // "SIGHUP" throws an `ENOSYS` error on Windows,
+          // so use a supported signal instead
+          sig = 'SIGINT'
+        }
+        process.kill(process.pid, sig)
+      }
     }
   })
 
-  process.emit = processEmit
-  process.reallyExit = processReallyExit
-}
+  module.exports.signals = function () {
+    return signals
+  }
 
-var originalProcessReallyExit = process.reallyExit
-function processReallyExit (code) {
-  process.exitCode = code || 0
-  emit('exit', process.exitCode, null)
-  /* istanbul ignore next */
-  emit('afterexit', process.exitCode, null)
-  /* istanbul ignore next */
-  originalProcessReallyExit.call(process, process.exitCode)
-}
+  var loaded = false
 
-var originalProcessEmit = process.emit
-function processEmit (ev, arg) {
-  if (ev === 'exit') {
-    if (arg !== undefined) {
-      process.exitCode = arg
+  var load = function load () {
+    if (loaded || process !== global.process) {
+      return
     }
-    var ret = originalProcessEmit.apply(this, arguments)
+    loaded = true
+
+    // This is the number of onSignalExit's that are in play.
+    // It's important so that we can count the correct number of
+    // listeners on signals, and don't wait for the other one to
+    // handle it instead of us.
+    emitter.count += 1
+
+    signals = signals.filter(function (sig) {
+      try {
+        process.on(sig, sigListeners[sig])
+        return true
+      } catch (er) {
+        return false
+      }
+    })
+
+    process.emit = processEmit
+    process.reallyExit = processReallyExit
+  }
+  module.exports.load = load
+
+  var originalProcessReallyExit = process.reallyExit
+  var processReallyExit = function processReallyExit (code) {
+    if (process !== global.process) {
+      return
+    }
+    process.exitCode = code || 0
     emit('exit', process.exitCode, null)
     /* istanbul ignore next */
     emit('afterexit', process.exitCode, null)
-    return ret
-  } else {
-    return originalProcessEmit.apply(this, arguments)
+    /* istanbul ignore next */
+    originalProcessReallyExit.call(process, process.exitCode)
+  }
+
+  var originalProcessEmit = process.emit
+  var processEmit = function processEmit (ev, arg) {
+    if (ev === 'exit' && process === global.process) {
+      if (arg !== undefined) {
+        process.exitCode = arg
+      }
+      var ret = originalProcessEmit.apply(this, arguments)
+      emit('exit', process.exitCode, null)
+      /* istanbul ignore next */
+      emit('afterexit', process.exitCode, null)
+      return ret
+    } else {
+      return originalProcessEmit.apply(this, arguments)
+    }
   }
 }
 
@@ -62830,11 +65184,11 @@ if (process.platform === 'linux') {
 /***/ }),
 
 /***/ 528:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const Signale = __webpack_require__(5132);
+const Signale = __nccwpck_require__(5132);
 
 module.exports = Object.assign(new Signale(), {Signale});
 
@@ -62842,12 +65196,12 @@ module.exports = Object.assign(new Signale(), {Signale});
 /***/ }),
 
 /***/ 7923:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-/* module decorator */ module = __webpack_require__.nmd(module);
+/* module decorator */ module = __nccwpck_require__.nmd(module);
 
-const colorConvert = __webpack_require__(1557);
+const colorConvert = __nccwpck_require__(1557);
 
 const wrapAnsi16 = (fn, offset) => function () {
 	const code = fn.apply(colorConvert, arguments);
@@ -63016,15 +65370,15 @@ Object.defineProperty(module, 'exports', {
 /***/ }),
 
 /***/ 6594:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const escapeStringRegexp = __webpack_require__(8691);
-const ansiStyles = __webpack_require__(7923);
-const stdoutColor = __webpack_require__(6295).stdout;
+const escapeStringRegexp = __nccwpck_require__(8691);
+const ansiStyles = __nccwpck_require__(7923);
+const stdoutColor = __nccwpck_require__(6295).stdout;
 
-const template = __webpack_require__(5924);
+const template = __nccwpck_require__(5924);
 
 const isSimpleWindowsTerm = process.platform === 'win32' && !(process.env.TERM || '').toLowerCase().startsWith('xterm');
 
@@ -63388,10 +65742,10 @@ module.exports = (chalk, tmp) => {
 /***/ }),
 
 /***/ 7605:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /* MIT license */
-var cssKeywords = __webpack_require__(9167);
+var cssKeywords = __nccwpck_require__(9167);
 
 // NOTE: conversions should only return primitive values (i.e. arrays, or
 //       values that give correct `typeof` results).
@@ -64263,10 +66617,10 @@ convert.rgb.gray = function (rgb) {
 /***/ }),
 
 /***/ 1557:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var conversions = __webpack_require__(7605);
-var route = __webpack_require__(9097);
+var conversions = __nccwpck_require__(7605);
+var route = __nccwpck_require__(9097);
 
 var convert = {};
 
@@ -64348,9 +66702,9 @@ module.exports = convert;
 /***/ }),
 
 /***/ 9097:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var conversions = __webpack_require__(7605);
+var conversions = __nccwpck_require__(7605);
 
 /*
 	this function routes a model to all other models.
@@ -64612,11 +66966,11 @@ module.exports = {
 /***/ }),
 
 /***/ 4843:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const escapeStringRegexp = __webpack_require__(8691);
+const escapeStringRegexp = __nccwpck_require__(8691);
 
 const platform = process.platform;
 
@@ -64783,12 +67137,12 @@ module.exports = (flag, argv) => {
 /***/ }),
 
 /***/ 6295:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const os = __webpack_require__(2087);
-const hasFlag = __webpack_require__(58);
+const os = __nccwpck_require__(2087);
+const hasFlag = __nccwpck_require__(58);
 
 const env = process.env;
 
@@ -64922,18 +67276,18 @@ module.exports = {
 /***/ }),
 
 /***/ 5132:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const util = __webpack_require__(1669);
-const path = __webpack_require__(5622);
-const readline = __webpack_require__(1058);
-const chalk = __webpack_require__(6594);
-const figures = __webpack_require__(4843);
-const pkgConf = __webpack_require__(1235);
-const pkg = __webpack_require__(2728);
-const defaultTypes = __webpack_require__(9881);
+const util = __nccwpck_require__(1669);
+const path = __nccwpck_require__(5622);
+const readline = __nccwpck_require__(1058);
+const chalk = __nccwpck_require__(6594);
+const figures = __nccwpck_require__(4843);
+const pkgConf = __nccwpck_require__(1235);
+const pkg = __nccwpck_require__(2728);
+const defaultTypes = __nccwpck_require__(9881);
 
 const {green, grey, red, underline, yellow} = chalk;
 
@@ -65336,11 +67690,11 @@ module.exports = Signale;
 /***/ }),
 
 /***/ 9881:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const figures = __webpack_require__(4843);
+const figures = __nccwpck_require__(4843);
 
 module.exports = {
   error: {
@@ -65481,7 +67835,7 @@ module.exports = function (child, errFactory) {
 /***/ }),
 
 /***/ 2372:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /*
 Copyright spdx-correct.js contributors
@@ -65498,8 +67852,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var parse = __webpack_require__(1620)
-var spdxLicenseIds = __webpack_require__(2172)
+var parse = __nccwpck_require__(1620)
+var spdxLicenseIds = __nccwpck_require__(2172)
 
 function valid (string) {
   try {
@@ -65852,13 +68206,13 @@ function upgradeGPLs (value) {
 /***/ }),
 
 /***/ 1620:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var scan = __webpack_require__(7380)
-var parse = __webpack_require__(9868)
+var scan = __nccwpck_require__(7380)
+var parse = __nccwpck_require__(9868)
 
 module.exports = function (source) {
   return parse(scan(source))
@@ -66014,15 +68368,15 @@ module.exports = function (tokens) {
 /***/ }),
 
 /***/ 7380:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 var licenses = []
-  .concat(__webpack_require__(2172))
-  .concat(__webpack_require__(4185))
-var exceptions = __webpack_require__(9752)
+  .concat(__nccwpck_require__(2172))
+  .concat(__nccwpck_require__(4185))
+var exceptions = __nccwpck_require__(9752)
 
 module.exports = function (source) {
   var index = 0
@@ -66153,7 +68507,7 @@ module.exports = function (source) {
 /***/ }),
 
 /***/ 5000:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 /*
@@ -66174,7 +68528,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
 
-var through = __webpack_require__(8180)
+var through = __nccwpck_require__(8180)
 
 function transform(chunk, enc, cb) {
   var list = chunk.toString('utf8').split(this.matcher)
@@ -66244,11 +68598,11 @@ module.exports = split
 /***/ }),
 
 /***/ 8769:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var PassThrough = __webpack_require__(1642).PassThrough
-var Readable = __webpack_require__(1642).Readable
-var duplexer = __webpack_require__(1932)
+var PassThrough = __nccwpck_require__(1642).PassThrough
+var Readable = __nccwpck_require__(1642).Readable
+var duplexer = __nccwpck_require__(1932)
 
 module.exports = function () {
   var streams
@@ -66318,8 +68672,63 @@ function wrap (tr, opts) {
 
 /***/ }),
 
+/***/ 2577:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const stripAnsi = __nccwpck_require__(5591);
+const isFullwidthCodePoint = __nccwpck_require__(4882);
+const emojiRegex = __nccwpck_require__(8212);
+
+const stringWidth = string => {
+	if (typeof string !== 'string' || string.length === 0) {
+		return 0;
+	}
+
+	string = stripAnsi(string);
+
+	if (string.length === 0) {
+		return 0;
+	}
+
+	string = string.replace(emojiRegex(), '  ');
+
+	let width = 0;
+
+	for (let i = 0; i < string.length; i++) {
+		const code = string.codePointAt(i);
+
+		// Ignore control characters
+		if (code <= 0x1F || (code >= 0x7F && code <= 0x9F)) {
+			continue;
+		}
+
+		// Ignore combining characters
+		if (code >= 0x300 && code <= 0x36F) {
+			continue;
+		}
+
+		// Surrogates
+		if (code > 0xFFFF) {
+			i++;
+		}
+
+		width += isFullwidthCodePoint(code) ? 2 : 1;
+	}
+
+	return width;
+};
+
+module.exports = stringWidth;
+// TODO: remove this in the next major version
+module.exports.default = stringWidth;
+
+
+/***/ }),
+
 /***/ 4841:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 // Copyright Joyent, Inc. and other Node contributors.
@@ -66347,7 +68756,7 @@ function wrap (tr, opts) {
 
 /*<replacement>*/
 
-var Buffer = __webpack_require__(2279).Buffer;
+var Buffer = __nccwpck_require__(1867).Buffer;
 /*</replacement>*/
 
 var isEncoding = Buffer.isEncoding || function (encoding) {
@@ -66621,93 +69030,14 @@ function simpleEnd(buf) {
 
 /***/ }),
 
-/***/ 2279:
-/***/ ((module, exports, __webpack_require__) => {
-
-/* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(4293)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
-
-
-/***/ }),
-
-/***/ 1963:
-/***/ ((module) => {
+/***/ 5591:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-module.exports = x => {
-	if (typeof x !== 'string') {
-		throw new TypeError('Expected a string, got ' + typeof x);
-	}
+const ansiRegex = __nccwpck_require__(5063);
 
-	// Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
-	// conversion translates it to FEFF (UTF-16 BOM)
-	if (x.charCodeAt(0) === 0xFEFF) {
-		return x.slice(1);
-	}
-
-	return x;
-};
+module.exports = string => typeof string === 'string' ? string.replace(ansiRegex(), '') : string;
 
 
 /***/ }),
@@ -66737,13 +69067,13 @@ module.exports = input => {
 /***/ }),
 
 /***/ 9318:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const os = __webpack_require__(2087);
-const tty = __webpack_require__(3867);
-const hasFlag = __webpack_require__(1621);
+const os = __nccwpck_require__(2087);
+const tty = __nccwpck_require__(3867);
+const hasFlag = __nccwpck_require__(1621);
 
 const {env} = process;
 
@@ -66880,12 +69210,12 @@ module.exports = {
 /***/ }),
 
 /***/ 8824:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const supportsColor = __webpack_require__(9318);
-const hasFlag = __webpack_require__(1621);
+const supportsColor = __nccwpck_require__(9318);
+const hasFlag = __nccwpck_require__(1621);
 
 function parseVersion(versionString) {
 	if (/^\d{3,4}$/.test(versionString)) {
@@ -66934,6 +69264,10 @@ function supportsHyperlink(stream) {
 		return false;
 	}
 
+	if ('NETLIFY' in env) {
+		return true;
+	}
+
 	if ('CI' in env) {
 		return false;
 	}
@@ -66979,11 +69313,11 @@ module.exports = {
 /***/ }),
 
 /***/ 8180:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var Transform = __webpack_require__(1642).Transform
-  , inherits  = __webpack_require__(1669).inherits
-  , xtend     = __webpack_require__(1208)
+var Transform = __nccwpck_require__(1642).Transform
+  , inherits  = __nccwpck_require__(1669).inherits
+  , xtend     = __nccwpck_require__(1208)
 
 function DestroyableTransform(opts) {
   Transform.call(this, opts)
@@ -67082,7 +69416,7 @@ module.exports.obj = through2(function (options, transform, flush) {
 /***/ }),
 
 /***/ 1861:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 /*!
@@ -67094,7 +69428,7 @@ module.exports.obj = through2(function (options, transform, flush) {
 
 
 
-const isNumber = __webpack_require__(1523);
+const isNumber = __nccwpck_require__(5680);
 
 const toRegexRange = (min, max, options) => {
   if (isNumber(min) === false) {
@@ -67373,32 +69707,6 @@ toRegexRange.clearCache = () => (toRegexRange.cache = {});
  */
 
 module.exports = toRegexRange;
-
-
-/***/ }),
-
-/***/ 1523:
-/***/ ((module) => {
-
-"use strict";
-/*!
- * is-number <https://github.com/jonschlinkert/is-number>
- *
- * Copyright (c) 2014-present, Jon Schlinkert.
- * Released under the MIT License.
- */
-
-
-
-module.exports = function(num) {
-  if (typeof num === 'number') {
-    return num - num === 0;
-  }
-  if (typeof num === 'string' && num.trim() !== '') {
-    return Number.isFinite ? Number.isFinite(+num) : isFinite(+num);
-  }
-  return false;
-};
 
 
 /***/ }),
@@ -67724,24 +70032,304 @@ var hasOwnProperty = Object.hasOwnProperty || function (obj, key) {
 
 /***/ }),
 
+/***/ 4294:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+module.exports = __nccwpck_require__(4219);
+
+
+/***/ }),
+
+/***/ 4219:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var net = __nccwpck_require__(1631);
+var tls = __nccwpck_require__(4016);
+var http = __nccwpck_require__(8605);
+var https = __nccwpck_require__(7211);
+var events = __nccwpck_require__(8614);
+var assert = __nccwpck_require__(2357);
+var util = __nccwpck_require__(1669);
+
+
+exports.httpOverHttp = httpOverHttp;
+exports.httpsOverHttp = httpsOverHttp;
+exports.httpOverHttps = httpOverHttps;
+exports.httpsOverHttps = httpsOverHttps;
+
+
+function httpOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  return agent;
+}
+
+function httpsOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+function httpOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  return agent;
+}
+
+function httpsOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+
+function TunnelingAgent(options) {
+  var self = this;
+  self.options = options || {};
+  self.proxyOptions = self.options.proxy || {};
+  self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
+  self.requests = [];
+  self.sockets = [];
+
+  self.on('free', function onFree(socket, host, port, localAddress) {
+    var options = toOptions(host, port, localAddress);
+    for (var i = 0, len = self.requests.length; i < len; ++i) {
+      var pending = self.requests[i];
+      if (pending.host === options.host && pending.port === options.port) {
+        // Detect the request to connect same origin server,
+        // reuse the connection.
+        self.requests.splice(i, 1);
+        pending.request.onSocket(socket);
+        return;
+      }
+    }
+    socket.destroy();
+    self.removeSocket(socket);
+  });
+}
+util.inherits(TunnelingAgent, events.EventEmitter);
+
+TunnelingAgent.prototype.addRequest = function addRequest(req, host, port, localAddress) {
+  var self = this;
+  var options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
+
+  if (self.sockets.length >= this.maxSockets) {
+    // We are over limit so we'll add it to the queue.
+    self.requests.push(options);
+    return;
+  }
+
+  // If we are under maxSockets create a new one.
+  self.createSocket(options, function(socket) {
+    socket.on('free', onFree);
+    socket.on('close', onCloseOrRemove);
+    socket.on('agentRemove', onCloseOrRemove);
+    req.onSocket(socket);
+
+    function onFree() {
+      self.emit('free', socket, options);
+    }
+
+    function onCloseOrRemove(err) {
+      self.removeSocket(socket);
+      socket.removeListener('free', onFree);
+      socket.removeListener('close', onCloseOrRemove);
+      socket.removeListener('agentRemove', onCloseOrRemove);
+    }
+  });
+};
+
+TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
+  var self = this;
+  var placeholder = {};
+  self.sockets.push(placeholder);
+
+  var connectOptions = mergeOptions({}, self.proxyOptions, {
+    method: 'CONNECT',
+    path: options.host + ':' + options.port,
+    agent: false,
+    headers: {
+      host: options.host + ':' + options.port
+    }
+  });
+  if (options.localAddress) {
+    connectOptions.localAddress = options.localAddress;
+  }
+  if (connectOptions.proxyAuth) {
+    connectOptions.headers = connectOptions.headers || {};
+    connectOptions.headers['Proxy-Authorization'] = 'Basic ' +
+        new Buffer(connectOptions.proxyAuth).toString('base64');
+  }
+
+  debug('making CONNECT request');
+  var connectReq = self.request(connectOptions);
+  connectReq.useChunkedEncodingByDefault = false; // for v0.6
+  connectReq.once('response', onResponse); // for v0.6
+  connectReq.once('upgrade', onUpgrade);   // for v0.6
+  connectReq.once('connect', onConnect);   // for v0.7 or later
+  connectReq.once('error', onError);
+  connectReq.end();
+
+  function onResponse(res) {
+    // Very hacky. This is necessary to avoid http-parser leaks.
+    res.upgrade = true;
+  }
+
+  function onUpgrade(res, socket, head) {
+    // Hacky.
+    process.nextTick(function() {
+      onConnect(res, socket, head);
+    });
+  }
+
+  function onConnect(res, socket, head) {
+    connectReq.removeAllListeners();
+    socket.removeAllListeners();
+
+    if (res.statusCode !== 200) {
+      debug('tunneling socket could not be established, statusCode=%d',
+        res.statusCode);
+      socket.destroy();
+      var error = new Error('tunneling socket could not be established, ' +
+        'statusCode=' + res.statusCode);
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    if (head.length > 0) {
+      debug('got illegal response body from proxy');
+      socket.destroy();
+      var error = new Error('got illegal response body from proxy');
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    debug('tunneling connection has established');
+    self.sockets[self.sockets.indexOf(placeholder)] = socket;
+    return cb(socket);
+  }
+
+  function onError(cause) {
+    connectReq.removeAllListeners();
+
+    debug('tunneling socket could not be established, cause=%s\n',
+          cause.message, cause.stack);
+    var error = new Error('tunneling socket could not be established, ' +
+                          'cause=' + cause.message);
+    error.code = 'ECONNRESET';
+    options.request.emit('error', error);
+    self.removeSocket(placeholder);
+  }
+};
+
+TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
+  var pos = this.sockets.indexOf(socket)
+  if (pos === -1) {
+    return;
+  }
+  this.sockets.splice(pos, 1);
+
+  var pending = this.requests.shift();
+  if (pending) {
+    // If we have pending requests and a socket gets closed a new one
+    // needs to be created to take over in the pool for the one that closed.
+    this.createSocket(pending, function(socket) {
+      pending.request.onSocket(socket);
+    });
+  }
+};
+
+function createSecureSocket(options, cb) {
+  var self = this;
+  TunnelingAgent.prototype.createSocket.call(self, options, function(socket) {
+    var hostHeader = options.request.getHeader('host');
+    var tlsOptions = mergeOptions({}, self.options, {
+      socket: socket,
+      servername: hostHeader ? hostHeader.replace(/:.*$/, '') : options.host
+    });
+
+    // 0 is dummy port for v0.6
+    var secureSocket = tls.connect(0, tlsOptions);
+    self.sockets[self.sockets.indexOf(socket)] = secureSocket;
+    cb(secureSocket);
+  });
+}
+
+
+function toOptions(host, port, localAddress) {
+  if (typeof host === 'string') { // since v0.10
+    return {
+      host: host,
+      port: port,
+      localAddress: localAddress
+    };
+  }
+  return host; // for v0.11 or later
+}
+
+function mergeOptions(target) {
+  for (var i = 1, len = arguments.length; i < len; ++i) {
+    var overrides = arguments[i];
+    if (typeof overrides === 'object') {
+      var keys = Object.keys(overrides);
+      for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
+        var k = keys[j];
+        if (overrides[k] !== undefined) {
+          target[k] = overrides[k];
+        }
+      }
+    }
+  }
+  return target;
+}
+
+
+var debug;
+if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
+  debug = function() {
+    var args = Array.prototype.slice.call(arguments);
+    if (typeof args[0] === 'string') {
+      args[0] = 'TUNNEL: ' + args[0];
+    } else {
+      args.unshift('TUNNEL:');
+    }
+    console.error.apply(console, args);
+  }
+} else {
+  debug = function() {};
+}
+exports.debug = debug; // for test
+
+
+/***/ }),
+
 /***/ 7127:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
 /**
  * For Node.js, simply re-export the core `util.deprecate` function.
  */
 
-module.exports = __webpack_require__(1669).deprecate;
+module.exports = __nccwpck_require__(1669).deprecate;
 
 
 /***/ }),
 
 /***/ 2524:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var parse = __webpack_require__(1620);
-var correct = __webpack_require__(2372);
+var parse = __nccwpck_require__(1620);
+var correct = __nccwpck_require__(2372);
 
 var genericWarning = (
   'license should be ' +
@@ -67830,6 +70418,138 @@ module.exports = function(argument) {
 
 /***/ }),
 
+/***/ 4207:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const isWindows = process.platform === 'win32' ||
+    process.env.OSTYPE === 'cygwin' ||
+    process.env.OSTYPE === 'msys'
+
+const path = __nccwpck_require__(5622)
+const COLON = isWindows ? ';' : ':'
+const isexe = __nccwpck_require__(7126)
+
+const getNotFoundError = (cmd) =>
+  Object.assign(new Error(`not found: ${cmd}`), { code: 'ENOENT' })
+
+const getPathInfo = (cmd, opt) => {
+  const colon = opt.colon || COLON
+
+  // If it has a slash, then we don't bother searching the pathenv.
+  // just check the file itself, and that's it.
+  const pathEnv = cmd.match(/\//) || isWindows && cmd.match(/\\/) ? ['']
+    : (
+      [
+        // windows always checks the cwd first
+        ...(isWindows ? [process.cwd()] : []),
+        ...(opt.path || process.env.PATH ||
+          /* istanbul ignore next: very unusual */ '').split(colon),
+      ]
+    )
+  const pathExtExe = isWindows
+    ? opt.pathExt || process.env.PATHEXT || '.EXE;.CMD;.BAT;.COM'
+    : ''
+  const pathExt = isWindows ? pathExtExe.split(colon) : ['']
+
+  if (isWindows) {
+    if (cmd.indexOf('.') !== -1 && pathExt[0] !== '')
+      pathExt.unshift('')
+  }
+
+  return {
+    pathEnv,
+    pathExt,
+    pathExtExe,
+  }
+}
+
+const which = (cmd, opt, cb) => {
+  if (typeof opt === 'function') {
+    cb = opt
+    opt = {}
+  }
+  if (!opt)
+    opt = {}
+
+  const { pathEnv, pathExt, pathExtExe } = getPathInfo(cmd, opt)
+  const found = []
+
+  const step = i => new Promise((resolve, reject) => {
+    if (i === pathEnv.length)
+      return opt.all && found.length ? resolve(found)
+        : reject(getNotFoundError(cmd))
+
+    const ppRaw = pathEnv[i]
+    const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw
+
+    const pCmd = path.join(pathPart, cmd)
+    const p = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd
+      : pCmd
+
+    resolve(subStep(p, i, 0))
+  })
+
+  const subStep = (p, i, ii) => new Promise((resolve, reject) => {
+    if (ii === pathExt.length)
+      return resolve(step(i + 1))
+    const ext = pathExt[ii]
+    isexe(p + ext, { pathExt: pathExtExe }, (er, is) => {
+      if (!er && is) {
+        if (opt.all)
+          found.push(p + ext)
+        else
+          return resolve(p + ext)
+      }
+      return resolve(subStep(p, i, ii + 1))
+    })
+  })
+
+  return cb ? step(0).then(res => cb(null, res), cb) : step(0)
+}
+
+const whichSync = (cmd, opt) => {
+  opt = opt || {}
+
+  const { pathEnv, pathExt, pathExtExe } = getPathInfo(cmd, opt)
+  const found = []
+
+  for (let i = 0; i < pathEnv.length; i ++) {
+    const ppRaw = pathEnv[i]
+    const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw
+
+    const pCmd = path.join(pathPart, cmd)
+    const p = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd
+      : pCmd
+
+    for (let j = 0; j < pathExt.length; j ++) {
+      const cur = p + pathExt[j]
+      try {
+        const is = isexe.sync(cur, { pathExt: pathExtExe })
+        if (is) {
+          if (opt.all)
+            found.push(cur)
+          else
+            return cur
+        }
+      } catch (ex) {}
+    }
+  }
+
+  if (opt.all && found.length)
+    return found
+
+  if (opt.nothrow)
+    return null
+
+  throw getNotFoundError(cmd)
+}
+
+module.exports = which
+which.sync = whichSync
+
+
+/***/ }),
+
 /***/ 2940:
 /***/ ((module) => {
 
@@ -67896,15 +70616,465 @@ function extend() {
 
 /***/ }),
 
-/***/ 1983:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 4091:
+/***/ ((module) => {
+
+"use strict";
+
+module.exports = function (Yallist) {
+  Yallist.prototype[Symbol.iterator] = function* () {
+    for (let walker = this.head; walker; walker = walker.next) {
+      yield walker.value
+    }
+  }
+}
+
+
+/***/ }),
+
+/***/ 665:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+module.exports = Yallist
+
+Yallist.Node = Node
+Yallist.create = Yallist
+
+function Yallist (list) {
+  var self = this
+  if (!(self instanceof Yallist)) {
+    self = new Yallist()
+  }
+
+  self.tail = null
+  self.head = null
+  self.length = 0
+
+  if (list && typeof list.forEach === 'function') {
+    list.forEach(function (item) {
+      self.push(item)
+    })
+  } else if (arguments.length > 0) {
+    for (var i = 0, l = arguments.length; i < l; i++) {
+      self.push(arguments[i])
+    }
+  }
+
+  return self
+}
+
+Yallist.prototype.removeNode = function (node) {
+  if (node.list !== this) {
+    throw new Error('removing node which does not belong to this list')
+  }
+
+  var next = node.next
+  var prev = node.prev
+
+  if (next) {
+    next.prev = prev
+  }
+
+  if (prev) {
+    prev.next = next
+  }
+
+  if (node === this.head) {
+    this.head = next
+  }
+  if (node === this.tail) {
+    this.tail = prev
+  }
+
+  node.list.length--
+  node.next = null
+  node.prev = null
+  node.list = null
+
+  return next
+}
+
+Yallist.prototype.unshiftNode = function (node) {
+  if (node === this.head) {
+    return
+  }
+
+  if (node.list) {
+    node.list.removeNode(node)
+  }
+
+  var head = this.head
+  node.list = this
+  node.next = head
+  if (head) {
+    head.prev = node
+  }
+
+  this.head = node
+  if (!this.tail) {
+    this.tail = node
+  }
+  this.length++
+}
+
+Yallist.prototype.pushNode = function (node) {
+  if (node === this.tail) {
+    return
+  }
+
+  if (node.list) {
+    node.list.removeNode(node)
+  }
+
+  var tail = this.tail
+  node.list = this
+  node.prev = tail
+  if (tail) {
+    tail.next = node
+  }
+
+  this.tail = node
+  if (!this.head) {
+    this.head = node
+  }
+  this.length++
+}
+
+Yallist.prototype.push = function () {
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    push(this, arguments[i])
+  }
+  return this.length
+}
+
+Yallist.prototype.unshift = function () {
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    unshift(this, arguments[i])
+  }
+  return this.length
+}
+
+Yallist.prototype.pop = function () {
+  if (!this.tail) {
+    return undefined
+  }
+
+  var res = this.tail.value
+  this.tail = this.tail.prev
+  if (this.tail) {
+    this.tail.next = null
+  } else {
+    this.head = null
+  }
+  this.length--
+  return res
+}
+
+Yallist.prototype.shift = function () {
+  if (!this.head) {
+    return undefined
+  }
+
+  var res = this.head.value
+  this.head = this.head.next
+  if (this.head) {
+    this.head.prev = null
+  } else {
+    this.tail = null
+  }
+  this.length--
+  return res
+}
+
+Yallist.prototype.forEach = function (fn, thisp) {
+  thisp = thisp || this
+  for (var walker = this.head, i = 0; walker !== null; i++) {
+    fn.call(thisp, walker.value, i, this)
+    walker = walker.next
+  }
+}
+
+Yallist.prototype.forEachReverse = function (fn, thisp) {
+  thisp = thisp || this
+  for (var walker = this.tail, i = this.length - 1; walker !== null; i--) {
+    fn.call(thisp, walker.value, i, this)
+    walker = walker.prev
+  }
+}
+
+Yallist.prototype.get = function (n) {
+  for (var i = 0, walker = this.head; walker !== null && i < n; i++) {
+    // abort out of the list early if we hit a cycle
+    walker = walker.next
+  }
+  if (i === n && walker !== null) {
+    return walker.value
+  }
+}
+
+Yallist.prototype.getReverse = function (n) {
+  for (var i = 0, walker = this.tail; walker !== null && i < n; i++) {
+    // abort out of the list early if we hit a cycle
+    walker = walker.prev
+  }
+  if (i === n && walker !== null) {
+    return walker.value
+  }
+}
+
+Yallist.prototype.map = function (fn, thisp) {
+  thisp = thisp || this
+  var res = new Yallist()
+  for (var walker = this.head; walker !== null;) {
+    res.push(fn.call(thisp, walker.value, this))
+    walker = walker.next
+  }
+  return res
+}
+
+Yallist.prototype.mapReverse = function (fn, thisp) {
+  thisp = thisp || this
+  var res = new Yallist()
+  for (var walker = this.tail; walker !== null;) {
+    res.push(fn.call(thisp, walker.value, this))
+    walker = walker.prev
+  }
+  return res
+}
+
+Yallist.prototype.reduce = function (fn, initial) {
+  var acc
+  var walker = this.head
+  if (arguments.length > 1) {
+    acc = initial
+  } else if (this.head) {
+    walker = this.head.next
+    acc = this.head.value
+  } else {
+    throw new TypeError('Reduce of empty list with no initial value')
+  }
+
+  for (var i = 0; walker !== null; i++) {
+    acc = fn(acc, walker.value, i)
+    walker = walker.next
+  }
+
+  return acc
+}
+
+Yallist.prototype.reduceReverse = function (fn, initial) {
+  var acc
+  var walker = this.tail
+  if (arguments.length > 1) {
+    acc = initial
+  } else if (this.tail) {
+    walker = this.tail.prev
+    acc = this.tail.value
+  } else {
+    throw new TypeError('Reduce of empty list with no initial value')
+  }
+
+  for (var i = this.length - 1; walker !== null; i--) {
+    acc = fn(acc, walker.value, i)
+    walker = walker.prev
+  }
+
+  return acc
+}
+
+Yallist.prototype.toArray = function () {
+  var arr = new Array(this.length)
+  for (var i = 0, walker = this.head; walker !== null; i++) {
+    arr[i] = walker.value
+    walker = walker.next
+  }
+  return arr
+}
+
+Yallist.prototype.toArrayReverse = function () {
+  var arr = new Array(this.length)
+  for (var i = 0, walker = this.tail; walker !== null; i++) {
+    arr[i] = walker.value
+    walker = walker.prev
+  }
+  return arr
+}
+
+Yallist.prototype.slice = function (from, to) {
+  to = to || this.length
+  if (to < 0) {
+    to += this.length
+  }
+  from = from || 0
+  if (from < 0) {
+    from += this.length
+  }
+  var ret = new Yallist()
+  if (to < from || to < 0) {
+    return ret
+  }
+  if (from < 0) {
+    from = 0
+  }
+  if (to > this.length) {
+    to = this.length
+  }
+  for (var i = 0, walker = this.head; walker !== null && i < from; i++) {
+    walker = walker.next
+  }
+  for (; walker !== null && i < to; i++, walker = walker.next) {
+    ret.push(walker.value)
+  }
+  return ret
+}
+
+Yallist.prototype.sliceReverse = function (from, to) {
+  to = to || this.length
+  if (to < 0) {
+    to += this.length
+  }
+  from = from || 0
+  if (from < 0) {
+    from += this.length
+  }
+  var ret = new Yallist()
+  if (to < from || to < 0) {
+    return ret
+  }
+  if (from < 0) {
+    from = 0
+  }
+  if (to > this.length) {
+    to = this.length
+  }
+  for (var i = this.length, walker = this.tail; walker !== null && i > to; i--) {
+    walker = walker.prev
+  }
+  for (; walker !== null && i > from; i--, walker = walker.prev) {
+    ret.push(walker.value)
+  }
+  return ret
+}
+
+Yallist.prototype.splice = function (start, deleteCount, ...nodes) {
+  if (start > this.length) {
+    start = this.length - 1
+  }
+  if (start < 0) {
+    start = this.length + start;
+  }
+
+  for (var i = 0, walker = this.head; walker !== null && i < start; i++) {
+    walker = walker.next
+  }
+
+  var ret = []
+  for (var i = 0; walker && i < deleteCount; i++) {
+    ret.push(walker.value)
+    walker = this.removeNode(walker)
+  }
+  if (walker === null) {
+    walker = this.tail
+  }
+
+  if (walker !== this.head && walker !== this.tail) {
+    walker = walker.prev
+  }
+
+  for (var i = 0; i < nodes.length; i++) {
+    walker = insert(this, walker, nodes[i])
+  }
+  return ret;
+}
+
+Yallist.prototype.reverse = function () {
+  var head = this.head
+  var tail = this.tail
+  for (var walker = head; walker !== null; walker = walker.prev) {
+    var p = walker.prev
+    walker.prev = walker.next
+    walker.next = p
+  }
+  this.head = tail
+  this.tail = head
+  return this
+}
+
+function insert (self, node, value) {
+  var inserted = node === self.head ?
+    new Node(value, null, node, self) :
+    new Node(value, node, node.next, self)
+
+  if (inserted.next === null) {
+    self.tail = inserted
+  }
+  if (inserted.prev === null) {
+    self.head = inserted
+  }
+
+  self.length++
+
+  return inserted
+}
+
+function push (self, item) {
+  self.tail = new Node(item, self.tail, null, self)
+  if (!self.head) {
+    self.head = self.tail
+  }
+  self.length++
+}
+
+function unshift (self, item) {
+  self.head = new Node(item, null, self.head, self)
+  if (!self.tail) {
+    self.tail = self.head
+  }
+  self.length++
+}
+
+function Node (value, prev, next, list) {
+  if (!(this instanceof Node)) {
+    return new Node(value, prev, next, list)
+  }
+
+  this.list = list
+  this.value = value
+
+  if (prev) {
+    prev.next = this
+    this.prev = prev
+  } else {
+    this.prev = null
+  }
+
+  if (next) {
+    next.prev = this
+    this.next = next
+  } else {
+    this.next = null
+  }
+}
+
+try {
+  // add if support for Symbol.iterator is present
+  __nccwpck_require__(4091)(Yallist)
+} catch (er) {}
+
+
+/***/ }),
+
+/***/ 5506:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var PlainValue = __webpack_require__(5215);
-var resolveSeq = __webpack_require__(6140);
-var Schema = __webpack_require__(3656);
+var PlainValue = __nccwpck_require__(5215);
+var resolveSeq = __nccwpck_require__(4227);
+var Schema = __nccwpck_require__(8021);
 
 const defaultOptions = {
   anchorPrefix: 'a',
@@ -67975,7 +71145,7 @@ const documentOptions = {
       prefix: 'tag:private.yaml.org,2002:'
     }]
   },
-  '1.1': {
+  1.1: {
     schema: 'yaml-1.1',
     merge: true,
     tagPrefixes: [{
@@ -67986,7 +71156,7 @@ const documentOptions = {
       prefix: PlainValue.defaultTagPrefix
     }]
   },
-  '1.2': {
+  1.2: {
     schema: 'core',
     merge: false,
     tagPrefixes: [{
@@ -68117,7 +71287,7 @@ class Anchors {
   }
 
   constructor(prefix) {
-    PlainValue._defineProperty(this, "map", {});
+    PlainValue._defineProperty(this, "map", Object.create(null));
 
     this.prefix = prefix;
   }
@@ -68616,7 +71786,7 @@ class Document {
     }
 
     const ctx = {
-      anchors: {},
+      anchors: Object.create(null),
       doc: this,
       indent: '',
       indentStep: ' '.repeat(indentSize),
@@ -69545,15 +72715,15 @@ exports.defaultTags = defaultTags;
 
 /***/ }),
 
-/***/ 3656:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8021:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var PlainValue = __webpack_require__(5215);
-var resolveSeq = __webpack_require__(6140);
-var warnings = __webpack_require__(7383);
+var PlainValue = __nccwpck_require__(5215);
+var resolveSeq = __nccwpck_require__(4227);
+var warnings = __nccwpck_require__(6003);
 
 function createMap(schema, obj, ctx) {
   const map = new resolveSeq.YAMLMap(schema);
@@ -69620,15 +72790,15 @@ const failsafe = [map, seq, string];
 
 /* global BigInt */
 
-const intIdentify = value => typeof value === 'bigint' || Number.isInteger(value);
+const intIdentify$2 = value => typeof value === 'bigint' || Number.isInteger(value);
 
-const intResolve = (src, part, radix) => resolveSeq.intOptions.asBigInt ? BigInt(src) : parseInt(part, radix);
+const intResolve$1 = (src, part, radix) => resolveSeq.intOptions.asBigInt ? BigInt(src) : parseInt(part, radix);
 
-function intStringify(node, radix, prefix) {
+function intStringify$1(node, radix, prefix) {
   const {
     value
   } = node;
-  if (intIdentify(value) && value >= 0) return prefix + value.toString(radix);
+  if (intIdentify$2(value) && value >= 0) return prefix + value.toString(radix);
   return resolveSeq.stringifyNumber(node);
 }
 
@@ -69654,33 +72824,33 @@ const boolObj = {
   }) => value ? resolveSeq.boolOptions.trueStr : resolveSeq.boolOptions.falseStr
 };
 const octObj = {
-  identify: value => intIdentify(value) && value >= 0,
+  identify: value => intIdentify$2(value) && value >= 0,
   default: true,
   tag: 'tag:yaml.org,2002:int',
   format: 'OCT',
   test: /^0o([0-7]+)$/,
-  resolve: (str, oct) => intResolve(str, oct, 8),
+  resolve: (str, oct) => intResolve$1(str, oct, 8),
   options: resolveSeq.intOptions,
-  stringify: node => intStringify(node, 8, '0o')
+  stringify: node => intStringify$1(node, 8, '0o')
 };
 const intObj = {
-  identify: intIdentify,
+  identify: intIdentify$2,
   default: true,
   tag: 'tag:yaml.org,2002:int',
   test: /^[-+]?[0-9]+$/,
-  resolve: str => intResolve(str, str, 10),
+  resolve: str => intResolve$1(str, str, 10),
   options: resolveSeq.intOptions,
   stringify: resolveSeq.stringifyNumber
 };
 const hexObj = {
-  identify: value => intIdentify(value) && value >= 0,
+  identify: value => intIdentify$2(value) && value >= 0,
   default: true,
   tag: 'tag:yaml.org,2002:int',
   format: 'HEX',
   test: /^0x([0-9a-fA-F]+)$/,
-  resolve: (str, hex) => intResolve(str, hex, 16),
+  resolve: (str, hex) => intResolve$1(str, hex, 16),
   options: resolveSeq.intOptions,
-  stringify: node => intStringify(node, 16, '0x')
+  stringify: node => intStringify$1(node, 16, '0x')
 };
 const nanObj = {
   identify: value => typeof value === 'number',
@@ -69775,9 +72945,9 @@ const boolStringify = ({
   value
 }) => value ? resolveSeq.boolOptions.trueStr : resolveSeq.boolOptions.falseStr;
 
-const intIdentify$2 = value => typeof value === 'bigint' || Number.isInteger(value);
+const intIdentify = value => typeof value === 'bigint' || Number.isInteger(value);
 
-function intResolve$1(sign, src, radix) {
+function intResolve(sign, src, radix) {
   let str = src.replace(/_/g, '');
 
   if (resolveSeq.intOptions.asBigInt) {
@@ -69803,12 +72973,12 @@ function intResolve$1(sign, src, radix) {
   return sign === '-' ? -1 * n : n;
 }
 
-function intStringify$1(node, radix, prefix) {
+function intStringify(node, radix, prefix) {
   const {
     value
   } = node;
 
-  if (intIdentify$2(value)) {
+  if (intIdentify(value)) {
     const str = value.toString(radix);
     return value < 0 ? '-' + prefix + str.substr(1) : prefix + str;
   }
@@ -69842,36 +73012,36 @@ const yaml11 = failsafe.concat([{
   options: resolveSeq.boolOptions,
   stringify: boolStringify
 }, {
-  identify: intIdentify$2,
+  identify: intIdentify,
   default: true,
   tag: 'tag:yaml.org,2002:int',
   format: 'BIN',
   test: /^([-+]?)0b([0-1_]+)$/,
-  resolve: (str, sign, bin) => intResolve$1(sign, bin, 2),
-  stringify: node => intStringify$1(node, 2, '0b')
+  resolve: (str, sign, bin) => intResolve(sign, bin, 2),
+  stringify: node => intStringify(node, 2, '0b')
 }, {
-  identify: intIdentify$2,
+  identify: intIdentify,
   default: true,
   tag: 'tag:yaml.org,2002:int',
   format: 'OCT',
   test: /^([-+]?)0([0-7_]+)$/,
-  resolve: (str, sign, oct) => intResolve$1(sign, oct, 8),
-  stringify: node => intStringify$1(node, 8, '0')
+  resolve: (str, sign, oct) => intResolve(sign, oct, 8),
+  stringify: node => intStringify(node, 8, '0')
 }, {
-  identify: intIdentify$2,
+  identify: intIdentify,
   default: true,
   tag: 'tag:yaml.org,2002:int',
   test: /^([-+]?)([0-9][0-9_]*)$/,
-  resolve: (str, sign, abs) => intResolve$1(sign, abs, 10),
+  resolve: (str, sign, abs) => intResolve(sign, abs, 10),
   stringify: resolveSeq.stringifyNumber
 }, {
-  identify: intIdentify$2,
+  identify: intIdentify,
   default: true,
   tag: 'tag:yaml.org,2002:int',
   format: 'HEX',
   test: /^([-+]?)0x([0-9a-fA-F_]+)$/,
-  resolve: (str, sign, hex) => intResolve$1(sign, hex, 16),
-  stringify: node => intStringify$1(node, 16, '0x')
+  resolve: (str, sign, hex) => intResolve(sign, hex, 16),
+  stringify: node => intStringify(node, 16, '0x')
 }, {
   identify: value => typeof value === 'number',
   default: true,
@@ -69961,7 +73131,7 @@ function createNode(value, tagName, ctx) {
 
   if (!tagObj) {
     if (typeof value.toJSON === 'function') value = value.toJSON();
-    if (typeof value !== 'object') return wrapScalars ? new resolveSeq.Scalar(value) : value;
+    if (!value || typeof value !== 'object') return wrapScalars ? new resolveSeq.Scalar(value) : value;
     tagObj = value instanceof Map ? map : value[Symbol.iterator] ? seq : map;
   }
 
@@ -69972,7 +73142,10 @@ function createNode(value, tagName, ctx) {
   // after first. The `obj` wrapper allows for circular references to resolve.
 
 
-  const obj = {};
+  const obj = {
+    value: undefined,
+    node: undefined
+  };
 
   if (value && typeof value === 'object' && prevObjects) {
     const prev = prevObjects.get(value);
@@ -70076,17 +73249,17 @@ exports.Schema = Schema;
 /***/ }),
 
 /***/ 5065:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var PlainValue = __webpack_require__(5215);
-var parseCst = __webpack_require__(445);
-__webpack_require__(6140);
-var Document$1 = __webpack_require__(1983);
-var Schema = __webpack_require__(3656);
-var warnings = __webpack_require__(7383);
+var parseCst = __nccwpck_require__(445);
+var Document$1 = __nccwpck_require__(5506);
+var Schema = __nccwpck_require__(8021);
+var PlainValue = __nccwpck_require__(5215);
+var warnings = __nccwpck_require__(6003);
+__nccwpck_require__(4227);
 
 function createNode(value, wrapScalars = true, tag) {
   if (tag === undefined && typeof wrapScalars === 'string') {
@@ -70163,12 +73336,12 @@ exports.YAML = YAML;
 /***/ }),
 
 /***/ 445:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var PlainValue = __webpack_require__(5215);
+var PlainValue = __nccwpck_require__(5215);
 
 class BlankLine extends PlainValue.Node {
   constructor() {
@@ -71818,11 +74991,17 @@ class ParseContext {
 
     while (ch === PlainValue.Char.ANCHOR || ch === PlainValue.Char.COMMENT || ch === PlainValue.Char.TAG || ch === '\n') {
       if (ch === '\n') {
-        const lineStart = offset + 1;
-        const inEnd = PlainValue.Node.endOfIndent(src, lineStart);
+        let inEnd = offset;
+        let lineStart;
+
+        do {
+          lineStart = inEnd + 1;
+          inEnd = PlainValue.Node.endOfIndent(src, lineStart);
+        } while (src[inEnd] === '\n');
+
         const indentDiff = inEnd - (lineStart + this.indent);
         const noIndicatorAsIndent = parent.type === PlainValue.Type.SEQ_ITEM && parent.context.atLineStart;
-        if (!PlainValue.Node.nextNodeIsIndented(src[inEnd], indentDiff, !noIndicatorAsIndent)) break;
+        if (src[inEnd] !== '#' && !PlainValue.Node.nextNodeIsIndented(src[inEnd], indentDiff, !noIndicatorAsIndent)) break;
         this.atLineStart = true;
         this.lineStart = lineStart;
         lineHasProps = false;
@@ -71917,13 +75096,13 @@ exports.parse = parse;
 
 /***/ }),
 
-/***/ 6140:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 4227:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var PlainValue = __webpack_require__(5215);
+var PlainValue = __nccwpck_require__(5215);
 
 function addCommentBefore(str, indent, comment) {
   if (!comment) return str;
@@ -71975,9 +75154,21 @@ function collectionFromPath(schema, path, value) {
 
   for (let i = path.length - 1; i >= 0; --i) {
     const k = path[i];
-    const o = Number.isInteger(k) && k >= 0 ? [] : {};
-    o[k] = v;
-    v = o;
+
+    if (Number.isInteger(k) && k >= 0) {
+      const a = [];
+      a[k] = v;
+      v = a;
+    } else {
+      const o = {};
+      Object.defineProperty(o, k, {
+        value: v,
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+      v = o;
+    }
   }
 
   return schema.createNode(v, false);
@@ -72201,7 +75392,7 @@ const stringifyKey = (key, jsKey, ctx) => {
   if (jsKey === null) return '';
   if (typeof jsKey !== 'object') return String(jsKey);
   if (key instanceof Node && ctx && ctx.doc) return key.toString({
-    anchors: {},
+    anchors: Object.create(null),
     doc: ctx.doc,
     indent: '',
     indentStep: ctx.indentStep,
@@ -72242,7 +75433,13 @@ class Pair extends Node {
       map.add(key);
     } else {
       const stringKey = stringifyKey(this.key, key, ctx);
-      map[stringKey] = toJSON(this.value, stringKey, ctx);
+      const value = toJSON(this.value, stringKey, ctx);
+      if (stringKey in map) Object.defineProperty(map, stringKey, {
+        value,
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });else map[stringKey] = value;
     }
 
     return map;
@@ -72277,7 +75474,7 @@ class Pair extends Node {
       }
     }
 
-    const explicitKey = !simpleKeys && (!key || keyComment || key instanceof Collection || key.type === PlainValue.Type.BLOCK_FOLDED || key.type === PlainValue.Type.BLOCK_LITERAL);
+    let explicitKey = !simpleKeys && (!key || keyComment || (key instanceof Node ? key instanceof Collection || key.type === PlainValue.Type.BLOCK_FOLDED || key.type === PlainValue.Type.BLOCK_LITERAL : typeof key === 'object'));
     const {
       doc,
       indent,
@@ -72292,13 +75489,18 @@ class Pair extends Node {
     let str = stringify(key, ctx, () => keyComment = null, () => chompKeep = true);
     str = addComment(str, ctx.indent, keyComment);
 
+    if (!explicitKey && str.length > 1024) {
+      if (simpleKeys) throw new Error('With simple keys, single line scalar must not span more than 1024 characters');
+      explicitKey = true;
+    }
+
     if (ctx.allNullValues && !simpleKeys) {
       if (this.comment) {
         str = addComment(str, ctx.indent, this.comment);
         if (onComment) onComment();
       } else if (chompKeep && !keyComment && onChompKeep) onChompKeep();
 
-      return ctx.inFlow ? str : `? ${str}`;
+      return ctx.inFlow && !explicitKey ? str : `? ${str}`;
     }
 
     str = explicitKey ? `? ${str}\n${indent}:` : `${str}:`;
@@ -72342,7 +75544,7 @@ class Pair extends Node {
     } else if (!explicitKey && value instanceof Collection) {
       const flow = valueStr[0] === '[' || valueStr[0] === '{';
       if (!flow || valueStr.includes('\n')) ws = `\n${ctx.indent}`;
-    }
+    } else if (valueStr[0] === '\n') ws = '';
 
     if (chompKeep && !valueComment && onChompKeep) onChompKeep();
     return addComment(str + ws + valueStr, ctx.indent, valueComment);
@@ -72566,8 +75768,13 @@ class Merge extends Pair {
           if (!map.has(key)) map.set(key, value);
         } else if (map instanceof Set) {
           map.add(key);
-        } else {
-          if (!Object.prototype.hasOwnProperty.call(map, key)) map[key] = value;
+        } else if (!Object.prototype.hasOwnProperty.call(map, key)) {
+          Object.defineProperty(map, key, {
+            value,
+            writable: true,
+            enumerable: true,
+            configurable: true
+          });
         }
       }
     }
@@ -72667,7 +75874,7 @@ const consumeMoreIndentedLines = (text, i) => {
  *   the first line, defaulting to `indent.length`
  * @param {number} [options.lineWidth=80]
  * @param {number} [options.minContentWidth=20] Allow highly indented lines to
- *   stretch the line width
+ *   stretch the line width or indent content from the start
  * @param {function} options.onFold Called once if the text is folded
  * @param {function} options.onFold Called once if any line of text exceeds
  *   lineWidth characters
@@ -72686,11 +75893,18 @@ function foldFlowLines(text, indent, mode, {
   if (text.length <= endStep) return text;
   const folds = [];
   const escapedFolds = {};
-  let end = lineWidth - (typeof indentAtStart === 'number' ? indentAtStart : indent.length);
+  let end = lineWidth - indent.length;
+
+  if (typeof indentAtStart === 'number') {
+    if (indentAtStart > lineWidth - Math.max(2, minContentWidth)) folds.push(0);else end = lineWidth - indentAtStart;
+  }
+
   let split = undefined;
   let prev = undefined;
   let overflow = false;
   let i = -1;
+  let escStart = -1;
+  let escEnd = -1;
 
   if (mode === FOLD_BLOCK) {
     i = consumeMoreIndentedLines(text, i);
@@ -72699,6 +75913,8 @@ function foldFlowLines(text, indent, mode, {
 
   for (let ch; ch = text[i += 1];) {
     if (mode === FOLD_QUOTED && ch === '\\') {
+      escStart = i;
+
       switch (text[i + 1]) {
         case 'x':
           i += 3;
@@ -72715,6 +75931,8 @@ function foldFlowLines(text, indent, mode, {
         default:
           i += 1;
       }
+
+      escEnd = i;
     }
 
     if (ch === '\n') {
@@ -72739,12 +75957,15 @@ function foldFlowLines(text, indent, mode, {
             prev = ch;
             ch = text[i += 1];
             overflow = true;
-          } // i - 2 accounts for not-dropped last char + newline-escaping \
+          } // Account for newline escape, but don't break preceding escape
 
 
-          folds.push(i - 2);
-          escapedFolds[i - 2] = true;
-          end = i - 2 + endStep;
+          const j = i > escEnd + 1 ? i - 2 : escStart - 1; // Bail out if lineWidth & minContentWidth are shorter than an escape string
+
+          if (escapedFolds[j]) return text;
+          folds.push(j);
+          escapedFolds[j] = true;
+          end = j + endStep;
           split = undefined;
         } else {
           overflow = true;
@@ -72763,8 +75984,10 @@ function foldFlowLines(text, indent, mode, {
   for (let i = 0; i < folds.length; ++i) {
     const fold = folds[i];
     const end = folds[i + 1] || text.length;
-    if (mode === FOLD_QUOTED && escapedFolds[fold]) res += `${text[fold]}\\`;
-    res += `\n${indent}${text.slice(fold + 1, end)}`;
+    if (fold === 0) res = `\n${indent}${text.slice(0, end)}`;else {
+      if (mode === FOLD_QUOTED && escapedFolds[fold]) res += `${text[fold]}\\`;
+      res += `\n${indent}${text.slice(fold + 1, end)}`;
+    }
   }
 
   return res;
@@ -72780,7 +76003,9 @@ const getFoldOptions = ({
 
 const containsDocumentMarker = str => /^(%|---|\.\.\.)/m.test(str);
 
-function lineLengthOverLimit(str, limit) {
+function lineLengthOverLimit(str, lineWidth, indentLength) {
+  if (!lineWidth || lineWidth < 0) return false;
+  const limit = lineWidth - indentLength;
   const strLen = str.length;
   if (strLen <= limit) return false;
 
@@ -72923,7 +76148,7 @@ function blockString({
   const indent = ctx.indent || (ctx.forceBlockIndent || containsDocumentMarker(value) ? '  ' : '');
   const indentSize = indent ? '2' : '1'; // root is at -1
 
-  const literal = type === PlainValue.Type.BLOCK_FOLDED ? false : type === PlainValue.Type.BLOCK_LITERAL ? true : !lineLengthOverLimit(value, strOptions.fold.lineWidth - indent.length);
+  const literal = type === PlainValue.Type.BLOCK_FOLDED ? false : type === PlainValue.Type.BLOCK_LITERAL ? true : !lineLengthOverLimit(value, strOptions.fold.lineWidth, indent.length);
   let header = literal ? '|' : '>';
   if (!value) return header + '\n';
   let wsStart = '';
@@ -74040,14 +77265,14 @@ exports.toJSON = toJSON;
 
 /***/ }),
 
-/***/ 7383:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 6003:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var PlainValue = __webpack_require__(5215);
-var resolveSeq = __webpack_require__(6140);
+var PlainValue = __nccwpck_require__(5215);
+var resolveSeq = __nccwpck_require__(4227);
 
 /* global atob, btoa, Buffer */
 const binary = {
@@ -74465,18 +77690,10 @@ exports.warnOptionDeprecation = warnOptionDeprecation;
 /***/ }),
 
 /***/ 3552:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __webpack_require__(5065).YAML
+module.exports = __nccwpck_require__(5065).YAML
 
-
-/***/ }),
-
-/***/ 9663:
-/***/ ((module) => {
-
-"use strict";
-module.exports = {"version":"0.3.4"};
 
 /***/ }),
 
@@ -74484,7 +77701,7 @@ module.exports = {"version":"0.3.4"};
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"assert\":true,\"assert/strict\":\">= 15\",\"async_hooks\":\">= 8\",\"buffer_ieee754\":\"< 0.9.7\",\"buffer\":true,\"child_process\":true,\"cluster\":true,\"console\":true,\"constants\":true,\"crypto\":true,\"_debug_agent\":\">= 1 && < 8\",\"_debugger\":\"< 8\",\"dgram\":true,\"diagnostics_channel\":\">= 15.1\",\"dns\":true,\"dns/promises\":\">= 15\",\"domain\":\">= 0.7.12\",\"events\":true,\"freelist\":\"< 6\",\"fs\":true,\"fs/promises\":[\">= 10 && < 10.1\",\">= 14\"],\"_http_agent\":\">= 0.11.1\",\"_http_client\":\">= 0.11.1\",\"_http_common\":\">= 0.11.1\",\"_http_incoming\":\">= 0.11.1\",\"_http_outgoing\":\">= 0.11.1\",\"_http_server\":\">= 0.11.1\",\"http\":true,\"http2\":\">= 8.8\",\"https\":true,\"inspector\":\">= 8.0.0\",\"_linklist\":\"< 8\",\"module\":true,\"net\":true,\"node-inspect/lib/_inspect\":\">= 7.6.0 && < 12\",\"node-inspect/lib/internal/inspect_client\":\">= 7.6.0 && < 12\",\"node-inspect/lib/internal/inspect_repl\":\">= 7.6.0 && < 12\",\"os\":true,\"path\":true,\"path/posix\":\">= 15.3\",\"path/win32\":\">= 15.3\",\"perf_hooks\":\">= 8.5\",\"process\":\">= 1\",\"punycode\":true,\"querystring\":true,\"readline\":true,\"repl\":true,\"smalloc\":\">= 0.11.5 && < 3\",\"_stream_duplex\":\">= 0.9.4\",\"_stream_transform\":\">= 0.9.4\",\"_stream_wrap\":\">= 1.4.1\",\"_stream_passthrough\":\">= 0.9.4\",\"_stream_readable\":\">= 0.9.4\",\"_stream_writable\":\">= 0.9.4\",\"stream\":true,\"stream/promises\":\">= 15\",\"string_decoder\":true,\"sys\":[\">= 0.6 && < 0.7\",\">= 0.8\"],\"timers\":true,\"timers/promises\":\">= 15\",\"_tls_common\":\">= 0.11.13\",\"_tls_legacy\":\">= 0.11.3 && < 10\",\"_tls_wrap\":\">= 0.11.3\",\"tls\":true,\"trace_events\":\">= 10\",\"tty\":true,\"url\":true,\"util\":true,\"util/types\":\">= 15.3\",\"v8/tools/arguments\":\">= 10 && < 12\",\"v8/tools/codemap\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/consarray\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/csvparser\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/logreader\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/profile_view\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/splaytree\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8\":\">= 1\",\"vm\":true,\"wasi\":\">= 13.4 && < 13.5\",\"worker_threads\":\">= 11.7\",\"zlib\":true}");
+module.exports = JSON.parse('{"assert":true,"node:assert":[">= 14.18 && < 15",">= 16"],"assert/strict":">= 15","node:assert/strict":">= 16","async_hooks":">= 8","node:async_hooks":[">= 14.18 && < 15",">= 16"],"buffer_ieee754":"< 0.9.7","buffer":true,"node:buffer":[">= 14.18 && < 15",">= 16"],"child_process":true,"node:child_process":[">= 14.18 && < 15",">= 16"],"cluster":true,"node:cluster":[">= 14.18 && < 15",">= 16"],"console":true,"node:console":[">= 14.18 && < 15",">= 16"],"constants":true,"node:constants":[">= 14.18 && < 15",">= 16"],"crypto":true,"node:crypto":[">= 14.18 && < 15",">= 16"],"_debug_agent":">= 1 && < 8","_debugger":"< 8","dgram":true,"node:dgram":[">= 14.18 && < 15",">= 16"],"diagnostics_channel":[">= 14.17 && < 15",">= 15.1"],"node:diagnostics_channel":[">= 14.18 && < 15",">= 16"],"dns":true,"node:dns":[">= 14.18 && < 15",">= 16"],"dns/promises":">= 15","node:dns/promises":">= 16","domain":">= 0.7.12","node:domain":[">= 14.18 && < 15",">= 16"],"events":true,"node:events":[">= 14.18 && < 15",">= 16"],"freelist":"< 6","fs":true,"node:fs":[">= 14.18 && < 15",">= 16"],"fs/promises":[">= 10 && < 10.1",">= 14"],"node:fs/promises":[">= 14.18 && < 15",">= 16"],"_http_agent":">= 0.11.1","node:_http_agent":[">= 14.18 && < 15",">= 16"],"_http_client":">= 0.11.1","node:_http_client":[">= 14.18 && < 15",">= 16"],"_http_common":">= 0.11.1","node:_http_common":[">= 14.18 && < 15",">= 16"],"_http_incoming":">= 0.11.1","node:_http_incoming":[">= 14.18 && < 15",">= 16"],"_http_outgoing":">= 0.11.1","node:_http_outgoing":[">= 14.18 && < 15",">= 16"],"_http_server":">= 0.11.1","node:_http_server":[">= 14.18 && < 15",">= 16"],"http":true,"node:http":[">= 14.18 && < 15",">= 16"],"http2":">= 8.8","node:http2":[">= 14.18 && < 15",">= 16"],"https":true,"node:https":[">= 14.18 && < 15",">= 16"],"inspector":">= 8","node:inspector":[">= 14.18 && < 15",">= 16"],"_linklist":"< 8","module":true,"node:module":[">= 14.18 && < 15",">= 16"],"net":true,"node:net":[">= 14.18 && < 15",">= 16"],"node-inspect/lib/_inspect":">= 7.6 && < 12","node-inspect/lib/internal/inspect_client":">= 7.6 && < 12","node-inspect/lib/internal/inspect_repl":">= 7.6 && < 12","os":true,"node:os":[">= 14.18 && < 15",">= 16"],"path":true,"node:path":[">= 14.18 && < 15",">= 16"],"path/posix":">= 15.3","node:path/posix":">= 16","path/win32":">= 15.3","node:path/win32":">= 16","perf_hooks":">= 8.5","node:perf_hooks":[">= 14.18 && < 15",">= 16"],"process":">= 1","node:process":[">= 14.18 && < 15",">= 16"],"punycode":true,"node:punycode":[">= 14.18 && < 15",">= 16"],"querystring":true,"node:querystring":[">= 14.18 && < 15",">= 16"],"readline":true,"node:readline":[">= 14.18 && < 15",">= 16"],"repl":true,"node:repl":[">= 14.18 && < 15",">= 16"],"smalloc":">= 0.11.5 && < 3","_stream_duplex":">= 0.9.4","node:_stream_duplex":[">= 14.18 && < 15",">= 16"],"_stream_transform":">= 0.9.4","node:_stream_transform":[">= 14.18 && < 15",">= 16"],"_stream_wrap":">= 1.4.1","node:_stream_wrap":[">= 14.18 && < 15",">= 16"],"_stream_passthrough":">= 0.9.4","node:_stream_passthrough":[">= 14.18 && < 15",">= 16"],"_stream_readable":">= 0.9.4","node:_stream_readable":[">= 14.18 && < 15",">= 16"],"_stream_writable":">= 0.9.4","node:_stream_writable":[">= 14.18 && < 15",">= 16"],"stream":true,"node:stream":[">= 14.18 && < 15",">= 16"],"stream/consumers":">= 16.7","node:stream/consumers":">= 16.7","stream/promises":">= 15","node:stream/promises":">= 16","stream/web":">= 16.5","node:stream/web":">= 16.5","string_decoder":true,"node:string_decoder":[">= 14.18 && < 15",">= 16"],"sys":[">= 0.6 && < 0.7",">= 0.8"],"node:sys":[">= 14.18 && < 15",">= 16"],"timers":true,"node:timers":[">= 14.18 && < 15",">= 16"],"timers/promises":">= 15","node:timers/promises":">= 16","_tls_common":">= 0.11.13","node:_tls_common":[">= 14.18 && < 15",">= 16"],"_tls_legacy":">= 0.11.3 && < 10","_tls_wrap":">= 0.11.3","node:_tls_wrap":[">= 14.18 && < 15",">= 16"],"tls":true,"node:tls":[">= 14.18 && < 15",">= 16"],"trace_events":">= 10","node:trace_events":[">= 14.18 && < 15",">= 16"],"tty":true,"node:tty":[">= 14.18 && < 15",">= 16"],"url":true,"node:url":[">= 14.18 && < 15",">= 16"],"util":true,"node:util":[">= 14.18 && < 15",">= 16"],"util/types":">= 15.3","node:util/types":">= 16","v8/tools/arguments":">= 10 && < 12","v8/tools/codemap":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/consarray":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/csvparser":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/logreader":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/profile_view":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/splaytree":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8":">= 1","node:v8":[">= 14.18 && < 15",">= 16"],"vm":true,"node:vm":[">= 14.18 && < 15",">= 16"],"wasi":">= 13.4 && < 13.5","worker_threads":">= 11.7","node:worker_threads":[">= 14.18 && < 15",">= 16"],"zlib":true,"node:zlib":[">= 14.18 && < 15",">= 16"]}');
 
 /***/ }),
 
@@ -74492,23 +77709,23 @@ module.exports = JSON.parse("{\"assert\":true,\"assert/strict\":\">= 15\",\"asyn
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"100\":\"💯\",\"1234\":\"🔢\",\"umbrella_with_rain_drops\":\"☔\",\"coffee\":\"☕\",\"aries\":\"♈\",\"taurus\":\"♉\",\"sagittarius\":\"♐\",\"capricorn\":\"♑\",\"aquarius\":\"♒\",\"pisces\":\"♓\",\"anchor\":\"⚓\",\"white_check_mark\":\"✅\",\"sparkles\":\"✨\",\"question\":\"❓\",\"grey_question\":\"❔\",\"grey_exclamation\":\"❕\",\"exclamation\":\"❗\",\"heavy_exclamation_mark\":\"❗\",\"heavy_plus_sign\":\"➕\",\"heavy_minus_sign\":\"➖\",\"heavy_division_sign\":\"➗\",\"hash\":\"#️⃣\",\"keycap_star\":\"*️⃣\",\"zero\":\"0️⃣\",\"one\":\"1️⃣\",\"two\":\"2️⃣\",\"three\":\"3️⃣\",\"four\":\"4️⃣\",\"five\":\"5️⃣\",\"six\":\"6️⃣\",\"seven\":\"7️⃣\",\"eight\":\"8️⃣\",\"nine\":\"9️⃣\",\"copyright\":\"©️\",\"registered\":\"®️\",\"mahjong\":\"🀄\",\"black_joker\":\"🃏\",\"a\":\"🅰️\",\"b\":\"🅱️\",\"o2\":\"🅾️\",\"parking\":\"🅿️\",\"ab\":\"🆎\",\"cl\":\"🆑\",\"cool\":\"🆒\",\"free\":\"🆓\",\"id\":\"🆔\",\"new\":\"🆕\",\"ng\":\"🆖\",\"ok\":\"🆗\",\"sos\":\"🆘\",\"up\":\"🆙\",\"vs\":\"🆚\",\"flag-ac\":\"🇦🇨\",\"flag-ad\":\"🇦🇩\",\"flag-ae\":\"🇦🇪\",\"flag-af\":\"🇦🇫\",\"flag-ag\":\"🇦🇬\",\"flag-ai\":\"🇦🇮\",\"flag-al\":\"🇦🇱\",\"flag-am\":\"🇦🇲\",\"flag-ao\":\"🇦🇴\",\"flag-aq\":\"🇦🇶\",\"flag-ar\":\"🇦🇷\",\"flag-as\":\"🇦🇸\",\"flag-at\":\"🇦🇹\",\"flag-au\":\"🇦🇺\",\"flag-aw\":\"🇦🇼\",\"flag-ax\":\"🇦🇽\",\"flag-az\":\"🇦🇿\",\"flag-ba\":\"🇧🇦\",\"flag-bb\":\"🇧🇧\",\"flag-bd\":\"🇧🇩\",\"flag-be\":\"🇧🇪\",\"flag-bf\":\"🇧🇫\",\"flag-bg\":\"🇧🇬\",\"flag-bh\":\"🇧🇭\",\"flag-bi\":\"🇧🇮\",\"flag-bj\":\"🇧🇯\",\"flag-bl\":\"🇧🇱\",\"flag-bm\":\"🇧🇲\",\"flag-bn\":\"🇧🇳\",\"flag-bo\":\"🇧🇴\",\"flag-bq\":\"🇧🇶\",\"flag-br\":\"🇧🇷\",\"flag-bs\":\"🇧🇸\",\"flag-bt\":\"🇧🇹\",\"flag-bv\":\"🇧🇻\",\"flag-bw\":\"🇧🇼\",\"flag-by\":\"🇧🇾\",\"flag-bz\":\"🇧🇿\",\"flag-ca\":\"🇨🇦\",\"flag-cc\":\"🇨🇨\",\"flag-cd\":\"🇨🇩\",\"flag-cf\":\"🇨🇫\",\"flag-cg\":\"🇨🇬\",\"flag-ch\":\"🇨🇭\",\"flag-ci\":\"🇨🇮\",\"flag-ck\":\"🇨🇰\",\"flag-cl\":\"🇨🇱\",\"flag-cm\":\"🇨🇲\",\"cn\":\"🇨🇳\",\"flag-cn\":\"🇨🇳\",\"flag-co\":\"🇨🇴\",\"flag-cp\":\"🇨🇵\",\"flag-cr\":\"🇨🇷\",\"flag-cu\":\"🇨🇺\",\"flag-cv\":\"🇨🇻\",\"flag-cw\":\"🇨🇼\",\"flag-cx\":\"🇨🇽\",\"flag-cy\":\"🇨🇾\",\"flag-cz\":\"🇨🇿\",\"de\":\"🇩🇪\",\"flag-de\":\"🇩🇪\",\"flag-dg\":\"🇩🇬\",\"flag-dj\":\"🇩🇯\",\"flag-dk\":\"🇩🇰\",\"flag-dm\":\"🇩🇲\",\"flag-do\":\"🇩🇴\",\"flag-dz\":\"🇩🇿\",\"flag-ea\":\"🇪🇦\",\"flag-ec\":\"🇪🇨\",\"flag-ee\":\"🇪🇪\",\"flag-eg\":\"🇪🇬\",\"flag-eh\":\"🇪🇭\",\"flag-er\":\"🇪🇷\",\"es\":\"🇪🇸\",\"flag-es\":\"🇪🇸\",\"flag-et\":\"🇪🇹\",\"flag-eu\":\"🇪🇺\",\"flag-fi\":\"🇫🇮\",\"flag-fj\":\"🇫🇯\",\"flag-fk\":\"🇫🇰\",\"flag-fm\":\"🇫🇲\",\"flag-fo\":\"🇫🇴\",\"fr\":\"🇫🇷\",\"flag-fr\":\"🇫🇷\",\"flag-ga\":\"🇬🇦\",\"gb\":\"🇬🇧\",\"uk\":\"🇬🇧\",\"flag-gb\":\"🇬🇧\",\"flag-gd\":\"🇬🇩\",\"flag-ge\":\"🇬🇪\",\"flag-gf\":\"🇬🇫\",\"flag-gg\":\"🇬🇬\",\"flag-gh\":\"🇬🇭\",\"flag-gi\":\"🇬🇮\",\"flag-gl\":\"🇬🇱\",\"flag-gm\":\"🇬🇲\",\"flag-gn\":\"🇬🇳\",\"flag-gp\":\"🇬🇵\",\"flag-gq\":\"🇬🇶\",\"flag-gr\":\"🇬🇷\",\"flag-gs\":\"🇬🇸\",\"flag-gt\":\"🇬🇹\",\"flag-gu\":\"🇬🇺\",\"flag-gw\":\"🇬🇼\",\"flag-gy\":\"🇬🇾\",\"flag-hk\":\"🇭🇰\",\"flag-hm\":\"🇭🇲\",\"flag-hn\":\"🇭🇳\",\"flag-hr\":\"🇭🇷\",\"flag-ht\":\"🇭🇹\",\"flag-hu\":\"🇭🇺\",\"flag-ic\":\"🇮🇨\",\"flag-id\":\"🇮🇩\",\"flag-ie\":\"🇮🇪\",\"flag-il\":\"🇮🇱\",\"flag-im\":\"🇮🇲\",\"flag-in\":\"🇮🇳\",\"flag-io\":\"🇮🇴\",\"flag-iq\":\"🇮🇶\",\"flag-ir\":\"🇮🇷\",\"flag-is\":\"🇮🇸\",\"it\":\"🇮🇹\",\"flag-it\":\"🇮🇹\",\"flag-je\":\"🇯🇪\",\"flag-jm\":\"🇯🇲\",\"flag-jo\":\"🇯🇴\",\"jp\":\"🇯🇵\",\"flag-jp\":\"🇯🇵\",\"flag-ke\":\"🇰🇪\",\"flag-kg\":\"🇰🇬\",\"flag-kh\":\"🇰🇭\",\"flag-ki\":\"🇰🇮\",\"flag-km\":\"🇰🇲\",\"flag-kn\":\"🇰🇳\",\"flag-kp\":\"🇰🇵\",\"kr\":\"🇰🇷\",\"flag-kr\":\"🇰🇷\",\"flag-kw\":\"🇰🇼\",\"flag-ky\":\"🇰🇾\",\"flag-kz\":\"🇰🇿\",\"flag-la\":\"🇱🇦\",\"flag-lb\":\"🇱🇧\",\"flag-lc\":\"🇱🇨\",\"flag-li\":\"🇱🇮\",\"flag-lk\":\"🇱🇰\",\"flag-lr\":\"🇱🇷\",\"flag-ls\":\"🇱🇸\",\"flag-lt\":\"🇱🇹\",\"flag-lu\":\"🇱🇺\",\"flag-lv\":\"🇱🇻\",\"flag-ly\":\"🇱🇾\",\"flag-ma\":\"🇲🇦\",\"flag-mc\":\"🇲🇨\",\"flag-md\":\"🇲🇩\",\"flag-me\":\"🇲🇪\",\"flag-mf\":\"🇲🇫\",\"flag-mg\":\"🇲🇬\",\"flag-mh\":\"🇲🇭\",\"flag-mk\":\"🇲🇰\",\"flag-ml\":\"🇲🇱\",\"flag-mm\":\"🇲🇲\",\"flag-mn\":\"🇲🇳\",\"flag-mo\":\"🇲🇴\",\"flag-mp\":\"🇲🇵\",\"flag-mq\":\"🇲🇶\",\"flag-mr\":\"🇲🇷\",\"flag-ms\":\"🇲🇸\",\"flag-mt\":\"🇲🇹\",\"flag-mu\":\"🇲🇺\",\"flag-mv\":\"🇲🇻\",\"flag-mw\":\"🇲🇼\",\"flag-mx\":\"🇲🇽\",\"flag-my\":\"🇲🇾\",\"flag-mz\":\"🇲🇿\",\"flag-na\":\"🇳🇦\",\"flag-nc\":\"🇳🇨\",\"flag-ne\":\"🇳🇪\",\"flag-nf\":\"🇳🇫\",\"flag-ng\":\"🇳🇬\",\"flag-ni\":\"🇳🇮\",\"flag-nl\":\"🇳🇱\",\"flag-no\":\"🇳🇴\",\"flag-np\":\"🇳🇵\",\"flag-nr\":\"🇳🇷\",\"flag-nu\":\"🇳🇺\",\"flag-nz\":\"🇳🇿\",\"flag-om\":\"🇴🇲\",\"flag-pa\":\"🇵🇦\",\"flag-pe\":\"🇵🇪\",\"flag-pf\":\"🇵🇫\",\"flag-pg\":\"🇵🇬\",\"flag-ph\":\"🇵🇭\",\"flag-pk\":\"🇵🇰\",\"flag-pl\":\"🇵🇱\",\"flag-pm\":\"🇵🇲\",\"flag-pn\":\"🇵🇳\",\"flag-pr\":\"🇵🇷\",\"flag-ps\":\"🇵🇸\",\"flag-pt\":\"🇵🇹\",\"flag-pw\":\"🇵🇼\",\"flag-py\":\"🇵🇾\",\"flag-qa\":\"🇶🇦\",\"flag-re\":\"🇷🇪\",\"flag-ro\":\"🇷🇴\",\"flag-rs\":\"🇷🇸\",\"ru\":\"🇷🇺\",\"flag-ru\":\"🇷🇺\",\"flag-rw\":\"🇷🇼\",\"flag-sa\":\"🇸🇦\",\"flag-sb\":\"🇸🇧\",\"flag-sc\":\"🇸🇨\",\"flag-sd\":\"🇸🇩\",\"flag-se\":\"🇸🇪\",\"flag-sg\":\"🇸🇬\",\"flag-sh\":\"🇸🇭\",\"flag-si\":\"🇸🇮\",\"flag-sj\":\"🇸🇯\",\"flag-sk\":\"🇸🇰\",\"flag-sl\":\"🇸🇱\",\"flag-sm\":\"🇸🇲\",\"flag-sn\":\"🇸🇳\",\"flag-so\":\"🇸🇴\",\"flag-sr\":\"🇸🇷\",\"flag-ss\":\"🇸🇸\",\"flag-st\":\"🇸🇹\",\"flag-sv\":\"🇸🇻\",\"flag-sx\":\"🇸🇽\",\"flag-sy\":\"🇸🇾\",\"flag-sz\":\"🇸🇿\",\"flag-ta\":\"🇹🇦\",\"flag-tc\":\"🇹🇨\",\"flag-td\":\"🇹🇩\",\"flag-tf\":\"🇹🇫\",\"flag-tg\":\"🇹🇬\",\"flag-th\":\"🇹🇭\",\"flag-tj\":\"🇹🇯\",\"flag-tk\":\"🇹🇰\",\"flag-tl\":\"🇹🇱\",\"flag-tm\":\"🇹🇲\",\"flag-tn\":\"🇹🇳\",\"flag-to\":\"🇹🇴\",\"flag-tr\":\"🇹🇷\",\"flag-tt\":\"🇹🇹\",\"flag-tv\":\"🇹🇻\",\"flag-tw\":\"🇹🇼\",\"flag-tz\":\"🇹🇿\",\"flag-ua\":\"🇺🇦\",\"flag-ug\":\"🇺🇬\",\"flag-um\":\"🇺🇲\",\"flag-un\":\"🇺🇳\",\"us\":\"🇺🇸\",\"flag-us\":\"🇺🇸\",\"flag-uy\":\"🇺🇾\",\"flag-uz\":\"🇺🇿\",\"flag-va\":\"🇻🇦\",\"flag-vc\":\"🇻🇨\",\"flag-ve\":\"🇻🇪\",\"flag-vg\":\"🇻🇬\",\"flag-vi\":\"🇻🇮\",\"flag-vn\":\"🇻🇳\",\"flag-vu\":\"🇻🇺\",\"flag-wf\":\"🇼🇫\",\"flag-ws\":\"🇼🇸\",\"flag-xk\":\"🇽🇰\",\"flag-ye\":\"🇾🇪\",\"flag-yt\":\"🇾🇹\",\"flag-za\":\"🇿🇦\",\"flag-zm\":\"🇿🇲\",\"flag-zw\":\"🇿🇼\",\"koko\":\"🈁\",\"sa\":\"🈂️\",\"u7121\":\"🈚\",\"u6307\":\"🈯\",\"u7981\":\"🈲\",\"u7a7a\":\"🈳\",\"u5408\":\"🈴\",\"u6e80\":\"🈵\",\"u6709\":\"🈶\",\"u6708\":\"🈷️\",\"u7533\":\"🈸\",\"u5272\":\"🈹\",\"u55b6\":\"🈺\",\"ideograph_advantage\":\"🉐\",\"accept\":\"🉑\",\"cyclone\":\"🌀\",\"foggy\":\"🌁\",\"closed_umbrella\":\"🌂\",\"night_with_stars\":\"🌃\",\"sunrise_over_mountains\":\"🌄\",\"sunrise\":\"🌅\",\"city_sunset\":\"🌆\",\"city_sunrise\":\"🌇\",\"rainbow\":\"🌈\",\"bridge_at_night\":\"🌉\",\"ocean\":\"🌊\",\"volcano\":\"🌋\",\"milky_way\":\"🌌\",\"earth_africa\":\"🌍\",\"earth_americas\":\"🌎\",\"earth_asia\":\"🌏\",\"globe_with_meridians\":\"🌐\",\"new_moon\":\"🌑\",\"waxing_crescent_moon\":\"🌒\",\"first_quarter_moon\":\"🌓\",\"moon\":\"🌔\",\"waxing_gibbous_moon\":\"🌔\",\"full_moon\":\"🌕\",\"waning_gibbous_moon\":\"🌖\",\"last_quarter_moon\":\"🌗\",\"waning_crescent_moon\":\"🌘\",\"crescent_moon\":\"🌙\",\"new_moon_with_face\":\"🌚\",\"first_quarter_moon_with_face\":\"🌛\",\"last_quarter_moon_with_face\":\"🌜\",\"full_moon_with_face\":\"🌝\",\"sun_with_face\":\"🌞\",\"star2\":\"🌟\",\"stars\":\"🌠\",\"thermometer\":\"🌡️\",\"mostly_sunny\":\"🌤️\",\"sun_small_cloud\":\"🌤️\",\"barely_sunny\":\"🌥️\",\"sun_behind_cloud\":\"🌥️\",\"partly_sunny_rain\":\"🌦️\",\"sun_behind_rain_cloud\":\"🌦️\",\"rain_cloud\":\"🌧️\",\"snow_cloud\":\"🌨️\",\"lightning\":\"🌩️\",\"lightning_cloud\":\"🌩️\",\"tornado\":\"🌪️\",\"tornado_cloud\":\"🌪️\",\"fog\":\"🌫️\",\"wind_blowing_face\":\"🌬️\",\"hotdog\":\"🌭\",\"taco\":\"🌮\",\"burrito\":\"🌯\",\"chestnut\":\"🌰\",\"seedling\":\"🌱\",\"evergreen_tree\":\"🌲\",\"deciduous_tree\":\"🌳\",\"palm_tree\":\"🌴\",\"cactus\":\"🌵\",\"hot_pepper\":\"🌶️\",\"tulip\":\"🌷\",\"cherry_blossom\":\"🌸\",\"rose\":\"🌹\",\"hibiscus\":\"🌺\",\"sunflower\":\"🌻\",\"blossom\":\"🌼\",\"corn\":\"🌽\",\"ear_of_rice\":\"🌾\",\"herb\":\"🌿\",\"four_leaf_clover\":\"🍀\",\"maple_leaf\":\"🍁\",\"fallen_leaf\":\"🍂\",\"leaves\":\"🍃\",\"mushroom\":\"🍄\",\"tomato\":\"🍅\",\"eggplant\":\"🍆\",\"grapes\":\"🍇\",\"melon\":\"🍈\",\"watermelon\":\"🍉\",\"tangerine\":\"🍊\",\"lemon\":\"🍋\",\"banana\":\"🍌\",\"pineapple\":\"🍍\",\"apple\":\"🍎\",\"green_apple\":\"🍏\",\"pear\":\"🍐\",\"peach\":\"🍑\",\"cherries\":\"🍒\",\"strawberry\":\"🍓\",\"hamburger\":\"🍔\",\"pizza\":\"🍕\",\"meat_on_bone\":\"🍖\",\"poultry_leg\":\"🍗\",\"rice_cracker\":\"🍘\",\"rice_ball\":\"🍙\",\"rice\":\"🍚\",\"curry\":\"🍛\",\"ramen\":\"🍜\",\"spaghetti\":\"🍝\",\"bread\":\"🍞\",\"fries\":\"🍟\",\"sweet_potato\":\"🍠\",\"dango\":\"🍡\",\"oden\":\"🍢\",\"sushi\":\"🍣\",\"fried_shrimp\":\"🍤\",\"fish_cake\":\"🍥\",\"icecream\":\"🍦\",\"shaved_ice\":\"🍧\",\"ice_cream\":\"🍨\",\"doughnut\":\"🍩\",\"cookie\":\"🍪\",\"chocolate_bar\":\"🍫\",\"candy\":\"🍬\",\"lollipop\":\"🍭\",\"custard\":\"🍮\",\"honey_pot\":\"🍯\",\"cake\":\"🍰\",\"bento\":\"🍱\",\"stew\":\"🍲\",\"fried_egg\":\"🍳\",\"cooking\":\"🍳\",\"fork_and_knife\":\"🍴\",\"tea\":\"🍵\",\"sake\":\"🍶\",\"wine_glass\":\"🍷\",\"cocktail\":\"🍸\",\"tropical_drink\":\"🍹\",\"beer\":\"🍺\",\"beers\":\"🍻\",\"baby_bottle\":\"🍼\",\"knife_fork_plate\":\"🍽️\",\"champagne\":\"🍾\",\"popcorn\":\"🍿\",\"ribbon\":\"🎀\",\"gift\":\"🎁\",\"birthday\":\"🎂\",\"jack_o_lantern\":\"🎃\",\"christmas_tree\":\"🎄\",\"santa\":\"🎅\",\"fireworks\":\"🎆\",\"sparkler\":\"🎇\",\"balloon\":\"🎈\",\"tada\":\"🎉\",\"confetti_ball\":\"🎊\",\"tanabata_tree\":\"🎋\",\"crossed_flags\":\"🎌\",\"bamboo\":\"🎍\",\"dolls\":\"🎎\",\"flags\":\"🎏\",\"wind_chime\":\"🎐\",\"rice_scene\":\"🎑\",\"school_satchel\":\"🎒\",\"mortar_board\":\"🎓\",\"medal\":\"🎖️\",\"reminder_ribbon\":\"🎗️\",\"studio_microphone\":\"🎙️\",\"level_slider\":\"🎚️\",\"control_knobs\":\"🎛️\",\"film_frames\":\"🎞️\",\"admission_tickets\":\"🎟️\",\"carousel_horse\":\"🎠\",\"ferris_wheel\":\"🎡\",\"roller_coaster\":\"🎢\",\"fishing_pole_and_fish\":\"🎣\",\"microphone\":\"🎤\",\"movie_camera\":\"🎥\",\"cinema\":\"🎦\",\"headphones\":\"🎧\",\"art\":\"🎨\",\"tophat\":\"🎩\",\"circus_tent\":\"🎪\",\"ticket\":\"🎫\",\"clapper\":\"🎬\",\"performing_arts\":\"🎭\",\"video_game\":\"🎮\",\"dart\":\"🎯\",\"slot_machine\":\"🎰\",\"8ball\":\"🎱\",\"game_die\":\"🎲\",\"bowling\":\"🎳\",\"flower_playing_cards\":\"🎴\",\"musical_note\":\"🎵\",\"notes\":\"🎶\",\"saxophone\":\"🎷\",\"guitar\":\"🎸\",\"musical_keyboard\":\"🎹\",\"trumpet\":\"🎺\",\"violin\":\"🎻\",\"musical_score\":\"🎼\",\"running_shirt_with_sash\":\"🎽\",\"tennis\":\"🎾\",\"ski\":\"🎿\",\"basketball\":\"🏀\",\"checkered_flag\":\"🏁\",\"snowboarder\":\"🏂\",\"woman-running\":\"🏃‍♀️\",\"man-running\":\"🏃‍♂️\",\"runner\":\"🏃‍♂️\",\"running\":\"🏃‍♂️\",\"woman-surfing\":\"🏄‍♀️\",\"man-surfing\":\"🏄‍♂️\",\"surfer\":\"🏄‍♂️\",\"sports_medal\":\"🏅\",\"trophy\":\"🏆\",\"horse_racing\":\"🏇\",\"football\":\"🏈\",\"rugby_football\":\"🏉\",\"woman-swimming\":\"🏊‍♀️\",\"man-swimming\":\"🏊‍♂️\",\"swimmer\":\"🏊‍♂️\",\"woman-lifting-weights\":\"🏋️‍♀️\",\"man-lifting-weights\":\"🏋️‍♂️\",\"weight_lifter\":\"🏋️‍♂️\",\"woman-golfing\":\"🏌️‍♀️\",\"man-golfing\":\"🏌️‍♂️\",\"golfer\":\"🏌️‍♂️\",\"racing_motorcycle\":\"🏍️\",\"racing_car\":\"🏎️\",\"cricket_bat_and_ball\":\"🏏\",\"volleyball\":\"🏐\",\"field_hockey_stick_and_ball\":\"🏑\",\"ice_hockey_stick_and_puck\":\"🏒\",\"table_tennis_paddle_and_ball\":\"🏓\",\"snow_capped_mountain\":\"🏔️\",\"camping\":\"🏕️\",\"beach_with_umbrella\":\"🏖️\",\"building_construction\":\"🏗️\",\"house_buildings\":\"🏘️\",\"cityscape\":\"🏙️\",\"derelict_house_building\":\"🏚️\",\"classical_building\":\"🏛️\",\"desert\":\"🏜️\",\"desert_island\":\"🏝️\",\"national_park\":\"🏞️\",\"stadium\":\"🏟️\",\"house\":\"🏠\",\"house_with_garden\":\"🏡\",\"office\":\"🏢\",\"post_office\":\"🏣\",\"european_post_office\":\"🏤\",\"hospital\":\"🏥\",\"bank\":\"🏦\",\"atm\":\"🏧\",\"hotel\":\"🏨\",\"love_hotel\":\"🏩\",\"convenience_store\":\"🏪\",\"school\":\"🏫\",\"department_store\":\"🏬\",\"factory\":\"🏭\",\"izakaya_lantern\":\"🏮\",\"lantern\":\"🏮\",\"japanese_castle\":\"🏯\",\"european_castle\":\"🏰\",\"rainbow-flag\":\"🏳️‍🌈\",\"waving_white_flag\":\"🏳️\",\"flag-england\":\"🏴󠁧󠁢󠁥󠁮󠁧󠁿\",\"flag-scotland\":\"🏴󠁧󠁢󠁳󠁣󠁴󠁿\",\"flag-wales\":\"🏴󠁧󠁢󠁷󠁬󠁳󠁿\",\"waving_black_flag\":\"🏴\",\"rosette\":\"🏵️\",\"label\":\"🏷️\",\"badminton_racquet_and_shuttlecock\":\"🏸\",\"bow_and_arrow\":\"🏹\",\"amphora\":\"🏺\",\"skin-tone-2\":\"🏻\",\"skin-tone-3\":\"🏼\",\"skin-tone-4\":\"🏽\",\"skin-tone-5\":\"🏾\",\"skin-tone-6\":\"🏿\",\"rat\":\"🐀\",\"mouse2\":\"🐁\",\"ox\":\"🐂\",\"water_buffalo\":\"🐃\",\"cow2\":\"🐄\",\"tiger2\":\"🐅\",\"leopard\":\"🐆\",\"rabbit2\":\"🐇\",\"cat2\":\"🐈\",\"dragon\":\"🐉\",\"crocodile\":\"🐊\",\"whale2\":\"🐋\",\"snail\":\"🐌\",\"snake\":\"🐍\",\"racehorse\":\"🐎\",\"ram\":\"🐏\",\"goat\":\"🐐\",\"sheep\":\"🐑\",\"monkey\":\"🐒\",\"rooster\":\"🐓\",\"chicken\":\"🐔\",\"dog2\":\"🐕\",\"pig2\":\"🐖\",\"boar\":\"🐗\",\"elephant\":\"🐘\",\"octopus\":\"🐙\",\"shell\":\"🐚\",\"bug\":\"🐛\",\"ant\":\"🐜\",\"bee\":\"🐝\",\"honeybee\":\"🐝\",\"beetle\":\"🐞\",\"fish\":\"🐟\",\"tropical_fish\":\"🐠\",\"blowfish\":\"🐡\",\"turtle\":\"🐢\",\"hatching_chick\":\"🐣\",\"baby_chick\":\"🐤\",\"hatched_chick\":\"🐥\",\"bird\":\"🐦\",\"penguin\":\"🐧\",\"koala\":\"🐨\",\"poodle\":\"🐩\",\"dromedary_camel\":\"🐪\",\"camel\":\"🐫\",\"dolphin\":\"🐬\",\"flipper\":\"🐬\",\"mouse\":\"🐭\",\"cow\":\"🐮\",\"tiger\":\"🐯\",\"rabbit\":\"🐰\",\"cat\":\"🐱\",\"dragon_face\":\"🐲\",\"whale\":\"🐳\",\"horse\":\"🐴\",\"monkey_face\":\"🐵\",\"dog\":\"🐶\",\"pig\":\"🐷\",\"frog\":\"🐸\",\"hamster\":\"🐹\",\"wolf\":\"🐺\",\"bear\":\"🐻\",\"panda_face\":\"🐼\",\"pig_nose\":\"🐽\",\"feet\":\"🐾\",\"paw_prints\":\"🐾\",\"chipmunk\":\"🐿️\",\"eyes\":\"👀\",\"eye-in-speech-bubble\":\"👁️‍🗨️\",\"eye\":\"👁️\",\"ear\":\"👂\",\"nose\":\"👃\",\"lips\":\"👄\",\"tongue\":\"👅\",\"point_up_2\":\"👆\",\"point_down\":\"👇\",\"point_left\":\"👈\",\"point_right\":\"👉\",\"facepunch\":\"👊\",\"punch\":\"👊\",\"wave\":\"👋\",\"ok_hand\":\"👌\",\"+1\":\"👍\",\"thumbsup\":\"👍\",\"-1\":\"👎\",\"thumbsdown\":\"👎\",\"clap\":\"👏\",\"open_hands\":\"👐\",\"crown\":\"👑\",\"womans_hat\":\"👒\",\"eyeglasses\":\"👓\",\"necktie\":\"👔\",\"shirt\":\"👕\",\"tshirt\":\"👕\",\"jeans\":\"👖\",\"dress\":\"👗\",\"kimono\":\"👘\",\"bikini\":\"👙\",\"womans_clothes\":\"👚\",\"purse\":\"👛\",\"handbag\":\"👜\",\"pouch\":\"👝\",\"mans_shoe\":\"👞\",\"shoe\":\"👞\",\"athletic_shoe\":\"👟\",\"high_heel\":\"👠\",\"sandal\":\"👡\",\"boot\":\"👢\",\"footprints\":\"👣\",\"bust_in_silhouette\":\"👤\",\"busts_in_silhouette\":\"👥\",\"boy\":\"👦\",\"girl\":\"👧\",\"male-farmer\":\"👨‍🌾\",\"male-cook\":\"👨‍🍳\",\"male-student\":\"👨‍🎓\",\"male-singer\":\"👨‍🎤\",\"male-artist\":\"👨‍🎨\",\"male-teacher\":\"👨‍🏫\",\"male-factory-worker\":\"👨‍🏭\",\"man-boy-boy\":\"👨‍👦‍👦\",\"man-boy\":\"👨‍👦\",\"man-girl-boy\":\"👨‍👧‍👦\",\"man-girl-girl\":\"👨‍👧‍👧\",\"man-girl\":\"👨‍👧\",\"man-man-boy\":\"👨‍👨‍👦\",\"man-man-boy-boy\":\"👨‍👨‍👦‍👦\",\"man-man-girl\":\"👨‍👨‍👧\",\"man-man-girl-boy\":\"👨‍👨‍👧‍👦\",\"man-man-girl-girl\":\"👨‍👨‍👧‍👧\",\"man-woman-boy\":\"👨‍👩‍👦\",\"family\":\"👨‍👩‍👦\",\"man-woman-boy-boy\":\"👨‍👩‍👦‍👦\",\"man-woman-girl\":\"👨‍👩‍👧\",\"man-woman-girl-boy\":\"👨‍👩‍👧‍👦\",\"man-woman-girl-girl\":\"👨‍👩‍👧‍👧\",\"male-technologist\":\"👨‍💻\",\"male-office-worker\":\"👨‍💼\",\"male-mechanic\":\"👨‍🔧\",\"male-scientist\":\"👨‍🔬\",\"male-astronaut\":\"👨‍🚀\",\"male-firefighter\":\"👨‍🚒\",\"male-doctor\":\"👨‍⚕️\",\"male-judge\":\"👨‍⚖️\",\"male-pilot\":\"👨‍✈️\",\"man-heart-man\":\"👨‍❤️‍👨\",\"man-kiss-man\":\"👨‍❤️‍💋‍👨\",\"man\":\"👨\",\"female-farmer\":\"👩‍🌾\",\"female-cook\":\"👩‍🍳\",\"female-student\":\"👩‍🎓\",\"female-singer\":\"👩‍🎤\",\"female-artist\":\"👩‍🎨\",\"female-teacher\":\"👩‍🏫\",\"female-factory-worker\":\"👩‍🏭\",\"woman-boy-boy\":\"👩‍👦‍👦\",\"woman-boy\":\"👩‍👦\",\"woman-girl-boy\":\"👩‍👧‍👦\",\"woman-girl-girl\":\"👩‍👧‍👧\",\"woman-girl\":\"👩‍👧\",\"woman-woman-boy\":\"👩‍👩‍👦\",\"woman-woman-boy-boy\":\"👩‍👩‍👦‍👦\",\"woman-woman-girl\":\"👩‍👩‍👧\",\"woman-woman-girl-boy\":\"👩‍👩‍👧‍👦\",\"woman-woman-girl-girl\":\"👩‍👩‍👧‍👧\",\"female-technologist\":\"👩‍💻\",\"female-office-worker\":\"👩‍💼\",\"female-mechanic\":\"👩‍🔧\",\"female-scientist\":\"👩‍🔬\",\"female-astronaut\":\"👩‍🚀\",\"female-firefighter\":\"👩‍🚒\",\"female-doctor\":\"👩‍⚕️\",\"female-judge\":\"👩‍⚖️\",\"female-pilot\":\"👩‍✈️\",\"woman-heart-man\":\"👩‍❤️‍👨\",\"couple_with_heart\":\"👩‍❤️‍👨\",\"woman-heart-woman\":\"👩‍❤️‍👩\",\"woman-kiss-man\":\"👩‍❤️‍💋‍👨\",\"couplekiss\":\"👩‍❤️‍💋‍👨\",\"woman-kiss-woman\":\"👩‍❤️‍💋‍👩\",\"woman\":\"👩\",\"couple\":\"👫\",\"man_and_woman_holding_hands\":\"👫\",\"two_men_holding_hands\":\"👬\",\"two_women_holding_hands\":\"👭\",\"female-police-officer\":\"👮‍♀️\",\"male-police-officer\":\"👮‍♂️\",\"cop\":\"👮‍♂️\",\"woman-with-bunny-ears-partying\":\"👯‍♀️\",\"dancers\":\"👯‍♀️\",\"man-with-bunny-ears-partying\":\"👯‍♂️\",\"bride_with_veil\":\"👰\",\"blond-haired-woman\":\"👱‍♀️\",\"blond-haired-man\":\"👱‍♂️\",\"person_with_blond_hair\":\"👱‍♂️\",\"man_with_gua_pi_mao\":\"👲\",\"woman-wearing-turban\":\"👳‍♀️\",\"man-wearing-turban\":\"👳‍♂️\",\"man_with_turban\":\"👳‍♂️\",\"older_man\":\"👴\",\"older_woman\":\"👵\",\"baby\":\"👶\",\"female-construction-worker\":\"👷‍♀️\",\"male-construction-worker\":\"👷‍♂️\",\"construction_worker\":\"👷‍♂️\",\"princess\":\"👸\",\"japanese_ogre\":\"👹\",\"japanese_goblin\":\"👺\",\"ghost\":\"👻\",\"angel\":\"👼\",\"alien\":\"👽\",\"space_invader\":\"👾\",\"imp\":\"👿\",\"skull\":\"💀\",\"woman-tipping-hand\":\"💁‍♀️\",\"information_desk_person\":\"💁‍♀️\",\"man-tipping-hand\":\"💁‍♂️\",\"female-guard\":\"💂‍♀️\",\"male-guard\":\"💂‍♂️\",\"guardsman\":\"💂‍♂️\",\"dancer\":\"💃\",\"lipstick\":\"💄\",\"nail_care\":\"💅\",\"woman-getting-massage\":\"💆‍♀️\",\"massage\":\"💆‍♀️\",\"man-getting-massage\":\"💆‍♂️\",\"woman-getting-haircut\":\"💇‍♀️\",\"haircut\":\"💇‍♀️\",\"man-getting-haircut\":\"💇‍♂️\",\"barber\":\"💈\",\"syringe\":\"💉\",\"pill\":\"💊\",\"kiss\":\"💋\",\"love_letter\":\"💌\",\"ring\":\"💍\",\"gem\":\"💎\",\"bouquet\":\"💐\",\"wedding\":\"💒\",\"heartbeat\":\"💓\",\"broken_heart\":\"💔\",\"two_hearts\":\"💕\",\"sparkling_heart\":\"💖\",\"heartpulse\":\"💗\",\"cupid\":\"💘\",\"blue_heart\":\"💙\",\"green_heart\":\"💚\",\"yellow_heart\":\"💛\",\"purple_heart\":\"💜\",\"gift_heart\":\"💝\",\"revolving_hearts\":\"💞\",\"heart_decoration\":\"💟\",\"diamond_shape_with_a_dot_inside\":\"💠\",\"bulb\":\"💡\",\"anger\":\"💢\",\"bomb\":\"💣\",\"zzz\":\"💤\",\"boom\":\"💥\",\"collision\":\"💥\",\"sweat_drops\":\"💦\",\"droplet\":\"💧\",\"dash\":\"💨\",\"hankey\":\"💩\",\"poop\":\"💩\",\"shit\":\"💩\",\"muscle\":\"💪\",\"dizzy\":\"💫\",\"speech_balloon\":\"💬\",\"thought_balloon\":\"💭\",\"white_flower\":\"💮\",\"moneybag\":\"💰\",\"currency_exchange\":\"💱\",\"heavy_dollar_sign\":\"💲\",\"credit_card\":\"💳\",\"yen\":\"💴\",\"dollar\":\"💵\",\"euro\":\"💶\",\"pound\":\"💷\",\"money_with_wings\":\"💸\",\"chart\":\"💹\",\"seat\":\"💺\",\"computer\":\"💻\",\"briefcase\":\"💼\",\"minidisc\":\"💽\",\"floppy_disk\":\"💾\",\"cd\":\"💿\",\"dvd\":\"📀\",\"file_folder\":\"📁\",\"open_file_folder\":\"📂\",\"page_with_curl\":\"📃\",\"page_facing_up\":\"📄\",\"date\":\"📅\",\"calendar\":\"📆\",\"card_index\":\"📇\",\"chart_with_upwards_trend\":\"📈\",\"chart_with_downwards_trend\":\"📉\",\"bar_chart\":\"📊\",\"clipboard\":\"📋\",\"pushpin\":\"📌\",\"round_pushpin\":\"📍\",\"paperclip\":\"📎\",\"straight_ruler\":\"📏\",\"triangular_ruler\":\"📐\",\"bookmark_tabs\":\"📑\",\"ledger\":\"📒\",\"notebook\":\"📓\",\"notebook_with_decorative_cover\":\"📔\",\"closed_book\":\"📕\",\"book\":\"📖\",\"open_book\":\"📖\",\"green_book\":\"📗\",\"blue_book\":\"📘\",\"orange_book\":\"📙\",\"books\":\"📚\",\"name_badge\":\"📛\",\"scroll\":\"📜\",\"memo\":\"📝\",\"pencil\":\"📝\",\"telephone_receiver\":\"📞\",\"pager\":\"📟\",\"fax\":\"📠\",\"satellite_antenna\":\"📡\",\"loudspeaker\":\"📢\",\"mega\":\"📣\",\"outbox_tray\":\"📤\",\"inbox_tray\":\"📥\",\"package\":\"📦\",\"e-mail\":\"📧\",\"incoming_envelope\":\"📨\",\"envelope_with_arrow\":\"📩\",\"mailbox_closed\":\"📪\",\"mailbox\":\"📫\",\"mailbox_with_mail\":\"📬\",\"mailbox_with_no_mail\":\"📭\",\"postbox\":\"📮\",\"postal_horn\":\"📯\",\"newspaper\":\"📰\",\"iphone\":\"📱\",\"calling\":\"📲\",\"vibration_mode\":\"📳\",\"mobile_phone_off\":\"📴\",\"no_mobile_phones\":\"📵\",\"signal_strength\":\"📶\",\"camera\":\"📷\",\"camera_with_flash\":\"📸\",\"video_camera\":\"📹\",\"tv\":\"📺\",\"radio\":\"📻\",\"vhs\":\"📼\",\"film_projector\":\"📽️\",\"prayer_beads\":\"📿\",\"twisted_rightwards_arrows\":\"🔀\",\"repeat\":\"🔁\",\"repeat_one\":\"🔂\",\"arrows_clockwise\":\"🔃\",\"arrows_counterclockwise\":\"🔄\",\"low_brightness\":\"🔅\",\"high_brightness\":\"🔆\",\"mute\":\"🔇\",\"speaker\":\"🔈\",\"sound\":\"🔉\",\"loud_sound\":\"🔊\",\"battery\":\"🔋\",\"electric_plug\":\"🔌\",\"mag\":\"🔍\",\"mag_right\":\"🔎\",\"lock_with_ink_pen\":\"🔏\",\"closed_lock_with_key\":\"🔐\",\"key\":\"🔑\",\"lock\":\"🔒\",\"unlock\":\"🔓\",\"bell\":\"🔔\",\"no_bell\":\"🔕\",\"bookmark\":\"🔖\",\"link\":\"🔗\",\"radio_button\":\"🔘\",\"back\":\"🔙\",\"end\":\"🔚\",\"on\":\"🔛\",\"soon\":\"🔜\",\"top\":\"🔝\",\"underage\":\"🔞\",\"keycap_ten\":\"🔟\",\"capital_abcd\":\"🔠\",\"abcd\":\"🔡\",\"symbols\":\"🔣\",\"abc\":\"🔤\",\"fire\":\"🔥\",\"flashlight\":\"🔦\",\"wrench\":\"🔧\",\"hammer\":\"🔨\",\"nut_and_bolt\":\"🔩\",\"hocho\":\"🔪\",\"knife\":\"🔪\",\"gun\":\"🔫\",\"microscope\":\"🔬\",\"telescope\":\"🔭\",\"crystal_ball\":\"🔮\",\"six_pointed_star\":\"🔯\",\"beginner\":\"🔰\",\"trident\":\"🔱\",\"black_square_button\":\"🔲\",\"white_square_button\":\"🔳\",\"red_circle\":\"🔴\",\"large_blue_circle\":\"🔵\",\"large_orange_diamond\":\"🔶\",\"large_blue_diamond\":\"🔷\",\"small_orange_diamond\":\"🔸\",\"small_blue_diamond\":\"🔹\",\"small_red_triangle\":\"🔺\",\"small_red_triangle_down\":\"🔻\",\"arrow_up_small\":\"🔼\",\"arrow_down_small\":\"🔽\",\"om_symbol\":\"🕉️\",\"dove_of_peace\":\"🕊️\",\"kaaba\":\"🕋\",\"mosque\":\"🕌\",\"synagogue\":\"🕍\",\"menorah_with_nine_branches\":\"🕎\",\"clock1\":\"🕐\",\"clock2\":\"🕑\",\"clock3\":\"🕒\",\"clock4\":\"🕓\",\"clock5\":\"🕔\",\"clock6\":\"🕕\",\"clock7\":\"🕖\",\"clock8\":\"🕗\",\"clock9\":\"🕘\",\"clock10\":\"🕙\",\"clock11\":\"🕚\",\"clock12\":\"🕛\",\"clock130\":\"🕜\",\"clock230\":\"🕝\",\"clock330\":\"🕞\",\"clock430\":\"🕟\",\"clock530\":\"🕠\",\"clock630\":\"🕡\",\"clock730\":\"🕢\",\"clock830\":\"🕣\",\"clock930\":\"🕤\",\"clock1030\":\"🕥\",\"clock1130\":\"🕦\",\"clock1230\":\"🕧\",\"candle\":\"🕯️\",\"mantelpiece_clock\":\"🕰️\",\"hole\":\"🕳️\",\"man_in_business_suit_levitating\":\"🕴️\",\"female-detective\":\"🕵️‍♀️\",\"male-detective\":\"🕵️‍♂️\",\"sleuth_or_spy\":\"🕵️‍♂️\",\"dark_sunglasses\":\"🕶️\",\"spider\":\"🕷️\",\"spider_web\":\"🕸️\",\"joystick\":\"🕹️\",\"man_dancing\":\"🕺\",\"linked_paperclips\":\"🖇️\",\"lower_left_ballpoint_pen\":\"🖊️\",\"lower_left_fountain_pen\":\"🖋️\",\"lower_left_paintbrush\":\"🖌️\",\"lower_left_crayon\":\"🖍️\",\"raised_hand_with_fingers_splayed\":\"🖐️\",\"middle_finger\":\"🖕\",\"reversed_hand_with_middle_finger_extended\":\"🖕\",\"spock-hand\":\"🖖\",\"black_heart\":\"🖤\",\"desktop_computer\":\"🖥️\",\"printer\":\"🖨️\",\"three_button_mouse\":\"🖱️\",\"trackball\":\"🖲️\",\"frame_with_picture\":\"🖼️\",\"card_index_dividers\":\"🗂️\",\"card_file_box\":\"🗃️\",\"file_cabinet\":\"🗄️\",\"wastebasket\":\"🗑️\",\"spiral_note_pad\":\"🗒️\",\"spiral_calendar_pad\":\"🗓️\",\"compression\":\"🗜️\",\"old_key\":\"🗝️\",\"rolled_up_newspaper\":\"🗞️\",\"dagger_knife\":\"🗡️\",\"speaking_head_in_silhouette\":\"🗣️\",\"left_speech_bubble\":\"🗨️\",\"right_anger_bubble\":\"🗯️\",\"ballot_box_with_ballot\":\"🗳️\",\"world_map\":\"🗺️\",\"mount_fuji\":\"🗻\",\"tokyo_tower\":\"🗼\",\"statue_of_liberty\":\"🗽\",\"japan\":\"🗾\",\"moyai\":\"🗿\",\"grinning\":\"😀\",\"grin\":\"😁\",\"joy\":\"😂\",\"smiley\":\"😃\",\"smile\":\"😄\",\"sweat_smile\":\"😅\",\"laughing\":\"😆\",\"satisfied\":\"😆\",\"innocent\":\"😇\",\"smiling_imp\":\"😈\",\"wink\":\"😉\",\"blush\":\"😊\",\"yum\":\"😋\",\"relieved\":\"😌\",\"heart_eyes\":\"😍\",\"sunglasses\":\"😎\",\"smirk\":\"😏\",\"neutral_face\":\"😐\",\"expressionless\":\"😑\",\"unamused\":\"😒\",\"sweat\":\"😓\",\"pensive\":\"😔\",\"confused\":\"😕\",\"confounded\":\"😖\",\"kissing\":\"😗\",\"kissing_heart\":\"😘\",\"kissing_smiling_eyes\":\"😙\",\"kissing_closed_eyes\":\"😚\",\"stuck_out_tongue\":\"😛\",\"stuck_out_tongue_winking_eye\":\"😜\",\"stuck_out_tongue_closed_eyes\":\"😝\",\"disappointed\":\"😞\",\"worried\":\"😟\",\"angry\":\"😠\",\"rage\":\"😡\",\"cry\":\"😢\",\"persevere\":\"😣\",\"triumph\":\"😤\",\"disappointed_relieved\":\"😥\",\"frowning\":\"😦\",\"anguished\":\"😧\",\"fearful\":\"😨\",\"weary\":\"😩\",\"sleepy\":\"😪\",\"tired_face\":\"😫\",\"grimacing\":\"😬\",\"sob\":\"😭\",\"open_mouth\":\"😮\",\"hushed\":\"😯\",\"cold_sweat\":\"😰\",\"scream\":\"😱\",\"astonished\":\"😲\",\"flushed\":\"😳\",\"sleeping\":\"😴\",\"dizzy_face\":\"😵\",\"no_mouth\":\"😶\",\"mask\":\"😷\",\"smile_cat\":\"😸\",\"joy_cat\":\"😹\",\"smiley_cat\":\"😺\",\"heart_eyes_cat\":\"😻\",\"smirk_cat\":\"😼\",\"kissing_cat\":\"😽\",\"pouting_cat\":\"😾\",\"crying_cat_face\":\"😿\",\"scream_cat\":\"🙀\",\"slightly_frowning_face\":\"🙁\",\"slightly_smiling_face\":\"🙂\",\"upside_down_face\":\"🙃\",\"face_with_rolling_eyes\":\"🙄\",\"woman-gesturing-no\":\"🙅‍♀️\",\"no_good\":\"🙅‍♀️\",\"man-gesturing-no\":\"🙅‍♂️\",\"woman-gesturing-ok\":\"🙆‍♀️\",\"ok_woman\":\"🙆‍♀️\",\"man-gesturing-ok\":\"🙆‍♂️\",\"woman-bowing\":\"🙇‍♀️\",\"man-bowing\":\"🙇‍♂️\",\"bow\":\"🙇‍♂️\",\"see_no_evil\":\"🙈\",\"hear_no_evil\":\"🙉\",\"speak_no_evil\":\"🙊\",\"woman-raising-hand\":\"🙋‍♀️\",\"raising_hand\":\"🙋‍♀️\",\"man-raising-hand\":\"🙋‍♂️\",\"raised_hands\":\"🙌\",\"woman-frowning\":\"🙍‍♀️\",\"person_frowning\":\"🙍‍♀️\",\"man-frowning\":\"🙍‍♂️\",\"woman-pouting\":\"🙎‍♀️\",\"person_with_pouting_face\":\"🙎‍♀️\",\"man-pouting\":\"🙎‍♂️\",\"pray\":\"🙏\",\"rocket\":\"🚀\",\"helicopter\":\"🚁\",\"steam_locomotive\":\"🚂\",\"railway_car\":\"🚃\",\"bullettrain_side\":\"🚄\",\"bullettrain_front\":\"🚅\",\"train2\":\"🚆\",\"metro\":\"🚇\",\"light_rail\":\"🚈\",\"station\":\"🚉\",\"tram\":\"🚊\",\"train\":\"🚋\",\"bus\":\"🚌\",\"oncoming_bus\":\"🚍\",\"trolleybus\":\"🚎\",\"busstop\":\"🚏\",\"minibus\":\"🚐\",\"ambulance\":\"🚑\",\"fire_engine\":\"🚒\",\"police_car\":\"🚓\",\"oncoming_police_car\":\"🚔\",\"taxi\":\"🚕\",\"oncoming_taxi\":\"🚖\",\"car\":\"🚗\",\"red_car\":\"🚗\",\"oncoming_automobile\":\"🚘\",\"blue_car\":\"🚙\",\"truck\":\"🚚\",\"articulated_lorry\":\"🚛\",\"tractor\":\"🚜\",\"monorail\":\"🚝\",\"mountain_railway\":\"🚞\",\"suspension_railway\":\"🚟\",\"mountain_cableway\":\"🚠\",\"aerial_tramway\":\"🚡\",\"ship\":\"🚢\",\"woman-rowing-boat\":\"🚣‍♀️\",\"man-rowing-boat\":\"🚣‍♂️\",\"rowboat\":\"🚣‍♂️\",\"speedboat\":\"🚤\",\"traffic_light\":\"🚥\",\"vertical_traffic_light\":\"🚦\",\"construction\":\"🚧\",\"rotating_light\":\"🚨\",\"triangular_flag_on_post\":\"🚩\",\"door\":\"🚪\",\"no_entry_sign\":\"🚫\",\"smoking\":\"🚬\",\"no_smoking\":\"🚭\",\"put_litter_in_its_place\":\"🚮\",\"do_not_litter\":\"🚯\",\"potable_water\":\"🚰\",\"non-potable_water\":\"🚱\",\"bike\":\"🚲\",\"no_bicycles\":\"🚳\",\"woman-biking\":\"🚴‍♀️\",\"man-biking\":\"🚴‍♂️\",\"bicyclist\":\"🚴‍♂️\",\"woman-mountain-biking\":\"🚵‍♀️\",\"man-mountain-biking\":\"🚵‍♂️\",\"mountain_bicyclist\":\"🚵‍♂️\",\"woman-walking\":\"🚶‍♀️\",\"man-walking\":\"🚶‍♂️\",\"walking\":\"🚶‍♂️\",\"no_pedestrians\":\"🚷\",\"children_crossing\":\"🚸\",\"mens\":\"🚹\",\"womens\":\"🚺\",\"restroom\":\"🚻\",\"baby_symbol\":\"🚼\",\"toilet\":\"🚽\",\"wc\":\"🚾\",\"shower\":\"🚿\",\"bath\":\"🛀\",\"bathtub\":\"🛁\",\"passport_control\":\"🛂\",\"customs\":\"🛃\",\"baggage_claim\":\"🛄\",\"left_luggage\":\"🛅\",\"couch_and_lamp\":\"🛋️\",\"sleeping_accommodation\":\"🛌\",\"shopping_bags\":\"🛍️\",\"bellhop_bell\":\"🛎️\",\"bed\":\"🛏️\",\"place_of_worship\":\"🛐\",\"octagonal_sign\":\"🛑\",\"shopping_trolley\":\"🛒\",\"hammer_and_wrench\":\"🛠️\",\"shield\":\"🛡️\",\"oil_drum\":\"🛢️\",\"motorway\":\"🛣️\",\"railway_track\":\"🛤️\",\"motor_boat\":\"🛥️\",\"small_airplane\":\"🛩️\",\"airplane_departure\":\"🛫\",\"airplane_arriving\":\"🛬\",\"satellite\":\"🛰️\",\"passenger_ship\":\"🛳️\",\"scooter\":\"🛴\",\"motor_scooter\":\"🛵\",\"canoe\":\"🛶\",\"sled\":\"🛷\",\"flying_saucer\":\"🛸\",\"zipper_mouth_face\":\"🤐\",\"money_mouth_face\":\"🤑\",\"face_with_thermometer\":\"🤒\",\"nerd_face\":\"🤓\",\"thinking_face\":\"🤔\",\"face_with_head_bandage\":\"🤕\",\"robot_face\":\"🤖\",\"hugging_face\":\"🤗\",\"the_horns\":\"🤘\",\"sign_of_the_horns\":\"🤘\",\"call_me_hand\":\"🤙\",\"raised_back_of_hand\":\"🤚\",\"left-facing_fist\":\"🤛\",\"right-facing_fist\":\"🤜\",\"handshake\":\"🤝\",\"crossed_fingers\":\"🤞\",\"hand_with_index_and_middle_fingers_crossed\":\"🤞\",\"i_love_you_hand_sign\":\"🤟\",\"face_with_cowboy_hat\":\"🤠\",\"clown_face\":\"🤡\",\"nauseated_face\":\"🤢\",\"rolling_on_the_floor_laughing\":\"🤣\",\"drooling_face\":\"🤤\",\"lying_face\":\"🤥\",\"woman-facepalming\":\"🤦‍♀️\",\"man-facepalming\":\"🤦‍♂️\",\"face_palm\":\"🤦\",\"sneezing_face\":\"🤧\",\"face_with_raised_eyebrow\":\"🤨\",\"face_with_one_eyebrow_raised\":\"🤨\",\"star-struck\":\"🤩\",\"grinning_face_with_star_eyes\":\"🤩\",\"zany_face\":\"🤪\",\"grinning_face_with_one_large_and_one_small_eye\":\"🤪\",\"shushing_face\":\"🤫\",\"face_with_finger_covering_closed_lips\":\"🤫\",\"face_with_symbols_on_mouth\":\"🤬\",\"serious_face_with_symbols_covering_mouth\":\"🤬\",\"face_with_hand_over_mouth\":\"🤭\",\"smiling_face_with_smiling_eyes_and_hand_covering_mouth\":\"🤭\",\"face_vomiting\":\"🤮\",\"face_with_open_mouth_vomiting\":\"🤮\",\"exploding_head\":\"🤯\",\"shocked_face_with_exploding_head\":\"🤯\",\"pregnant_woman\":\"🤰\",\"breast-feeding\":\"🤱\",\"palms_up_together\":\"🤲\",\"selfie\":\"🤳\",\"prince\":\"🤴\",\"man_in_tuxedo\":\"🤵\",\"mrs_claus\":\"🤶\",\"mother_christmas\":\"🤶\",\"woman-shrugging\":\"🤷‍♀️\",\"man-shrugging\":\"🤷‍♂️\",\"shrug\":\"🤷\",\"woman-cartwheeling\":\"🤸‍♀️\",\"man-cartwheeling\":\"🤸‍♂️\",\"person_doing_cartwheel\":\"🤸\",\"woman-juggling\":\"🤹‍♀️\",\"man-juggling\":\"🤹‍♂️\",\"juggling\":\"🤹\",\"fencer\":\"🤺\",\"woman-wrestling\":\"🤼‍♀️\",\"man-wrestling\":\"🤼‍♂️\",\"wrestlers\":\"🤼\",\"woman-playing-water-polo\":\"🤽‍♀️\",\"man-playing-water-polo\":\"🤽‍♂️\",\"water_polo\":\"🤽\",\"woman-playing-handball\":\"🤾‍♀️\",\"man-playing-handball\":\"🤾‍♂️\",\"handball\":\"🤾\",\"wilted_flower\":\"🥀\",\"drum_with_drumsticks\":\"🥁\",\"clinking_glasses\":\"🥂\",\"tumbler_glass\":\"🥃\",\"spoon\":\"🥄\",\"goal_net\":\"🥅\",\"first_place_medal\":\"🥇\",\"second_place_medal\":\"🥈\",\"third_place_medal\":\"🥉\",\"boxing_glove\":\"🥊\",\"martial_arts_uniform\":\"🥋\",\"curling_stone\":\"🥌\",\"croissant\":\"🥐\",\"avocado\":\"🥑\",\"cucumber\":\"🥒\",\"bacon\":\"🥓\",\"potato\":\"🥔\",\"carrot\":\"🥕\",\"baguette_bread\":\"🥖\",\"green_salad\":\"🥗\",\"shallow_pan_of_food\":\"🥘\",\"stuffed_flatbread\":\"🥙\",\"egg\":\"🥚\",\"glass_of_milk\":\"🥛\",\"peanuts\":\"🥜\",\"kiwifruit\":\"🥝\",\"pancakes\":\"🥞\",\"dumpling\":\"🥟\",\"fortune_cookie\":\"🥠\",\"takeout_box\":\"🥡\",\"chopsticks\":\"🥢\",\"bowl_with_spoon\":\"🥣\",\"cup_with_straw\":\"🥤\",\"coconut\":\"🥥\",\"broccoli\":\"🥦\",\"pie\":\"🥧\",\"pretzel\":\"🥨\",\"cut_of_meat\":\"🥩\",\"sandwich\":\"🥪\",\"canned_food\":\"🥫\",\"crab\":\"🦀\",\"lion_face\":\"🦁\",\"scorpion\":\"🦂\",\"turkey\":\"🦃\",\"unicorn_face\":\"🦄\",\"eagle\":\"🦅\",\"duck\":\"🦆\",\"bat\":\"🦇\",\"shark\":\"🦈\",\"owl\":\"🦉\",\"fox_face\":\"🦊\",\"butterfly\":\"🦋\",\"deer\":\"🦌\",\"gorilla\":\"🦍\",\"lizard\":\"🦎\",\"rhinoceros\":\"🦏\",\"shrimp\":\"🦐\",\"squid\":\"🦑\",\"giraffe_face\":\"🦒\",\"zebra_face\":\"🦓\",\"hedgehog\":\"🦔\",\"sauropod\":\"🦕\",\"t-rex\":\"🦖\",\"cricket\":\"🦗\",\"cheese_wedge\":\"🧀\",\"face_with_monocle\":\"🧐\",\"adult\":\"🧑\",\"child\":\"🧒\",\"older_adult\":\"🧓\",\"bearded_person\":\"🧔\",\"person_with_headscarf\":\"🧕\",\"woman_in_steamy_room\":\"🧖‍♀️\",\"man_in_steamy_room\":\"🧖‍♂️\",\"person_in_steamy_room\":\"🧖‍♂️\",\"woman_climbing\":\"🧗‍♀️\",\"person_climbing\":\"🧗‍♀️\",\"man_climbing\":\"🧗‍♂️\",\"woman_in_lotus_position\":\"🧘‍♀️\",\"person_in_lotus_position\":\"🧘‍♀️\",\"man_in_lotus_position\":\"🧘‍♂️\",\"female_mage\":\"🧙‍♀️\",\"mage\":\"🧙‍♀️\",\"male_mage\":\"🧙‍♂️\",\"female_fairy\":\"🧚‍♀️\",\"fairy\":\"🧚‍♀️\",\"male_fairy\":\"🧚‍♂️\",\"female_vampire\":\"🧛‍♀️\",\"vampire\":\"🧛‍♀️\",\"male_vampire\":\"🧛‍♂️\",\"mermaid\":\"🧜‍♀️\",\"merman\":\"🧜‍♂️\",\"merperson\":\"🧜‍♂️\",\"female_elf\":\"🧝‍♀️\",\"male_elf\":\"🧝‍♂️\",\"elf\":\"🧝‍♂️\",\"female_genie\":\"🧞‍♀️\",\"male_genie\":\"🧞‍♂️\",\"genie\":\"🧞‍♂️\",\"female_zombie\":\"🧟‍♀️\",\"male_zombie\":\"🧟‍♂️\",\"zombie\":\"🧟‍♂️\",\"brain\":\"🧠\",\"orange_heart\":\"🧡\",\"billed_cap\":\"🧢\",\"scarf\":\"🧣\",\"gloves\":\"🧤\",\"coat\":\"🧥\",\"socks\":\"🧦\",\"bangbang\":\"‼️\",\"interrobang\":\"⁉️\",\"tm\":\"™️\",\"information_source\":\"ℹ️\",\"left_right_arrow\":\"↔️\",\"arrow_up_down\":\"↕️\",\"arrow_upper_left\":\"↖️\",\"arrow_upper_right\":\"↗️\",\"arrow_lower_right\":\"↘️\",\"arrow_lower_left\":\"↙️\",\"leftwards_arrow_with_hook\":\"↩️\",\"arrow_right_hook\":\"↪️\",\"watch\":\"⌚\",\"hourglass\":\"⌛\",\"keyboard\":\"⌨️\",\"eject\":\"⏏️\",\"fast_forward\":\"⏩\",\"rewind\":\"⏪\",\"arrow_double_up\":\"⏫\",\"arrow_double_down\":\"⏬\",\"black_right_pointing_double_triangle_with_vertical_bar\":\"⏭️\",\"black_left_pointing_double_triangle_with_vertical_bar\":\"⏮️\",\"black_right_pointing_triangle_with_double_vertical_bar\":\"⏯️\",\"alarm_clock\":\"⏰\",\"stopwatch\":\"⏱️\",\"timer_clock\":\"⏲️\",\"hourglass_flowing_sand\":\"⏳\",\"double_vertical_bar\":\"⏸️\",\"black_square_for_stop\":\"⏹️\",\"black_circle_for_record\":\"⏺️\",\"m\":\"Ⓜ️\",\"black_small_square\":\"▪️\",\"white_small_square\":\"▫️\",\"arrow_forward\":\"▶️\",\"arrow_backward\":\"◀️\",\"white_medium_square\":\"◻️\",\"black_medium_square\":\"◼️\",\"white_medium_small_square\":\"◽\",\"black_medium_small_square\":\"◾\",\"sunny\":\"☀️\",\"cloud\":\"☁️\",\"umbrella\":\"☂️\",\"snowman\":\"☃️\",\"comet\":\"☄️\",\"phone\":\"☎️\",\"telephone\":\"☎️\",\"ballot_box_with_check\":\"☑️\",\"shamrock\":\"☘️\",\"point_up\":\"☝️\",\"skull_and_crossbones\":\"☠️\",\"radioactive_sign\":\"☢️\",\"biohazard_sign\":\"☣️\",\"orthodox_cross\":\"☦️\",\"star_and_crescent\":\"☪️\",\"peace_symbol\":\"☮️\",\"yin_yang\":\"☯️\",\"wheel_of_dharma\":\"☸️\",\"white_frowning_face\":\"☹️\",\"relaxed\":\"☺️\",\"female_sign\":\"♀️\",\"male_sign\":\"♂️\",\"gemini\":\"♊\",\"cancer\":\"♋\",\"leo\":\"♌\",\"virgo\":\"♍\",\"libra\":\"♎\",\"scorpius\":\"♏\",\"spades\":\"♠️\",\"clubs\":\"♣️\",\"hearts\":\"♥️\",\"diamonds\":\"♦️\",\"hotsprings\":\"♨️\",\"recycle\":\"♻️\",\"wheelchair\":\"♿\",\"hammer_and_pick\":\"⚒️\",\"crossed_swords\":\"⚔️\",\"medical_symbol\":\"⚕️\",\"staff_of_aesculapius\":\"⚕️\",\"scales\":\"⚖️\",\"alembic\":\"⚗️\",\"gear\":\"⚙️\",\"atom_symbol\":\"⚛️\",\"fleur_de_lis\":\"⚜️\",\"warning\":\"⚠️\",\"zap\":\"⚡\",\"white_circle\":\"⚪\",\"black_circle\":\"⚫\",\"coffin\":\"⚰️\",\"funeral_urn\":\"⚱️\",\"soccer\":\"⚽\",\"baseball\":\"⚾\",\"snowman_without_snow\":\"⛄\",\"partly_sunny\":\"⛅\",\"thunder_cloud_and_rain\":\"⛈️\",\"ophiuchus\":\"⛎\",\"pick\":\"⛏️\",\"helmet_with_white_cross\":\"⛑️\",\"chains\":\"⛓️\",\"no_entry\":\"⛔\",\"shinto_shrine\":\"⛩️\",\"church\":\"⛪\",\"mountain\":\"⛰️\",\"umbrella_on_ground\":\"⛱️\",\"fountain\":\"⛲\",\"golf\":\"⛳\",\"ferry\":\"⛴️\",\"boat\":\"⛵\",\"sailboat\":\"⛵\",\"skier\":\"⛷️\",\"ice_skate\":\"⛸️\",\"woman-bouncing-ball\":\"⛹️‍♀️\",\"man-bouncing-ball\":\"⛹️‍♂️\",\"person_with_ball\":\"⛹️‍♂️\",\"tent\":\"⛺\",\"fuelpump\":\"⛽\",\"scissors\":\"✂️\",\"airplane\":\"✈️\",\"email\":\"✉️\",\"envelope\":\"✉️\",\"fist\":\"✊\",\"hand\":\"✋\",\"raised_hand\":\"✋\",\"v\":\"✌️\",\"writing_hand\":\"✍️\",\"pencil2\":\"✏️\",\"black_nib\":\"✒️\",\"heavy_check_mark\":\"✔️\",\"heavy_multiplication_x\":\"✖️\",\"latin_cross\":\"✝️\",\"star_of_david\":\"✡️\",\"eight_spoked_asterisk\":\"✳️\",\"eight_pointed_black_star\":\"✴️\",\"snowflake\":\"❄️\",\"sparkle\":\"❇️\",\"x\":\"❌\",\"negative_squared_cross_mark\":\"❎\",\"heavy_heart_exclamation_mark_ornament\":\"❣️\",\"heart\":\"❤️\",\"arrow_right\":\"➡️\",\"curly_loop\":\"➰\",\"loop\":\"➿\",\"arrow_heading_up\":\"⤴️\",\"arrow_heading_down\":\"⤵️\",\"arrow_left\":\"⬅️\",\"arrow_up\":\"⬆️\",\"arrow_down\":\"⬇️\",\"black_large_square\":\"⬛\",\"white_large_square\":\"⬜\",\"star\":\"⭐\",\"o\":\"⭕\",\"wavy_dash\":\"〰️\",\"part_alternation_mark\":\"〽️\",\"congratulations\":\"㊗️\",\"secret\":\"㊙️\"}");
+module.exports = JSON.parse('{"100":"💯","1234":"🔢","umbrella_with_rain_drops":"☔","coffee":"☕","aries":"♈","taurus":"♉","sagittarius":"♐","capricorn":"♑","aquarius":"♒","pisces":"♓","anchor":"⚓","white_check_mark":"✅","sparkles":"✨","question":"❓","grey_question":"❔","grey_exclamation":"❕","exclamation":"❗","heavy_exclamation_mark":"❗","heavy_plus_sign":"➕","heavy_minus_sign":"➖","heavy_division_sign":"➗","hash":"#️⃣","keycap_star":"*️⃣","zero":"0️⃣","one":"1️⃣","two":"2️⃣","three":"3️⃣","four":"4️⃣","five":"5️⃣","six":"6️⃣","seven":"7️⃣","eight":"8️⃣","nine":"9️⃣","copyright":"©️","registered":"®️","mahjong":"🀄","black_joker":"🃏","a":"🅰️","b":"🅱️","o2":"🅾️","parking":"🅿️","ab":"🆎","cl":"🆑","cool":"🆒","free":"🆓","id":"🆔","new":"🆕","ng":"🆖","ok":"🆗","sos":"🆘","up":"🆙","vs":"🆚","flag-ac":"🇦🇨","flag-ad":"🇦🇩","flag-ae":"🇦🇪","flag-af":"🇦🇫","flag-ag":"🇦🇬","flag-ai":"🇦🇮","flag-al":"🇦🇱","flag-am":"🇦🇲","flag-ao":"🇦🇴","flag-aq":"🇦🇶","flag-ar":"🇦🇷","flag-as":"🇦🇸","flag-at":"🇦🇹","flag-au":"🇦🇺","flag-aw":"🇦🇼","flag-ax":"🇦🇽","flag-az":"🇦🇿","flag-ba":"🇧🇦","flag-bb":"🇧🇧","flag-bd":"🇧🇩","flag-be":"🇧🇪","flag-bf":"🇧🇫","flag-bg":"🇧🇬","flag-bh":"🇧🇭","flag-bi":"🇧🇮","flag-bj":"🇧🇯","flag-bl":"🇧🇱","flag-bm":"🇧🇲","flag-bn":"🇧🇳","flag-bo":"🇧🇴","flag-bq":"🇧🇶","flag-br":"🇧🇷","flag-bs":"🇧🇸","flag-bt":"🇧🇹","flag-bv":"🇧🇻","flag-bw":"🇧🇼","flag-by":"🇧🇾","flag-bz":"🇧🇿","flag-ca":"🇨🇦","flag-cc":"🇨🇨","flag-cd":"🇨🇩","flag-cf":"🇨🇫","flag-cg":"🇨🇬","flag-ch":"🇨🇭","flag-ci":"🇨🇮","flag-ck":"🇨🇰","flag-cl":"🇨🇱","flag-cm":"🇨🇲","cn":"🇨🇳","flag-cn":"🇨🇳","flag-co":"🇨🇴","flag-cp":"🇨🇵","flag-cr":"🇨🇷","flag-cu":"🇨🇺","flag-cv":"🇨🇻","flag-cw":"🇨🇼","flag-cx":"🇨🇽","flag-cy":"🇨🇾","flag-cz":"🇨🇿","de":"🇩🇪","flag-de":"🇩🇪","flag-dg":"🇩🇬","flag-dj":"🇩🇯","flag-dk":"🇩🇰","flag-dm":"🇩🇲","flag-do":"🇩🇴","flag-dz":"🇩🇿","flag-ea":"🇪🇦","flag-ec":"🇪🇨","flag-ee":"🇪🇪","flag-eg":"🇪🇬","flag-eh":"🇪🇭","flag-er":"🇪🇷","es":"🇪🇸","flag-es":"🇪🇸","flag-et":"🇪🇹","flag-eu":"🇪🇺","flag-fi":"🇫🇮","flag-fj":"🇫🇯","flag-fk":"🇫🇰","flag-fm":"🇫🇲","flag-fo":"🇫🇴","fr":"🇫🇷","flag-fr":"🇫🇷","flag-ga":"🇬🇦","gb":"🇬🇧","uk":"🇬🇧","flag-gb":"🇬🇧","flag-gd":"🇬🇩","flag-ge":"🇬🇪","flag-gf":"🇬🇫","flag-gg":"🇬🇬","flag-gh":"🇬🇭","flag-gi":"🇬🇮","flag-gl":"🇬🇱","flag-gm":"🇬🇲","flag-gn":"🇬🇳","flag-gp":"🇬🇵","flag-gq":"🇬🇶","flag-gr":"🇬🇷","flag-gs":"🇬🇸","flag-gt":"🇬🇹","flag-gu":"🇬🇺","flag-gw":"🇬🇼","flag-gy":"🇬🇾","flag-hk":"🇭🇰","flag-hm":"🇭🇲","flag-hn":"🇭🇳","flag-hr":"🇭🇷","flag-ht":"🇭🇹","flag-hu":"🇭🇺","flag-ic":"🇮🇨","flag-id":"🇮🇩","flag-ie":"🇮🇪","flag-il":"🇮🇱","flag-im":"🇮🇲","flag-in":"🇮🇳","flag-io":"🇮🇴","flag-iq":"🇮🇶","flag-ir":"🇮🇷","flag-is":"🇮🇸","it":"🇮🇹","flag-it":"🇮🇹","flag-je":"🇯🇪","flag-jm":"🇯🇲","flag-jo":"🇯🇴","jp":"🇯🇵","flag-jp":"🇯🇵","flag-ke":"🇰🇪","flag-kg":"🇰🇬","flag-kh":"🇰🇭","flag-ki":"🇰🇮","flag-km":"🇰🇲","flag-kn":"🇰🇳","flag-kp":"🇰🇵","kr":"🇰🇷","flag-kr":"🇰🇷","flag-kw":"🇰🇼","flag-ky":"🇰🇾","flag-kz":"🇰🇿","flag-la":"🇱🇦","flag-lb":"🇱🇧","flag-lc":"🇱🇨","flag-li":"🇱🇮","flag-lk":"🇱🇰","flag-lr":"🇱🇷","flag-ls":"🇱🇸","flag-lt":"🇱🇹","flag-lu":"🇱🇺","flag-lv":"🇱🇻","flag-ly":"🇱🇾","flag-ma":"🇲🇦","flag-mc":"🇲🇨","flag-md":"🇲🇩","flag-me":"🇲🇪","flag-mf":"🇲🇫","flag-mg":"🇲🇬","flag-mh":"🇲🇭","flag-mk":"🇲🇰","flag-ml":"🇲🇱","flag-mm":"🇲🇲","flag-mn":"🇲🇳","flag-mo":"🇲🇴","flag-mp":"🇲🇵","flag-mq":"🇲🇶","flag-mr":"🇲🇷","flag-ms":"🇲🇸","flag-mt":"🇲🇹","flag-mu":"🇲🇺","flag-mv":"🇲🇻","flag-mw":"🇲🇼","flag-mx":"🇲🇽","flag-my":"🇲🇾","flag-mz":"🇲🇿","flag-na":"🇳🇦","flag-nc":"🇳🇨","flag-ne":"🇳🇪","flag-nf":"🇳🇫","flag-ng":"🇳🇬","flag-ni":"🇳🇮","flag-nl":"🇳🇱","flag-no":"🇳🇴","flag-np":"🇳🇵","flag-nr":"🇳🇷","flag-nu":"🇳🇺","flag-nz":"🇳🇿","flag-om":"🇴🇲","flag-pa":"🇵🇦","flag-pe":"🇵🇪","flag-pf":"🇵🇫","flag-pg":"🇵🇬","flag-ph":"🇵🇭","flag-pk":"🇵🇰","flag-pl":"🇵🇱","flag-pm":"🇵🇲","flag-pn":"🇵🇳","flag-pr":"🇵🇷","flag-ps":"🇵🇸","flag-pt":"🇵🇹","flag-pw":"🇵🇼","flag-py":"🇵🇾","flag-qa":"🇶🇦","flag-re":"🇷🇪","flag-ro":"🇷🇴","flag-rs":"🇷🇸","ru":"🇷🇺","flag-ru":"🇷🇺","flag-rw":"🇷🇼","flag-sa":"🇸🇦","flag-sb":"🇸🇧","flag-sc":"🇸🇨","flag-sd":"🇸🇩","flag-se":"🇸🇪","flag-sg":"🇸🇬","flag-sh":"🇸🇭","flag-si":"🇸🇮","flag-sj":"🇸🇯","flag-sk":"🇸🇰","flag-sl":"🇸🇱","flag-sm":"🇸🇲","flag-sn":"🇸🇳","flag-so":"🇸🇴","flag-sr":"🇸🇷","flag-ss":"🇸🇸","flag-st":"🇸🇹","flag-sv":"🇸🇻","flag-sx":"🇸🇽","flag-sy":"🇸🇾","flag-sz":"🇸🇿","flag-ta":"🇹🇦","flag-tc":"🇹🇨","flag-td":"🇹🇩","flag-tf":"🇹🇫","flag-tg":"🇹🇬","flag-th":"🇹🇭","flag-tj":"🇹🇯","flag-tk":"🇹🇰","flag-tl":"🇹🇱","flag-tm":"🇹🇲","flag-tn":"🇹🇳","flag-to":"🇹🇴","flag-tr":"🇹🇷","flag-tt":"🇹🇹","flag-tv":"🇹🇻","flag-tw":"🇹🇼","flag-tz":"🇹🇿","flag-ua":"🇺🇦","flag-ug":"🇺🇬","flag-um":"🇺🇲","flag-un":"🇺🇳","us":"🇺🇸","flag-us":"🇺🇸","flag-uy":"🇺🇾","flag-uz":"🇺🇿","flag-va":"🇻🇦","flag-vc":"🇻🇨","flag-ve":"🇻🇪","flag-vg":"🇻🇬","flag-vi":"🇻🇮","flag-vn":"🇻🇳","flag-vu":"🇻🇺","flag-wf":"🇼🇫","flag-ws":"🇼🇸","flag-xk":"🇽🇰","flag-ye":"🇾🇪","flag-yt":"🇾🇹","flag-za":"🇿🇦","flag-zm":"🇿🇲","flag-zw":"🇿🇼","koko":"🈁","sa":"🈂️","u7121":"🈚","u6307":"🈯","u7981":"🈲","u7a7a":"🈳","u5408":"🈴","u6e80":"🈵","u6709":"🈶","u6708":"🈷️","u7533":"🈸","u5272":"🈹","u55b6":"🈺","ideograph_advantage":"🉐","accept":"🉑","cyclone":"🌀","foggy":"🌁","closed_umbrella":"🌂","night_with_stars":"🌃","sunrise_over_mountains":"🌄","sunrise":"🌅","city_sunset":"🌆","city_sunrise":"🌇","rainbow":"🌈","bridge_at_night":"🌉","ocean":"🌊","volcano":"🌋","milky_way":"🌌","earth_africa":"🌍","earth_americas":"🌎","earth_asia":"🌏","globe_with_meridians":"🌐","new_moon":"🌑","waxing_crescent_moon":"🌒","first_quarter_moon":"🌓","moon":"🌔","waxing_gibbous_moon":"🌔","full_moon":"🌕","waning_gibbous_moon":"🌖","last_quarter_moon":"🌗","waning_crescent_moon":"🌘","crescent_moon":"🌙","new_moon_with_face":"🌚","first_quarter_moon_with_face":"🌛","last_quarter_moon_with_face":"🌜","full_moon_with_face":"🌝","sun_with_face":"🌞","star2":"🌟","stars":"🌠","thermometer":"🌡️","mostly_sunny":"🌤️","sun_small_cloud":"🌤️","barely_sunny":"🌥️","sun_behind_cloud":"🌥️","partly_sunny_rain":"🌦️","sun_behind_rain_cloud":"🌦️","rain_cloud":"🌧️","snow_cloud":"🌨️","lightning":"🌩️","lightning_cloud":"🌩️","tornado":"🌪️","tornado_cloud":"🌪️","fog":"🌫️","wind_blowing_face":"🌬️","hotdog":"🌭","taco":"🌮","burrito":"🌯","chestnut":"🌰","seedling":"🌱","evergreen_tree":"🌲","deciduous_tree":"🌳","palm_tree":"🌴","cactus":"🌵","hot_pepper":"🌶️","tulip":"🌷","cherry_blossom":"🌸","rose":"🌹","hibiscus":"🌺","sunflower":"🌻","blossom":"🌼","corn":"🌽","ear_of_rice":"🌾","herb":"🌿","four_leaf_clover":"🍀","maple_leaf":"🍁","fallen_leaf":"🍂","leaves":"🍃","mushroom":"🍄","tomato":"🍅","eggplant":"🍆","grapes":"🍇","melon":"🍈","watermelon":"🍉","tangerine":"🍊","lemon":"🍋","banana":"🍌","pineapple":"🍍","apple":"🍎","green_apple":"🍏","pear":"🍐","peach":"🍑","cherries":"🍒","strawberry":"🍓","hamburger":"🍔","pizza":"🍕","meat_on_bone":"🍖","poultry_leg":"🍗","rice_cracker":"🍘","rice_ball":"🍙","rice":"🍚","curry":"🍛","ramen":"🍜","spaghetti":"🍝","bread":"🍞","fries":"🍟","sweet_potato":"🍠","dango":"🍡","oden":"🍢","sushi":"🍣","fried_shrimp":"🍤","fish_cake":"🍥","icecream":"🍦","shaved_ice":"🍧","ice_cream":"🍨","doughnut":"🍩","cookie":"🍪","chocolate_bar":"🍫","candy":"🍬","lollipop":"🍭","custard":"🍮","honey_pot":"🍯","cake":"🍰","bento":"🍱","stew":"🍲","fried_egg":"🍳","cooking":"🍳","fork_and_knife":"🍴","tea":"🍵","sake":"🍶","wine_glass":"🍷","cocktail":"🍸","tropical_drink":"🍹","beer":"🍺","beers":"🍻","baby_bottle":"🍼","knife_fork_plate":"🍽️","champagne":"🍾","popcorn":"🍿","ribbon":"🎀","gift":"🎁","birthday":"🎂","jack_o_lantern":"🎃","christmas_tree":"🎄","santa":"🎅","fireworks":"🎆","sparkler":"🎇","balloon":"🎈","tada":"🎉","confetti_ball":"🎊","tanabata_tree":"🎋","crossed_flags":"🎌","bamboo":"🎍","dolls":"🎎","flags":"🎏","wind_chime":"🎐","rice_scene":"🎑","school_satchel":"🎒","mortar_board":"🎓","medal":"🎖️","reminder_ribbon":"🎗️","studio_microphone":"🎙️","level_slider":"🎚️","control_knobs":"🎛️","film_frames":"🎞️","admission_tickets":"🎟️","carousel_horse":"🎠","ferris_wheel":"🎡","roller_coaster":"🎢","fishing_pole_and_fish":"🎣","microphone":"🎤","movie_camera":"🎥","cinema":"🎦","headphones":"🎧","art":"🎨","tophat":"🎩","circus_tent":"🎪","ticket":"🎫","clapper":"🎬","performing_arts":"🎭","video_game":"🎮","dart":"🎯","slot_machine":"🎰","8ball":"🎱","game_die":"🎲","bowling":"🎳","flower_playing_cards":"🎴","musical_note":"🎵","notes":"🎶","saxophone":"🎷","guitar":"🎸","musical_keyboard":"🎹","trumpet":"🎺","violin":"🎻","musical_score":"🎼","running_shirt_with_sash":"🎽","tennis":"🎾","ski":"🎿","basketball":"🏀","checkered_flag":"🏁","snowboarder":"🏂","woman-running":"🏃‍♀️","man-running":"🏃‍♂️","runner":"🏃‍♂️","running":"🏃‍♂️","woman-surfing":"🏄‍♀️","man-surfing":"🏄‍♂️","surfer":"🏄‍♂️","sports_medal":"🏅","trophy":"🏆","horse_racing":"🏇","football":"🏈","rugby_football":"🏉","woman-swimming":"🏊‍♀️","man-swimming":"🏊‍♂️","swimmer":"🏊‍♂️","woman-lifting-weights":"🏋️‍♀️","man-lifting-weights":"🏋️‍♂️","weight_lifter":"🏋️‍♂️","woman-golfing":"🏌️‍♀️","man-golfing":"🏌️‍♂️","golfer":"🏌️‍♂️","racing_motorcycle":"🏍️","racing_car":"🏎️","cricket_bat_and_ball":"🏏","volleyball":"🏐","field_hockey_stick_and_ball":"🏑","ice_hockey_stick_and_puck":"🏒","table_tennis_paddle_and_ball":"🏓","snow_capped_mountain":"🏔️","camping":"🏕️","beach_with_umbrella":"🏖️","building_construction":"🏗️","house_buildings":"🏘️","cityscape":"🏙️","derelict_house_building":"🏚️","classical_building":"🏛️","desert":"🏜️","desert_island":"🏝️","national_park":"🏞️","stadium":"🏟️","house":"🏠","house_with_garden":"🏡","office":"🏢","post_office":"🏣","european_post_office":"🏤","hospital":"🏥","bank":"🏦","atm":"🏧","hotel":"🏨","love_hotel":"🏩","convenience_store":"🏪","school":"🏫","department_store":"🏬","factory":"🏭","izakaya_lantern":"🏮","lantern":"🏮","japanese_castle":"🏯","european_castle":"🏰","rainbow-flag":"🏳️‍🌈","transgender_flag":"🏳️‍⚧️","waving_white_flag":"🏳️","pirate_flag":"🏴‍☠️","flag-england":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","flag-scotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","flag-wales":"🏴󠁧󠁢󠁷󠁬󠁳󠁿","waving_black_flag":"🏴","rosette":"🏵️","label":"🏷️","badminton_racquet_and_shuttlecock":"🏸","bow_and_arrow":"🏹","amphora":"🏺","skin-tone-2":"🏻","skin-tone-3":"🏼","skin-tone-4":"🏽","skin-tone-5":"🏾","skin-tone-6":"🏿","rat":"🐀","mouse2":"🐁","ox":"🐂","water_buffalo":"🐃","cow2":"🐄","tiger2":"🐅","leopard":"🐆","rabbit2":"🐇","black_cat":"🐈‍⬛","cat2":"🐈","dragon":"🐉","crocodile":"🐊","whale2":"🐋","snail":"🐌","snake":"🐍","racehorse":"🐎","ram":"🐏","goat":"🐐","sheep":"🐑","monkey":"🐒","rooster":"🐓","chicken":"🐔","service_dog":"🐕‍🦺","dog2":"🐕","pig2":"🐖","boar":"🐗","elephant":"🐘","octopus":"🐙","shell":"🐚","bug":"🐛","ant":"🐜","bee":"🐝","honeybee":"🐝","ladybug":"🐞","lady_beetle":"🐞","fish":"🐟","tropical_fish":"🐠","blowfish":"🐡","turtle":"🐢","hatching_chick":"🐣","baby_chick":"🐤","hatched_chick":"🐥","bird":"🐦","penguin":"🐧","koala":"🐨","poodle":"🐩","dromedary_camel":"🐪","camel":"🐫","dolphin":"🐬","flipper":"🐬","mouse":"🐭","cow":"🐮","tiger":"🐯","rabbit":"🐰","cat":"🐱","dragon_face":"🐲","whale":"🐳","horse":"🐴","monkey_face":"🐵","dog":"🐶","pig":"🐷","frog":"🐸","hamster":"🐹","wolf":"🐺","polar_bear":"🐻‍❄️","bear":"🐻","panda_face":"🐼","pig_nose":"🐽","feet":"🐾","paw_prints":"🐾","chipmunk":"🐿️","eyes":"👀","eye-in-speech-bubble":"👁️‍🗨️","eye":"👁️","ear":"👂","nose":"👃","lips":"👄","tongue":"👅","point_up_2":"👆","point_down":"👇","point_left":"👈","point_right":"👉","facepunch":"👊","punch":"👊","wave":"👋","ok_hand":"👌","+1":"👍","thumbsup":"👍","-1":"👎","thumbsdown":"👎","clap":"👏","open_hands":"👐","crown":"👑","womans_hat":"👒","eyeglasses":"👓","necktie":"👔","shirt":"👕","tshirt":"👕","jeans":"👖","dress":"👗","kimono":"👘","bikini":"👙","womans_clothes":"👚","purse":"👛","handbag":"👜","pouch":"👝","mans_shoe":"👞","shoe":"👞","athletic_shoe":"👟","high_heel":"👠","sandal":"👡","boot":"👢","footprints":"👣","bust_in_silhouette":"👤","busts_in_silhouette":"👥","boy":"👦","girl":"👧","male-farmer":"👨‍🌾","male-cook":"👨‍🍳","man_feeding_baby":"👨‍🍼","male-student":"👨‍🎓","male-singer":"👨‍🎤","male-artist":"👨‍🎨","male-teacher":"👨‍🏫","male-factory-worker":"👨‍🏭","man-boy-boy":"👨‍👦‍👦","man-boy":"👨‍👦","man-girl-boy":"👨‍👧‍👦","man-girl-girl":"👨‍👧‍👧","man-girl":"👨‍👧","man-man-boy":"👨‍👨‍👦","man-man-boy-boy":"👨‍👨‍👦‍👦","man-man-girl":"👨‍👨‍👧","man-man-girl-boy":"👨‍👨‍👧‍👦","man-man-girl-girl":"👨‍👨‍👧‍👧","man-woman-boy":"👨‍👩‍👦","family":"👨‍👩‍👦","man-woman-boy-boy":"👨‍👩‍👦‍👦","man-woman-girl":"👨‍👩‍👧","man-woman-girl-boy":"👨‍👩‍👧‍👦","man-woman-girl-girl":"👨‍👩‍👧‍👧","male-technologist":"👨‍💻","male-office-worker":"👨‍💼","male-mechanic":"👨‍🔧","male-scientist":"👨‍🔬","male-astronaut":"👨‍🚀","male-firefighter":"👨‍🚒","man_with_probing_cane":"👨‍🦯","red_haired_man":"👨‍🦰","curly_haired_man":"👨‍🦱","bald_man":"👨‍🦲","white_haired_man":"👨‍🦳","man_in_motorized_wheelchair":"👨‍🦼","man_in_manual_wheelchair":"👨‍🦽","male-doctor":"👨‍⚕️","male-judge":"👨‍⚖️","male-pilot":"👨‍✈️","man-heart-man":"👨‍❤️‍👨","man-kiss-man":"👨‍❤️‍💋‍👨","man":"👨","female-farmer":"👩‍🌾","female-cook":"👩‍🍳","woman_feeding_baby":"👩‍🍼","female-student":"👩‍🎓","female-singer":"👩‍🎤","female-artist":"👩‍🎨","female-teacher":"👩‍🏫","female-factory-worker":"👩‍🏭","woman-boy-boy":"👩‍👦‍👦","woman-boy":"👩‍👦","woman-girl-boy":"👩‍👧‍👦","woman-girl-girl":"👩‍👧‍👧","woman-girl":"👩‍👧","woman-woman-boy":"👩‍👩‍👦","woman-woman-boy-boy":"👩‍👩‍👦‍👦","woman-woman-girl":"👩‍👩‍👧","woman-woman-girl-boy":"👩‍👩‍👧‍👦","woman-woman-girl-girl":"👩‍👩‍👧‍👧","female-technologist":"👩‍💻","female-office-worker":"👩‍💼","female-mechanic":"👩‍🔧","female-scientist":"👩‍🔬","female-astronaut":"👩‍🚀","female-firefighter":"👩‍🚒","woman_with_probing_cane":"👩‍🦯","red_haired_woman":"👩‍🦰","curly_haired_woman":"👩‍🦱","bald_woman":"👩‍🦲","white_haired_woman":"👩‍🦳","woman_in_motorized_wheelchair":"👩‍🦼","woman_in_manual_wheelchair":"👩‍🦽","female-doctor":"👩‍⚕️","female-judge":"👩‍⚖️","female-pilot":"👩‍✈️","woman-heart-man":"👩‍❤️‍👨","woman-heart-woman":"👩‍❤️‍👩","woman-kiss-man":"👩‍❤️‍💋‍👨","woman-kiss-woman":"👩‍❤️‍💋‍👩","woman":"👩","man_and_woman_holding_hands":"👫","woman_and_man_holding_hands":"👫","couple":"👫","two_men_holding_hands":"👬","men_holding_hands":"👬","two_women_holding_hands":"👭","women_holding_hands":"👭","female-police-officer":"👮‍♀️","male-police-officer":"👮‍♂️","cop":"👮‍♂️","women-with-bunny-ears-partying":"👯‍♀️","woman-with-bunny-ears-partying":"👯‍♀️","dancers":"👯‍♀️","men-with-bunny-ears-partying":"👯‍♂️","man-with-bunny-ears-partying":"👯‍♂️","woman_with_veil":"👰‍♀️","man_with_veil":"👰‍♂️","bride_with_veil":"👰","blond-haired-woman":"👱‍♀️","blond-haired-man":"👱‍♂️","person_with_blond_hair":"👱‍♂️","man_with_gua_pi_mao":"👲","woman-wearing-turban":"👳‍♀️","man-wearing-turban":"👳‍♂️","man_with_turban":"👳‍♂️","older_man":"👴","older_woman":"👵","baby":"👶","female-construction-worker":"👷‍♀️","male-construction-worker":"👷‍♂️","construction_worker":"👷‍♂️","princess":"👸","japanese_ogre":"👹","japanese_goblin":"👺","ghost":"👻","angel":"👼","alien":"👽","space_invader":"👾","imp":"👿","skull":"💀","woman-tipping-hand":"💁‍♀️","information_desk_person":"💁‍♀️","man-tipping-hand":"💁‍♂️","female-guard":"💂‍♀️","male-guard":"💂‍♂️","guardsman":"💂‍♂️","dancer":"💃","lipstick":"💄","nail_care":"💅","woman-getting-massage":"💆‍♀️","massage":"💆‍♀️","man-getting-massage":"💆‍♂️","woman-getting-haircut":"💇‍♀️","haircut":"💇‍♀️","man-getting-haircut":"💇‍♂️","barber":"💈","syringe":"💉","pill":"💊","kiss":"💋","love_letter":"💌","ring":"💍","gem":"💎","couplekiss":"💏","bouquet":"💐","couple_with_heart":"💑","wedding":"💒","heartbeat":"💓","broken_heart":"💔","two_hearts":"💕","sparkling_heart":"💖","heartpulse":"💗","cupid":"💘","blue_heart":"💙","green_heart":"💚","yellow_heart":"💛","purple_heart":"💜","gift_heart":"💝","revolving_hearts":"💞","heart_decoration":"💟","diamond_shape_with_a_dot_inside":"💠","bulb":"💡","anger":"💢","bomb":"💣","zzz":"💤","boom":"💥","collision":"💥","sweat_drops":"💦","droplet":"💧","dash":"💨","hankey":"💩","poop":"💩","shit":"💩","muscle":"💪","dizzy":"💫","speech_balloon":"💬","thought_balloon":"💭","white_flower":"💮","moneybag":"💰","currency_exchange":"💱","heavy_dollar_sign":"💲","credit_card":"💳","yen":"💴","dollar":"💵","euro":"💶","pound":"💷","money_with_wings":"💸","chart":"💹","seat":"💺","computer":"💻","briefcase":"💼","minidisc":"💽","floppy_disk":"💾","cd":"💿","dvd":"📀","file_folder":"📁","open_file_folder":"📂","page_with_curl":"📃","page_facing_up":"📄","date":"📅","calendar":"📆","card_index":"📇","chart_with_upwards_trend":"📈","chart_with_downwards_trend":"📉","bar_chart":"📊","clipboard":"📋","pushpin":"📌","round_pushpin":"📍","paperclip":"📎","straight_ruler":"📏","triangular_ruler":"📐","bookmark_tabs":"📑","ledger":"📒","notebook":"📓","notebook_with_decorative_cover":"📔","closed_book":"📕","book":"📖","open_book":"📖","green_book":"📗","blue_book":"📘","orange_book":"📙","books":"📚","name_badge":"📛","scroll":"📜","memo":"📝","pencil":"📝","telephone_receiver":"📞","pager":"📟","fax":"📠","satellite_antenna":"📡","loudspeaker":"📢","mega":"📣","outbox_tray":"📤","inbox_tray":"📥","package":"📦","e-mail":"📧","incoming_envelope":"📨","envelope_with_arrow":"📩","mailbox_closed":"📪","mailbox":"📫","mailbox_with_mail":"📬","mailbox_with_no_mail":"📭","postbox":"📮","postal_horn":"📯","newspaper":"📰","iphone":"📱","calling":"📲","vibration_mode":"📳","mobile_phone_off":"📴","no_mobile_phones":"📵","signal_strength":"📶","camera":"📷","camera_with_flash":"📸","video_camera":"📹","tv":"📺","radio":"📻","vhs":"📼","film_projector":"📽️","prayer_beads":"📿","twisted_rightwards_arrows":"🔀","repeat":"🔁","repeat_one":"🔂","arrows_clockwise":"🔃","arrows_counterclockwise":"🔄","low_brightness":"🔅","high_brightness":"🔆","mute":"🔇","speaker":"🔈","sound":"🔉","loud_sound":"🔊","battery":"🔋","electric_plug":"🔌","mag":"🔍","mag_right":"🔎","lock_with_ink_pen":"🔏","closed_lock_with_key":"🔐","key":"🔑","lock":"🔒","unlock":"🔓","bell":"🔔","no_bell":"🔕","bookmark":"🔖","link":"🔗","radio_button":"🔘","back":"🔙","end":"🔚","on":"🔛","soon":"🔜","top":"🔝","underage":"🔞","keycap_ten":"🔟","capital_abcd":"🔠","abcd":"🔡","symbols":"🔣","abc":"🔤","fire":"🔥","flashlight":"🔦","wrench":"🔧","hammer":"🔨","nut_and_bolt":"🔩","hocho":"🔪","knife":"🔪","gun":"🔫","microscope":"🔬","telescope":"🔭","crystal_ball":"🔮","six_pointed_star":"🔯","beginner":"🔰","trident":"🔱","black_square_button":"🔲","white_square_button":"🔳","red_circle":"🔴","large_blue_circle":"🔵","large_orange_diamond":"🔶","large_blue_diamond":"🔷","small_orange_diamond":"🔸","small_blue_diamond":"🔹","small_red_triangle":"🔺","small_red_triangle_down":"🔻","arrow_up_small":"🔼","arrow_down_small":"🔽","om_symbol":"🕉️","dove_of_peace":"🕊️","kaaba":"🕋","mosque":"🕌","synagogue":"🕍","menorah_with_nine_branches":"🕎","clock1":"🕐","clock2":"🕑","clock3":"🕒","clock4":"🕓","clock5":"🕔","clock6":"🕕","clock7":"🕖","clock8":"🕗","clock9":"🕘","clock10":"🕙","clock11":"🕚","clock12":"🕛","clock130":"🕜","clock230":"🕝","clock330":"🕞","clock430":"🕟","clock530":"🕠","clock630":"🕡","clock730":"🕢","clock830":"🕣","clock930":"🕤","clock1030":"🕥","clock1130":"🕦","clock1230":"🕧","candle":"🕯️","mantelpiece_clock":"🕰️","hole":"🕳️","man_in_business_suit_levitating":"🕴️","female-detective":"🕵️‍♀️","male-detective":"🕵️‍♂️","sleuth_or_spy":"🕵️‍♂️","dark_sunglasses":"🕶️","spider":"🕷️","spider_web":"🕸️","joystick":"🕹️","man_dancing":"🕺","linked_paperclips":"🖇️","lower_left_ballpoint_pen":"🖊️","lower_left_fountain_pen":"🖋️","lower_left_paintbrush":"🖌️","lower_left_crayon":"🖍️","raised_hand_with_fingers_splayed":"🖐️","middle_finger":"🖕","reversed_hand_with_middle_finger_extended":"🖕","spock-hand":"🖖","black_heart":"🖤","desktop_computer":"🖥️","printer":"🖨️","three_button_mouse":"🖱️","trackball":"🖲️","frame_with_picture":"🖼️","card_index_dividers":"🗂️","card_file_box":"🗃️","file_cabinet":"🗄️","wastebasket":"🗑️","spiral_note_pad":"🗒️","spiral_calendar_pad":"🗓️","compression":"🗜️","old_key":"🗝️","rolled_up_newspaper":"🗞️","dagger_knife":"🗡️","speaking_head_in_silhouette":"🗣️","left_speech_bubble":"🗨️","right_anger_bubble":"🗯️","ballot_box_with_ballot":"🗳️","world_map":"🗺️","mount_fuji":"🗻","tokyo_tower":"🗼","statue_of_liberty":"🗽","japan":"🗾","moyai":"🗿","grinning":"😀","grin":"😁","joy":"😂","smiley":"😃","smile":"😄","sweat_smile":"😅","laughing":"😆","satisfied":"😆","innocent":"😇","smiling_imp":"😈","wink":"😉","blush":"😊","yum":"😋","relieved":"😌","heart_eyes":"😍","sunglasses":"😎","smirk":"😏","neutral_face":"😐","expressionless":"😑","unamused":"😒","sweat":"😓","pensive":"😔","confused":"😕","confounded":"😖","kissing":"😗","kissing_heart":"😘","kissing_smiling_eyes":"😙","kissing_closed_eyes":"😚","stuck_out_tongue":"😛","stuck_out_tongue_winking_eye":"😜","stuck_out_tongue_closed_eyes":"😝","disappointed":"😞","worried":"😟","angry":"😠","rage":"😡","cry":"😢","persevere":"😣","triumph":"😤","disappointed_relieved":"😥","frowning":"😦","anguished":"😧","fearful":"😨","weary":"😩","sleepy":"😪","tired_face":"😫","grimacing":"😬","sob":"😭","face_exhaling":"😮‍💨","open_mouth":"😮","hushed":"😯","cold_sweat":"😰","scream":"😱","astonished":"😲","flushed":"😳","sleeping":"😴","face_with_spiral_eyes":"😵‍💫","dizzy_face":"😵","face_in_clouds":"😶‍🌫️","no_mouth":"😶","mask":"😷","smile_cat":"😸","joy_cat":"😹","smiley_cat":"😺","heart_eyes_cat":"😻","smirk_cat":"😼","kissing_cat":"😽","pouting_cat":"😾","crying_cat_face":"😿","scream_cat":"🙀","slightly_frowning_face":"🙁","slightly_smiling_face":"🙂","upside_down_face":"🙃","face_with_rolling_eyes":"🙄","woman-gesturing-no":"🙅‍♀️","no_good":"🙅‍♀️","man-gesturing-no":"🙅‍♂️","woman-gesturing-ok":"🙆‍♀️","ok_woman":"🙆‍♀️","man-gesturing-ok":"🙆‍♂️","woman-bowing":"🙇‍♀️","man-bowing":"🙇‍♂️","bow":"🙇‍♂️","see_no_evil":"🙈","hear_no_evil":"🙉","speak_no_evil":"🙊","woman-raising-hand":"🙋‍♀️","raising_hand":"🙋‍♀️","man-raising-hand":"🙋‍♂️","raised_hands":"🙌","woman-frowning":"🙍‍♀️","person_frowning":"🙍‍♀️","man-frowning":"🙍‍♂️","woman-pouting":"🙎‍♀️","person_with_pouting_face":"🙎‍♀️","man-pouting":"🙎‍♂️","pray":"🙏","rocket":"🚀","helicopter":"🚁","steam_locomotive":"🚂","railway_car":"🚃","bullettrain_side":"🚄","bullettrain_front":"🚅","train2":"🚆","metro":"🚇","light_rail":"🚈","station":"🚉","tram":"🚊","train":"🚋","bus":"🚌","oncoming_bus":"🚍","trolleybus":"🚎","busstop":"🚏","minibus":"🚐","ambulance":"🚑","fire_engine":"🚒","police_car":"🚓","oncoming_police_car":"🚔","taxi":"🚕","oncoming_taxi":"🚖","car":"🚗","red_car":"🚗","oncoming_automobile":"🚘","blue_car":"🚙","truck":"🚚","articulated_lorry":"🚛","tractor":"🚜","monorail":"🚝","mountain_railway":"🚞","suspension_railway":"🚟","mountain_cableway":"🚠","aerial_tramway":"🚡","ship":"🚢","woman-rowing-boat":"🚣‍♀️","man-rowing-boat":"🚣‍♂️","rowboat":"🚣‍♂️","speedboat":"🚤","traffic_light":"🚥","vertical_traffic_light":"🚦","construction":"🚧","rotating_light":"🚨","triangular_flag_on_post":"🚩","door":"🚪","no_entry_sign":"🚫","smoking":"🚬","no_smoking":"🚭","put_litter_in_its_place":"🚮","do_not_litter":"🚯","potable_water":"🚰","non-potable_water":"🚱","bike":"🚲","no_bicycles":"🚳","woman-biking":"🚴‍♀️","man-biking":"🚴‍♂️","bicyclist":"🚴‍♂️","woman-mountain-biking":"🚵‍♀️","man-mountain-biking":"🚵‍♂️","mountain_bicyclist":"🚵‍♂️","woman-walking":"🚶‍♀️","man-walking":"🚶‍♂️","walking":"🚶‍♂️","no_pedestrians":"🚷","children_crossing":"🚸","mens":"🚹","womens":"🚺","restroom":"🚻","baby_symbol":"🚼","toilet":"🚽","wc":"🚾","shower":"🚿","bath":"🛀","bathtub":"🛁","passport_control":"🛂","customs":"🛃","baggage_claim":"🛄","left_luggage":"🛅","couch_and_lamp":"🛋️","sleeping_accommodation":"🛌","shopping_bags":"🛍️","bellhop_bell":"🛎️","bed":"🛏️","place_of_worship":"🛐","octagonal_sign":"🛑","shopping_trolley":"🛒","hindu_temple":"🛕","hut":"🛖","elevator":"🛗","hammer_and_wrench":"🛠️","shield":"🛡️","oil_drum":"🛢️","motorway":"🛣️","railway_track":"🛤️","motor_boat":"🛥️","small_airplane":"🛩️","airplane_departure":"🛫","airplane_arriving":"🛬","satellite":"🛰️","passenger_ship":"🛳️","scooter":"🛴","motor_scooter":"🛵","canoe":"🛶","sled":"🛷","flying_saucer":"🛸","skateboard":"🛹","auto_rickshaw":"🛺","pickup_truck":"🛻","roller_skate":"🛼","large_orange_circle":"🟠","large_yellow_circle":"🟡","large_green_circle":"🟢","large_purple_circle":"🟣","large_brown_circle":"🟤","large_red_square":"🟥","large_blue_square":"🟦","large_orange_square":"🟧","large_yellow_square":"🟨","large_green_square":"🟩","large_purple_square":"🟪","large_brown_square":"🟫","pinched_fingers":"🤌","white_heart":"🤍","brown_heart":"🤎","pinching_hand":"🤏","zipper_mouth_face":"🤐","money_mouth_face":"🤑","face_with_thermometer":"🤒","nerd_face":"🤓","thinking_face":"🤔","face_with_head_bandage":"🤕","robot_face":"🤖","hugging_face":"🤗","the_horns":"🤘","sign_of_the_horns":"🤘","call_me_hand":"🤙","raised_back_of_hand":"🤚","left-facing_fist":"🤛","right-facing_fist":"🤜","handshake":"🤝","crossed_fingers":"🤞","hand_with_index_and_middle_fingers_crossed":"🤞","i_love_you_hand_sign":"🤟","face_with_cowboy_hat":"🤠","clown_face":"🤡","nauseated_face":"🤢","rolling_on_the_floor_laughing":"🤣","drooling_face":"🤤","lying_face":"🤥","woman-facepalming":"🤦‍♀️","man-facepalming":"🤦‍♂️","face_palm":"🤦","sneezing_face":"🤧","face_with_raised_eyebrow":"🤨","face_with_one_eyebrow_raised":"🤨","star-struck":"🤩","grinning_face_with_star_eyes":"🤩","zany_face":"🤪","grinning_face_with_one_large_and_one_small_eye":"🤪","shushing_face":"🤫","face_with_finger_covering_closed_lips":"🤫","face_with_symbols_on_mouth":"🤬","serious_face_with_symbols_covering_mouth":"🤬","face_with_hand_over_mouth":"🤭","smiling_face_with_smiling_eyes_and_hand_covering_mouth":"🤭","face_vomiting":"🤮","face_with_open_mouth_vomiting":"🤮","exploding_head":"🤯","shocked_face_with_exploding_head":"🤯","pregnant_woman":"🤰","breast-feeding":"🤱","palms_up_together":"🤲","selfie":"🤳","prince":"🤴","woman_in_tuxedo":"🤵‍♀️","man_in_tuxedo":"🤵‍♂️","person_in_tuxedo":"🤵","mrs_claus":"🤶","mother_christmas":"🤶","woman-shrugging":"🤷‍♀️","man-shrugging":"🤷‍♂️","shrug":"🤷","woman-cartwheeling":"🤸‍♀️","man-cartwheeling":"🤸‍♂️","person_doing_cartwheel":"🤸","woman-juggling":"🤹‍♀️","man-juggling":"🤹‍♂️","juggling":"🤹","fencer":"🤺","woman-wrestling":"🤼‍♀️","man-wrestling":"🤼‍♂️","wrestlers":"🤼","woman-playing-water-polo":"🤽‍♀️","man-playing-water-polo":"🤽‍♂️","water_polo":"🤽","woman-playing-handball":"🤾‍♀️","man-playing-handball":"🤾‍♂️","handball":"🤾","diving_mask":"🤿","wilted_flower":"🥀","drum_with_drumsticks":"🥁","clinking_glasses":"🥂","tumbler_glass":"🥃","spoon":"🥄","goal_net":"🥅","first_place_medal":"🥇","second_place_medal":"🥈","third_place_medal":"🥉","boxing_glove":"🥊","martial_arts_uniform":"🥋","curling_stone":"🥌","lacrosse":"🥍","softball":"🥎","flying_disc":"🥏","croissant":"🥐","avocado":"🥑","cucumber":"🥒","bacon":"🥓","potato":"🥔","carrot":"🥕","baguette_bread":"🥖","green_salad":"🥗","shallow_pan_of_food":"🥘","stuffed_flatbread":"🥙","egg":"🥚","glass_of_milk":"🥛","peanuts":"🥜","kiwifruit":"🥝","pancakes":"🥞","dumpling":"🥟","fortune_cookie":"🥠","takeout_box":"🥡","chopsticks":"🥢","bowl_with_spoon":"🥣","cup_with_straw":"🥤","coconut":"🥥","broccoli":"🥦","pie":"🥧","pretzel":"🥨","cut_of_meat":"🥩","sandwich":"🥪","canned_food":"🥫","leafy_green":"🥬","mango":"🥭","moon_cake":"🥮","bagel":"🥯","smiling_face_with_3_hearts":"🥰","yawning_face":"🥱","smiling_face_with_tear":"🥲","partying_face":"🥳","woozy_face":"🥴","hot_face":"🥵","cold_face":"🥶","ninja":"🥷","disguised_face":"🥸","pleading_face":"🥺","sari":"🥻","lab_coat":"🥼","goggles":"🥽","hiking_boot":"🥾","womans_flat_shoe":"🥿","crab":"🦀","lion_face":"🦁","scorpion":"🦂","turkey":"🦃","unicorn_face":"🦄","eagle":"🦅","duck":"🦆","bat":"🦇","shark":"🦈","owl":"🦉","fox_face":"🦊","butterfly":"🦋","deer":"🦌","gorilla":"🦍","lizard":"🦎","rhinoceros":"🦏","shrimp":"🦐","squid":"🦑","giraffe_face":"🦒","zebra_face":"🦓","hedgehog":"🦔","sauropod":"🦕","t-rex":"🦖","cricket":"🦗","kangaroo":"🦘","llama":"🦙","peacock":"🦚","hippopotamus":"🦛","parrot":"🦜","raccoon":"🦝","lobster":"🦞","mosquito":"🦟","microbe":"🦠","badger":"🦡","swan":"🦢","mammoth":"🦣","dodo":"🦤","sloth":"🦥","otter":"🦦","orangutan":"🦧","skunk":"🦨","flamingo":"🦩","oyster":"🦪","beaver":"🦫","bison":"🦬","seal":"🦭","guide_dog":"🦮","probing_cane":"🦯","bone":"🦴","leg":"🦵","foot":"🦶","tooth":"🦷","female_superhero":"🦸‍♀️","male_superhero":"🦸‍♂️","superhero":"🦸","female_supervillain":"🦹‍♀️","male_supervillain":"🦹‍♂️","supervillain":"🦹","safety_vest":"🦺","ear_with_hearing_aid":"🦻","motorized_wheelchair":"🦼","manual_wheelchair":"🦽","mechanical_arm":"🦾","mechanical_leg":"🦿","cheese_wedge":"🧀","cupcake":"🧁","salt":"🧂","beverage_box":"🧃","garlic":"🧄","onion":"🧅","falafel":"🧆","waffle":"🧇","butter":"🧈","mate_drink":"🧉","ice_cube":"🧊","bubble_tea":"🧋","woman_standing":"🧍‍♀️","man_standing":"🧍‍♂️","standing_person":"🧍","woman_kneeling":"🧎‍♀️","man_kneeling":"🧎‍♂️","kneeling_person":"🧎","deaf_woman":"🧏‍♀️","deaf_man":"🧏‍♂️","deaf_person":"🧏","face_with_monocle":"🧐","farmer":"🧑‍🌾","cook":"🧑‍🍳","person_feeding_baby":"🧑‍🍼","mx_claus":"🧑‍🎄","student":"🧑‍🎓","singer":"🧑‍🎤","artist":"🧑‍🎨","teacher":"🧑‍🏫","factory_worker":"🧑‍🏭","technologist":"🧑‍💻","office_worker":"🧑‍💼","mechanic":"🧑‍🔧","scientist":"🧑‍🔬","astronaut":"🧑‍🚀","firefighter":"🧑‍🚒","people_holding_hands":"🧑‍🤝‍🧑","person_with_probing_cane":"🧑‍🦯","red_haired_person":"🧑‍🦰","curly_haired_person":"🧑‍🦱","bald_person":"🧑‍🦲","white_haired_person":"🧑‍🦳","person_in_motorized_wheelchair":"🧑‍🦼","person_in_manual_wheelchair":"🧑‍🦽","health_worker":"🧑‍⚕️","judge":"🧑‍⚖️","pilot":"🧑‍✈️","adult":"🧑","child":"🧒","older_adult":"🧓","woman_with_beard":"🧔‍♀️","man_with_beard":"🧔‍♂️","bearded_person":"🧔","person_with_headscarf":"🧕","woman_in_steamy_room":"🧖‍♀️","man_in_steamy_room":"🧖‍♂️","person_in_steamy_room":"🧖‍♂️","woman_climbing":"🧗‍♀️","person_climbing":"🧗‍♀️","man_climbing":"🧗‍♂️","woman_in_lotus_position":"🧘‍♀️","person_in_lotus_position":"🧘‍♀️","man_in_lotus_position":"🧘‍♂️","female_mage":"🧙‍♀️","mage":"🧙‍♀️","male_mage":"🧙‍♂️","female_fairy":"🧚‍♀️","fairy":"🧚‍♀️","male_fairy":"🧚‍♂️","female_vampire":"🧛‍♀️","vampire":"🧛‍♀️","male_vampire":"🧛‍♂️","mermaid":"🧜‍♀️","merman":"🧜‍♂️","merperson":"🧜‍♂️","female_elf":"🧝‍♀️","male_elf":"🧝‍♂️","elf":"🧝‍♂️","female_genie":"🧞‍♀️","male_genie":"🧞‍♂️","genie":"🧞‍♂️","female_zombie":"🧟‍♀️","male_zombie":"🧟‍♂️","zombie":"🧟‍♂️","brain":"🧠","orange_heart":"🧡","billed_cap":"🧢","scarf":"🧣","gloves":"🧤","coat":"🧥","socks":"🧦","red_envelope":"🧧","firecracker":"🧨","jigsaw":"🧩","test_tube":"🧪","petri_dish":"🧫","dna":"🧬","compass":"🧭","abacus":"🧮","fire_extinguisher":"🧯","toolbox":"🧰","bricks":"🧱","magnet":"🧲","luggage":"🧳","lotion_bottle":"🧴","thread":"🧵","yarn":"🧶","safety_pin":"🧷","teddy_bear":"🧸","broom":"🧹","basket":"🧺","roll_of_paper":"🧻","soap":"🧼","sponge":"🧽","receipt":"🧾","nazar_amulet":"🧿","ballet_shoes":"🩰","one-piece_swimsuit":"🩱","briefs":"🩲","shorts":"🩳","thong_sandal":"🩴","drop_of_blood":"🩸","adhesive_bandage":"🩹","stethoscope":"🩺","yo-yo":"🪀","kite":"🪁","parachute":"🪂","boomerang":"🪃","magic_wand":"🪄","pinata":"🪅","nesting_dolls":"🪆","ringed_planet":"🪐","chair":"🪑","razor":"🪒","axe":"🪓","diya_lamp":"🪔","banjo":"🪕","military_helmet":"🪖","accordion":"🪗","long_drum":"🪘","coin":"🪙","carpentry_saw":"🪚","screwdriver":"🪛","ladder":"🪜","hook":"🪝","mirror":"🪞","window":"🪟","plunger":"🪠","sewing_needle":"🪡","knot":"🪢","bucket":"🪣","mouse_trap":"🪤","toothbrush":"🪥","headstone":"🪦","placard":"🪧","rock":"🪨","fly":"🪰","worm":"🪱","beetle":"🪲","cockroach":"🪳","potted_plant":"🪴","wood":"🪵","feather":"🪶","anatomical_heart":"🫀","lungs":"🫁","people_hugging":"🫂","blueberries":"🫐","bell_pepper":"🫑","olive":"🫒","flatbread":"🫓","tamale":"🫔","fondue":"🫕","teapot":"🫖","bangbang":"‼️","interrobang":"⁉️","tm":"™️","information_source":"ℹ️","left_right_arrow":"↔️","arrow_up_down":"↕️","arrow_upper_left":"↖️","arrow_upper_right":"↗️","arrow_lower_right":"↘️","arrow_lower_left":"↙️","leftwards_arrow_with_hook":"↩️","arrow_right_hook":"↪️","watch":"⌚","hourglass":"⌛","keyboard":"⌨️","eject":"⏏️","fast_forward":"⏩","rewind":"⏪","arrow_double_up":"⏫","arrow_double_down":"⏬","black_right_pointing_double_triangle_with_vertical_bar":"⏭️","black_left_pointing_double_triangle_with_vertical_bar":"⏮️","black_right_pointing_triangle_with_double_vertical_bar":"⏯️","alarm_clock":"⏰","stopwatch":"⏱️","timer_clock":"⏲️","hourglass_flowing_sand":"⏳","double_vertical_bar":"⏸️","black_square_for_stop":"⏹️","black_circle_for_record":"⏺️","m":"Ⓜ️","black_small_square":"▪️","white_small_square":"▫️","arrow_forward":"▶️","arrow_backward":"◀️","white_medium_square":"◻️","black_medium_square":"◼️","white_medium_small_square":"◽","black_medium_small_square":"◾","sunny":"☀️","cloud":"☁️","umbrella":"☂️","snowman":"☃️","comet":"☄️","phone":"☎️","telephone":"☎️","ballot_box_with_check":"☑️","shamrock":"☘️","point_up":"☝️","skull_and_crossbones":"☠️","radioactive_sign":"☢️","biohazard_sign":"☣️","orthodox_cross":"☦️","star_and_crescent":"☪️","peace_symbol":"☮️","yin_yang":"☯️","wheel_of_dharma":"☸️","white_frowning_face":"☹️","relaxed":"☺️","female_sign":"♀️","male_sign":"♂️","gemini":"♊","cancer":"♋","leo":"♌","virgo":"♍","libra":"♎","scorpius":"♏","chess_pawn":"♟️","spades":"♠️","clubs":"♣️","hearts":"♥️","diamonds":"♦️","hotsprings":"♨️","recycle":"♻️","infinity":"♾️","wheelchair":"♿","hammer_and_pick":"⚒️","crossed_swords":"⚔️","medical_symbol":"⚕️","staff_of_aesculapius":"⚕️","scales":"⚖️","alembic":"⚗️","gear":"⚙️","atom_symbol":"⚛️","fleur_de_lis":"⚜️","warning":"⚠️","zap":"⚡","transgender_symbol":"⚧️","white_circle":"⚪","black_circle":"⚫","coffin":"⚰️","funeral_urn":"⚱️","soccer":"⚽","baseball":"⚾","snowman_without_snow":"⛄","partly_sunny":"⛅","thunder_cloud_and_rain":"⛈️","ophiuchus":"⛎","pick":"⛏️","helmet_with_white_cross":"⛑️","chains":"⛓️","no_entry":"⛔","shinto_shrine":"⛩️","church":"⛪","mountain":"⛰️","umbrella_on_ground":"⛱️","fountain":"⛲","golf":"⛳","ferry":"⛴️","boat":"⛵","sailboat":"⛵","skier":"⛷️","ice_skate":"⛸️","woman-bouncing-ball":"⛹️‍♀️","man-bouncing-ball":"⛹️‍♂️","person_with_ball":"⛹️‍♂️","tent":"⛺","fuelpump":"⛽","scissors":"✂️","airplane":"✈️","email":"✉️","envelope":"✉️","fist":"✊","hand":"✋","raised_hand":"✋","v":"✌️","writing_hand":"✍️","pencil2":"✏️","black_nib":"✒️","heavy_check_mark":"✔️","heavy_multiplication_x":"✖️","latin_cross":"✝️","star_of_david":"✡️","eight_spoked_asterisk":"✳️","eight_pointed_black_star":"✴️","snowflake":"❄️","sparkle":"❇️","x":"❌","negative_squared_cross_mark":"❎","heavy_heart_exclamation_mark_ornament":"❣️","heart_on_fire":"❤️‍🔥","mending_heart":"❤️‍🩹","heart":"❤️","arrow_right":"➡️","curly_loop":"➰","loop":"➿","arrow_heading_up":"⤴️","arrow_heading_down":"⤵️","arrow_left":"⬅️","arrow_up":"⬆️","arrow_down":"⬇️","black_large_square":"⬛","white_large_square":"⬜","star":"⭐","o":"⭕","wavy_dash":"〰️","part_alternation_mark":"〽️","congratulations":"㊗️","secret":"㊙️"}');
 
 /***/ }),
 
-/***/ 9043:
+/***/ 6659:
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"topLevel\":{\"dependancies\":\"dependencies\",\"dependecies\":\"dependencies\",\"depdenencies\":\"dependencies\",\"devEependencies\":\"devDependencies\",\"depends\":\"dependencies\",\"dev-dependencies\":\"devDependencies\",\"devDependences\":\"devDependencies\",\"devDepenencies\":\"devDependencies\",\"devdependencies\":\"devDependencies\",\"repostitory\":\"repository\",\"repo\":\"repository\",\"prefereGlobal\":\"preferGlobal\",\"hompage\":\"homepage\",\"hampage\":\"homepage\",\"autohr\":\"author\",\"autor\":\"author\",\"contributers\":\"contributors\",\"publicationConfig\":\"publishConfig\",\"script\":\"scripts\"},\"bugs\":{\"web\":\"url\",\"name\":\"url\"},\"script\":{\"server\":\"start\",\"tests\":\"test\"}}");
+module.exports = JSON.parse('{"topLevel":{"dependancies":"dependencies","dependecies":"dependencies","depdenencies":"dependencies","devEependencies":"devDependencies","depends":"dependencies","dev-dependencies":"devDependencies","devDependences":"devDependencies","devDepenencies":"devDependencies","devdependencies":"devDependencies","repostitory":"repository","repo":"repository","prefereGlobal":"preferGlobal","hompage":"homepage","hampage":"homepage","autohr":"author","autor":"author","contributers":"contributors","publicationConfig":"publishConfig","script":"scripts"},"bugs":{"web":"url","name":"url"},"script":{"server":"start","tests":"test"}}');
 
 /***/ }),
 
-/***/ 8402:
+/***/ 4136:
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"repositories\":\"'repositories' (plural) Not supported. Please pick one as the 'repository' field\",\"missingRepository\":\"No repository field.\",\"brokenGitUrl\":\"Probably broken git url: %s\",\"nonObjectScripts\":\"scripts must be an object\",\"nonStringScript\":\"script values must be string commands\",\"nonArrayFiles\":\"Invalid 'files' member\",\"invalidFilename\":\"Invalid filename in 'files' list: %s\",\"nonArrayBundleDependencies\":\"Invalid 'bundleDependencies' list. Must be array of package names\",\"nonStringBundleDependency\":\"Invalid bundleDependencies member: %s\",\"nonDependencyBundleDependency\":\"Non-dependency in bundleDependencies: %s\",\"nonObjectDependencies\":\"%s field must be an object\",\"nonStringDependency\":\"Invalid dependency: %s %s\",\"deprecatedArrayDependencies\":\"specifying %s as array is deprecated\",\"deprecatedModules\":\"modules field is deprecated\",\"nonArrayKeywords\":\"keywords should be an array of strings\",\"nonStringKeyword\":\"keywords should be an array of strings\",\"conflictingName\":\"%s is also the name of a node core module.\",\"nonStringDescription\":\"'description' field should be a string\",\"missingDescription\":\"No description\",\"missingReadme\":\"No README data\",\"missingLicense\":\"No license field.\",\"nonEmailUrlBugsString\":\"Bug string field must be url, email, or {email,url}\",\"nonUrlBugsUrlField\":\"bugs.url field must be a string url. Deleted.\",\"nonEmailBugsEmailField\":\"bugs.email field must be a string email. Deleted.\",\"emptyNormalizedBugs\":\"Normalized value of bugs field is an empty object. Deleted.\",\"nonUrlHomepage\":\"homepage field must be a string url. Deleted.\",\"invalidLicense\":\"license should be a valid SPDX license expression\",\"typo\":\"%s should probably be %s.\"}");
+module.exports = JSON.parse('{"repositories":"\'repositories\' (plural) Not supported. Please pick one as the \'repository\' field","missingRepository":"No repository field.","brokenGitUrl":"Probably broken git url: %s","nonObjectScripts":"scripts must be an object","nonStringScript":"script values must be string commands","nonArrayFiles":"Invalid \'files\' member","invalidFilename":"Invalid filename in \'files\' list: %s","nonArrayBundleDependencies":"Invalid \'bundleDependencies\' list. Must be array of package names","nonStringBundleDependency":"Invalid bundleDependencies member: %s","nonDependencyBundleDependency":"Non-dependency in bundleDependencies: %s","nonObjectDependencies":"%s field must be an object","nonStringDependency":"Invalid dependency: %s %s","deprecatedArrayDependencies":"specifying %s as array is deprecated","deprecatedModules":"modules field is deprecated","nonArrayKeywords":"keywords should be an array of strings","nonStringKeyword":"keywords should be an array of strings","conflictingName":"%s is also the name of a node core module.","nonStringDescription":"\'description\' field should be a string","missingDescription":"No description","missingReadme":"No README data","missingLicense":"No license field.","nonEmailUrlBugsString":"Bug string field must be url, email, or {email,url}","nonUrlBugsUrlField":"bugs.url field must be a string url. Deleted.","nonEmailBugsEmailField":"bugs.email field must be a string email. Deleted.","emptyNormalizedBugs":"Normalized value of bugs field is an empty object. Deleted.","nonUrlHomepage":"homepage field must be a string url. Deleted.","invalidLicense":"license should be a valid SPDX license expression","typo":"%s should probably be %s."}');
 
 /***/ }),
 
@@ -74516,7 +77733,7 @@ module.exports = JSON.parse("{\"repositories\":\"'repositories' (plural) Not sup
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"assert\":true,\"assert/strict\":\">= 15\",\"async_hooks\":\">= 8\",\"buffer_ieee754\":\"< 0.9.7\",\"buffer\":true,\"child_process\":true,\"cluster\":true,\"console\":true,\"constants\":true,\"crypto\":true,\"_debug_agent\":\">= 1 && < 8\",\"_debugger\":\"< 8\",\"dgram\":true,\"diagnostics_channel\":\">= 15.1\",\"dns\":true,\"dns/promises\":\">= 15\",\"domain\":\">= 0.7.12\",\"events\":true,\"freelist\":\"< 6\",\"fs\":true,\"fs/promises\":[\">= 10 && < 10.1\",\">= 14\"],\"_http_agent\":\">= 0.11.1\",\"_http_client\":\">= 0.11.1\",\"_http_common\":\">= 0.11.1\",\"_http_incoming\":\">= 0.11.1\",\"_http_outgoing\":\">= 0.11.1\",\"_http_server\":\">= 0.11.1\",\"http\":true,\"http2\":\">= 8.8\",\"https\":true,\"inspector\":\">= 8.0.0\",\"_linklist\":\"< 8\",\"module\":true,\"net\":true,\"node-inspect/lib/_inspect\":\">= 7.6.0 && < 12\",\"node-inspect/lib/internal/inspect_client\":\">= 7.6.0 && < 12\",\"node-inspect/lib/internal/inspect_repl\":\">= 7.6.0 && < 12\",\"os\":true,\"path\":true,\"perf_hooks\":\">= 8.5\",\"process\":\">= 1\",\"punycode\":true,\"querystring\":true,\"readline\":true,\"repl\":true,\"smalloc\":\">= 0.11.5 && < 3\",\"_stream_duplex\":\">= 0.9.4\",\"_stream_transform\":\">= 0.9.4\",\"_stream_wrap\":\">= 1.4.1\",\"_stream_passthrough\":\">= 0.9.4\",\"_stream_readable\":\">= 0.9.4\",\"_stream_writable\":\">= 0.9.4\",\"stream\":true,\"stream/promises\":\">= 15\",\"string_decoder\":true,\"sys\":[\">= 0.6 && < 0.7\",\">= 0.8\"],\"timers\":true,\"timers/promises\":\">= 15\",\"_tls_common\":\">= 0.11.13\",\"_tls_legacy\":\">= 0.11.3 && < 10\",\"_tls_wrap\":\">= 0.11.3\",\"tls\":true,\"trace_events\":\">= 10\",\"tty\":true,\"url\":true,\"util\":true,\"v8/tools/arguments\":\">= 10 && < 12\",\"v8/tools/codemap\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/consarray\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/csvparser\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/logreader\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/profile_view\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/splaytree\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8\":\">= 1\",\"vm\":true,\"wasi\":\">= 13.4 && < 13.5\",\"worker_threads\":\">= 11.7\",\"zlib\":true}");
+module.exports = JSON.parse('{"assert":true,"assert/strict":">= 15","async_hooks":">= 8","buffer_ieee754":"< 0.9.7","buffer":true,"child_process":true,"cluster":true,"console":true,"constants":true,"crypto":true,"_debug_agent":">= 1 && < 8","_debugger":"< 8","dgram":true,"diagnostics_channel":">= 15.1","dns":true,"dns/promises":">= 15","domain":">= 0.7.12","events":true,"freelist":"< 6","fs":true,"fs/promises":[">= 10 && < 10.1",">= 14"],"_http_agent":">= 0.11.1","_http_client":">= 0.11.1","_http_common":">= 0.11.1","_http_incoming":">= 0.11.1","_http_outgoing":">= 0.11.1","_http_server":">= 0.11.1","http":true,"http2":">= 8.8","https":true,"inspector":">= 8.0.0","_linklist":"< 8","module":true,"net":true,"node-inspect/lib/_inspect":">= 7.6.0 && < 12","node-inspect/lib/internal/inspect_client":">= 7.6.0 && < 12","node-inspect/lib/internal/inspect_repl":">= 7.6.0 && < 12","os":true,"path":true,"path/posix":">= 15.3","path/win32":">= 15.3","perf_hooks":">= 8.5","process":">= 1","punycode":true,"querystring":true,"readline":true,"repl":true,"smalloc":">= 0.11.5 && < 3","_stream_duplex":">= 0.9.4","_stream_transform":">= 0.9.4","_stream_wrap":">= 1.4.1","_stream_passthrough":">= 0.9.4","_stream_readable":">= 0.9.4","_stream_writable":">= 0.9.4","stream":true,"stream/promises":">= 15","string_decoder":true,"sys":[">= 0.6 && < 0.7",">= 0.8"],"timers":true,"timers/promises":">= 15","_tls_common":">= 0.11.13","_tls_legacy":">= 0.11.3 && < 10","_tls_wrap":">= 0.11.3","tls":true,"trace_events":">= 10","tty":true,"url":true,"util":true,"util/types":">= 15.3","v8/tools/arguments":">= 10 && < 12","v8/tools/codemap":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/consarray":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/csvparser":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/logreader":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/profile_view":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/splaytree":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8":">= 1","vm":true,"wasi":">= 13.4 && < 13.5","worker_threads":">= 11.7","zlib":true}');
 
 /***/ }),
 
@@ -74524,7 +77741,7 @@ module.exports = JSON.parse("{\"assert\":true,\"assert/strict\":\">= 15\",\"asyn
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"name\":\"semantic-release\",\"description\":\"Automated semver compliant package publishing\",\"version\":\"17.3.1\",\"author\":\"Stephan Bönnemann <stephan@boennemann.me> (http://boennemann.me)\",\"ava\":{\"files\":[\"test/**/*.test.js\"],\"timeout\":\"2m\"},\"bin\":{\"semantic-release\":\"bin/semantic-release.js\"},\"bugs\":{\"url\":\"https://github.com/semantic-release/semantic-release/issues\"},\"contributors\":[\"Gregor Martynus (https://twitter.com/gr2m)\",\"Pierre Vanduynslager (https://twitter.com/@pvdlg_)\"],\"dependencies\":{\"@semantic-release/commit-analyzer\":\"^8.0.0\",\"@semantic-release/error\":\"^2.2.0\",\"@semantic-release/github\":\"^7.0.0\",\"@semantic-release/npm\":\"^7.0.0\",\"@semantic-release/release-notes-generator\":\"^9.0.0\",\"aggregate-error\":\"^3.0.0\",\"cosmiconfig\":\"^6.0.0\",\"debug\":\"^4.0.0\",\"env-ci\":\"^5.0.0\",\"execa\":\"^4.0.0\",\"figures\":\"^3.0.0\",\"find-versions\":\"^4.0.0\",\"get-stream\":\"^5.0.0\",\"git-log-parser\":\"^1.2.0\",\"hook-std\":\"^2.0.0\",\"hosted-git-info\":\"^3.0.0\",\"lodash\":\"^4.17.15\",\"marked\":\"^1.0.0\",\"marked-terminal\":\"^4.0.0\",\"micromatch\":\"^4.0.2\",\"p-each-series\":\"^2.1.0\",\"p-reduce\":\"^2.0.0\",\"read-pkg-up\":\"^7.0.0\",\"resolve-from\":\"^5.0.0\",\"semver\":\"^7.3.2\",\"semver-diff\":\"^3.1.1\",\"signale\":\"^1.2.1\",\"yargs\":\"^15.0.1\"},\"devDependencies\":{\"ava\":\"^3.1.0\",\"clear-module\":\"^4.0.0\",\"codecov\":\"^3.0.0\",\"delay\":\"^4.0.0\",\"dockerode\":\"^3.0.0\",\"file-url\":\"^3.0.0\",\"fs-extra\":\"^9.0.0\",\"got\":\"^11.0.0\",\"js-yaml\":\"^3.10.0\",\"mockserver-client\":\"^5.1.1\",\"nock\":\"^12.0.0\",\"nyc\":\"^15.0.0\",\"p-retry\":\"^4.0.0\",\"proxyquire\":\"^2.0.0\",\"sinon\":\"^9.0.0\",\"stream-buffers\":\"^3.0.2\",\"tempy\":\"^0.5.0\",\"xo\":\"^0.29.0\"},\"engines\":{\"node\":\">=10.18\"},\"files\":[\"bin\",\"docs\",\"lib\",\"index.js\",\"cli.js\"],\"homepage\":\"https://github.com/semantic-release/semantic-release#readme\",\"keywords\":[\"author\",\"automation\",\"changelog\",\"module\",\"package\",\"publish\",\"release\",\"semver\",\"version\"],\"license\":\"MIT\",\"main\":\"index.js\",\"nyc\":{\"include\":[\"lib/**/*.js\",\"index.js\",\"cli.js\"],\"reporter\":[\"json\",\"text\",\"html\"],\"all\":true},\"prettier\":{\"printWidth\":120,\"trailingComma\":\"es5\"},\"publishConfig\":{\"access\":\"public\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/semantic-release/semantic-release.git\"},\"scripts\":{\"codecov\":\"codecov -f coverage/coverage-final.json\",\"lint\":\"xo\",\"pretest\":\"npm run lint\",\"semantic-release\":\"./bin/semantic-release.js\",\"test\":\"nyc ava -v\"},\"xo\":{\"prettier\":true,\"space\":true,\"rules\":{\"unicorn/string-content\":\"off\"}}}");
+module.exports = JSON.parse('{"name":"semantic-release","description":"Automated semver compliant package publishing","version":"18.0.0","author":"Stephan Bönnemann <stephan@boennemann.me> (http://boennemann.me)","ava":{"files":["test/**/*.test.js"],"timeout":"2m"},"bin":{"semantic-release":"bin/semantic-release.js"},"bugs":{"url":"https://github.com/semantic-release/semantic-release/issues"},"contributors":["Gregor Martynus (https://twitter.com/gr2m)","Pierre Vanduynslager (https://twitter.com/@pvdlg_)"],"dependencies":{"@semantic-release/commit-analyzer":"^9.0.0","@semantic-release/error":"^3.0.0","@semantic-release/github":"^8.0.0","@semantic-release/npm":"^8.0.0","@semantic-release/release-notes-generator":"^10.0.0","aggregate-error":"^3.0.0","cosmiconfig":"^7.0.0","debug":"^4.0.0","env-ci":"^5.0.0","execa":"^5.0.0","figures":"^3.0.0","find-versions":"^4.0.0","get-stream":"^6.0.0","git-log-parser":"^1.2.0","hook-std":"^2.0.0","hosted-git-info":"^4.0.0","lodash":"^4.17.21","marked":"^2.0.0","marked-terminal":"^4.1.1","micromatch":"^4.0.2","p-each-series":"^2.1.0","p-reduce":"^2.0.0","read-pkg-up":"^7.0.0","resolve-from":"^5.0.0","semver":"^7.3.2","semver-diff":"^3.1.1","signale":"^1.2.1","yargs":"^16.2.0"},"devDependencies":{"ava":"3.15.0","clear-module":"4.1.1","codecov":"3.8.3","delay":"5.0.0","dockerode":"3.3.1","file-url":"3.0.0","fs-extra":"9.1.0","got":"11.8.2","js-yaml":"4.1.0","mockserver-client":"5.11.2","nock":"13.1.3","nyc":"15.1.0","p-retry":"4.6.1","proxyquire":"2.1.3","sinon":"11.1.2","stream-buffers":"3.0.2","tempy":"1.0.1","xo":"0.29.1"},"engines":{"node":">=14.17"},"files":["bin","docs","lib","index.js","cli.js"],"homepage":"https://github.com/semantic-release/semantic-release#readme","keywords":["author","automation","changelog","module","package","publish","release","semver","version"],"license":"MIT","main":"index.js","nyc":{"include":["lib/**/*.js","index.js","cli.js"],"reporter":["json","text","html"],"all":true},"prettier":{"printWidth":120,"trailingComma":"es5"},"publishConfig":{"access":"public"},"repository":{"type":"git","url":"git+https://github.com/semantic-release/semantic-release.git"},"scripts":{"codecov":"codecov -f coverage/coverage-final.json","lint":"xo","pretest":"npm run lint","semantic-release":"./bin/semantic-release.js","test":"nyc ava -v","test:ci":"nyc ava -v"},"xo":{"prettier":true,"space":true,"rules":{"unicorn/string-content":"off"}},"renovate":{"extends":["github>semantic-release/.github"]}}');
 
 /***/ }),
 
@@ -74532,7 +77749,7 @@ module.exports = JSON.parse("{\"name\":\"semantic-release\",\"description\":\"Au
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"name\":\"signale\",\"version\":\"1.4.0\",\"description\":\"👋 Hackable console logger\",\"license\":\"MIT\",\"repository\":\"klaussinani/signale\",\"author\":{\"name\":\"Klaus Sinani\",\"email\":\"klaussinani@gmail.com\",\"url\":\"https://klaussinani.github.io\"},\"maintainers\":[{\"name\":\"Mario Sinani\",\"email\":\"mariosinani@protonmail.ch\",\"url\":\"https://mariocfhq.github.io\"}],\"engines\":{\"node\":\">=6\"},\"files\":[\"index.js\",\"signale.js\",\"types.js\"],\"keywords\":[\"hackable\",\"colorful\",\"console\",\"logger\"],\"scripts\":{\"test\":\"xo\"},\"dependencies\":{\"chalk\":\"^2.3.2\",\"figures\":\"^2.0.0\",\"pkg-conf\":\"^2.1.0\"},\"devDependencies\":{\"xo\":\"*\"},\"options\":{\"default\":{\"displayScope\":true,\"displayBadge\":true,\"displayDate\":false,\"displayFilename\":false,\"displayLabel\":true,\"displayTimestamp\":false,\"underlineLabel\":true,\"underlineMessage\":false,\"underlinePrefix\":false,\"underlineSuffix\":false,\"uppercaseLabel\":false}},\"xo\":{\"space\":2}}");
+module.exports = JSON.parse('{"name":"signale","version":"1.4.0","description":"👋 Hackable console logger","license":"MIT","repository":"klaussinani/signale","author":{"name":"Klaus Sinani","email":"klaussinani@gmail.com","url":"https://klaussinani.github.io"},"maintainers":[{"name":"Mario Sinani","email":"mariosinani@protonmail.ch","url":"https://mariocfhq.github.io"}],"engines":{"node":">=6"},"files":["index.js","signale.js","types.js"],"keywords":["hackable","colorful","console","logger"],"scripts":{"test":"xo"},"dependencies":{"chalk":"^2.3.2","figures":"^2.0.0","pkg-conf":"^2.1.0"},"devDependencies":{"xo":"*"},"options":{"default":{"displayScope":true,"displayBadge":true,"displayDate":false,"displayFilename":false,"displayLabel":true,"displayTimestamp":false,"underlineLabel":true,"underlineMessage":false,"underlinePrefix":false,"underlineSuffix":false,"uppercaseLabel":false}},"xo":{"space":2}}');
 
 /***/ }),
 
@@ -74540,7 +77757,7 @@ module.exports = JSON.parse("{\"name\":\"signale\",\"version\":\"1.4.0\",\"descr
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("[\"389-exception\",\"Autoconf-exception-2.0\",\"Autoconf-exception-3.0\",\"Bison-exception-2.2\",\"Bootloader-exception\",\"Classpath-exception-2.0\",\"CLISP-exception-2.0\",\"DigiRule-FOSS-exception\",\"eCos-exception-2.0\",\"Fawkes-Runtime-exception\",\"FLTK-exception\",\"Font-exception-2.0\",\"freertos-exception-2.0\",\"GCC-exception-2.0\",\"GCC-exception-3.1\",\"gnu-javamail-exception\",\"GPL-3.0-linking-exception\",\"GPL-3.0-linking-source-exception\",\"GPL-CC-1.0\",\"i2p-gpl-java-exception\",\"Libtool-exception\",\"Linux-syscall-note\",\"LLVM-exception\",\"LZMA-exception\",\"mif-exception\",\"Nokia-Qt-exception-1.1\",\"OCaml-LGPL-linking-exception\",\"OCCT-exception-1.0\",\"OpenJDK-assembly-exception-1.0\",\"openvpn-openssl-exception\",\"PS-or-PDF-font-exception-20170817\",\"Qt-GPL-exception-1.0\",\"Qt-LGPL-exception-1.1\",\"Qwt-exception-1.0\",\"Swift-exception\",\"u-boot-exception-2.0\",\"Universal-FOSS-exception-1.0\",\"WxWindows-exception-3.1\"]");
+module.exports = JSON.parse('["389-exception","Autoconf-exception-2.0","Autoconf-exception-3.0","Bison-exception-2.2","Bootloader-exception","Classpath-exception-2.0","CLISP-exception-2.0","DigiRule-FOSS-exception","eCos-exception-2.0","Fawkes-Runtime-exception","FLTK-exception","Font-exception-2.0","freertos-exception-2.0","GCC-exception-2.0","GCC-exception-3.1","gnu-javamail-exception","GPL-3.0-linking-exception","GPL-3.0-linking-source-exception","GPL-CC-1.0","i2p-gpl-java-exception","Libtool-exception","Linux-syscall-note","LLVM-exception","LZMA-exception","mif-exception","Nokia-Qt-exception-1.1","OCaml-LGPL-linking-exception","OCCT-exception-1.0","OpenJDK-assembly-exception-1.0","openvpn-openssl-exception","PS-or-PDF-font-exception-20170817","Qt-GPL-exception-1.0","Qt-LGPL-exception-1.1","Qwt-exception-1.0","Swift-exception","u-boot-exception-2.0","Universal-FOSS-exception-1.0","WxWindows-exception-3.1"]');
 
 /***/ }),
 
@@ -74548,7 +77765,7 @@ module.exports = JSON.parse("[\"389-exception\",\"Autoconf-exception-2.0\",\"Aut
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("[\"AGPL-1.0\",\"AGPL-3.0\",\"BSD-2-Clause-FreeBSD\",\"BSD-2-Clause-NetBSD\",\"GFDL-1.1\",\"GFDL-1.2\",\"GFDL-1.3\",\"GPL-1.0\",\"GPL-2.0\",\"GPL-2.0-with-GCC-exception\",\"GPL-2.0-with-autoconf-exception\",\"GPL-2.0-with-bison-exception\",\"GPL-2.0-with-classpath-exception\",\"GPL-2.0-with-font-exception\",\"GPL-3.0\",\"GPL-3.0-with-GCC-exception\",\"GPL-3.0-with-autoconf-exception\",\"LGPL-2.0\",\"LGPL-2.1\",\"LGPL-3.0\",\"Nunit\",\"StandardML-NJ\",\"eCos-2.0\",\"wxWindows\"]");
+module.exports = JSON.parse('["AGPL-1.0","AGPL-3.0","BSD-2-Clause-FreeBSD","BSD-2-Clause-NetBSD","GFDL-1.1","GFDL-1.2","GFDL-1.3","GPL-1.0","GPL-2.0","GPL-2.0-with-GCC-exception","GPL-2.0-with-autoconf-exception","GPL-2.0-with-bison-exception","GPL-2.0-with-classpath-exception","GPL-2.0-with-font-exception","GPL-3.0","GPL-3.0-with-GCC-exception","GPL-3.0-with-autoconf-exception","LGPL-2.0","LGPL-2.1","LGPL-3.0","Nunit","StandardML-NJ","eCos-2.0","wxWindows"]');
 
 /***/ }),
 
@@ -74556,7 +77773,7 @@ module.exports = JSON.parse("[\"AGPL-1.0\",\"AGPL-3.0\",\"BSD-2-Clause-FreeBSD\"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("[\"0BSD\",\"AAL\",\"ADSL\",\"AFL-1.1\",\"AFL-1.2\",\"AFL-2.0\",\"AFL-2.1\",\"AFL-3.0\",\"AGPL-1.0-only\",\"AGPL-1.0-or-later\",\"AGPL-3.0-only\",\"AGPL-3.0-or-later\",\"AMDPLPA\",\"AML\",\"AMPAS\",\"ANTLR-PD\",\"ANTLR-PD-fallback\",\"APAFML\",\"APL-1.0\",\"APSL-1.0\",\"APSL-1.1\",\"APSL-1.2\",\"APSL-2.0\",\"Abstyles\",\"Adobe-2006\",\"Adobe-Glyph\",\"Afmparse\",\"Aladdin\",\"Apache-1.0\",\"Apache-1.1\",\"Apache-2.0\",\"Artistic-1.0\",\"Artistic-1.0-Perl\",\"Artistic-1.0-cl8\",\"Artistic-2.0\",\"BSD-1-Clause\",\"BSD-2-Clause\",\"BSD-2-Clause-Patent\",\"BSD-2-Clause-Views\",\"BSD-3-Clause\",\"BSD-3-Clause-Attribution\",\"BSD-3-Clause-Clear\",\"BSD-3-Clause-LBNL\",\"BSD-3-Clause-No-Nuclear-License\",\"BSD-3-Clause-No-Nuclear-License-2014\",\"BSD-3-Clause-No-Nuclear-Warranty\",\"BSD-3-Clause-Open-MPI\",\"BSD-4-Clause\",\"BSD-4-Clause-UC\",\"BSD-Protection\",\"BSD-Source-Code\",\"BSL-1.0\",\"BUSL-1.1\",\"Bahyph\",\"Barr\",\"Beerware\",\"BitTorrent-1.0\",\"BitTorrent-1.1\",\"BlueOak-1.0.0\",\"Borceux\",\"CAL-1.0\",\"CAL-1.0-Combined-Work-Exception\",\"CATOSL-1.1\",\"CC-BY-1.0\",\"CC-BY-2.0\",\"CC-BY-2.5\",\"CC-BY-3.0\",\"CC-BY-3.0-AT\",\"CC-BY-3.0-US\",\"CC-BY-4.0\",\"CC-BY-NC-1.0\",\"CC-BY-NC-2.0\",\"CC-BY-NC-2.5\",\"CC-BY-NC-3.0\",\"CC-BY-NC-4.0\",\"CC-BY-NC-ND-1.0\",\"CC-BY-NC-ND-2.0\",\"CC-BY-NC-ND-2.5\",\"CC-BY-NC-ND-3.0\",\"CC-BY-NC-ND-3.0-IGO\",\"CC-BY-NC-ND-4.0\",\"CC-BY-NC-SA-1.0\",\"CC-BY-NC-SA-2.0\",\"CC-BY-NC-SA-2.5\",\"CC-BY-NC-SA-3.0\",\"CC-BY-NC-SA-4.0\",\"CC-BY-ND-1.0\",\"CC-BY-ND-2.0\",\"CC-BY-ND-2.5\",\"CC-BY-ND-3.0\",\"CC-BY-ND-4.0\",\"CC-BY-SA-1.0\",\"CC-BY-SA-2.0\",\"CC-BY-SA-2.0-UK\",\"CC-BY-SA-2.5\",\"CC-BY-SA-3.0\",\"CC-BY-SA-3.0-AT\",\"CC-BY-SA-4.0\",\"CC-PDDC\",\"CC0-1.0\",\"CDDL-1.0\",\"CDDL-1.1\",\"CDLA-Permissive-1.0\",\"CDLA-Sharing-1.0\",\"CECILL-1.0\",\"CECILL-1.1\",\"CECILL-2.0\",\"CECILL-2.1\",\"CECILL-B\",\"CECILL-C\",\"CERN-OHL-1.1\",\"CERN-OHL-1.2\",\"CERN-OHL-P-2.0\",\"CERN-OHL-S-2.0\",\"CERN-OHL-W-2.0\",\"CNRI-Jython\",\"CNRI-Python\",\"CNRI-Python-GPL-Compatible\",\"CPAL-1.0\",\"CPL-1.0\",\"CPOL-1.02\",\"CUA-OPL-1.0\",\"Caldera\",\"ClArtistic\",\"Condor-1.1\",\"Crossword\",\"CrystalStacker\",\"Cube\",\"D-FSL-1.0\",\"DOC\",\"DSDP\",\"Dotseqn\",\"ECL-1.0\",\"ECL-2.0\",\"EFL-1.0\",\"EFL-2.0\",\"EPICS\",\"EPL-1.0\",\"EPL-2.0\",\"EUDatagrid\",\"EUPL-1.0\",\"EUPL-1.1\",\"EUPL-1.2\",\"Entessa\",\"ErlPL-1.1\",\"Eurosym\",\"FSFAP\",\"FSFUL\",\"FSFULLR\",\"FTL\",\"Fair\",\"Frameworx-1.0\",\"FreeImage\",\"GFDL-1.1-invariants-only\",\"GFDL-1.1-invariants-or-later\",\"GFDL-1.1-no-invariants-only\",\"GFDL-1.1-no-invariants-or-later\",\"GFDL-1.1-only\",\"GFDL-1.1-or-later\",\"GFDL-1.2-invariants-only\",\"GFDL-1.2-invariants-or-later\",\"GFDL-1.2-no-invariants-only\",\"GFDL-1.2-no-invariants-or-later\",\"GFDL-1.2-only\",\"GFDL-1.2-or-later\",\"GFDL-1.3-invariants-only\",\"GFDL-1.3-invariants-or-later\",\"GFDL-1.3-no-invariants-only\",\"GFDL-1.3-no-invariants-or-later\",\"GFDL-1.3-only\",\"GFDL-1.3-or-later\",\"GL2PS\",\"GLWTPL\",\"GPL-1.0-only\",\"GPL-1.0-or-later\",\"GPL-2.0-only\",\"GPL-2.0-or-later\",\"GPL-3.0-only\",\"GPL-3.0-or-later\",\"Giftware\",\"Glide\",\"Glulxe\",\"HPND\",\"HPND-sell-variant\",\"HTMLTIDY\",\"HaskellReport\",\"Hippocratic-2.1\",\"IBM-pibs\",\"ICU\",\"IJG\",\"IPA\",\"IPL-1.0\",\"ISC\",\"ImageMagick\",\"Imlib2\",\"Info-ZIP\",\"Intel\",\"Intel-ACPI\",\"Interbase-1.0\",\"JPNIC\",\"JSON\",\"JasPer-2.0\",\"LAL-1.2\",\"LAL-1.3\",\"LGPL-2.0-only\",\"LGPL-2.0-or-later\",\"LGPL-2.1-only\",\"LGPL-2.1-or-later\",\"LGPL-3.0-only\",\"LGPL-3.0-or-later\",\"LGPLLR\",\"LPL-1.0\",\"LPL-1.02\",\"LPPL-1.0\",\"LPPL-1.1\",\"LPPL-1.2\",\"LPPL-1.3a\",\"LPPL-1.3c\",\"Latex2e\",\"Leptonica\",\"LiLiQ-P-1.1\",\"LiLiQ-R-1.1\",\"LiLiQ-Rplus-1.1\",\"Libpng\",\"Linux-OpenIB\",\"MIT\",\"MIT-0\",\"MIT-CMU\",\"MIT-advertising\",\"MIT-enna\",\"MIT-feh\",\"MIT-open-group\",\"MITNFA\",\"MPL-1.0\",\"MPL-1.1\",\"MPL-2.0\",\"MPL-2.0-no-copyleft-exception\",\"MS-PL\",\"MS-RL\",\"MTLL\",\"MakeIndex\",\"MirOS\",\"Motosoto\",\"MulanPSL-1.0\",\"MulanPSL-2.0\",\"Multics\",\"Mup\",\"NASA-1.3\",\"NBPL-1.0\",\"NCGL-UK-2.0\",\"NCSA\",\"NGPL\",\"NIST-PD\",\"NIST-PD-fallback\",\"NLOD-1.0\",\"NLPL\",\"NOSL\",\"NPL-1.0\",\"NPL-1.1\",\"NPOSL-3.0\",\"NRL\",\"NTP\",\"NTP-0\",\"Naumen\",\"Net-SNMP\",\"NetCDF\",\"Newsletr\",\"Nokia\",\"Noweb\",\"O-UDA-1.0\",\"OCCT-PL\",\"OCLC-2.0\",\"ODC-By-1.0\",\"ODbL-1.0\",\"OFL-1.0\",\"OFL-1.0-RFN\",\"OFL-1.0-no-RFN\",\"OFL-1.1\",\"OFL-1.1-RFN\",\"OFL-1.1-no-RFN\",\"OGC-1.0\",\"OGL-Canada-2.0\",\"OGL-UK-1.0\",\"OGL-UK-2.0\",\"OGL-UK-3.0\",\"OGTSL\",\"OLDAP-1.1\",\"OLDAP-1.2\",\"OLDAP-1.3\",\"OLDAP-1.4\",\"OLDAP-2.0\",\"OLDAP-2.0.1\",\"OLDAP-2.1\",\"OLDAP-2.2\",\"OLDAP-2.2.1\",\"OLDAP-2.2.2\",\"OLDAP-2.3\",\"OLDAP-2.4\",\"OLDAP-2.5\",\"OLDAP-2.6\",\"OLDAP-2.7\",\"OLDAP-2.8\",\"OML\",\"OPL-1.0\",\"OSET-PL-2.1\",\"OSL-1.0\",\"OSL-1.1\",\"OSL-2.0\",\"OSL-2.1\",\"OSL-3.0\",\"OpenSSL\",\"PDDL-1.0\",\"PHP-3.0\",\"PHP-3.01\",\"PSF-2.0\",\"Parity-6.0.0\",\"Parity-7.0.0\",\"Plexus\",\"PolyForm-Noncommercial-1.0.0\",\"PolyForm-Small-Business-1.0.0\",\"PostgreSQL\",\"Python-2.0\",\"QPL-1.0\",\"Qhull\",\"RHeCos-1.1\",\"RPL-1.1\",\"RPL-1.5\",\"RPSL-1.0\",\"RSA-MD\",\"RSCPL\",\"Rdisc\",\"Ruby\",\"SAX-PD\",\"SCEA\",\"SGI-B-1.0\",\"SGI-B-1.1\",\"SGI-B-2.0\",\"SHL-0.5\",\"SHL-0.51\",\"SISSL\",\"SISSL-1.2\",\"SMLNJ\",\"SMPPL\",\"SNIA\",\"SPL-1.0\",\"SSH-OpenSSH\",\"SSH-short\",\"SSPL-1.0\",\"SWL\",\"Saxpath\",\"Sendmail\",\"Sendmail-8.23\",\"SimPL-2.0\",\"Sleepycat\",\"Spencer-86\",\"Spencer-94\",\"Spencer-99\",\"SugarCRM-1.1.3\",\"TAPR-OHL-1.0\",\"TCL\",\"TCP-wrappers\",\"TMate\",\"TORQUE-1.1\",\"TOSL\",\"TU-Berlin-1.0\",\"TU-Berlin-2.0\",\"UCL-1.0\",\"UPL-1.0\",\"Unicode-DFS-2015\",\"Unicode-DFS-2016\",\"Unicode-TOU\",\"Unlicense\",\"VOSTROM\",\"VSL-1.0\",\"Vim\",\"W3C\",\"W3C-19980720\",\"W3C-20150513\",\"WTFPL\",\"Watcom-1.0\",\"Wsuipa\",\"X11\",\"XFree86-1.1\",\"XSkat\",\"Xerox\",\"Xnet\",\"YPL-1.0\",\"YPL-1.1\",\"ZPL-1.1\",\"ZPL-2.0\",\"ZPL-2.1\",\"Zed\",\"Zend-2.0\",\"Zimbra-1.3\",\"Zimbra-1.4\",\"Zlib\",\"blessing\",\"bzip2-1.0.5\",\"bzip2-1.0.6\",\"copyleft-next-0.3.0\",\"copyleft-next-0.3.1\",\"curl\",\"diffmark\",\"dvipdfm\",\"eGenix\",\"etalab-2.0\",\"gSOAP-1.3b\",\"gnuplot\",\"iMatix\",\"libpng-2.0\",\"libselinux-1.0\",\"libtiff\",\"mpich2\",\"psfrag\",\"psutils\",\"xinetd\",\"xpp\",\"zlib-acknowledgement\"]");
+module.exports = JSON.parse('["0BSD","AAL","ADSL","AFL-1.1","AFL-1.2","AFL-2.0","AFL-2.1","AFL-3.0","AGPL-1.0-only","AGPL-1.0-or-later","AGPL-3.0-only","AGPL-3.0-or-later","AMDPLPA","AML","AMPAS","ANTLR-PD","ANTLR-PD-fallback","APAFML","APL-1.0","APSL-1.0","APSL-1.1","APSL-1.2","APSL-2.0","Abstyles","Adobe-2006","Adobe-Glyph","Afmparse","Aladdin","Apache-1.0","Apache-1.1","Apache-2.0","Artistic-1.0","Artistic-1.0-Perl","Artistic-1.0-cl8","Artistic-2.0","BSD-1-Clause","BSD-2-Clause","BSD-2-Clause-Patent","BSD-2-Clause-Views","BSD-3-Clause","BSD-3-Clause-Attribution","BSD-3-Clause-Clear","BSD-3-Clause-LBNL","BSD-3-Clause-Modification","BSD-3-Clause-No-Military-License","BSD-3-Clause-No-Nuclear-License","BSD-3-Clause-No-Nuclear-License-2014","BSD-3-Clause-No-Nuclear-Warranty","BSD-3-Clause-Open-MPI","BSD-4-Clause","BSD-4-Clause-Shortened","BSD-4-Clause-UC","BSD-Protection","BSD-Source-Code","BSL-1.0","BUSL-1.1","Bahyph","Barr","Beerware","BitTorrent-1.0","BitTorrent-1.1","BlueOak-1.0.0","Borceux","C-UDA-1.0","CAL-1.0","CAL-1.0-Combined-Work-Exception","CATOSL-1.1","CC-BY-1.0","CC-BY-2.0","CC-BY-2.5","CC-BY-2.5-AU","CC-BY-3.0","CC-BY-3.0-AT","CC-BY-3.0-DE","CC-BY-3.0-NL","CC-BY-3.0-US","CC-BY-4.0","CC-BY-NC-1.0","CC-BY-NC-2.0","CC-BY-NC-2.5","CC-BY-NC-3.0","CC-BY-NC-3.0-DE","CC-BY-NC-4.0","CC-BY-NC-ND-1.0","CC-BY-NC-ND-2.0","CC-BY-NC-ND-2.5","CC-BY-NC-ND-3.0","CC-BY-NC-ND-3.0-DE","CC-BY-NC-ND-3.0-IGO","CC-BY-NC-ND-4.0","CC-BY-NC-SA-1.0","CC-BY-NC-SA-2.0","CC-BY-NC-SA-2.0-FR","CC-BY-NC-SA-2.0-UK","CC-BY-NC-SA-2.5","CC-BY-NC-SA-3.0","CC-BY-NC-SA-3.0-DE","CC-BY-NC-SA-3.0-IGO","CC-BY-NC-SA-4.0","CC-BY-ND-1.0","CC-BY-ND-2.0","CC-BY-ND-2.5","CC-BY-ND-3.0","CC-BY-ND-3.0-DE","CC-BY-ND-4.0","CC-BY-SA-1.0","CC-BY-SA-2.0","CC-BY-SA-2.0-UK","CC-BY-SA-2.1-JP","CC-BY-SA-2.5","CC-BY-SA-3.0","CC-BY-SA-3.0-AT","CC-BY-SA-3.0-DE","CC-BY-SA-4.0","CC-PDDC","CC0-1.0","CDDL-1.0","CDDL-1.1","CDL-1.0","CDLA-Permissive-1.0","CDLA-Permissive-2.0","CDLA-Sharing-1.0","CECILL-1.0","CECILL-1.1","CECILL-2.0","CECILL-2.1","CECILL-B","CECILL-C","CERN-OHL-1.1","CERN-OHL-1.2","CERN-OHL-P-2.0","CERN-OHL-S-2.0","CERN-OHL-W-2.0","CNRI-Jython","CNRI-Python","CNRI-Python-GPL-Compatible","CPAL-1.0","CPL-1.0","CPOL-1.02","CUA-OPL-1.0","Caldera","ClArtistic","Condor-1.1","Crossword","CrystalStacker","Cube","D-FSL-1.0","DOC","DRL-1.0","DSDP","Dotseqn","ECL-1.0","ECL-2.0","EFL-1.0","EFL-2.0","EPICS","EPL-1.0","EPL-2.0","EUDatagrid","EUPL-1.0","EUPL-1.1","EUPL-1.2","Entessa","ErlPL-1.1","Eurosym","FSFAP","FSFUL","FSFULLR","FTL","Fair","Frameworx-1.0","FreeBSD-DOC","FreeImage","GD","GFDL-1.1-invariants-only","GFDL-1.1-invariants-or-later","GFDL-1.1-no-invariants-only","GFDL-1.1-no-invariants-or-later","GFDL-1.1-only","GFDL-1.1-or-later","GFDL-1.2-invariants-only","GFDL-1.2-invariants-or-later","GFDL-1.2-no-invariants-only","GFDL-1.2-no-invariants-or-later","GFDL-1.2-only","GFDL-1.2-or-later","GFDL-1.3-invariants-only","GFDL-1.3-invariants-or-later","GFDL-1.3-no-invariants-only","GFDL-1.3-no-invariants-or-later","GFDL-1.3-only","GFDL-1.3-or-later","GL2PS","GLWTPL","GPL-1.0-only","GPL-1.0-or-later","GPL-2.0-only","GPL-2.0-or-later","GPL-3.0-only","GPL-3.0-or-later","Giftware","Glide","Glulxe","HPND","HPND-sell-variant","HTMLTIDY","HaskellReport","Hippocratic-2.1","IBM-pibs","ICU","IJG","IPA","IPL-1.0","ISC","ImageMagick","Imlib2","Info-ZIP","Intel","Intel-ACPI","Interbase-1.0","JPNIC","JSON","JasPer-2.0","LAL-1.2","LAL-1.3","LGPL-2.0-only","LGPL-2.0-or-later","LGPL-2.1-only","LGPL-2.1-or-later","LGPL-3.0-only","LGPL-3.0-or-later","LGPLLR","LPL-1.0","LPL-1.02","LPPL-1.0","LPPL-1.1","LPPL-1.2","LPPL-1.3a","LPPL-1.3c","Latex2e","Leptonica","LiLiQ-P-1.1","LiLiQ-R-1.1","LiLiQ-Rplus-1.1","Libpng","Linux-OpenIB","MIT","MIT-0","MIT-CMU","MIT-Modern-Variant","MIT-advertising","MIT-enna","MIT-feh","MIT-open-group","MITNFA","MPL-1.0","MPL-1.1","MPL-2.0","MPL-2.0-no-copyleft-exception","MS-PL","MS-RL","MTLL","MakeIndex","MirOS","Motosoto","MulanPSL-1.0","MulanPSL-2.0","Multics","Mup","NAIST-2003","NASA-1.3","NBPL-1.0","NCGL-UK-2.0","NCSA","NGPL","NIST-PD","NIST-PD-fallback","NLOD-1.0","NLOD-2.0","NLPL","NOSL","NPL-1.0","NPL-1.1","NPOSL-3.0","NRL","NTP","NTP-0","Naumen","Net-SNMP","NetCDF","Newsletr","Nokia","Noweb","O-UDA-1.0","OCCT-PL","OCLC-2.0","ODC-By-1.0","ODbL-1.0","OFL-1.0","OFL-1.0-RFN","OFL-1.0-no-RFN","OFL-1.1","OFL-1.1-RFN","OFL-1.1-no-RFN","OGC-1.0","OGDL-Taiwan-1.0","OGL-Canada-2.0","OGL-UK-1.0","OGL-UK-2.0","OGL-UK-3.0","OGTSL","OLDAP-1.1","OLDAP-1.2","OLDAP-1.3","OLDAP-1.4","OLDAP-2.0","OLDAP-2.0.1","OLDAP-2.1","OLDAP-2.2","OLDAP-2.2.1","OLDAP-2.2.2","OLDAP-2.3","OLDAP-2.4","OLDAP-2.5","OLDAP-2.6","OLDAP-2.7","OLDAP-2.8","OML","OPL-1.0","OPUBL-1.0","OSET-PL-2.1","OSL-1.0","OSL-1.1","OSL-2.0","OSL-2.1","OSL-3.0","OpenSSL","PDDL-1.0","PHP-3.0","PHP-3.01","PSF-2.0","Parity-6.0.0","Parity-7.0.0","Plexus","PolyForm-Noncommercial-1.0.0","PolyForm-Small-Business-1.0.0","PostgreSQL","Python-2.0","QPL-1.0","Qhull","RHeCos-1.1","RPL-1.1","RPL-1.5","RPSL-1.0","RSA-MD","RSCPL","Rdisc","Ruby","SAX-PD","SCEA","SGI-B-1.0","SGI-B-1.1","SGI-B-2.0","SHL-0.5","SHL-0.51","SISSL","SISSL-1.2","SMLNJ","SMPPL","SNIA","SPL-1.0","SSH-OpenSSH","SSH-short","SSPL-1.0","SWL","Saxpath","Sendmail","Sendmail-8.23","SimPL-2.0","Sleepycat","Spencer-86","Spencer-94","Spencer-99","SugarCRM-1.1.3","TAPR-OHL-1.0","TCL","TCP-wrappers","TMate","TORQUE-1.1","TOSL","TU-Berlin-1.0","TU-Berlin-2.0","UCL-1.0","UPL-1.0","Unicode-DFS-2015","Unicode-DFS-2016","Unicode-TOU","Unlicense","VOSTROM","VSL-1.0","Vim","W3C","W3C-19980720","W3C-20150513","WTFPL","Watcom-1.0","Wsuipa","X11","XFree86-1.1","XSkat","Xerox","Xnet","YPL-1.0","YPL-1.1","ZPL-1.1","ZPL-2.0","ZPL-2.1","Zed","Zend-2.0","Zimbra-1.3","Zimbra-1.4","Zlib","blessing","bzip2-1.0.5","bzip2-1.0.6","copyleft-next-0.3.0","copyleft-next-0.3.1","curl","diffmark","dvipdfm","eGenix","etalab-2.0","gSOAP-1.3b","gnuplot","iMatix","libpng-2.0","libselinux-1.0","libtiff","mpich2","psfrag","psutils","xinetd","xpp","zlib-acknowledgement"]');
 
 /***/ }),
 
@@ -74564,7 +77781,7 @@ module.exports = JSON.parse("[\"0BSD\",\"AAL\",\"ADSL\",\"AFL-1.1\",\"AFL-1.2\",
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");;
+module.exports = require("assert");
 
 /***/ }),
 
@@ -74572,7 +77789,7 @@ module.exports = require("assert");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("buffer");;
+module.exports = require("buffer");
 
 /***/ }),
 
@@ -74580,7 +77797,7 @@ module.exports = require("buffer");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");;
+module.exports = require("child_process");
 
 /***/ }),
 
@@ -74588,7 +77805,7 @@ module.exports = require("child_process");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("constants");;
+module.exports = require("constants");
 
 /***/ }),
 
@@ -74596,7 +77813,7 @@ module.exports = require("constants");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");;
+module.exports = require("events");
 
 /***/ }),
 
@@ -74604,7 +77821,23 @@ module.exports = require("events");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");;
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 8605:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ 7211:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("https");
 
 /***/ }),
 
@@ -74612,7 +77845,15 @@ module.exports = require("fs");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("module");;
+module.exports = require("module");
+
+/***/ }),
+
+/***/ 1631:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("net");
 
 /***/ }),
 
@@ -74620,7 +77861,7 @@ module.exports = require("module");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");;
+module.exports = require("os");
 
 /***/ }),
 
@@ -74628,7 +77869,7 @@ module.exports = require("os");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");;
+module.exports = require("path");
 
 /***/ }),
 
@@ -74636,7 +77877,7 @@ module.exports = require("path");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("process");;
+module.exports = require("process");
 
 /***/ }),
 
@@ -74644,7 +77885,7 @@ module.exports = require("process");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("readline");;
+module.exports = require("readline");
 
 /***/ }),
 
@@ -74652,7 +77893,15 @@ module.exports = require("readline");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");;
+module.exports = require("stream");
+
+/***/ }),
+
+/***/ 4016:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tls");
 
 /***/ }),
 
@@ -74660,7 +77909,7 @@ module.exports = require("stream");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tty");;
+module.exports = require("tty");
 
 /***/ }),
 
@@ -74668,7 +77917,7 @@ module.exports = require("tty");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("url");;
+module.exports = require("url");
 
 /***/ }),
 
@@ -74676,7 +77925,7 @@ module.exports = require("url");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");;
+module.exports = require("util");
 
 /***/ })
 
@@ -74686,10 +77935,11 @@ module.exports = require("util");;
 /******/ 	var __webpack_module_cache__ = {};
 /******/ 	
 /******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
+/******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -74701,7 +77951,7 @@ module.exports = require("util");;
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
-/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nccwpck_require__);
 /******/ 			threw = false;
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
@@ -74717,7 +77967,7 @@ module.exports = require("util");;
 /************************************************************************/
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
-/******/ 		__webpack_require__.nmd = (module) => {
+/******/ 		__nccwpck_require__.nmd = (module) => {
 /******/ 			module.paths = [];
 /******/ 			if (!module.children) module.children = [];
 /******/ 			return module;
@@ -74726,11 +77976,16 @@ module.exports = require("util");;
 /******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	__webpack_require__.ab = __dirname + "/";/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
+/******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(9957);
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(9957);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
