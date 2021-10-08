@@ -1,5 +1,5 @@
-import { Context } from 'semantic-release';
-import { PluginConfig } from '../../src/semantic-release';
+import { Context } from 'semantic-release'
+import { PluginConfig } from '../../src/semantic-release'
 
 export function setup<R>(
     callback: (config: PluginConfig, context: Context) => R,

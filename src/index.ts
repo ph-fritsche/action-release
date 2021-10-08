@@ -100,8 +100,12 @@ export default async function run(env = process.env): Promise<void> {
         }
 
     } catch(e) {
-        core.setFailed(e?.message ?? e)
+        core.setFailed(((hasProp(e, 'message') ? e.message : undefined) ?? e) as Error|string)
     }
+}
+
+function hasProp<K extends PropertyKey>(obj: unknown, key: K): obj is { [k in K]: unknown } {
+    return Boolean(obj && typeof obj === 'object' && key in obj)
 }
 
 function safeParse(val: string) {

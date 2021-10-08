@@ -1,4 +1,4 @@
-import SemanticRelease from 'semantic-release';
+import SemanticRelease from 'semantic-release'
 
 // see https://github.com/semantic-release/semantic-release/blob/master/docs/developer-guide/js-api.md
 export default {
