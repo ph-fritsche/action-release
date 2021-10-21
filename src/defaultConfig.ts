@@ -16,4 +16,17 @@ if (process.env.GITHUB_TOKEN) {
 export default {
     plugins,
     preset: 'conventionalcommits',
+
+    // See defaults: https://github.com/semantic-release/semantic-release/blob/master/lib/get-config.js#L57-L64
+    // See issue: https://github.com/semantic-release/semantic-release/issues/1581
+    // Moving ahead and adding `main` to the defaults
+    branches: [
+        '+([0-9])?(.{+([0-9]),x}).x',
+        'main',
+        'master',
+        'next',
+        'next-major',
+        { name: 'beta', prerelease: true },
+        { name: 'alpha', prerelease: true },
+    ],
 } as Partial<GlobalConfig>
