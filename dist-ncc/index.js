@@ -35,6 +35,18 @@ if (process.env.GITHUB_TOKEN) {
 exports.default = {
     plugins,
     preset: 'conventionalcommits',
+    // See defaults: https://github.com/semantic-release/semantic-release/blob/master/lib/get-config.js#L57-L64
+    // See issue: https://github.com/semantic-release/semantic-release/issues/1581
+    // Moving ahead and adding `main` to the defaults
+    branches: [
+        '+([0-9])?(.{+([0-9]),x}).x',
+        'main',
+        'master',
+        'next',
+        'next-major',
+        { name: 'beta', prerelease: true },
+        { name: 'alpha', prerelease: true },
+    ],
 };
 
 
@@ -4211,6 +4223,23 @@ module.exports = {
 	supportsColor: getSupportLevel,
 	stdout: getSupportLevel(process.stdout),
 	stderr: getSupportLevel(process.stderr)
+};
+
+
+/***/ }),
+
+/***/ 5192:
+/***/ ((module) => {
+
+module.exports = class SemanticReleaseError extends Error {
+  constructor(message, code, details) {
+    super(message);
+    Error.captureStackTrace(this, this.constructor);
+    this.name = 'SemanticReleaseError';
+    this.code = code;
+    this.details = details;
+    this.semanticRelease = true;
+  }
 };
 
 
@@ -11866,151 +11895,49 @@ module.exports = function () {
 
 /***/ }),
 
-/***/ 1205:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var once = __nccwpck_require__(1223);
-
-var noop = function() {};
-
-var isRequest = function(stream) {
-	return stream.setHeader && typeof stream.abort === 'function';
-};
-
-var isChildProcess = function(stream) {
-	return stream.stdio && Array.isArray(stream.stdio) && stream.stdio.length === 3
-};
-
-var eos = function(stream, opts, callback) {
-	if (typeof opts === 'function') return eos(stream, null, opts);
-	if (!opts) opts = {};
-
-	callback = once(callback || noop);
-
-	var ws = stream._writableState;
-	var rs = stream._readableState;
-	var readable = opts.readable || (opts.readable !== false && stream.readable);
-	var writable = opts.writable || (opts.writable !== false && stream.writable);
-	var cancelled = false;
-
-	var onlegacyfinish = function() {
-		if (!stream.writable) onfinish();
-	};
-
-	var onfinish = function() {
-		writable = false;
-		if (!readable) callback.call(stream);
-	};
-
-	var onend = function() {
-		readable = false;
-		if (!writable) callback.call(stream);
-	};
-
-	var onexit = function(exitCode) {
-		callback.call(stream, exitCode ? new Error('exited with error code: ' + exitCode) : null);
-	};
-
-	var onerror = function(err) {
-		callback.call(stream, err);
-	};
-
-	var onclose = function() {
-		process.nextTick(onclosenexttick);
-	};
-
-	var onclosenexttick = function() {
-		if (cancelled) return;
-		if (readable && !(rs && (rs.ended && !rs.destroyed))) return callback.call(stream, new Error('premature close'));
-		if (writable && !(ws && (ws.ended && !ws.destroyed))) return callback.call(stream, new Error('premature close'));
-	};
-
-	var onrequest = function() {
-		stream.req.on('finish', onfinish);
-	};
-
-	if (isRequest(stream)) {
-		stream.on('complete', onfinish);
-		stream.on('abort', onclose);
-		if (stream.req) onrequest();
-		else stream.on('request', onrequest);
-	} else if (writable && !ws) { // legacy streams
-		stream.on('end', onlegacyfinish);
-		stream.on('close', onlegacyfinish);
-	}
-
-	if (isChildProcess(stream)) stream.on('exit', onexit);
-
-	stream.on('end', onend);
-	stream.on('finish', onfinish);
-	if (opts.error !== false) stream.on('error', onerror);
-	stream.on('close', onclose);
-
-	return function() {
-		cancelled = true;
-		stream.removeListener('complete', onfinish);
-		stream.removeListener('abort', onclose);
-		stream.removeListener('request', onrequest);
-		if (stream.req) stream.req.removeListener('finish', onfinish);
-		stream.removeListener('end', onlegacyfinish);
-		stream.removeListener('close', onlegacyfinish);
-		stream.removeListener('finish', onfinish);
-		stream.removeListener('exit', onexit);
-		stream.removeListener('end', onend);
-		stream.removeListener('error', onerror);
-		stream.removeListener('close', onclose);
-	};
-};
-
-module.exports = eos;
-
-
-/***/ }),
-
 /***/ 7686:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-"use strict";
-
-
-const process = __nccwpck_require__(1765); // eslint-disable-line node/prefer-global/process
+const process = __nccwpck_require__(1765);
 const git = __nccwpck_require__(9778);
 
 const services = {
-	appveyor: __nccwpck_require__(7323),
-	bamboo: __nccwpck_require__(4285),
-	bitbucket: __nccwpck_require__(741),
-	bitrise: __nccwpck_require__(5069),
-	buddy: __nccwpck_require__(6905),
-	buildkite: __nccwpck_require__(5909),
-	circleci: __nccwpck_require__(4846),
-	cirrus: __nccwpck_require__(2277),
-	codebuild: __nccwpck_require__(5416),
-	codefresh: __nccwpck_require__(2972),
-	codeship: __nccwpck_require__(5954),
-	drone: __nccwpck_require__(9068),
-	github: __nccwpck_require__(9653),
-	gitlab: __nccwpck_require__(6926),
-	jenkins: __nccwpck_require__(1237),
-	puppet: __nccwpck_require__(3590),
-	sail: __nccwpck_require__(3164),
-	scrutinizer: __nccwpck_require__(6410),
-	semaphore: __nccwpck_require__(8871),
-	shippable: __nccwpck_require__(8053),
-	teamcity: __nccwpck_require__(63),
-	travis: __nccwpck_require__(5042),
-	vsts: __nccwpck_require__(771),
-	wercker: __nccwpck_require__(8061),
+  appveyor: __nccwpck_require__(7323),
+  bamboo: __nccwpck_require__(4285),
+  bitbucket: __nccwpck_require__(741),
+  bitrise: __nccwpck_require__(5069),
+  buddy: __nccwpck_require__(6905),
+  buildkite: __nccwpck_require__(5909),
+  circleci: __nccwpck_require__(4846),
+  cirrus: __nccwpck_require__(2277),
+  codebuild: __nccwpck_require__(5416),
+  codefresh: __nccwpck_require__(2972),
+  codeship: __nccwpck_require__(5954),
+  drone: __nccwpck_require__(9068),
+  github: __nccwpck_require__(9653),
+  gitlab: __nccwpck_require__(6926),
+  jenkins: __nccwpck_require__(1237),
+  netlify: __nccwpck_require__(9379),
+  puppet: __nccwpck_require__(3590),
+  sail: __nccwpck_require__(3164),
+  scrutinizer: __nccwpck_require__(6410),
+  semaphore: __nccwpck_require__(8871),
+  shippable: __nccwpck_require__(8053),
+  teamcity: __nccwpck_require__(63),
+  travis: __nccwpck_require__(5042),
+  vercel: __nccwpck_require__(48),
+  vsts: __nccwpck_require__(771),
+  wercker: __nccwpck_require__(8061),
 };
 
 module.exports = ({env = process.env, cwd = process.cwd()} = {}) => {
-	for (const name of Object.keys(services)) {
-		if (services[name].detect({env, cwd})) {
-			return {isCi: true, ...services[name].configuration({env, cwd})};
-		}
-	}
+  for (const name of Object.keys(services)) {
+    if (services[name].detect({env, cwd})) {
+      return {isCi: true, ...services[name].configuration({env, cwd})};
+    }
+  }
 
-	return {isCi: Boolean(env.CI), ...git.configuration({env, cwd})};
+  return {isCi: Boolean(env.CI), ...git.configuration({env, cwd})};
 };
 
 
@@ -12019,33 +11946,33 @@ module.exports = ({env = process.env, cwd = process.cwd()} = {}) => {
 /***/ 6482:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const execa = __nccwpck_require__(6688);
+const execa = __nccwpck_require__(5447);
 
 function head(options) {
-	try {
-		return execa.sync('git', ['rev-parse', 'HEAD'], options).stdout;
-	} catch (_) {
-		return undefined;
-	}
+  try {
+    return execa.sync('git', ['rev-parse', 'HEAD'], options).stdout;
+  } catch {
+    return undefined;
+  }
 }
 
 function branch(options) {
-	try {
-		const headRef = execa.sync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], options).stdout;
+  try {
+    const headRef = execa.sync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], options).stdout;
 
-		if (headRef === 'HEAD') {
-			const branch = execa
-				.sync('git', ['show', '-s', '--pretty=%d', 'HEAD'], options)
-				.stdout.replace(/^\(|\)$/g, '')
-				.split(', ')
-				.find(branch => branch.startsWith('origin/'));
-			return branch ? branch.match(/^origin\/(?<branch>.+)/)[1] : undefined;
-		}
+    if (headRef === 'HEAD') {
+      const branch = execa
+        .sync('git', ['show', '-s', '--pretty=%d', 'HEAD'], options)
+        .stdout.replace(/^\(|\)$/g, '')
+        .split(', ')
+        .find((branch) => branch.startsWith('origin/'));
+      return branch ? branch.match(/^origin\/(?<branch>.+)/)[1] : undefined;
+    }
 
-		return headRef;
-	} catch (_) {
-		return undefined;
-	}
+    return headRef;
+  } catch {
+    return undefined;
+  }
 }
 
 module.exports = {head, branch};
@@ -12057,1310 +11984,15 @@ module.exports = {head, branch};
 /***/ ((module) => {
 
 function prNumber(pr) {
-	return (/\d+(?!.*\d+)/.exec(pr) || [])[0];
+  return (/\d+(?!.*\d+)/.exec(pr) || [])[0];
 }
 
 function parseBranch(branch) {
-	return branch ? /^(?:refs\/heads\/)?(?<branch>.+)$/i.exec(branch)[1] : undefined;
+  return branch ? /^(?:refs\/heads\/)?(?<branch>.+)$/i.exec(branch)[1] : undefined;
 }
 
 module.exports = {prNumber, parseBranch};
 
-
-/***/ }),
-
-/***/ 6688:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const path = __nccwpck_require__(5622);
-const childProcess = __nccwpck_require__(3129);
-const crossSpawn = __nccwpck_require__(2746);
-const stripFinalNewline = __nccwpck_require__(8174);
-const npmRunPath = __nccwpck_require__(502);
-const onetime = __nccwpck_require__(9082);
-const makeError = __nccwpck_require__(1041);
-const normalizeStdio = __nccwpck_require__(1969);
-const {spawnedKill, spawnedCancel, setupTimeout, setExitHandler} = __nccwpck_require__(6633);
-const {handleInput, getSpawnedResult, makeAllStream, validateInputSync} = __nccwpck_require__(4606);
-const {mergePromise, getSpawnedPromise} = __nccwpck_require__(1483);
-const {joinCommand, parseCommand} = __nccwpck_require__(1097);
-
-const DEFAULT_MAX_BUFFER = 1000 * 1000 * 100;
-
-const getEnv = ({env: envOption, extendEnv, preferLocal, localDir, execPath}) => {
-	const env = extendEnv ? {...process.env, ...envOption} : envOption;
-
-	if (preferLocal) {
-		return npmRunPath.env({env, cwd: localDir, execPath});
-	}
-
-	return env;
-};
-
-const handleArguments = (file, args, options = {}) => {
-	const parsed = crossSpawn._parse(file, args, options);
-	file = parsed.command;
-	args = parsed.args;
-	options = parsed.options;
-
-	options = {
-		maxBuffer: DEFAULT_MAX_BUFFER,
-		buffer: true,
-		stripFinalNewline: true,
-		extendEnv: true,
-		preferLocal: false,
-		localDir: options.cwd || process.cwd(),
-		execPath: process.execPath,
-		encoding: 'utf8',
-		reject: true,
-		cleanup: true,
-		all: false,
-		windowsHide: true,
-		...options
-	};
-
-	options.env = getEnv(options);
-
-	options.stdio = normalizeStdio(options);
-
-	if (process.platform === 'win32' && path.basename(file, '.exe') === 'cmd') {
-		// #116
-		args.unshift('/q');
-	}
-
-	return {file, args, options, parsed};
-};
-
-const handleOutput = (options, value, error) => {
-	if (typeof value !== 'string' && !Buffer.isBuffer(value)) {
-		// When `execa.sync()` errors, we normalize it to '' to mimic `execa()`
-		return error === undefined ? undefined : '';
-	}
-
-	if (options.stripFinalNewline) {
-		return stripFinalNewline(value);
-	}
-
-	return value;
-};
-
-const execa = (file, args, options) => {
-	const parsed = handleArguments(file, args, options);
-	const command = joinCommand(file, args);
-
-	let spawned;
-	try {
-		spawned = childProcess.spawn(parsed.file, parsed.args, parsed.options);
-	} catch (error) {
-		// Ensure the returned error is always both a promise and a child process
-		const dummySpawned = new childProcess.ChildProcess();
-		const errorPromise = Promise.reject(makeError({
-			error,
-			stdout: '',
-			stderr: '',
-			all: '',
-			command,
-			parsed,
-			timedOut: false,
-			isCanceled: false,
-			killed: false
-		}));
-		return mergePromise(dummySpawned, errorPromise);
-	}
-
-	const spawnedPromise = getSpawnedPromise(spawned);
-	const timedPromise = setupTimeout(spawned, parsed.options, spawnedPromise);
-	const processDone = setExitHandler(spawned, parsed.options, timedPromise);
-
-	const context = {isCanceled: false};
-
-	spawned.kill = spawnedKill.bind(null, spawned.kill.bind(spawned));
-	spawned.cancel = spawnedCancel.bind(null, spawned, context);
-
-	const handlePromise = async () => {
-		const [{error, exitCode, signal, timedOut}, stdoutResult, stderrResult, allResult] = await getSpawnedResult(spawned, parsed.options, processDone);
-		const stdout = handleOutput(parsed.options, stdoutResult);
-		const stderr = handleOutput(parsed.options, stderrResult);
-		const all = handleOutput(parsed.options, allResult);
-
-		if (error || exitCode !== 0 || signal !== null) {
-			const returnedError = makeError({
-				error,
-				exitCode,
-				signal,
-				stdout,
-				stderr,
-				all,
-				command,
-				parsed,
-				timedOut,
-				isCanceled: context.isCanceled,
-				killed: spawned.killed
-			});
-
-			if (!parsed.options.reject) {
-				return returnedError;
-			}
-
-			throw returnedError;
-		}
-
-		return {
-			command,
-			exitCode: 0,
-			stdout,
-			stderr,
-			all,
-			failed: false,
-			timedOut: false,
-			isCanceled: false,
-			killed: false
-		};
-	};
-
-	const handlePromiseOnce = onetime(handlePromise);
-
-	crossSpawn._enoent.hookChildProcess(spawned, parsed.parsed);
-
-	handleInput(spawned, parsed.options.input);
-
-	spawned.all = makeAllStream(spawned, parsed.options);
-
-	return mergePromise(spawned, handlePromiseOnce);
-};
-
-module.exports = execa;
-
-module.exports.sync = (file, args, options) => {
-	const parsed = handleArguments(file, args, options);
-	const command = joinCommand(file, args);
-
-	validateInputSync(parsed.options);
-
-	let result;
-	try {
-		result = childProcess.spawnSync(parsed.file, parsed.args, parsed.options);
-	} catch (error) {
-		throw makeError({
-			error,
-			stdout: '',
-			stderr: '',
-			all: '',
-			command,
-			parsed,
-			timedOut: false,
-			isCanceled: false,
-			killed: false
-		});
-	}
-
-	const stdout = handleOutput(parsed.options, result.stdout, result.error);
-	const stderr = handleOutput(parsed.options, result.stderr, result.error);
-
-	if (result.error || result.status !== 0 || result.signal !== null) {
-		const error = makeError({
-			stdout,
-			stderr,
-			error: result.error,
-			signal: result.signal,
-			exitCode: result.status,
-			command,
-			parsed,
-			timedOut: result.error && result.error.code === 'ETIMEDOUT',
-			isCanceled: false,
-			killed: result.signal !== null
-		});
-
-		if (!parsed.options.reject) {
-			return error;
-		}
-
-		throw error;
-	}
-
-	return {
-		command,
-		exitCode: 0,
-		stdout,
-		stderr,
-		failed: false,
-		timedOut: false,
-		isCanceled: false,
-		killed: false
-	};
-};
-
-module.exports.command = (command, options) => {
-	const [file, ...args] = parseCommand(command);
-	return execa(file, args, options);
-};
-
-module.exports.commandSync = (command, options) => {
-	const [file, ...args] = parseCommand(command);
-	return execa.sync(file, args, options);
-};
-
-module.exports.node = (scriptPath, args, options = {}) => {
-	if (args && !Array.isArray(args) && typeof args === 'object') {
-		options = args;
-		args = [];
-	}
-
-	const stdio = normalizeStdio.node(options);
-	const defaultExecArgv = process.execArgv.filter(arg => !arg.startsWith('--inspect'));
-
-	const {
-		nodePath = process.execPath,
-		nodeOptions = defaultExecArgv
-	} = options;
-
-	return execa(
-		nodePath,
-		[
-			...nodeOptions,
-			scriptPath,
-			...(Array.isArray(args) ? args : [])
-		],
-		{
-			...options,
-			stdin: undefined,
-			stdout: undefined,
-			stderr: undefined,
-			stdio,
-			shell: false
-		}
-	);
-};
-
-
-/***/ }),
-
-/***/ 1097:
-/***/ ((module) => {
-
-"use strict";
-
-const SPACES_REGEXP = / +/g;
-
-const joinCommand = (file, args = []) => {
-	if (!Array.isArray(args)) {
-		return file;
-	}
-
-	return [file, ...args].join(' ');
-};
-
-// Handle `execa.command()`
-const parseCommand = command => {
-	const tokens = [];
-	for (const token of command.trim().split(SPACES_REGEXP)) {
-		// Allow spaces to be escaped by a backslash if not meant as a delimiter
-		const previousToken = tokens[tokens.length - 1];
-		if (previousToken && previousToken.endsWith('\\')) {
-			// Merge previous token with current one
-			tokens[tokens.length - 1] = `${previousToken.slice(0, -1)} ${token}`;
-		} else {
-			tokens.push(token);
-		}
-	}
-
-	return tokens;
-};
-
-module.exports = {
-	joinCommand,
-	parseCommand
-};
-
-
-/***/ }),
-
-/***/ 1041:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const {signalsByName} = __nccwpck_require__(5433);
-
-const getErrorPrefix = ({timedOut, timeout, errorCode, signal, signalDescription, exitCode, isCanceled}) => {
-	if (timedOut) {
-		return `timed out after ${timeout} milliseconds`;
-	}
-
-	if (isCanceled) {
-		return 'was canceled';
-	}
-
-	if (errorCode !== undefined) {
-		return `failed with ${errorCode}`;
-	}
-
-	if (signal !== undefined) {
-		return `was killed with ${signal} (${signalDescription})`;
-	}
-
-	if (exitCode !== undefined) {
-		return `failed with exit code ${exitCode}`;
-	}
-
-	return 'failed';
-};
-
-const makeError = ({
-	stdout,
-	stderr,
-	all,
-	error,
-	signal,
-	exitCode,
-	command,
-	timedOut,
-	isCanceled,
-	killed,
-	parsed: {options: {timeout}}
-}) => {
-	// `signal` and `exitCode` emitted on `spawned.on('exit')` event can be `null`.
-	// We normalize them to `undefined`
-	exitCode = exitCode === null ? undefined : exitCode;
-	signal = signal === null ? undefined : signal;
-	const signalDescription = signal === undefined ? undefined : signalsByName[signal].description;
-
-	const errorCode = error && error.code;
-
-	const prefix = getErrorPrefix({timedOut, timeout, errorCode, signal, signalDescription, exitCode, isCanceled});
-	const execaMessage = `Command ${prefix}: ${command}`;
-	const isError = Object.prototype.toString.call(error) === '[object Error]';
-	const shortMessage = isError ? `${execaMessage}\n${error.message}` : execaMessage;
-	const message = [shortMessage, stderr, stdout].filter(Boolean).join('\n');
-
-	if (isError) {
-		error.originalMessage = error.message;
-		error.message = message;
-	} else {
-		error = new Error(message);
-	}
-
-	error.shortMessage = shortMessage;
-	error.command = command;
-	error.exitCode = exitCode;
-	error.signal = signal;
-	error.signalDescription = signalDescription;
-	error.stdout = stdout;
-	error.stderr = stderr;
-
-	if (all !== undefined) {
-		error.all = all;
-	}
-
-	if ('bufferedData' in error) {
-		delete error.bufferedData;
-	}
-
-	error.failed = true;
-	error.timedOut = Boolean(timedOut);
-	error.isCanceled = isCanceled;
-	error.killed = killed && !timedOut;
-
-	return error;
-};
-
-module.exports = makeError;
-
-
-/***/ }),
-
-/***/ 6633:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const os = __nccwpck_require__(2087);
-const onExit = __nccwpck_require__(4931);
-
-const DEFAULT_FORCE_KILL_TIMEOUT = 1000 * 5;
-
-// Monkey-patches `childProcess.kill()` to add `forceKillAfterTimeout` behavior
-const spawnedKill = (kill, signal = 'SIGTERM', options = {}) => {
-	const killResult = kill(signal);
-	setKillTimeout(kill, signal, options, killResult);
-	return killResult;
-};
-
-const setKillTimeout = (kill, signal, options, killResult) => {
-	if (!shouldForceKill(signal, options, killResult)) {
-		return;
-	}
-
-	const timeout = getForceKillAfterTimeout(options);
-	const t = setTimeout(() => {
-		kill('SIGKILL');
-	}, timeout);
-
-	// Guarded because there's no `.unref()` when `execa` is used in the renderer
-	// process in Electron. This cannot be tested since we don't run tests in
-	// Electron.
-	// istanbul ignore else
-	if (t.unref) {
-		t.unref();
-	}
-};
-
-const shouldForceKill = (signal, {forceKillAfterTimeout}, killResult) => {
-	return isSigterm(signal) && forceKillAfterTimeout !== false && killResult;
-};
-
-const isSigterm = signal => {
-	return signal === os.constants.signals.SIGTERM ||
-		(typeof signal === 'string' && signal.toUpperCase() === 'SIGTERM');
-};
-
-const getForceKillAfterTimeout = ({forceKillAfterTimeout = true}) => {
-	if (forceKillAfterTimeout === true) {
-		return DEFAULT_FORCE_KILL_TIMEOUT;
-	}
-
-	if (!Number.isFinite(forceKillAfterTimeout) || forceKillAfterTimeout < 0) {
-		throw new TypeError(`Expected the \`forceKillAfterTimeout\` option to be a non-negative integer, got \`${forceKillAfterTimeout}\` (${typeof forceKillAfterTimeout})`);
-	}
-
-	return forceKillAfterTimeout;
-};
-
-// `childProcess.cancel()`
-const spawnedCancel = (spawned, context) => {
-	const killResult = spawned.kill();
-
-	if (killResult) {
-		context.isCanceled = true;
-	}
-};
-
-const timeoutKill = (spawned, signal, reject) => {
-	spawned.kill(signal);
-	reject(Object.assign(new Error('Timed out'), {timedOut: true, signal}));
-};
-
-// `timeout` option handling
-const setupTimeout = (spawned, {timeout, killSignal = 'SIGTERM'}, spawnedPromise) => {
-	if (timeout === 0 || timeout === undefined) {
-		return spawnedPromise;
-	}
-
-	if (!Number.isFinite(timeout) || timeout < 0) {
-		throw new TypeError(`Expected the \`timeout\` option to be a non-negative integer, got \`${timeout}\` (${typeof timeout})`);
-	}
-
-	let timeoutId;
-	const timeoutPromise = new Promise((resolve, reject) => {
-		timeoutId = setTimeout(() => {
-			timeoutKill(spawned, killSignal, reject);
-		}, timeout);
-	});
-
-	const safeSpawnedPromise = spawnedPromise.finally(() => {
-		clearTimeout(timeoutId);
-	});
-
-	return Promise.race([timeoutPromise, safeSpawnedPromise]);
-};
-
-// `cleanup` option handling
-const setExitHandler = async (spawned, {cleanup, detached}, timedPromise) => {
-	if (!cleanup || detached) {
-		return timedPromise;
-	}
-
-	const removeExitHandler = onExit(() => {
-		spawned.kill();
-	});
-
-	return timedPromise.finally(() => {
-		removeExitHandler();
-	});
-};
-
-module.exports = {
-	spawnedKill,
-	spawnedCancel,
-	setupTimeout,
-	setExitHandler
-};
-
-
-/***/ }),
-
-/***/ 1483:
-/***/ ((module) => {
-
-"use strict";
-
-
-const nativePromisePrototype = (async () => {})().constructor.prototype;
-const descriptors = ['then', 'catch', 'finally'].map(property => [
-	property,
-	Reflect.getOwnPropertyDescriptor(nativePromisePrototype, property)
-]);
-
-// The return value is a mixin of `childProcess` and `Promise`
-const mergePromise = (spawned, promise) => {
-	for (const [property, descriptor] of descriptors) {
-		// Starting the main `promise` is deferred to avoid consuming streams
-		const value = typeof promise === 'function' ?
-			(...args) => Reflect.apply(descriptor.value, promise(), args) :
-			descriptor.value.bind(promise);
-
-		Reflect.defineProperty(spawned, property, {...descriptor, value});
-	}
-
-	return spawned;
-};
-
-// Use promises instead of `child_process` events
-const getSpawnedPromise = spawned => {
-	return new Promise((resolve, reject) => {
-		spawned.on('exit', (exitCode, signal) => {
-			resolve({exitCode, signal});
-		});
-
-		spawned.on('error', error => {
-			reject(error);
-		});
-
-		if (spawned.stdin) {
-			spawned.stdin.on('error', error => {
-				reject(error);
-			});
-		}
-	});
-};
-
-module.exports = {
-	mergePromise,
-	getSpawnedPromise
-};
-
-
-
-/***/ }),
-
-/***/ 1969:
-/***/ ((module) => {
-
-"use strict";
-
-const aliases = ['stdin', 'stdout', 'stderr'];
-
-const hasAlias = opts => aliases.some(alias => opts[alias] !== undefined);
-
-const normalizeStdio = opts => {
-	if (!opts) {
-		return;
-	}
-
-	const {stdio} = opts;
-
-	if (stdio === undefined) {
-		return aliases.map(alias => opts[alias]);
-	}
-
-	if (hasAlias(opts)) {
-		throw new Error(`It's not possible to provide \`stdio\` in combination with one of ${aliases.map(alias => `\`${alias}\``).join(', ')}`);
-	}
-
-	if (typeof stdio === 'string') {
-		return stdio;
-	}
-
-	if (!Array.isArray(stdio)) {
-		throw new TypeError(`Expected \`stdio\` to be of type \`string\` or \`Array\`, got \`${typeof stdio}\``);
-	}
-
-	const length = Math.max(stdio.length, aliases.length);
-	return Array.from({length}, (value, index) => stdio[index]);
-};
-
-module.exports = normalizeStdio;
-
-// `ipc` is pushed unless it is already present
-module.exports.node = opts => {
-	const stdio = normalizeStdio(opts);
-
-	if (stdio === 'ipc') {
-		return 'ipc';
-	}
-
-	if (stdio === undefined || typeof stdio === 'string') {
-		return [stdio, stdio, stdio, 'ipc'];
-	}
-
-	if (stdio.includes('ipc')) {
-		return stdio;
-	}
-
-	return [...stdio, 'ipc'];
-};
-
-
-/***/ }),
-
-/***/ 4606:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const isStream = __nccwpck_require__(1554);
-const getStream = __nccwpck_require__(1937);
-const mergeStream = __nccwpck_require__(2621);
-
-// `input` option
-const handleInput = (spawned, input) => {
-	// Checking for stdin is workaround for https://github.com/nodejs/node/issues/26852
-	// TODO: Remove `|| spawned.stdin === undefined` once we drop support for Node.js <=12.2.0
-	if (input === undefined || spawned.stdin === undefined) {
-		return;
-	}
-
-	if (isStream(input)) {
-		input.pipe(spawned.stdin);
-	} else {
-		spawned.stdin.end(input);
-	}
-};
-
-// `all` interleaves `stdout` and `stderr`
-const makeAllStream = (spawned, {all}) => {
-	if (!all || (!spawned.stdout && !spawned.stderr)) {
-		return;
-	}
-
-	const mixed = mergeStream();
-
-	if (spawned.stdout) {
-		mixed.add(spawned.stdout);
-	}
-
-	if (spawned.stderr) {
-		mixed.add(spawned.stderr);
-	}
-
-	return mixed;
-};
-
-// On failure, `result.stdout|stderr|all` should contain the currently buffered stream
-const getBufferedData = async (stream, streamPromise) => {
-	if (!stream) {
-		return;
-	}
-
-	stream.destroy();
-
-	try {
-		return await streamPromise;
-	} catch (error) {
-		return error.bufferedData;
-	}
-};
-
-const getStreamPromise = (stream, {encoding, buffer, maxBuffer}) => {
-	if (!stream || !buffer) {
-		return;
-	}
-
-	if (encoding) {
-		return getStream(stream, {encoding, maxBuffer});
-	}
-
-	return getStream.buffer(stream, {maxBuffer});
-};
-
-// Retrieve result of child process: exit code, signal, error, streams (stdout/stderr/all)
-const getSpawnedResult = async ({stdout, stderr, all}, {encoding, buffer, maxBuffer}, processDone) => {
-	const stdoutPromise = getStreamPromise(stdout, {encoding, buffer, maxBuffer});
-	const stderrPromise = getStreamPromise(stderr, {encoding, buffer, maxBuffer});
-	const allPromise = getStreamPromise(all, {encoding, buffer, maxBuffer: maxBuffer * 2});
-
-	try {
-		return await Promise.all([processDone, stdoutPromise, stderrPromise, allPromise]);
-	} catch (error) {
-		return Promise.all([
-			{error, signal: error.signal, timedOut: error.timedOut},
-			getBufferedData(stdout, stdoutPromise),
-			getBufferedData(stderr, stderrPromise),
-			getBufferedData(all, allPromise)
-		]);
-	}
-};
-
-const validateInputSync = ({input}) => {
-	if (isStream(input)) {
-		throw new TypeError('The `input` option cannot be a stream in sync mode');
-	}
-};
-
-module.exports = {
-	handleInput,
-	makeAllStream,
-	getSpawnedResult,
-	validateInputSync
-};
-
-
-
-/***/ }),
-
-/***/ 1169:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const {PassThrough: PassThroughStream} = __nccwpck_require__(2413);
-
-module.exports = options => {
-	options = {...options};
-
-	const {array} = options;
-	let {encoding} = options;
-	const isBuffer = encoding === 'buffer';
-	let objectMode = false;
-
-	if (array) {
-		objectMode = !(encoding || isBuffer);
-	} else {
-		encoding = encoding || 'utf8';
-	}
-
-	if (isBuffer) {
-		encoding = null;
-	}
-
-	const stream = new PassThroughStream({objectMode});
-
-	if (encoding) {
-		stream.setEncoding(encoding);
-	}
-
-	let length = 0;
-	const chunks = [];
-
-	stream.on('data', chunk => {
-		chunks.push(chunk);
-
-		if (objectMode) {
-			length = chunks.length;
-		} else {
-			length += chunk.length;
-		}
-	});
-
-	stream.getBufferedValue = () => {
-		if (array) {
-			return chunks;
-		}
-
-		return isBuffer ? Buffer.concat(chunks, length) : chunks.join('');
-	};
-
-	stream.getBufferedLength = () => length;
-
-	return stream;
-};
-
-
-/***/ }),
-
-/***/ 1937:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const {constants: BufferConstants} = __nccwpck_require__(4293);
-const pump = __nccwpck_require__(8341);
-const bufferStream = __nccwpck_require__(1169);
-
-class MaxBufferError extends Error {
-	constructor() {
-		super('maxBuffer exceeded');
-		this.name = 'MaxBufferError';
-	}
-}
-
-async function getStream(inputStream, options) {
-	if (!inputStream) {
-		return Promise.reject(new Error('Expected a stream'));
-	}
-
-	options = {
-		maxBuffer: Infinity,
-		...options
-	};
-
-	const {maxBuffer} = options;
-
-	let stream;
-	await new Promise((resolve, reject) => {
-		const rejectPromise = error => {
-			// Don't retrieve an oversized buffer.
-			if (error && stream.getBufferedLength() <= BufferConstants.MAX_LENGTH) {
-				error.bufferedData = stream.getBufferedValue();
-			}
-
-			reject(error);
-		};
-
-		stream = pump(inputStream, bufferStream(options), error => {
-			if (error) {
-				rejectPromise(error);
-				return;
-			}
-
-			resolve();
-		});
-
-		stream.on('data', () => {
-			if (stream.getBufferedLength() > maxBuffer) {
-				rejectPromise(new MaxBufferError());
-			}
-		});
-	});
-
-	return stream.getBufferedValue();
-}
-
-module.exports = getStream;
-// TODO: Remove this for the next major release
-module.exports.default = getStream;
-module.exports.buffer = (stream, options) => getStream(stream, {...options, encoding: 'buffer'});
-module.exports.array = (stream, options) => getStream(stream, {...options, array: true});
-module.exports.MaxBufferError = MaxBufferError;
-
-
-/***/ }),
-
-/***/ 8009:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.SIGNALS=void 0;
-
-const SIGNALS=[
-{
-name:"SIGHUP",
-number:1,
-action:"terminate",
-description:"Terminal closed",
-standard:"posix"},
-
-{
-name:"SIGINT",
-number:2,
-action:"terminate",
-description:"User interruption with CTRL-C",
-standard:"ansi"},
-
-{
-name:"SIGQUIT",
-number:3,
-action:"core",
-description:"User interruption with CTRL-\\",
-standard:"posix"},
-
-{
-name:"SIGILL",
-number:4,
-action:"core",
-description:"Invalid machine instruction",
-standard:"ansi"},
-
-{
-name:"SIGTRAP",
-number:5,
-action:"core",
-description:"Debugger breakpoint",
-standard:"posix"},
-
-{
-name:"SIGABRT",
-number:6,
-action:"core",
-description:"Aborted",
-standard:"ansi"},
-
-{
-name:"SIGIOT",
-number:6,
-action:"core",
-description:"Aborted",
-standard:"bsd"},
-
-{
-name:"SIGBUS",
-number:7,
-action:"core",
-description:
-"Bus error due to misaligned, non-existing address or paging error",
-standard:"bsd"},
-
-{
-name:"SIGEMT",
-number:7,
-action:"terminate",
-description:"Command should be emulated but is not implemented",
-standard:"other"},
-
-{
-name:"SIGFPE",
-number:8,
-action:"core",
-description:"Floating point arithmetic error",
-standard:"ansi"},
-
-{
-name:"SIGKILL",
-number:9,
-action:"terminate",
-description:"Forced termination",
-standard:"posix",
-forced:true},
-
-{
-name:"SIGUSR1",
-number:10,
-action:"terminate",
-description:"Application-specific signal",
-standard:"posix"},
-
-{
-name:"SIGSEGV",
-number:11,
-action:"core",
-description:"Segmentation fault",
-standard:"ansi"},
-
-{
-name:"SIGUSR2",
-number:12,
-action:"terminate",
-description:"Application-specific signal",
-standard:"posix"},
-
-{
-name:"SIGPIPE",
-number:13,
-action:"terminate",
-description:"Broken pipe or socket",
-standard:"posix"},
-
-{
-name:"SIGALRM",
-number:14,
-action:"terminate",
-description:"Timeout or timer",
-standard:"posix"},
-
-{
-name:"SIGTERM",
-number:15,
-action:"terminate",
-description:"Termination",
-standard:"ansi"},
-
-{
-name:"SIGSTKFLT",
-number:16,
-action:"terminate",
-description:"Stack is empty or overflowed",
-standard:"other"},
-
-{
-name:"SIGCHLD",
-number:17,
-action:"ignore",
-description:"Child process terminated, paused or unpaused",
-standard:"posix"},
-
-{
-name:"SIGCLD",
-number:17,
-action:"ignore",
-description:"Child process terminated, paused or unpaused",
-standard:"other"},
-
-{
-name:"SIGCONT",
-number:18,
-action:"unpause",
-description:"Unpaused",
-standard:"posix",
-forced:true},
-
-{
-name:"SIGSTOP",
-number:19,
-action:"pause",
-description:"Paused",
-standard:"posix",
-forced:true},
-
-{
-name:"SIGTSTP",
-number:20,
-action:"pause",
-description:"Paused using CTRL-Z or \"suspend\"",
-standard:"posix"},
-
-{
-name:"SIGTTIN",
-number:21,
-action:"pause",
-description:"Background process cannot read terminal input",
-standard:"posix"},
-
-{
-name:"SIGBREAK",
-number:21,
-action:"terminate",
-description:"User interruption with CTRL-BREAK",
-standard:"other"},
-
-{
-name:"SIGTTOU",
-number:22,
-action:"pause",
-description:"Background process cannot write to terminal output",
-standard:"posix"},
-
-{
-name:"SIGURG",
-number:23,
-action:"ignore",
-description:"Socket received out-of-band data",
-standard:"bsd"},
-
-{
-name:"SIGXCPU",
-number:24,
-action:"core",
-description:"Process timed out",
-standard:"bsd"},
-
-{
-name:"SIGXFSZ",
-number:25,
-action:"core",
-description:"File too big",
-standard:"bsd"},
-
-{
-name:"SIGVTALRM",
-number:26,
-action:"terminate",
-description:"Timeout or timer",
-standard:"bsd"},
-
-{
-name:"SIGPROF",
-number:27,
-action:"terminate",
-description:"Timeout or timer",
-standard:"bsd"},
-
-{
-name:"SIGWINCH",
-number:28,
-action:"ignore",
-description:"Terminal window size changed",
-standard:"bsd"},
-
-{
-name:"SIGIO",
-number:29,
-action:"terminate",
-description:"I/O is available",
-standard:"other"},
-
-{
-name:"SIGPOLL",
-number:29,
-action:"terminate",
-description:"Watched event",
-standard:"other"},
-
-{
-name:"SIGINFO",
-number:29,
-action:"ignore",
-description:"Request for process information",
-standard:"other"},
-
-{
-name:"SIGPWR",
-number:30,
-action:"terminate",
-description:"Device running out of power",
-standard:"systemv"},
-
-{
-name:"SIGSYS",
-number:31,
-action:"core",
-description:"Invalid system call",
-standard:"other"},
-
-{
-name:"SIGUNUSED",
-number:31,
-action:"terminate",
-description:"Invalid system call",
-standard:"other"}];exports.SIGNALS=SIGNALS;
-//# sourceMappingURL=core.js.map
-
-/***/ }),
-
-/***/ 5433:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.signalsByNumber=exports.signalsByName=void 0;var _os=__nccwpck_require__(2087);
-
-var _signals=__nccwpck_require__(9034);
-var _realtime=__nccwpck_require__(1931);
-
-
-
-const getSignalsByName=function(){
-const signals=(0,_signals.getSignals)();
-return signals.reduce(getSignalByName,{});
-};
-
-const getSignalByName=function(
-signalByNameMemo,
-{name,number,description,supported,action,forced,standard})
-{
-return{
-...signalByNameMemo,
-[name]:{name,number,description,supported,action,forced,standard}};
-
-};
-
-const signalsByName=getSignalsByName();exports.signalsByName=signalsByName;
-
-
-
-
-const getSignalsByNumber=function(){
-const signals=(0,_signals.getSignals)();
-const length=_realtime.SIGRTMAX+1;
-const signalsA=Array.from({length},(value,number)=>
-getSignalByNumber(number,signals));
-
-return Object.assign({},...signalsA);
-};
-
-const getSignalByNumber=function(number,signals){
-const signal=findSignalByNumber(number,signals);
-
-if(signal===undefined){
-return{};
-}
-
-const{name,description,supported,action,forced,standard}=signal;
-return{
-[number]:{
-name,
-number,
-description,
-supported,
-action,
-forced,
-standard}};
-
-
-};
-
-
-
-const findSignalByNumber=function(number,signals){
-const signal=signals.find(({name})=>_os.constants.signals[name]===number);
-
-if(signal!==undefined){
-return signal;
-}
-
-return signals.find(signalA=>signalA.number===number);
-};
-
-const signalsByNumber=getSignalsByNumber();exports.signalsByNumber=signalsByNumber;
-//# sourceMappingURL=main.js.map
-
-/***/ }),
-
-/***/ 1931:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.SIGRTMAX=exports.getRealtimeSignals=void 0;
-const getRealtimeSignals=function(){
-const length=SIGRTMAX-SIGRTMIN+1;
-return Array.from({length},getRealtimeSignal);
-};exports.getRealtimeSignals=getRealtimeSignals;
-
-const getRealtimeSignal=function(value,index){
-return{
-name:`SIGRT${index+1}`,
-number:SIGRTMIN+index,
-action:"terminate",
-description:"Application-specific signal (realtime)",
-standard:"posix"};
-
-};
-
-const SIGRTMIN=34;
-const SIGRTMAX=64;exports.SIGRTMAX=SIGRTMAX;
-//# sourceMappingURL=realtime.js.map
-
-/***/ }),
-
-/***/ 9034:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", ({value:true}));exports.getSignals=void 0;var _os=__nccwpck_require__(2087);
-
-var _core=__nccwpck_require__(8009);
-var _realtime=__nccwpck_require__(1931);
-
-
-
-const getSignals=function(){
-const realtimeSignals=(0,_realtime.getRealtimeSignals)();
-const signals=[..._core.SIGNALS,...realtimeSignals].map(normalizeSignal);
-return signals;
-};exports.getSignals=getSignals;
-
-
-
-
-
-
-
-const normalizeSignal=function({
-name,
-number:defaultNumber,
-description,
-action,
-forced=false,
-standard})
-{
-const{
-signals:{[name]:constantSignal}}=
-_os.constants;
-const supported=constantSignal!==undefined;
-const number=supported?constantSignal:defaultNumber;
-return{name,number,description,supported,action,forced,standard};
-};
-//# sourceMappingURL=signals.js.map
 
 /***/ }),
 
@@ -13370,30 +12002,30 @@ return{name,number,description,supported,action,forced,standard};
 // https://www.appveyor.com/docs/environment-variables
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.APPVEYOR);
-	},
-	configuration({env}) {
-		const pr = env.APPVEYOR_PULL_REQUEST_NUMBER;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.APPVEYOR);
+  },
+  configuration({env}) {
+    const pr = env.APPVEYOR_PULL_REQUEST_NUMBER;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Appveyor',
-			service: 'appveyor',
-			commit: env.APPVEYOR_REPO_COMMIT,
-			tag: env.APPVEYOR_REPO_TAG_NAME,
-			build: env.APPVEYOR_BUILD_NUMBER,
-			buildUrl: `https://ci.appveyor.com/project/${env.APPVEYOR_PROJECT_SLUG}/build/${env.APPVEYOR_BUILD_VERSION}`,
-			branch: env.APPVEYOR_REPO_BRANCH,
-			job: env.APPVEYOR_JOB_NUMBER,
-			jobUrl: `https://ci.appveyor.com/project/${env.APPVEYOR_PROJECT_SLUG}/build/job/${env.APPVEYOR_JOB_ID}`,
-			pr,
-			isPr,
-			prBranch: env.APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH,
-			slug: env.APPVEYOR_REPO_NAME,
-			root: env.APPVEYOR_BUILD_FOLDER,
-		};
-	},
+    return {
+      name: 'Appveyor',
+      service: 'appveyor',
+      commit: env.APPVEYOR_REPO_COMMIT,
+      tag: env.APPVEYOR_REPO_TAG_NAME,
+      build: env.APPVEYOR_BUILD_NUMBER,
+      buildUrl: `https://ci.appveyor.com/project/${env.APPVEYOR_PROJECT_SLUG}/build/${env.APPVEYOR_BUILD_VERSION}`,
+      branch: env.APPVEYOR_REPO_BRANCH,
+      job: env.APPVEYOR_JOB_NUMBER,
+      jobUrl: `https://ci.appveyor.com/project/${env.APPVEYOR_PROJECT_SLUG}/build/job/${env.APPVEYOR_JOB_ID}`,
+      pr,
+      isPr,
+      prBranch: env.APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH,
+      slug: env.APPVEYOR_REPO_NAME,
+      root: env.APPVEYOR_BUILD_FOLDER,
+    };
+  },
 };
 
 
@@ -13405,21 +12037,21 @@ module.exports = {
 // https://confluence.atlassian.com/bamboo/bamboo-variables-289277087.html
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.bamboo_agentId);
-	},
-	configuration({env}) {
-		return {
-			name: 'Bamboo',
-			service: 'bamboo',
-			commit: env.bamboo_planRepository_1_revision,
-			build: env.bamboo_buildNumber,
-			buildUrl: env.bamboo_buildResultsUrl,
-			branch: env.bamboo_planRepository_1_branchName,
-			job: env.bamboo_buildKey,
-			root: env.bamboo_build_working_directory,
-		};
-	},
+  detect({env}) {
+    return Boolean(env.bamboo_agentId);
+  },
+  configuration({env}) {
+    return {
+      name: 'Bamboo',
+      service: 'bamboo',
+      commit: env.bamboo_planRepository_1_revision,
+      build: env.bamboo_buildNumber,
+      buildUrl: env.bamboo_buildResultsUrl,
+      branch: env.bamboo_planRepository_1_branchName,
+      job: env.bamboo_buildKey,
+      root: env.bamboo_build_working_directory,
+    };
+  },
 };
 
 
@@ -13431,22 +12063,22 @@ module.exports = {
 // https://confluence.atlassian.com/bitbucket/environment-variables-794502608.html
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.BITBUCKET_BUILD_NUMBER);
-	},
-	configuration({env}) {
-		return {
-			name: 'Bitbucket Pipelines',
-			service: 'bitbucket',
-			commit: env.BITBUCKET_COMMIT,
-			tag: env.BITBUCKET_TAG,
-			build: env.BITBUCKET_BUILD_NUMBER,
-			buildUrl: `https://bitbucket.org/${env.BITBUCKET_REPO_SLUG}/addon/pipelines/home#!/results/${env.BITBUCKET_BUILD_NUMBER}`,
-			branch: env.BITBUCKET_BRANCH,
-			slug: env.BITBUCKET_REPO_SLUG,
-			root: env.BITBUCKET_CLONE_DIR,
-		};
-	},
+  detect({env}) {
+    return Boolean(env.BITBUCKET_BUILD_NUMBER);
+  },
+  configuration({env}) {
+    return {
+      name: 'Bitbucket Pipelines',
+      service: 'bitbucket',
+      commit: env.BITBUCKET_COMMIT,
+      tag: env.BITBUCKET_TAG,
+      build: env.BITBUCKET_BUILD_NUMBER,
+      buildUrl: `https://bitbucket.org/${env.BITBUCKET_REPO_SLUG}/addon/pipelines/home#!/results/${env.BITBUCKET_BUILD_NUMBER}`,
+      branch: env.BITBUCKET_BRANCH,
+      slug: env.BITBUCKET_REPO_SLUG,
+      root: env.BITBUCKET_CLONE_DIR,
+    };
+  },
 };
 
 
@@ -13458,27 +12090,27 @@ module.exports = {
 // https://devcenter.bitrise.io/builds/available-environment-variables/#exposed-by-bitriseio
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.BITRISE_IO);
-	},
-	configuration({env}) {
-		const pr = env.BITRISE_PULL_REQUEST === 'false' ? undefined : env.BITRISE_PULL_REQUEST;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.BITRISE_IO);
+  },
+  configuration({env}) {
+    const pr = env.BITRISE_PULL_REQUEST === 'false' ? undefined : env.BITRISE_PULL_REQUEST;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Bitrise',
-			service: 'bitrise',
-			commit: env.BITRISE_GIT_COMMIT,
-			tag: env.BITRISE_GIT_TAG,
-			build: env.BITRISE_BUILD_NUMBER,
-			buildUrl: env.BITRISE_BUILD_URL,
-			branch: isPr ? env.BITRISEIO_GIT_BRANCH_DEST : env.BITRISE_GIT_BRANCH,
-			pr,
-			isPr,
-			prBranch: isPr ? env.BITRISE_GIT_BRANCH : undefined,
-			slug: env.BITRISE_APP_SLUG,
-		};
-	},
+    return {
+      name: 'Bitrise',
+      service: 'bitrise',
+      commit: env.BITRISE_GIT_COMMIT,
+      tag: env.BITRISE_GIT_TAG,
+      build: env.BITRISE_BUILD_NUMBER,
+      buildUrl: env.BITRISE_BUILD_URL,
+      branch: isPr ? env.BITRISEIO_GIT_BRANCH_DEST : env.BITRISE_GIT_BRANCH,
+      pr,
+      isPr,
+      prBranch: isPr ? env.BITRISE_GIT_BRANCH : undefined,
+      slug: env.BITRISE_APP_SLUG,
+    };
+  },
 };
 
 
@@ -13492,26 +12124,26 @@ module.exports = {
 const {prNumber} = __nccwpck_require__(4073);
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.BUDDY_WORKSPACE_ID);
-	},
-	configuration({env}) {
-		const pr = prNumber(env.BUDDY_EXECUTION_PULL_REQUEST_ID);
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.BUDDY_WORKSPACE_ID);
+  },
+  configuration({env}) {
+    const pr = prNumber(env.BUDDY_EXECUTION_PULL_REQUEST_ID);
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Buddy',
-			service: 'buddy',
-			commit: env.BUDDY_EXECUTION_REVISION,
-			tag: env.BUDDY_EXECUTION_TAG,
-			build: env.BUDDY_EXECUTION_ID,
-			buildUrl: env.BUDDY_EXECUTION_URL,
-			branch: isPr ? undefined : env.BUDDY_EXECUTION_BRANCH,
-			pr,
-			isPr,
-			slug: env.BUDDY_REPO_SLUG,
-		};
-	},
+    return {
+      name: 'Buddy',
+      service: 'buddy',
+      commit: env.BUDDY_EXECUTION_REVISION,
+      tag: env.BUDDY_EXECUTION_TAG,
+      build: env.BUDDY_EXECUTION_ID,
+      buildUrl: env.BUDDY_EXECUTION_URL,
+      branch: isPr ? undefined : env.BUDDY_EXECUTION_BRANCH,
+      pr,
+      isPr,
+      slug: env.BUDDY_REPO_SLUG,
+    };
+  },
 };
 
 
@@ -13523,28 +12155,28 @@ module.exports = {
 // https://buildkite.com/docs/builds/environment-variables
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.BUILDKITE);
-	},
-	configuration({env}) {
-		const pr = env.BUILDKITE_PULL_REQUEST === 'false' ? undefined : env.BUILDKITE_PULL_REQUEST;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.BUILDKITE);
+  },
+  configuration({env}) {
+    const pr = env.BUILDKITE_PULL_REQUEST === 'false' ? undefined : env.BUILDKITE_PULL_REQUEST;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Buildkite',
-			service: 'buildkite',
-			build: env.BUILDKITE_BUILD_NUMBER,
-			buildUrl: env.BUILDKITE_BUILD_URL,
-			commit: env.BUILDKITE_COMMIT,
-			tag: env.BUILDKITE_TAG,
-			branch: isPr ? env.BUILDKITE_PULL_REQUEST_BASE_BRANCH : env.BUILDKITE_BRANCH,
-			slug: `${env.BUILDKITE_ORGANIZATION_SLUG}/${env.BUILDKITE_PROJECT_SLUG}`,
-			pr,
-			isPr,
-			prBranch: isPr ? env.BUILDKITE_BRANCH : undefined,
-			root: env.BUILDKITE_BUILD_CHECKOUT_PATH,
-		};
-	},
+    return {
+      name: 'Buildkite',
+      service: 'buildkite',
+      build: env.BUILDKITE_BUILD_NUMBER,
+      buildUrl: env.BUILDKITE_BUILD_URL,
+      commit: env.BUILDKITE_COMMIT,
+      tag: env.BUILDKITE_TAG,
+      branch: isPr ? env.BUILDKITE_PULL_REQUEST_BASE_BRANCH : env.BUILDKITE_BRANCH,
+      slug: `${env.BUILDKITE_ORGANIZATION_SLUG}/${env.BUILDKITE_PROJECT_SLUG}`,
+      pr,
+      isPr,
+      prBranch: isPr ? env.BUILDKITE_BRANCH : undefined,
+      root: env.BUILDKITE_BUILD_CHECKOUT_PATH,
+    };
+  },
 };
 
 
@@ -13558,28 +12190,28 @@ module.exports = {
 const {prNumber} = __nccwpck_require__(4073);
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.CIRCLECI);
-	},
-	configuration({env}) {
-		const pr = env.CIRCLE_PR_NUMBER || prNumber(env.CIRCLE_PULL_REQUEST || env.CI_PULL_REQUEST);
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.CIRCLECI);
+  },
+  configuration({env}) {
+    const pr = env.CIRCLE_PR_NUMBER || prNumber(env.CIRCLE_PULL_REQUEST || env.CI_PULL_REQUEST);
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'CircleCI',
-			service: 'circleci',
-			build: env.CIRCLE_BUILD_NUM,
-			buildUrl: env.CIRCLE_BUILD_URL,
-			job: `${env.CIRCLE_BUILD_NUM}.${env.CIRCLE_NODE_INDEX}`,
-			commit: env.CIRCLE_SHA1,
-			tag: env.CIRCLE_TAG,
-			branch: isPr ? undefined : env.CIRCLE_BRANCH,
-			pr,
-			isPr,
-			prBranch: isPr ? env.CIRCLE_BRANCH : undefined,
-			slug: `${env.CIRCLE_PROJECT_USERNAME}/${env.CIRCLE_PROJECT_REPONAME}`,
-		};
-	},
+    return {
+      name: 'CircleCI',
+      service: 'circleci',
+      build: env.CIRCLE_BUILD_NUM,
+      buildUrl: env.CIRCLE_BUILD_URL,
+      job: `${env.CIRCLE_BUILD_NUM}.${env.CIRCLE_NODE_INDEX}`,
+      commit: env.CIRCLE_SHA1,
+      tag: env.CIRCLE_TAG,
+      branch: isPr ? undefined : env.CIRCLE_BRANCH,
+      pr,
+      isPr,
+      prBranch: isPr ? env.CIRCLE_BRANCH : undefined,
+      slug: `${env.CIRCLE_PROJECT_USERNAME}/${env.CIRCLE_PROJECT_REPONAME}`,
+    };
+  },
 };
 
 
@@ -13593,29 +12225,29 @@ module.exports = {
 const CIRRUS_CI_DASHBOARD = 'https://cirrus-ci.com';
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.CIRRUS_CI);
-	},
-	configuration({env}) {
-		const pr = env.CIRRUS_PR;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.CIRRUS_CI);
+  },
+  configuration({env}) {
+    const pr = env.CIRRUS_PR;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Cirrus CI',
-			service: 'cirrus',
-			commit: env.CIRRUS_CHANGE_IN_REPO,
-			tag: env.CIRRUS_TAG,
-			build: env.CIRRUS_BUILD_ID,
-			buildUrl: `${CIRRUS_CI_DASHBOARD}/build/${env.CIRRUS_BUILD_ID}`,
-			job: env.CIRRUS_TASK_ID,
-			jobUrl: `${CIRRUS_CI_DASHBOARD}/task/${env.CIRRUS_TASK_ID}`,
-			branch: isPr ? env.CIRRUS_BASE_BRANCH : env.CIRRUS_BRANCH,
-			pr,
-			isPr,
-			slug: env.CIRRUS_REPO_FULL_NAME,
-			root: env.CIRRUS_WORKING_DIR,
-		};
-	},
+    return {
+      name: 'Cirrus CI',
+      service: 'cirrus',
+      commit: env.CIRRUS_CHANGE_IN_REPO,
+      tag: env.CIRRUS_TAG,
+      build: env.CIRRUS_BUILD_ID,
+      buildUrl: `${CIRRUS_CI_DASHBOARD}/build/${env.CIRRUS_BUILD_ID}`,
+      job: env.CIRRUS_TASK_ID,
+      jobUrl: `${CIRRUS_CI_DASHBOARD}/task/${env.CIRRUS_TASK_ID}`,
+      branch: isPr ? env.CIRRUS_BASE_BRANCH : env.CIRRUS_BRANCH,
+      pr,
+      isPr,
+      slug: env.CIRRUS_REPO_FULL_NAME,
+      root: env.CIRRUS_WORKING_DIR,
+    };
+  },
 };
 
 
@@ -13629,20 +12261,20 @@ const {head, branch} = __nccwpck_require__(6482);
 // https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.CODEBUILD_BUILD_ID);
-	},
-	configuration({env, cwd}) {
-		return {
-			name: 'AWS CodeBuild',
-			service: 'codebuild',
-			commit: head({env, cwd}),
-			build: env.CODEBUILD_BUILD_ID,
-			branch: branch({env, cwd}),
-			buildUrl: `https://console.aws.amazon.com/codebuild/home?region=${env.AWS_REGION}#/builds/${env.CODEBUILD_BUILD_ID}/view/new`,
-			root: env.PWD,
-		};
-	},
+  detect({env}) {
+    return Boolean(env.CODEBUILD_BUILD_ID);
+  },
+  configuration({env, cwd}) {
+    return {
+      name: 'AWS CodeBuild',
+      service: 'codebuild',
+      commit: head({env, cwd}),
+      build: env.CODEBUILD_BUILD_ID,
+      branch: branch({env, cwd}),
+      buildUrl: `https://console.aws.amazon.com/codebuild/home?region=${env.AWS_REGION}#/builds/${env.CODEBUILD_BUILD_ID}/view/new`,
+      root: env.PWD,
+    };
+  },
 };
 
 
@@ -13654,27 +12286,27 @@ module.exports = {
 // https://codefresh.io/docs/docs/codefresh-yaml/variables#system-provided-variables
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.CF_BUILD_ID);
-	},
-	configuration({env}) {
-		const pr = env.CF_PULL_REQUEST_NUMBER;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.CF_BUILD_ID);
+  },
+  configuration({env}) {
+    const pr = env.CF_PULL_REQUEST_NUMBER;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Codefresh',
-			service: 'codefresh',
-			commit: env.CF_REVISION,
-			build: env.CF_BUILD_ID,
-			buildUrl: env.CF_BUILD_URL,
-			branch: isPr ? env.CF_PULL_REQUEST_TARGET : env.CF_BRANCH,
-			pr,
-			isPr,
-			prBranch: isPr ? env.CF_BRANCH : undefined,
-			slug: `${env.CF_REPO_OWNER}/${env.CF_REPO_NAME}`,
-			root: env.CF_VOLUME_PATH,
-		};
-	},
+    return {
+      name: 'Codefresh',
+      service: 'codefresh',
+      commit: env.CF_REVISION,
+      build: env.CF_BUILD_ID,
+      buildUrl: env.CF_BUILD_URL,
+      branch: isPr ? env.CF_PULL_REQUEST_TARGET : env.CF_BRANCH,
+      pr,
+      isPr,
+      prBranch: isPr ? env.CF_BRANCH : undefined,
+      slug: `${env.CF_REPO_OWNER}/${env.CF_REPO_NAME}`,
+      root: env.CF_VOLUME_PATH,
+    };
+  },
 };
 
 
@@ -13686,20 +12318,20 @@ module.exports = {
 // https://documentation.codeship.com/basic/builds-and-configuration/set-environment-variables/#default-environment-variables
 
 module.exports = {
-	detect({env}) {
-		return env.CI_NAME && env.CI_NAME === 'codeship';
-	},
-	configuration({env}) {
-		return {
-			name: 'Codeship',
-			service: 'codeship',
-			build: env.CI_BUILD_NUMBER,
-			buildUrl: env.CI_BUILD_URL,
-			commit: env.CI_COMMIT_ID,
-			branch: env.CI_BRANCH,
-			slug: env.CI_REPO_NAME,
-		};
-	},
+  detect({env}) {
+    return env.CI_NAME && env.CI_NAME === 'codeship';
+  },
+  configuration({env}) {
+    return {
+      name: 'Codeship',
+      service: 'codeship',
+      build: env.CI_BUILD_NUMBER,
+      buildUrl: env.CI_BUILD_URL,
+      commit: env.CI_COMMIT_ID,
+      branch: env.CI_BRANCH,
+      slug: env.CI_REPO_NAME,
+    };
+  },
 };
 
 
@@ -13711,29 +12343,29 @@ module.exports = {
 // https://readme.drone.io/reference/environ
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.DRONE);
-	},
-	configuration({env}) {
-		const isPr = env.DRONE_BUILD_EVENT === 'pull_request';
+  detect({env}) {
+    return Boolean(env.DRONE);
+  },
+  configuration({env}) {
+    const isPr = env.DRONE_BUILD_EVENT === 'pull_request';
 
-		return {
-			name: 'Drone',
-			service: 'drone',
-			commit: env.DRONE_COMMIT_SHA,
-			tag: env.DRONE_TAG,
-			build: env.DRONE_BUILD_NUMBER,
-			buildUrl: env.DRONE_BUILD_LINK,
-			branch: isPr ? env.DRONE_TARGET_BRANCH : env.DRONE_BRANCH,
-			job: env.DRONE_JOB_NUMBER,
-			jobUrl: env.DRONE_BUILD_LINK,
-			pr: env.DRONE_PULL_REQUEST,
-			isPr,
-			prBranch: isPr ? env.DRONE_SOURCE_BRANCH : undefined,
-			slug: `${env.DRONE_REPO_OWNER}/${env.DRONE_REPO_NAME}`,
-			root: env.DRONE_WORKSPACE,
-		};
-	},
+    return {
+      name: 'Drone',
+      service: 'drone',
+      commit: env.DRONE_COMMIT_SHA,
+      tag: env.DRONE_TAG,
+      build: env.DRONE_BUILD_NUMBER,
+      buildUrl: env.DRONE_BUILD_LINK,
+      branch: isPr ? env.DRONE_TARGET_BRANCH : env.DRONE_BRANCH,
+      job: env.DRONE_JOB_NUMBER,
+      jobUrl: env.DRONE_BUILD_LINK,
+      pr: env.DRONE_PULL_REQUEST,
+      isPr,
+      prBranch: isPr ? env.DRONE_SOURCE_BRANCH : undefined,
+      slug: `${env.DRONE_REPO_OWNER}/${env.DRONE_REPO_NAME}`,
+      root: env.DRONE_WORKSPACE,
+    };
+  },
 };
 
 
@@ -13745,9 +12377,9 @@ module.exports = {
 const {head, branch} = __nccwpck_require__(6482);
 
 module.exports = {
-	configuration(options) {
-		return {commit: head(options), branch: branch(options)};
-	},
+  configuration(options) {
+    return {commit: head(options), branch: branch(options)};
+  },
 };
 
 
@@ -13756,46 +12388,47 @@ module.exports = {
 /***/ 9653:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-// https://help.github.com/en/articles/virtual-environments-for-github-actions#environment-variables
+// https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 const {parseBranch} = __nccwpck_require__(4073);
 
 const getPrEvent = ({env}) => {
-	try {
-		const event = env.GITHUB_EVENT_PATH ? require(env.GITHUB_EVENT_PATH) : undefined;
+  try {
+    const event = env.GITHUB_EVENT_PATH ? require(env.GITHUB_EVENT_PATH) : undefined;
 
-		if (event && event.pull_request) {
-			return {
-				branch: event.pull_request.base ? parseBranch(event.pull_request.base.ref) : undefined,
-				pr: event.pull_request.number,
-			};
-		}
-	} catch (_) {
-		// Noop
-	}
+    if (event && event.pull_request) {
+      return {
+        branch: event.pull_request.base ? parseBranch(event.pull_request.base.ref) : undefined,
+        pr: event.pull_request.number,
+      };
+    }
+  } catch {
+    // Noop
+  }
 
-	return {pr: undefined, branch: undefined};
+  return {pr: undefined, branch: undefined};
 };
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.GITHUB_ACTION);
-	},
-	configuration({env, cwd}) {
-		const isPr = env.GITHUB_EVENT_NAME === 'pull_request';
-		const branch = parseBranch(env.GITHUB_REF);
+  detect({env}) {
+    return Boolean(env.GITHUB_ACTIONS);
+  },
+  configuration({env, cwd}) {
+    const isPr = env.GITHUB_EVENT_NAME === 'pull_request' || env.GITHUB_EVENT_NAME === 'pull_request_target';
+    const branch = parseBranch(env.GITHUB_REF);
 
-		return {
-			name: 'GitHub Actions',
-			service: 'github',
-			commit: env.GITHUB_SHA,
-			isPr,
-			branch,
-			prBranch: isPr ? branch : undefined,
-			slug: env.GITHUB_REPOSITORY,
-			root: env.GITHUB_WORKSPACE,
-			...(isPr ? getPrEvent({env, cwd}) : undefined),
-		};
-	},
+    return {
+      name: 'GitHub Actions',
+      service: 'github',
+      commit: env.GITHUB_SHA,
+      build: env.GITHUB_RUN_ID,
+      isPr,
+      branch,
+      prBranch: isPr ? branch : undefined,
+      slug: env.GITHUB_REPOSITORY,
+      root: env.GITHUB_WORKSPACE,
+      ...(isPr ? getPrEvent({env, cwd}) : undefined),
+    };
+  },
 };
 
 
@@ -13807,30 +12440,30 @@ module.exports = {
 // https://docs.gitlab.com/ce/ci/variables/README.html
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.GITLAB_CI);
-	},
-	configuration({env}) {
-		const pr = env.CI_MERGE_REQUEST_ID;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.GITLAB_CI);
+  },
+  configuration({env}) {
+    const pr = env.CI_MERGE_REQUEST_ID;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'GitLab CI/CD',
-			service: 'gitlab',
-			commit: env.CI_COMMIT_SHA,
-			tag: env.CI_COMMIT_TAG,
-			build: env.CI_PIPELINE_ID,
-			buildUrl: `${env.CI_PROJECT_URL}/pipelines/${env.CI_PIPELINE_ID}`,
-			job: env.CI_JOB_ID,
-			jobUrl: `${env.CI_PROJECT_URL}/-/jobs/${env.CI_JOB_ID}`,
-			branch: isPr ? env.CI_MERGE_REQUEST_TARGET_BRANCH_NAME : env.CI_COMMIT_REF_NAME,
-			pr,
-			isPr,
-			prBranch: env.CI_MERGE_REQUEST_SOURCE_BRANCH_NAME,
-			slug: env.CI_PROJECT_PATH,
-			root: env.CI_PROJECT_DIR,
-		};
-	},
+    return {
+      name: 'GitLab CI/CD',
+      service: 'gitlab',
+      commit: env.CI_COMMIT_SHA,
+      tag: env.CI_COMMIT_TAG,
+      build: env.CI_PIPELINE_ID,
+      buildUrl: `${env.CI_PROJECT_URL}/pipelines/${env.CI_PIPELINE_ID}`,
+      job: env.CI_JOB_ID,
+      jobUrl: `${env.CI_PROJECT_URL}/-/jobs/${env.CI_JOB_ID}`,
+      branch: isPr ? env.CI_MERGE_REQUEST_TARGET_BRANCH_NAME : env.CI_COMMIT_REF_NAME,
+      pr,
+      isPr,
+      prBranch: env.CI_MERGE_REQUEST_SOURCE_BRANCH_NAME,
+      slug: env.CI_PROJECT_PATH,
+      root: env.CI_PROJECT_DIR,
+    };
+  },
 };
 
 
@@ -13844,27 +12477,58 @@ const {head} = __nccwpck_require__(6482);
 // https://wiki.jenkins.io/display/JENKINS/Building+a+software+project
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.JENKINS_URL);
-	},
-	configuration({env, cwd}) {
-		const pr = env.ghprbPullId || env.gitlabMergeRequestId || env.CHANGE_ID;
-		const isPr = Boolean(pr);
-		const localBranch = env.GIT_LOCAL_BRANCH || env.GIT_BRANCH || env.gitlabBranch || env.BRANCH_NAME;
+  detect({env}) {
+    return Boolean(env.JENKINS_URL);
+  },
+  configuration({env, cwd}) {
+    const pr = env.ghprbPullId || env.gitlabMergeRequestId || env.CHANGE_ID;
+    const isPr = Boolean(pr);
+    const localBranch = env.GIT_LOCAL_BRANCH || env.GIT_BRANCH || env.gitlabBranch || env.BRANCH_NAME;
 
-		return {
-			name: 'Jenkins',
-			service: 'jenkins',
-			commit: env.ghprbActualCommit || env.GIT_COMMIT || head({env, cwd}),
-			branch: isPr ? env.ghprbTargetBranch || env.gitlabTargetBranch : localBranch,
-			build: env.BUILD_NUMBER,
-			buildUrl: env.BUILD_URL,
-			root: env.WORKSPACE,
-			pr,
-			isPr,
-			prBranch: isPr ? env.ghprbSourceBranch || env.gitlabSourceBranch || localBranch : undefined,
-		};
-	},
+    return {
+      name: 'Jenkins',
+      service: 'jenkins',
+      commit: env.ghprbActualCommit || env.GIT_COMMIT || head({env, cwd}),
+      branch: isPr ? env.ghprbTargetBranch || env.gitlabTargetBranch : localBranch,
+      build: env.BUILD_NUMBER,
+      buildUrl: env.BUILD_URL,
+      root: env.WORKSPACE,
+      pr,
+      isPr,
+      prBranch: isPr ? env.ghprbSourceBranch || env.gitlabSourceBranch || localBranch : undefined,
+    };
+  },
+};
+
+
+/***/ }),
+
+/***/ 9379:
+/***/ ((module) => {
+
+// https://docs.netlify.com/configure-builds/environment-variables/#netlify-configuration-variables
+
+module.exports = {
+  detect({env}) {
+    return env.NETLIFY === 'true';
+  },
+  configuration({env}) {
+    const isPr = env.PULL_REQUEST === 'true';
+
+    return {
+      name: 'Netlify',
+      service: 'netlify',
+      commit: env.COMMIT_REF,
+      build: env.DEPLOY_ID,
+      buildUrl: `https://app.netlify.com/sites/${env.SITE_NAME}/deploys/${env.DEPLOY_ID}`,
+      branch: isPr ? undefined : env.HEAD,
+      pr: env.REVIEW_ID,
+      isPr,
+      prBranch: isPr ? env.HEAD : undefined,
+      slug: env.REPOSITORY_URL.match(/[^/:]+\/[^/]+?$/)[0],
+      root: env.PWD,
+    };
+  },
 };
 
 
@@ -13876,20 +12540,20 @@ module.exports = {
 // https://puppet.com/docs/pipelines-for-apps/enterprise/environment-variable.html
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.DISTELLI_APPNAME);
-	},
-	configuration({env}) {
-		return {
-			name: 'Puppet',
-			service: 'puppet',
-			build: env.DISTELLI_BUILDNUM,
-			buildUrl: env.DISTELLI_RELEASE,
-			commit: env.DISTELLI_RELREVISION,
-			branch: env.DISTELLI_RELBRANCH,
-			root: env.DISTELLI_INSTALLHOME,
-		};
-	},
+  detect({env}) {
+    return Boolean(env.DISTELLI_APPNAME);
+  },
+  configuration({env}) {
+    return {
+      name: 'Puppet',
+      service: 'puppet',
+      build: env.DISTELLI_BUILDNUM,
+      buildUrl: env.DISTELLI_RELEASE,
+      commit: env.DISTELLI_RELREVISION,
+      branch: env.DISTELLI_RELBRANCH,
+      root: env.DISTELLI_INSTALLHOME,
+    };
+  },
 };
 
 
@@ -13901,24 +12565,24 @@ module.exports = {
 // https://sail.ci/docs/environment-variables
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.SAILCI);
-	},
-	configuration({env}) {
-		const pr = env.SAIL_PULL_REQUEST_NUMBER;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.SAILCI);
+  },
+  configuration({env}) {
+    const pr = env.SAIL_PULL_REQUEST_NUMBER;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Sail CI',
-			service: 'sail',
-			commit: env.SAIL_COMMIT_SHA,
-			branch: isPr ? undefined : env.SAIL_COMMIT_BRANCH,
-			pr,
-			isPr,
-			slug: `${env.SAIL_REPO_OWNER}/${env.SAIL_REPO_NAME}`,
-			root: env.SAIL_CLONE_DIR,
-		};
-	},
+    return {
+      name: 'Sail CI',
+      service: 'sail',
+      commit: env.SAIL_COMMIT_SHA,
+      branch: isPr ? undefined : env.SAIL_COMMIT_BRANCH,
+      pr,
+      isPr,
+      slug: `${env.SAIL_REPO_OWNER}/${env.SAIL_REPO_NAME}`,
+      root: env.SAIL_CLONE_DIR,
+    };
+  },
 };
 
 
@@ -13930,24 +12594,24 @@ module.exports = {
 // https://scrutinizer-ci.com/docs/build/environment-variables
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.SCRUTINIZER);
-	},
-	configuration({env}) {
-		const pr = env.SCRUTINIZER_PR_NUMBER;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.SCRUTINIZER);
+  },
+  configuration({env}) {
+    const pr = env.SCRUTINIZER_PR_NUMBER;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Scrutinizer',
-			service: 'scrutinizer',
-			commit: env.SCRUTINIZER_SHA1,
-			build: env.SCRUTINIZER_INSPECTION_UUID,
-			branch: env.SCRUTINIZER_BRANCH,
-			pr,
-			isPr,
-			prBranch: env.SCRUTINIZER_PR_SOURCE_BRANCH,
-		};
-	},
+    return {
+      name: 'Scrutinizer',
+      service: 'scrutinizer',
+      commit: env.SCRUTINIZER_SHA1,
+      build: env.SCRUTINIZER_INSPECTION_UUID,
+      branch: env.SCRUTINIZER_BRANCH,
+      pr,
+      isPr,
+      prBranch: env.SCRUTINIZER_PR_SOURCE_BRANCH,
+    };
+  },
 };
 
 
@@ -13962,27 +12626,27 @@ const {head} = __nccwpck_require__(6482);
 // 2.0: https://docs.semaphoreci.com/article/12-environment-variables
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.SEMAPHORE);
-	},
-	configuration({env, cwd}) {
-		const pr = env.SEMAPHORE_GIT_PR_NUMBER || env.PULL_REQUEST_NUMBER;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.SEMAPHORE);
+  },
+  configuration({env, cwd}) {
+    const pr = env.SEMAPHORE_GIT_PR_NUMBER || env.PULL_REQUEST_NUMBER;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Semaphore',
-			service: 'semaphore',
-			commit: env.SEMAPHORE_GIT_SHA || head({env, cwd}),
-			tag: env.SEMAPHORE_GIT_TAG_NAME,
-			build: env.SEMAPHORE_JOB_ID || env.SEMAPHORE_BUILD_NUMBER,
-			branch: env.SEMAPHORE_GIT_BRANCH || (isPr ? undefined : env.BRANCH_NAME),
-			pr,
-			isPr,
-			prBranch: env.SEMAPHORE_GIT_PR_BRANCH || (isPr ? env.BRANCH_NAME : undefined),
-			slug: env.SEMAPHORE_GIT_REPO_SLUG || env.SEMAPHORE_REPO_SLUG,
-			root: env.SEMAPHORE_GIT_DIR || env.SEMAPHORE_PROJECT_DIR,
-		};
-	},
+    return {
+      name: 'Semaphore',
+      service: 'semaphore',
+      commit: env.SEMAPHORE_GIT_SHA || head({env, cwd}),
+      tag: env.SEMAPHORE_GIT_TAG_NAME,
+      build: env.SEMAPHORE_JOB_ID || env.SEMAPHORE_BUILD_NUMBER,
+      branch: env.SEMAPHORE_GIT_BRANCH || (isPr ? undefined : env.BRANCH_NAME),
+      pr,
+      isPr,
+      prBranch: env.SEMAPHORE_GIT_PR_BRANCH || (isPr ? env.BRANCH_NAME : undefined),
+      slug: env.SEMAPHORE_GIT_REPO_SLUG || env.SEMAPHORE_REPO_SLUG,
+      root: env.SEMAPHORE_GIT_DIR || env.SEMAPHORE_PROJECT_DIR,
+    };
+  },
 };
 
 
@@ -13994,29 +12658,29 @@ module.exports = {
 // http://docs.shippable.com/ci/env-vars/#stdEnv
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.SHIPPABLE);
-	},
-	configuration({env}) {
-		const pr = env.IS_PULL_REQUEST === 'true' ? env.PULL_REQUEST : undefined;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.SHIPPABLE);
+  },
+  configuration({env}) {
+    const pr = env.IS_PULL_REQUEST === 'true' ? env.PULL_REQUEST : undefined;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Shippable',
-			service: 'shippable',
-			commit: env.COMMIT,
-			tag: env.GIT_TAG_NAME,
-			build: env.BUILD_NUMBER,
-			buildUrl: env.BUILD_URL,
-			branch: isPr ? env.BASE_BRANCH : env.BRANCH,
-			job: env.JOB_NUMBER,
-			pr,
-			isPr,
-			prBranch: isPr ? env.HEAD_BRANCH : undefined,
-			slug: env.SHIPPABLE_REPO_SLUG,
-			root: env.SHIPPABLE_BUILD_DIR,
-		};
-	},
+    return {
+      name: 'Shippable',
+      service: 'shippable',
+      commit: env.COMMIT,
+      tag: env.GIT_TAG_NAME,
+      build: env.BUILD_NUMBER,
+      buildUrl: env.BUILD_URL,
+      branch: isPr ? env.BASE_BRANCH : env.BRANCH,
+      job: env.JOB_NUMBER,
+      pr,
+      isPr,
+      prBranch: isPr ? env.HEAD_BRANCH : undefined,
+      slug: env.SHIPPABLE_REPO_SLUG,
+      root: env.SHIPPABLE_BUILD_DIR,
+    };
+  },
 };
 
 
@@ -14028,51 +12692,51 @@ module.exports = {
 // https://confluence.jetbrains.com/display/TCD10/Predefined+Build+Parameters
 
 const javaProperties = __nccwpck_require__(7735);
+const fromEntries = __nccwpck_require__(6522);
+
 const {branch} = __nccwpck_require__(6482);
 
 const PROPERTIES_MAPPING = {root: 'teamcity.build.workingDir', branch: 'teamcity.build.branch'};
 
-const safeReadProperties = filePath => {
-	try {
-		return javaProperties.of(filePath);
-	} catch (_) {
-		return undefined;
-	}
+const safeReadProperties = (filePath) => {
+  try {
+    return javaProperties.of(filePath);
+  } catch {
+    return undefined;
+  }
 };
 
 const getProperties = ({env, cwd}) => {
-	const buildProperties = env.TEAMCITY_BUILD_PROPERTIES_FILE
-		? safeReadProperties(env.TEAMCITY_BUILD_PROPERTIES_FILE)
-		: undefined;
-	const configFile = buildProperties ? buildProperties.get('teamcity.configuration.properties.file') : undefined;
-	const configProperties = configFile ? safeReadProperties(configFile) : configFile;
+  const buildProperties = env.TEAMCITY_BUILD_PROPERTIES_FILE
+    ? safeReadProperties(env.TEAMCITY_BUILD_PROPERTIES_FILE)
+    : undefined;
+  const configFile = buildProperties ? buildProperties.get('teamcity.configuration.properties.file') : undefined;
+  const configProperties = configFile ? safeReadProperties(configFile) : configFile;
 
-	return Object.keys(PROPERTIES_MAPPING).reduce(
-		(result, key) =>
-			Object.assign(result, {
-				[key]:
-					(buildProperties ? buildProperties.get(PROPERTIES_MAPPING[key]) : undefined) ||
-					(configProperties ? configProperties.get(PROPERTIES_MAPPING[key]) : undefined) ||
-					(key === 'branch' ? branch({env, cwd}) : undefined),
-			}),
-		{}
-	);
+  return fromEntries(
+    Object.keys(PROPERTIES_MAPPING).map((key) => [
+      key,
+      (buildProperties ? buildProperties.get(PROPERTIES_MAPPING[key]) : undefined) ||
+        (configProperties ? configProperties.get(PROPERTIES_MAPPING[key]) : undefined) ||
+        (key === 'branch' ? branch({env, cwd}) : undefined),
+    ])
+  );
 };
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.TEAMCITY_VERSION);
-	},
-	configuration({env, cwd}) {
-		return {
-			name: 'TeamCity',
-			service: 'teamcity',
-			commit: env.BUILD_VCS_NUMBER,
-			build: env.BUILD_NUMBER,
-			slug: env.TEAMCITY_BUILDCONF_NAME,
-			...getProperties({env, cwd}),
-		};
-	},
+  detect({env}) {
+    return Boolean(env.TEAMCITY_VERSION);
+  },
+  configuration({env, cwd}) {
+    return {
+      name: 'TeamCity',
+      service: 'teamcity',
+      commit: env.BUILD_VCS_NUMBER,
+      build: env.BUILD_NUMBER,
+      slug: env.TEAMCITY_BUILDCONF_NAME,
+      ...getProperties({env, cwd}),
+    };
+  },
 };
 
 
@@ -14084,30 +12748,66 @@ module.exports = {
 // https://docs.travis-ci.com/user/environment-variables#default-environment-variables
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.TRAVIS);
-	},
-	configuration({env}) {
-		const pr = env.TRAVIS_PULL_REQUEST === 'false' ? undefined : env.TRAVIS_PULL_REQUEST;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.TRAVIS);
+  },
+  configuration({env}) {
+    const pr = env.TRAVIS_PULL_REQUEST === 'false' ? undefined : env.TRAVIS_PULL_REQUEST;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Travis CI',
-			service: 'travis',
-			commit: env.TRAVIS_COMMIT,
-			tag: env.TRAVIS_TAG,
-			build: env.TRAVIS_BUILD_NUMBER,
-			buildUrl: env.TRAVIS_BUILD_WEB_URL,
-			branch: env.TRAVIS_BRANCH,
-			job: env.TRAVIS_JOB_NUMBER,
-			jobUrl: env.TRAVIS_JOB_WEB_URL,
-			pr,
-			isPr,
-			prBranch: env.TRAVIS_PULL_REQUEST_BRANCH,
-			slug: env.TRAVIS_REPO_SLUG,
-			root: env.TRAVIS_BUILD_DIR,
-		};
-	},
+    return {
+      name: 'Travis CI',
+      service: 'travis',
+      commit: env.TRAVIS_COMMIT,
+      tag: env.TRAVIS_TAG,
+      build: env.TRAVIS_BUILD_NUMBER,
+      buildUrl: env.TRAVIS_BUILD_WEB_URL,
+      branch: env.TRAVIS_BRANCH,
+      job: env.TRAVIS_JOB_NUMBER,
+      jobUrl: env.TRAVIS_JOB_WEB_URL,
+      pr,
+      isPr,
+      prBranch: env.TRAVIS_PULL_REQUEST_BRANCH,
+      slug: env.TRAVIS_REPO_SLUG,
+      root: env.TRAVIS_BUILD_DIR,
+    };
+  },
+};
+
+
+/***/ }),
+
+/***/ 48:
+/***/ ((module) => {
+
+// https://vercel.com/docs/environment-variables
+
+module.exports = {
+  detect({env}) {
+    return Boolean(env.VERCEL) || Boolean(env.NOW_GITHUB_DEPLOYMENT);
+  },
+  configuration({env}) {
+    const name = 'Vercel';
+    const service = 'vercel';
+
+    if (env.VERCEL) {
+      return {
+        name,
+        service,
+        commit: env.VERCEL_GIT_COMMIT_SHA,
+        branch: env.VERCEL_GIT_COMMIT_REF,
+        slug: `${env.VERCEL_GIT_REPO_OWNER}/${env.VERCEL_GIT_REPO_SLUG}`,
+      };
+    }
+
+    return {
+      name,
+      service,
+      commit: env.NOW_GITHUB_COMMIT_SHA,
+      branch: env.NOW_GITHUB_COMMIT_REF,
+      slug: `${env.NOW_GITHUB_ORG}/${env.NOW_GITHUB_REPO}`,
+    };
+  },
 };
 
 
@@ -14121,25 +12821,25 @@ module.exports = {
 const {parseBranch} = __nccwpck_require__(4073);
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.BUILD_BUILDURI);
-	},
-	configuration({env}) {
-		const pr = env.SYSTEM_PULLREQUEST_PULLREQUESTID;
-		const isPr = Boolean(pr);
+  detect({env}) {
+    return Boolean(env.BUILD_BUILDURI);
+  },
+  configuration({env}) {
+    const pr = env.SYSTEM_PULLREQUEST_PULLREQUESTID;
+    const isPr = Boolean(pr);
 
-		return {
-			name: 'Visual Studio Team Services',
-			service: 'vsts',
-			commit: env.BUILD_SOURCEVERSION,
-			build: env.BUILD_BUILDNUMBER,
-			branch: parseBranch(isPr ? env.SYSTEM_PULLREQUEST_TARGETBRANCH : env.BUILD_SOURCEBRANCH),
-			pr,
-			isPr,
-			prBranch: parseBranch(isPr ? env.SYSTEM_PULLREQUEST_SOURCEBRANCH : undefined),
-			root: env.BUILD_REPOSITORY_LOCALPATH,
-		};
-	},
+    return {
+      name: 'Visual Studio Team Services',
+      service: 'vsts',
+      commit: env.BUILD_SOURCEVERSION,
+      build: env.BUILD_BUILDNUMBER,
+      branch: parseBranch(isPr ? env.SYSTEM_PULLREQUEST_TARGETBRANCH : env.BUILD_SOURCEBRANCH),
+      pr,
+      isPr,
+      prBranch: parseBranch(isPr ? env.SYSTEM_PULLREQUEST_SOURCEBRANCH : undefined),
+      root: env.BUILD_REPOSITORY_LOCALPATH,
+    };
+  },
 };
 
 
@@ -14151,21 +12851,21 @@ module.exports = {
 // http://devcenter.wercker.com/docs/environment-variables/available-env-vars#hs_cos_wrapper_name
 
 module.exports = {
-	detect({env}) {
-		return Boolean(env.WERCKER_MAIN_PIPELINE_STARTED);
-	},
-	configuration({env}) {
-		return {
-			name: 'Wercker',
-			service: 'wercker',
-			commit: env.WERCKER_GIT_COMMIT,
-			build: env.WERCKER_MAIN_PIPELINE_STARTED,
-			buildUrl: env.WERCKER_RUN_URL,
-			branch: env.WERCKER_GIT_BRANCH,
-			slug: `${env.WERCKER_GIT_OWNER}/${env.WERCKER_GIT_REPOSITORY}`,
-			root: env.WERCKER_ROOT,
-		};
-	},
+  detect({env}) {
+    return Boolean(env.WERCKER_MAIN_PIPELINE_STARTED);
+  },
+  configuration({env}) {
+    return {
+      name: 'Wercker',
+      service: 'wercker',
+      commit: env.WERCKER_GIT_COMMIT,
+      build: env.WERCKER_MAIN_PIPELINE_STARTED,
+      buildUrl: env.WERCKER_RUN_URL,
+      branch: env.WERCKER_GIT_BRANCH,
+      slug: `${env.WERCKER_GIT_OWNER}/${env.WERCKER_GIT_REPOSITORY}`,
+      root: env.WERCKER_ROOT,
+    };
+  },
 };
 
 
@@ -22335,6 +21035,20 @@ module.exports.stop = stop;
 
 /***/ }),
 
+/***/ 6522:
+/***/ ((module) => {
+
+/*! fromentries. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+module.exports = function fromEntries (iterable) {
+  return [...iterable].reduce((obj, [key, val]) => {
+    obj[key] = val
+    return obj
+  }, {})
+}
+
+
+/***/ }),
+
 /***/ 9320:
 /***/ ((module) => {
 
@@ -23636,7 +22350,7 @@ module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
 
 /***/ }),
 
-/***/ 3580:
+/***/ 1205:
 /***/ ((module) => {
 
 "use strict";
@@ -49509,55 +48223,6 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 /***/ }),
 
-/***/ 1223:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var wrappy = __nccwpck_require__(2940)
-module.exports = wrappy(once)
-module.exports.strict = wrappy(onceStrict)
-
-once.proto = once(function () {
-  Object.defineProperty(Function.prototype, 'once', {
-    value: function () {
-      return once(this)
-    },
-    configurable: true
-  })
-
-  Object.defineProperty(Function.prototype, 'onceStrict', {
-    value: function () {
-      return onceStrict(this)
-    },
-    configurable: true
-  })
-})
-
-function once (fn) {
-  var f = function () {
-    if (f.called) return f.value
-    f.called = true
-    return f.value = fn.apply(this, arguments)
-  }
-  f.called = false
-  return f
-}
-
-function onceStrict (fn) {
-  var f = function () {
-    if (f.called)
-      throw new Error(f.onceError)
-    f.called = true
-    return f.value = fn.apply(this, arguments)
-  }
-  var name = fn.name || 'Function wrapped with `once`'
-  f.onceError = name + " shouldn't be called more than once"
-  f.called = false
-  return f
-}
-
-
-/***/ }),
-
 /***/ 9082:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -52652,95 +51317,6 @@ function nextTick(fn, arg1, arg2, arg3) {
   }
 }
 
-
-
-/***/ }),
-
-/***/ 8341:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var once = __nccwpck_require__(1223)
-var eos = __nccwpck_require__(1205)
-var fs = __nccwpck_require__(5747) // we only need fs to get the ReadStream and WriteStream prototypes
-
-var noop = function () {}
-var ancient = /^v?\.0/.test(process.version)
-
-var isFn = function (fn) {
-  return typeof fn === 'function'
-}
-
-var isFS = function (stream) {
-  if (!ancient) return false // newer node version do not need to care about fs is a special way
-  if (!fs) return false // browser
-  return (stream instanceof (fs.ReadStream || noop) || stream instanceof (fs.WriteStream || noop)) && isFn(stream.close)
-}
-
-var isRequest = function (stream) {
-  return stream.setHeader && isFn(stream.abort)
-}
-
-var destroyer = function (stream, reading, writing, callback) {
-  callback = once(callback)
-
-  var closed = false
-  stream.on('close', function () {
-    closed = true
-  })
-
-  eos(stream, {readable: reading, writable: writing}, function (err) {
-    if (err) return callback(err)
-    closed = true
-    callback()
-  })
-
-  var destroyed = false
-  return function (err) {
-    if (closed) return
-    if (destroyed) return
-    destroyed = true
-
-    if (isFS(stream)) return stream.close(noop) // use close for fs streams to avoid fd leaks
-    if (isRequest(stream)) return stream.abort() // request.destroy just do .end - .abort is what we want
-
-    if (isFn(stream.destroy)) return stream.destroy()
-
-    callback(err || new Error('stream was destroyed'))
-  }
-}
-
-var call = function (fn) {
-  fn()
-}
-
-var pipe = function (from, to) {
-  return from.pipe(to)
-}
-
-var pump = function () {
-  var streams = Array.prototype.slice.call(arguments)
-  var callback = isFn(streams[streams.length - 1] || noop) && streams.pop() || noop
-
-  if (Array.isArray(streams[0])) streams = streams[0]
-  if (streams.length < 2) throw new Error('pump requires two streams per minimum')
-
-  var error
-  var destroys = streams.map(function (stream, i) {
-    var reading = i < streams.length - 1
-    var writing = i > 0
-    return destroyer(stream, reading, writing, function (err) {
-      if (!error) error = err
-      if (err) destroys.forEach(call)
-      if (reading) return
-      destroys.forEach(call)
-      callback(error)
-    })
-  })
-
-  return streams.reduce(pipe)
-}
-
-module.exports = pump
 
 
 /***/ }),
@@ -58735,7 +57311,7 @@ const {pick} = __nccwpck_require__(250);
 const marked = __nccwpck_require__(4223);
 const TerminalRenderer = __nccwpck_require__(8138);
 const envCi = __nccwpck_require__(7686);
-const hookStd = __nccwpck_require__(3580);
+const hookStd = __nccwpck_require__(1205);
 const semver = __nccwpck_require__(1383);
 const AggregateError = __nccwpck_require__(1231);
 const pkg = __nccwpck_require__(6034);
@@ -59812,7 +58388,7 @@ async function pkgRepoUrl(options) {
 /***/ 2976:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const SemanticReleaseError = __nccwpck_require__(4393);
+const SemanticReleaseError = __nccwpck_require__(5192);
 const ERROR_DEFINITIONS = __nccwpck_require__(6636);
 
 module.exports = (code, ctx = {}) => {
@@ -60986,23 +59562,6 @@ module.exports = async (context) => {
 
   if (errors.length > 0) {
     throw new AggregateError(errors);
-  }
-};
-
-
-/***/ }),
-
-/***/ 4393:
-/***/ ((module) => {
-
-module.exports = class SemanticReleaseError extends Error {
-  constructor(message, code, details) {
-    super(message);
-    Error.captureStackTrace(this, this.constructor);
-    this.name = 'SemanticReleaseError';
-    this.code = code;
-    this.details = details;
-    this.semanticRelease = true;
   }
 };
 
@@ -63850,7 +62409,7 @@ module.exports = lte
 
 /***/ }),
 
-/***/ 5831:
+/***/ 6688:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const SemVer = __nccwpck_require__(8088)
@@ -64021,7 +62580,7 @@ module.exports = {
   clean: __nccwpck_require__(8848),
   inc: __nccwpck_require__(900),
   diff: __nccwpck_require__(4297),
-  major: __nccwpck_require__(5831),
+  major: __nccwpck_require__(6688),
   minor: __nccwpck_require__(8447),
   patch: __nccwpck_require__(2866),
   prerelease: __nccwpck_require__(6014),
@@ -70546,46 +69105,6 @@ const whichSync = (cmd, opt) => {
 
 module.exports = which
 which.sync = whichSync
-
-
-/***/ }),
-
-/***/ 2940:
-/***/ ((module) => {
-
-// Returns a wrapper function that returns a wrapped callback
-// The wrapper function should do some stuff, and return a
-// presumably different callback function.
-// This makes sure that own properties are retained, so that
-// decorations and such are not lost along the way.
-module.exports = wrappy
-function wrappy (fn, cb) {
-  if (fn && cb) return wrappy(fn)(cb)
-
-  if (typeof fn !== 'function')
-    throw new TypeError('need wrapper function')
-
-  Object.keys(fn).forEach(function (k) {
-    wrapper[k] = fn[k]
-  })
-
-  return wrapper
-
-  function wrapper() {
-    var args = new Array(arguments.length)
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i]
-    }
-    var ret = fn.apply(this, args)
-    var cb = args[args.length-1]
-    if (typeof ret === 'function' && ret !== cb) {
-      Object.keys(cb).forEach(function (k) {
-        ret[k] = cb[k]
-      })
-    }
-    return ret
-  }
-}
 
 
 /***/ }),
@@ -77701,7 +76220,7 @@ module.exports = __nccwpck_require__(5065).YAML
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"assert":true,"node:assert":[">= 14.18 && < 15",">= 16"],"assert/strict":">= 15","node:assert/strict":">= 16","async_hooks":">= 8","node:async_hooks":[">= 14.18 && < 15",">= 16"],"buffer_ieee754":"< 0.9.7","buffer":true,"node:buffer":[">= 14.18 && < 15",">= 16"],"child_process":true,"node:child_process":[">= 14.18 && < 15",">= 16"],"cluster":true,"node:cluster":[">= 14.18 && < 15",">= 16"],"console":true,"node:console":[">= 14.18 && < 15",">= 16"],"constants":true,"node:constants":[">= 14.18 && < 15",">= 16"],"crypto":true,"node:crypto":[">= 14.18 && < 15",">= 16"],"_debug_agent":">= 1 && < 8","_debugger":"< 8","dgram":true,"node:dgram":[">= 14.18 && < 15",">= 16"],"diagnostics_channel":[">= 14.17 && < 15",">= 15.1"],"node:diagnostics_channel":[">= 14.18 && < 15",">= 16"],"dns":true,"node:dns":[">= 14.18 && < 15",">= 16"],"dns/promises":">= 15","node:dns/promises":">= 16","domain":">= 0.7.12","node:domain":[">= 14.18 && < 15",">= 16"],"events":true,"node:events":[">= 14.18 && < 15",">= 16"],"freelist":"< 6","fs":true,"node:fs":[">= 14.18 && < 15",">= 16"],"fs/promises":[">= 10 && < 10.1",">= 14"],"node:fs/promises":[">= 14.18 && < 15",">= 16"],"_http_agent":">= 0.11.1","node:_http_agent":[">= 14.18 && < 15",">= 16"],"_http_client":">= 0.11.1","node:_http_client":[">= 14.18 && < 15",">= 16"],"_http_common":">= 0.11.1","node:_http_common":[">= 14.18 && < 15",">= 16"],"_http_incoming":">= 0.11.1","node:_http_incoming":[">= 14.18 && < 15",">= 16"],"_http_outgoing":">= 0.11.1","node:_http_outgoing":[">= 14.18 && < 15",">= 16"],"_http_server":">= 0.11.1","node:_http_server":[">= 14.18 && < 15",">= 16"],"http":true,"node:http":[">= 14.18 && < 15",">= 16"],"http2":">= 8.8","node:http2":[">= 14.18 && < 15",">= 16"],"https":true,"node:https":[">= 14.18 && < 15",">= 16"],"inspector":">= 8","node:inspector":[">= 14.18 && < 15",">= 16"],"_linklist":"< 8","module":true,"node:module":[">= 14.18 && < 15",">= 16"],"net":true,"node:net":[">= 14.18 && < 15",">= 16"],"node-inspect/lib/_inspect":">= 7.6 && < 12","node-inspect/lib/internal/inspect_client":">= 7.6 && < 12","node-inspect/lib/internal/inspect_repl":">= 7.6 && < 12","os":true,"node:os":[">= 14.18 && < 15",">= 16"],"path":true,"node:path":[">= 14.18 && < 15",">= 16"],"path/posix":">= 15.3","node:path/posix":">= 16","path/win32":">= 15.3","node:path/win32":">= 16","perf_hooks":">= 8.5","node:perf_hooks":[">= 14.18 && < 15",">= 16"],"process":">= 1","node:process":[">= 14.18 && < 15",">= 16"],"punycode":true,"node:punycode":[">= 14.18 && < 15",">= 16"],"querystring":true,"node:querystring":[">= 14.18 && < 15",">= 16"],"readline":true,"node:readline":[">= 14.18 && < 15",">= 16"],"repl":true,"node:repl":[">= 14.18 && < 15",">= 16"],"smalloc":">= 0.11.5 && < 3","_stream_duplex":">= 0.9.4","node:_stream_duplex":[">= 14.18 && < 15",">= 16"],"_stream_transform":">= 0.9.4","node:_stream_transform":[">= 14.18 && < 15",">= 16"],"_stream_wrap":">= 1.4.1","node:_stream_wrap":[">= 14.18 && < 15",">= 16"],"_stream_passthrough":">= 0.9.4","node:_stream_passthrough":[">= 14.18 && < 15",">= 16"],"_stream_readable":">= 0.9.4","node:_stream_readable":[">= 14.18 && < 15",">= 16"],"_stream_writable":">= 0.9.4","node:_stream_writable":[">= 14.18 && < 15",">= 16"],"stream":true,"node:stream":[">= 14.18 && < 15",">= 16"],"stream/consumers":">= 16.7","node:stream/consumers":">= 16.7","stream/promises":">= 15","node:stream/promises":">= 16","stream/web":">= 16.5","node:stream/web":">= 16.5","string_decoder":true,"node:string_decoder":[">= 14.18 && < 15",">= 16"],"sys":[">= 0.6 && < 0.7",">= 0.8"],"node:sys":[">= 14.18 && < 15",">= 16"],"timers":true,"node:timers":[">= 14.18 && < 15",">= 16"],"timers/promises":">= 15","node:timers/promises":">= 16","_tls_common":">= 0.11.13","node:_tls_common":[">= 14.18 && < 15",">= 16"],"_tls_legacy":">= 0.11.3 && < 10","_tls_wrap":">= 0.11.3","node:_tls_wrap":[">= 14.18 && < 15",">= 16"],"tls":true,"node:tls":[">= 14.18 && < 15",">= 16"],"trace_events":">= 10","node:trace_events":[">= 14.18 && < 15",">= 16"],"tty":true,"node:tty":[">= 14.18 && < 15",">= 16"],"url":true,"node:url":[">= 14.18 && < 15",">= 16"],"util":true,"node:util":[">= 14.18 && < 15",">= 16"],"util/types":">= 15.3","node:util/types":">= 16","v8/tools/arguments":">= 10 && < 12","v8/tools/codemap":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/consarray":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/csvparser":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/logreader":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/profile_view":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/splaytree":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8":">= 1","node:v8":[">= 14.18 && < 15",">= 16"],"vm":true,"node:vm":[">= 14.18 && < 15",">= 16"],"wasi":">= 13.4 && < 13.5","worker_threads":">= 11.7","node:worker_threads":[">= 14.18 && < 15",">= 16"],"zlib":true,"node:zlib":[">= 14.18 && < 15",">= 16"]}');
+module.exports = JSON.parse('{"assert":true,"node:assert":[">= 14.18 && < 15",">= 16"],"assert/strict":">= 15","node:assert/strict":">= 16","async_hooks":">= 8","node:async_hooks":[">= 14.18 && < 15",">= 16"],"buffer_ieee754":"< 0.9.7","buffer":true,"node:buffer":[">= 14.18 && < 15",">= 16"],"child_process":true,"node:child_process":[">= 14.18 && < 15",">= 16"],"cluster":true,"node:cluster":[">= 14.18 && < 15",">= 16"],"console":true,"node:console":[">= 14.18 && < 15",">= 16"],"constants":true,"node:constants":[">= 14.18 && < 15",">= 16"],"crypto":true,"node:crypto":[">= 14.18 && < 15",">= 16"],"_debug_agent":">= 1 && < 8","_debugger":"< 8","dgram":true,"node:dgram":[">= 14.18 && < 15",">= 16"],"diagnostics_channel":[">= 14.17 && < 15",">= 15.1"],"node:diagnostics_channel":[">= 14.18 && < 15",">= 16"],"dns":true,"node:dns":[">= 14.18 && < 15",">= 16"],"dns/promises":">= 15","node:dns/promises":">= 16","domain":">= 0.7.12","node:domain":[">= 14.18 && < 15",">= 16"],"events":true,"node:events":[">= 14.18 && < 15",">= 16"],"freelist":"< 6","fs":true,"node:fs":[">= 14.18 && < 15",">= 16"],"fs/promises":[">= 10 && < 10.1",">= 14"],"node:fs/promises":[">= 14.18 && < 15",">= 16"],"_http_agent":">= 0.11.1","node:_http_agent":[">= 14.18 && < 15",">= 16"],"_http_client":">= 0.11.1","node:_http_client":[">= 14.18 && < 15",">= 16"],"_http_common":">= 0.11.1","node:_http_common":[">= 14.18 && < 15",">= 16"],"_http_incoming":">= 0.11.1","node:_http_incoming":[">= 14.18 && < 15",">= 16"],"_http_outgoing":">= 0.11.1","node:_http_outgoing":[">= 14.18 && < 15",">= 16"],"_http_server":">= 0.11.1","node:_http_server":[">= 14.18 && < 15",">= 16"],"http":true,"node:http":[">= 14.18 && < 15",">= 16"],"http2":">= 8.8","node:http2":[">= 14.18 && < 15",">= 16"],"https":true,"node:https":[">= 14.18 && < 15",">= 16"],"inspector":">= 8","node:inspector":[">= 14.18 && < 15",">= 16"],"_linklist":"< 8","module":true,"node:module":[">= 14.18 && < 15",">= 16"],"net":true,"node:net":[">= 14.18 && < 15",">= 16"],"node-inspect/lib/_inspect":">= 7.6 && < 12","node-inspect/lib/internal/inspect_client":">= 7.6 && < 12","node-inspect/lib/internal/inspect_repl":">= 7.6 && < 12","os":true,"node:os":[">= 14.18 && < 15",">= 16"],"path":true,"node:path":[">= 14.18 && < 15",">= 16"],"path/posix":">= 15.3","node:path/posix":">= 16","path/win32":">= 15.3","node:path/win32":">= 16","perf_hooks":">= 8.5","node:perf_hooks":[">= 14.18 && < 15",">= 16"],"process":">= 1","node:process":[">= 14.18 && < 15",">= 16"],"punycode":true,"node:punycode":[">= 14.18 && < 15",">= 16"],"querystring":true,"node:querystring":[">= 14.18 && < 15",">= 16"],"readline":true,"node:readline":[">= 14.18 && < 15",">= 16"],"readline/promises":">= 17","node:readline/promises":">= 17","repl":true,"node:repl":[">= 14.18 && < 15",">= 16"],"smalloc":">= 0.11.5 && < 3","_stream_duplex":">= 0.9.4","node:_stream_duplex":[">= 14.18 && < 15",">= 16"],"_stream_transform":">= 0.9.4","node:_stream_transform":[">= 14.18 && < 15",">= 16"],"_stream_wrap":">= 1.4.1","node:_stream_wrap":[">= 14.18 && < 15",">= 16"],"_stream_passthrough":">= 0.9.4","node:_stream_passthrough":[">= 14.18 && < 15",">= 16"],"_stream_readable":">= 0.9.4","node:_stream_readable":[">= 14.18 && < 15",">= 16"],"_stream_writable":">= 0.9.4","node:_stream_writable":[">= 14.18 && < 15",">= 16"],"stream":true,"node:stream":[">= 14.18 && < 15",">= 16"],"stream/consumers":">= 16.7","node:stream/consumers":">= 16.7","stream/promises":">= 15","node:stream/promises":">= 16","stream/web":">= 16.5","node:stream/web":">= 16.5","string_decoder":true,"node:string_decoder":[">= 14.18 && < 15",">= 16"],"sys":[">= 0.6 && < 0.7",">= 0.8"],"node:sys":[">= 14.18 && < 15",">= 16"],"timers":true,"node:timers":[">= 14.18 && < 15",">= 16"],"timers/promises":">= 15","node:timers/promises":">= 16","_tls_common":">= 0.11.13","node:_tls_common":[">= 14.18 && < 15",">= 16"],"_tls_legacy":">= 0.11.3 && < 10","_tls_wrap":">= 0.11.3","node:_tls_wrap":[">= 14.18 && < 15",">= 16"],"tls":true,"node:tls":[">= 14.18 && < 15",">= 16"],"trace_events":">= 10","node:trace_events":[">= 14.18 && < 15",">= 16"],"tty":true,"node:tty":[">= 14.18 && < 15",">= 16"],"url":true,"node:url":[">= 14.18 && < 15",">= 16"],"util":true,"node:util":[">= 14.18 && < 15",">= 16"],"util/types":">= 15.3","node:util/types":">= 16","v8/tools/arguments":">= 10 && < 12","v8/tools/codemap":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/consarray":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/csvparser":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/logreader":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/profile_view":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8/tools/splaytree":[">= 4.4 && < 5",">= 5.2 && < 12"],"v8":">= 1","node:v8":[">= 14.18 && < 15",">= 16"],"vm":true,"node:vm":[">= 14.18 && < 15",">= 16"],"wasi":">= 13.4 && < 13.5","worker_threads":">= 11.7","node:worker_threads":[">= 14.18 && < 15",">= 16"],"zlib":true,"node:zlib":[">= 14.18 && < 15",">= 16"]}');
 
 /***/ }),
 
