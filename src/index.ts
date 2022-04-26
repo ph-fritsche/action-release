@@ -1,16 +1,15 @@
 import * as core from '@actions/core'
-import semanticRelease from 'semantic-release'
+import type SemanticRelease from 'semantic-release'
 import defaultConfig from './defaultConfig'
 import { install } from './util/install'
-import debugLib from 'debug'
 import { forceRelease, initialRelease } from './plugin'
-import { PluginSpec } from './semantic-release'
+import type { PluginSpec } from './semantic-release'
 import { updateTags } from './util/updateTags'
 import { gitConfig } from './util/gitConfig'
 
 export default async function run(env = process.env): Promise<void> {
     try {
-        const packages: string[] = ['semantic-release'] // npm warns about missing peer dependency without this
+        const packages: string[] = ['semantic-release']
 
         const config = getConfig(core.getInput('config', { required: false}), defaultConfig, packages)
         const plugins: PluginSpec[] = Array.from(config.plugins ?? [])
@@ -43,14 +42,16 @@ export default async function run(env = process.env): Promise<void> {
             log('DRY RUN')
         }
         if (debug) {
+            const {default: debugLib} = await import('debug')
             debugLib.enable('semantic-release:*')
         }
 
         plugins.push(forceRelease, initialRelease)
 
+        const {default: semanticRelease} = await import('semantic-release')
         const result = await semanticRelease({
             ...config,
-            plugins: plugins as semanticRelease.PluginSpec[],
+            plugins: plugins as SemanticRelease.PluginSpec[],
             dryRun,
         }, {
             env: {
@@ -119,9 +120,9 @@ function safeParse(val: string) {
 
 function getConfig(
     configInput: string,
-    defaultConfig: Partial<semanticRelease.GlobalConfig>,
+    defaultConfig: Partial<SemanticRelease.GlobalConfig>,
     packages: string[],
-): Partial<semanticRelease.GlobalConfig> {
+): Partial<SemanticRelease.GlobalConfig> {
     if (configInput[0] === '.') {
         return {
             ...defaultConfig,
@@ -131,7 +132,7 @@ function getConfig(
         try {
             return {
                 ...defaultConfig,
-                ...JSON.parse(configInput) as Partial<semanticRelease.GlobalConfig>,
+                ...JSON.parse(configInput) as Partial<SemanticRelease.GlobalConfig>,
             }
         } catch(e) {
             throw 'Invalid inline config'
