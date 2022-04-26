@@ -27,25 +27,25 @@ jest.mock('@actions/core', () => ({
     setFailed: (msg: string) => setFailed(msg),
 }))
 
-let release: (options: SemanticRelease.Options, config: SemanticRelease.Config) => SemanticRelease.Result
+let release: jest.MockedFunction<(options: SemanticRelease.Options, config: SemanticRelease.Config) => SemanticRelease.Result>
 jest.mock('semantic-release', () => (options: SemanticRelease.Options, config: SemanticRelease.Config) => release(options, config))
 
-let debugEnable: (ident: string) => void
+let debugEnable: jest.MockedFunction<(ident: string) => void>
 jest.mock('debug', () => ({
     enable: (ident: string) => debugEnable(ident),
 }))
 
-let install: (packages: string[]) => Promise<string>
+let install: jest.MockedFunction<(packages: string[]) => Promise<string>>
 jest.mock('../src/util/install', () => ({
     install: (packages: string[]) => install(packages),
 }))
 
-let gitConfig: () => Promise<string>
+let gitConfig: jest.MockedFunction<() => Promise<string>>
 jest.mock('../src/util/gitConfig', () => ({
     gitConfig: () => gitConfig(),
 }))
 
-let updateTags: typeof realUpdateTags
+let updateTags: jest.MockedFunction<typeof realUpdateTags>
 jest.mock('../src/util/updateTags', () => ({
     updateTags: (...a: Parameters<typeof realUpdateTags>) => updateTags(...a),
 }))
@@ -63,10 +63,10 @@ function setup() {
         coreInfo = []
         debugEnable = jest.fn()
 
-        install = jest.fn(() => Promise.resolve(''))
-        release = jest.fn(() => releaseResult)
-        gitConfig = jest.fn(() => Promise.resolve(''))
-        updateTags = jest.fn(() => Promise.resolve([]))
+        install = jest.fn().mockImplementation(() => Promise.resolve(''))
+        release = jest.fn().mockImplementation(() => releaseResult)
+        gitConfig = jest.fn().mockImplementation(() => Promise.resolve(''))
+        updateTags = jest.fn().mockImplementation(() => Promise.resolve([]))
 
         return run(env)
     }
@@ -93,7 +93,7 @@ it('run with dry run option', () => {
     return run.finally(() => {
         expect(coreDebug).toEqual(expect.arrayContaining(['DRY RUN']))
         expect(release).toBeCalledTimes(1)
-        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({dryRun: true})
+        expect(release.mock.calls[0][0]).toMatchObject({dryRun: true})
     })
 })
 
@@ -136,10 +136,10 @@ it('setup forceRelease plugin', () => {
 
     return run.finally(() => {
         expect(release).toBeCalledTimes(1)
-        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+        expect(release.mock.calls[0][0]).toMatchObject({
             plugins: expect.arrayContaining([forceRelease]),
         })
-        expect((release as jest.Mock).mock.calls[0][1]).toMatchObject({
+        expect(release.mock.calls[0][1]).toMatchObject({
             env: expect.objectContaining({
                 RELEASE_FORCE: 'foobar',
             }),
@@ -154,7 +154,7 @@ it('setup initialRelease plugin', () => {
 
     return run.finally(() => {
         expect(release).toBeCalledTimes(1)
-        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+        expect(release.mock.calls[0][0]).toMatchObject({
             plugins: expect.arrayContaining([initialRelease]),
         })
     })
@@ -167,7 +167,7 @@ it('run with extended config', () => {
 
     return run.finally(() => {
         expect(install).toHaveBeenCalledWith(expect.arrayContaining(['@my-namespace/my-shared-config']))
-        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+        expect(release.mock.calls[0][0]).toMatchObject({
             extends: '@my-namespace/my-shared-config',
         })
     })
@@ -180,7 +180,7 @@ it('run with local extended config', () => {
 
     return run.finally(() => {
         expect(install).toHaveBeenCalledWith(expect.not.arrayContaining(['./my-local-config']))
-        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+        expect(release.mock.calls[0][0]).toMatchObject({
             extends: './my-local-config',
         })
     })
@@ -193,7 +193,7 @@ it('run with inline config', () => {
 
     return run.finally(() => {
         expect(install).toHaveBeenCalledWith(expect.arrayContaining(['conventional-changelog-angular']))
-        expect((release as jest.Mock).mock.calls[0][0]).toMatchObject({
+        expect(release.mock.calls[0][0]).toMatchObject({
             preset: 'angular',
         })
     })

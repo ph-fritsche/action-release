@@ -4,16 +4,14 @@
         "target": "ES6",
         "module": "commonjs",
 
-        "rootDir": "src",
-
         "strict": true,
         "esModuleInterop": true,
     },
     "include": [
-        "src/*",
+        "src",
+        "test",
     ],
     "exclude": [
         "node_modules",
-        "**/*.test.ts",
     ],
 }

@@ -34,7 +34,7 @@ export default async function run(env = process.env): Promise<void> {
         })
 
         if (config.preset) {
-            packages.push('conventional-changelog-' + config.preset)
+            packages.push(`conventional-changelog-${String(config.preset)}`)
         }
 
         await install(packages, log)
@@ -70,7 +70,7 @@ export default async function run(env = process.env): Promise<void> {
         core.info(`${nextRelease.type} release: ${lastRelease.version} -> ${nextRelease.version}`)
         core.info(` including ${commits.length} commits`)
 
-        releases.map(r => core.info(`-> Released ${r.name} by ${r.pluginName}: ${r.url}`))
+        releases.map(r => core.info(`-> Released ${String(r.name)} by ${r.pluginName}: ${String(r.url)}`))
 
         core.setOutput('lastVersion', lastRelease.version)
 
@@ -110,6 +110,7 @@ function hasProp<K extends PropertyKey>(obj: unknown, key: K): obj is { [k in K]
 
 function safeParse(val: string) {
     try {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return JSON.parse(val)
     } catch (e) {
         return undefined
@@ -130,7 +131,7 @@ function getConfig(
         try {
             return {
                 ...defaultConfig,
-                ...JSON.parse(configInput),
+                ...JSON.parse(configInput) as Partial<semanticRelease.GlobalConfig>,
             }
         } catch(e) {
             throw 'Invalid inline config'

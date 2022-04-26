@@ -1,8 +1,8 @@
-import type { ChildProcess, SpawnOptions } from 'child_process'
+import type { ChildProcess, SpawnOptions, spawn as Spawn } from 'child_process'
 import { EventEmitter } from 'events'
 import { spawn } from '../../src/util/spawn'
 
-const { spawn: realSpawn } = jest.requireActual('child_process')
+const { spawn: realSpawn } = jest.requireActual<{spawn: typeof Spawn}>('child_process')
 let spawnMock: (cmd: string, args: string[], options: SpawnOptions) => ChildProcess
 jest.mock('child_process', () => ({
     spawn: (cmd: string, args: string[], options: SpawnOptions): ChildProcess => spawnMock(cmd, args, options),
