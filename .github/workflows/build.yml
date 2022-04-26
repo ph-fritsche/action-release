@@ -17,8 +17,8 @@ jobs:
     - name: Commit build if it changed
       run: >
         git diff --staged --quiet
-        || (git config user.name "${GITHUB_ACTOR}"
-        && git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        || (git config user.name "github-actions"
+        && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         && git commit -m "build: autoupdate"
         && echo "buildCommit=$(git rev-parse HEAD)" >>$GITHUB_ENV)
 
