@@ -1,3 +1,5 @@
+import { SpawnOptions } from 'child_process'
+import path from 'path'
 import { install } from '../../src/util/install'
 
 let resolveMock: jest.MockedFunction<(name: string) => string>
@@ -5,9 +7,9 @@ jest.mock('../../src/util/resolve', () => ({
     resolve: (name: string) => resolveMock(name),
 }))
 
-let spawnMock: jest.MockedFn<(cmd: string, args: string[]) => Promise<string>>
+let spawnMock: jest.MockedFn<(cmd: string, args: string[], opt: SpawnOptions) => Promise<string>>
 jest.mock('../../src/util/spawn', () => ({
-    spawn: (cmd: string, args: string[]) => spawnMock(cmd, args),
+    spawn: (cmd: string, args: string[], opt: SpawnOptions) => spawnMock(cmd, args, opt),
 }))
 
 test('skip present modules', async () => {
@@ -41,4 +43,16 @@ test('install missing modules', async () => {
     expect(spawnMock.mock.calls[0][1]).toContain('foo')
     expect(spawnMock.mock.calls[0][1]).toContain('bar')
     expect(log).toEqual([expect.stringContaining('Install ["foo","bar"]')])
+})
+
+test('install in dist', async () => {
+    spawnMock = jest.fn()
+
+    await install(['foo'], () => undefined)
+
+    expect(spawnMock).toBeCalledTimes(1)
+    expect(spawnMock.mock.calls[0][2]).toEqual(expect.objectContaining({
+        // In test this should be the directory of the `install` util
+        cwd: path.resolve(__dirname, '../../src/util'),
+    }))
 })

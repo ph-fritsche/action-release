@@ -16,13 +16,18 @@ export function install(packages: string[], log: (msg: string) => void): Promise
     if (missing.length) {
         log(`Install ${JSON.stringify(missing)}`)
 
+        // if logging function is core.info, we're in debug/test
+        const isDebug = log === info
+
         const args = ['install', '--no-save']
-        if (log !== info) { // if logging function is core.info, we're in debug/test
+        if (!isDebug) {
             args.push('--silent')
         }
         args.push('--', ...missing)
 
-        return spawn('npm', args, {})
+        return spawn('npm', args, {
+            cwd: __dirname,
+        })
     }
 
     return Promise.resolve('')
