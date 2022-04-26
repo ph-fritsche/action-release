@@ -5,7 +5,7 @@ branding:
   color: green
 runs:
   using: node16
-  main: dist-ncc/index.js
+  main: build/index.js
 inputs:
   debug:
     description: debug

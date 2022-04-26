@@ -12,7 +12,7 @@ jobs:
     - uses: bahmutov/npm-install@v1
     - run: yarn build
 
-    - run: git add -f dist-ncc
+    - run: git add -f build
 
     - name: Commit build if it changed
       run: >
