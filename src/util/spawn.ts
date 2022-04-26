@@ -16,17 +16,18 @@ export function spawn(cmd: string, args: string[] = [], options: child_process.S
         }
         function sendBuffered (type: keyof typeof buffer, force = false) {
             const nPos = buffer[type].lastIndexOf('\n')
-            let send
-            if (force && buffer[type] && buffer[type].substr(-1) !== '\n') {
-                send = buffer[type] + '\n'
-            } else if (!force && nPos < 0) {
+            if (!force && nPos < 0 || !buffer[type]) {
                 return
-            } else {
-                send = buffer[type]
             }
-            if (send && send.trim()) {
-                (type === 'out' ? core.debug : core.warning)(send)
-                buffer[type] = buffer[type].slice(send.length)
+            const slice = force ? buffer[type] : buffer[type].slice(0, nPos + 1)
+            const lines = slice.split('\n')
+            if (lines.some(ln => ln.trim())) {
+                const logger = type === 'out' ? core.debug : core.warning
+                if (lines[lines.length -1].trim() === '') {
+                    lines.pop()
+                }
+                lines.forEach(ln => logger(ln))
+                buffer[type] = buffer[type].slice(slice.length)
             }
         }
 

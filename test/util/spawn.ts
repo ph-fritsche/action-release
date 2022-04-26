@@ -51,10 +51,10 @@ test('reject on error', () => {
 
 test('defer stdout to debug', () => {
     coreDebug = []
-    spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stdout.write('foo')`]))
+    spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stdout.write('foo\\nbar')`]))
 
     return spawn('foo', ['bar', 'baz'], { uid: 123456 }).finally(() => {
-        expect(coreDebug).toEqual(['foo\n'])
+        expect(coreDebug).toEqual(['foo', 'bar'])
     })
 })
 
@@ -69,9 +69,9 @@ test('resolve to stdout', () => {
 
 test('defer stderr to warning', () => {
     coreWarning = []
-    spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stderr.write('foo')`]))
+    spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stderr.write('foo\\nbar')`]))
 
     return spawn('foo', ['bar', 'baz'], { uid: 123456 }).finally(() => {
-        expect(coreWarning).toEqual(['foo\n'])
+        expect(coreWarning).toEqual(['foo', 'bar'])
     })
 })
