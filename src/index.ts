@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import type SemanticRelease from 'semantic-release'
+import type * as SemanticRelease from 'semantic-release'
 import defaultConfig from './defaultConfig'
 import { install } from './util/install'
 import { forceRelease, initialRelease } from './plugin'

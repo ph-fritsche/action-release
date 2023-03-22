@@ -21,7 +21,7 @@ test('defer args and options', () => {
 
     const child = spawn('foo', ['bar', 'baz'], {uid: 123456})
 
-    expect(spawnMock).toBeCalledWith('foo', ['bar', 'baz'], {uid: 123456})
+    expect(spawnMock).toHaveBeenCalledWith('foo', ['bar', 'baz'], {uid: 123456})
 
     return expect(child).resolves.toBe('')
 })
@@ -35,7 +35,7 @@ test('reject on spawn error', () => {
 
     const child = spawn('foo', ['bar', 'baz'], {uid: 123456})
 
-    expect(spawnMock).toBeCalledWith('foo', ['bar', 'baz'], {uid: 123456})
+    expect(spawnMock).toHaveBeenCalledWith('foo', ['bar', 'baz'], {uid: 123456})
 
     return expect(child).rejects.toMatch('ENOSUP')
 })

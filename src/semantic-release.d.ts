@@ -1,4 +1,4 @@
-import SemanticRelease from 'semantic-release'
+import type * as SemanticRelease from 'semantic-release'
 
 export type PluginConfig = {
     [k: string]: unknown,

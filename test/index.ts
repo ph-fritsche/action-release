@@ -1,4 +1,4 @@
-import type SemanticRelease from 'semantic-release'
+import type * as SemanticRelease from 'semantic-release'
 import run from '../src/index'
 import { forceRelease, initialRelease } from '../src/plugin'
 import defaultResult from './_releaseResult'
@@ -92,7 +92,7 @@ it('run with dry run option', () => {
 
     return run.finally(() => {
         expect(coreDebug).toEqual(expect.arrayContaining(['DRY RUN']))
-        expect(release).toBeCalledTimes(1)
+        expect(release).toHaveBeenCalledTimes(1)
         expect(release.mock.calls[0][0]).toMatchObject({dryRun: true})
     })
 })
@@ -103,8 +103,8 @@ it('run with debug option', () => {
     const run = exec({debug: 'true'})
 
     return run.finally(() => {
-        expect(debugEnable).toBeCalled()
-        expect(release).toBeCalled()
+        expect(debugEnable).toHaveBeenCalled()
+        expect(release).toHaveBeenCalled()
     })
 })
 
@@ -135,7 +135,7 @@ it('setup forceRelease plugin', () => {
     const run = exec({force: 'foobar'})
 
     return run.finally(() => {
-        expect(release).toBeCalledTimes(1)
+        expect(release).toHaveBeenCalledTimes(1)
         expect(release.mock.calls[0][0]).toMatchObject({
             plugins: expect.arrayContaining([forceRelease]),
         })
@@ -153,7 +153,7 @@ it('setup initialRelease plugin', () => {
     const run = exec()
 
     return run.finally(() => {
-        expect(release).toBeCalledTimes(1)
+        expect(release).toHaveBeenCalledTimes(1)
         expect(release.mock.calls[0][0]).toMatchObject({
             plugins: expect.arrayContaining([initialRelease]),
         })
@@ -211,8 +211,8 @@ it('call updateTag', () => {
     }})
 
     return run.finally(() => {
-        expect(gitConfig).toBeCalled()
-        expect(updateTags).toBeCalledWith('HEAD', '1.2.3-foo.1', {
+        expect(gitConfig).toHaveBeenCalled()
+        expect(updateTags).toHaveBeenCalledWith('HEAD', '1.2.3-foo.1', {
             major: '1',
             minor: '2',
             patch: '3',

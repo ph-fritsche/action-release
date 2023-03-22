@@ -1,4 +1,4 @@
-import type SemanticRelease from 'semantic-release'
+import type * as SemanticRelease from 'semantic-release'
 import type { PluginConfig } from '../semantic-release'
 import { releaseTypes } from './shared/releaseTypes'
 
