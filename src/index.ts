@@ -9,7 +9,7 @@ import { gitConfig } from './util/gitConfig'
 
 export default async function run(env = process.env): Promise<void> {
     try {
-        const packages: string[] = ['semantic-release']
+        const packages: string[] = ['semantic-release', 'debug']
 
         const config = getConfig(core.getInput('config', { required: false}), defaultConfig, packages)
         const plugins: PluginSpec[] = Array.from(config.plugins ?? [])
