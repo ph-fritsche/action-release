@@ -1,4 +1,4 @@
-const { buildSync } = require('esbuild')
+import { buildSync } from 'esbuild'
 
 buildSync({
     entryPoints: ['src/action.ts'],
