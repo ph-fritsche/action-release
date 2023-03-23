@@ -2445,7 +2445,7 @@ function run() {
   return __async(this, arguments, function* (env = process.env) {
     var _a, _b, _c;
     try {
-      const packages = ["semantic-release"];
+      const packages = ["semantic-release", "debug"];
       const config = getConfig(core2.getInput("config", { required: false }), defaultConfig_default, packages);
       const plugins2 = Array.from((_a = config.plugins) != null ? _a : []);
       const dryRun = Boolean(safeParse(core2.getInput("dry", { required: false })));
