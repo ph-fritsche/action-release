@@ -758,12 +758,12 @@ var require_tunnel = __commonJS({
       function onResponse(res) {
         res.upgrade = true;
       }
-      function onUpgrade(res, socket, head) {
+      function onUpgrade(res, socket, head2) {
         process.nextTick(function() {
-          onConnect(res, socket, head);
+          onConnect(res, socket, head2);
         });
       }
-      function onConnect(res, socket, head) {
+      function onConnect(res, socket, head2) {
         connectReq.removeAllListeners();
         socket.removeAllListeners();
         if (res.statusCode !== 200) {
@@ -778,7 +778,7 @@ var require_tunnel = __commonJS({
           self.removeSocket(placeholder);
           return;
         }
-        if (head.length > 0) {
+        if (head2.length > 0) {
           debug3("got illegal response body from proxy");
           socket.destroy();
           var error = new Error("got illegal response body from proxy");
@@ -1991,7 +1991,7 @@ var require_path_utils = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = void 0;
-    var path = __importStar(require("path"));
+    var path3 = __importStar(require("path"));
     function toPosixPath(pth) {
       return pth.replace(/[\\]/g, "/");
     }
@@ -2001,7 +2001,7 @@ var require_path_utils = __commonJS({
     }
     exports.toWin32Path = toWin32Path;
     function toPlatformPath(pth) {
-      return pth.replace(/[/\\]/g, path.sep);
+      return pth.replace(/[/\\]/g, path3.sep);
     }
     exports.toPlatformPath = toPlatformPath;
   }
@@ -2072,7 +2072,7 @@ var require_core = __commonJS({
     var file_command_1 = require_file_command();
     var utils_1 = require_utils();
     var os = __importStar(require("os"));
-    var path = __importStar(require("path"));
+    var path3 = __importStar(require("path"));
     var oidc_utils_1 = require_oidc_utils();
     var ExitCode;
     (function(ExitCode2) {
@@ -2100,7 +2100,7 @@ var require_core = __commonJS({
       } else {
         command_1.issueCommand("add-path", {}, inputPath);
       }
-      process.env["PATH"] = `${inputPath}${path.delimiter}${process.env["PATH"]}`;
+      process.env["PATH"] = `${inputPath}${path3.delimiter}${process.env["PATH"]}`;
     }
     exports.addPath = addPath;
     function getInput2(name, options) {
@@ -2233,6 +2233,2839 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     Object.defineProperty(exports, "toPlatformPath", { enumerable: true, get: function() {
       return path_utils_1.toPlatformPath;
     } });
+  }
+});
+
+// node_modules/env-ci/services/appveyor.js
+var appveyor_default;
+var init_appveyor = __esm({
+  "node_modules/env-ci/services/appveyor.js"() {
+    appveyor_default = {
+      detect({ env }) {
+        return Boolean(env.APPVEYOR);
+      },
+      configuration({ env }) {
+        const pr = env.APPVEYOR_PULL_REQUEST_NUMBER;
+        const isPr = Boolean(pr);
+        return {
+          name: "Appveyor",
+          service: "appveyor",
+          commit: env.APPVEYOR_REPO_COMMIT,
+          tag: env.APPVEYOR_REPO_TAG_NAME,
+          build: env.APPVEYOR_BUILD_NUMBER,
+          buildUrl: `https://ci.appveyor.com/project/${env.APPVEYOR_PROJECT_SLUG}/build/${env.APPVEYOR_BUILD_VERSION}`,
+          branch: env.APPVEYOR_REPO_BRANCH,
+          job: env.APPVEYOR_JOB_NUMBER,
+          jobUrl: `https://ci.appveyor.com/project/${env.APPVEYOR_PROJECT_SLUG}/build/job/${env.APPVEYOR_JOB_ID}`,
+          pr,
+          isPr,
+          prBranch: env.APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH,
+          slug: env.APPVEYOR_REPO_NAME,
+          root: env.APPVEYOR_BUILD_FOLDER
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/lib/utils.js
+function prNumber(pr) {
+  return (/\d+(?!.*\d+)/.exec(pr) || [])[0];
+}
+function parseBranch(branch2) {
+  return branch2 ? /^(?:refs\/heads\/)?(?<branch>.+)$/i.exec(branch2)[1] : void 0;
+}
+var init_utils = __esm({
+  "node_modules/env-ci/lib/utils.js"() {
+  }
+});
+
+// node_modules/env-ci/services/azure-pipelines.js
+var azure_pipelines_default;
+var init_azure_pipelines = __esm({
+  "node_modules/env-ci/services/azure-pipelines.js"() {
+    init_utils();
+    azure_pipelines_default = {
+      detect({ env }) {
+        return Boolean(env.BUILD_BUILDURI);
+      },
+      configuration({ env }) {
+        const pr = env.SYSTEM_PULLREQUEST_PULLREQUESTID;
+        const isPr = Boolean(pr);
+        return {
+          name: "Azure Pipelines",
+          service: "azurePipelines",
+          commit: env.BUILD_SOURCEVERSION,
+          build: env.BUILD_BUILDNUMBER,
+          branch: parseBranch(
+            isPr ? env.SYSTEM_PULLREQUEST_TARGETBRANCH : env.BUILD_SOURCEBRANCH
+          ),
+          pr,
+          isPr,
+          prBranch: parseBranch(
+            isPr ? env.SYSTEM_PULLREQUEST_SOURCEBRANCH : void 0
+          ),
+          root: env.BUILD_REPOSITORY_LOCALPATH
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/bamboo.js
+var bamboo_default;
+var init_bamboo = __esm({
+  "node_modules/env-ci/services/bamboo.js"() {
+    bamboo_default = {
+      detect({ env }) {
+        return Boolean(env.bamboo_agentId);
+      },
+      configuration({ env }) {
+        return {
+          name: "Bamboo",
+          service: "bamboo",
+          commit: env.bamboo_planRepository_1_revision,
+          build: env.bamboo_buildNumber,
+          buildUrl: env.bamboo_buildResultsUrl,
+          branch: env.bamboo_planRepository_1_branchName,
+          job: env.bamboo_buildKey,
+          root: env.bamboo_build_working_directory
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/bitbucket.js
+var bitbucket_default;
+var init_bitbucket = __esm({
+  "node_modules/env-ci/services/bitbucket.js"() {
+    bitbucket_default = {
+      detect({ env }) {
+        return Boolean(env.BITBUCKET_BUILD_NUMBER);
+      },
+      configuration({ env }) {
+        return {
+          name: "Bitbucket Pipelines",
+          service: "bitbucket",
+          commit: env.BITBUCKET_COMMIT,
+          tag: env.BITBUCKET_TAG,
+          build: env.BITBUCKET_BUILD_NUMBER,
+          buildUrl: `https://bitbucket.org/${env.BITBUCKET_REPO_SLUG}/addon/pipelines/home#!/results/${env.BITBUCKET_BUILD_NUMBER}`,
+          branch: env.BITBUCKET_BRANCH,
+          slug: env.BITBUCKET_REPO_SLUG,
+          root: env.BITBUCKET_CLONE_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/bitrise.js
+var bitrise_default;
+var init_bitrise = __esm({
+  "node_modules/env-ci/services/bitrise.js"() {
+    bitrise_default = {
+      detect({ env }) {
+        return Boolean(env.BITRISE_IO);
+      },
+      configuration({ env }) {
+        const pr = env.BITRISE_PULL_REQUEST === "false" ? void 0 : env.BITRISE_PULL_REQUEST;
+        const isPr = Boolean(pr);
+        return {
+          name: "Bitrise",
+          service: "bitrise",
+          commit: env.BITRISE_GIT_COMMIT,
+          tag: env.BITRISE_GIT_TAG,
+          build: env.BITRISE_BUILD_NUMBER,
+          buildUrl: env.BITRISE_BUILD_URL,
+          branch: isPr ? env.BITRISEIO_GIT_BRANCH_DEST : env.BITRISE_GIT_BRANCH,
+          pr,
+          isPr,
+          prBranch: isPr ? env.BITRISE_GIT_BRANCH : void 0,
+          slug: env.BITRISE_APP_SLUG
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/buddy.js
+var buddy_default;
+var init_buddy = __esm({
+  "node_modules/env-ci/services/buddy.js"() {
+    init_utils();
+    buddy_default = {
+      detect({ env }) {
+        return Boolean(env.BUDDY_WORKSPACE_ID);
+      },
+      configuration({ env }) {
+        const pr = prNumber(env.BUDDY_EXECUTION_PULL_REQUEST_ID);
+        const isPr = Boolean(pr);
+        return {
+          name: "Buddy",
+          service: "buddy",
+          commit: env.BUDDY_EXECUTION_REVISION,
+          tag: env.BUDDY_EXECUTION_TAG,
+          build: env.BUDDY_EXECUTION_ID,
+          buildUrl: env.BUDDY_EXECUTION_URL,
+          branch: isPr ? void 0 : env.BUDDY_EXECUTION_BRANCH,
+          pr,
+          isPr,
+          slug: env.BUDDY_REPO_SLUG
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/buildkite.js
+var buildkite_default;
+var init_buildkite = __esm({
+  "node_modules/env-ci/services/buildkite.js"() {
+    buildkite_default = {
+      detect({ env }) {
+        return Boolean(env.BUILDKITE);
+      },
+      configuration({ env }) {
+        const pr = env.BUILDKITE_PULL_REQUEST === "false" ? void 0 : env.BUILDKITE_PULL_REQUEST;
+        const isPr = Boolean(pr);
+        return {
+          name: "Buildkite",
+          service: "buildkite",
+          build: env.BUILDKITE_BUILD_NUMBER,
+          buildUrl: env.BUILDKITE_BUILD_URL,
+          commit: env.BUILDKITE_COMMIT,
+          tag: env.BUILDKITE_TAG,
+          branch: isPr ? env.BUILDKITE_PULL_REQUEST_BASE_BRANCH : env.BUILDKITE_BRANCH,
+          slug: `${env.BUILDKITE_ORGANIZATION_SLUG}/${env.BUILDKITE_PROJECT_SLUG}`,
+          pr,
+          isPr,
+          prBranch: isPr ? env.BUILDKITE_BRANCH : void 0,
+          root: env.BUILDKITE_BUILD_CHECKOUT_PATH
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/circleci.js
+var circleci_default;
+var init_circleci = __esm({
+  "node_modules/env-ci/services/circleci.js"() {
+    init_utils();
+    circleci_default = {
+      detect({ env }) {
+        return Boolean(env.CIRCLECI);
+      },
+      configuration({ env }) {
+        const pr = env.CIRCLE_PR_NUMBER || prNumber(env.CIRCLE_PULL_REQUEST || env.CI_PULL_REQUEST);
+        const isPr = Boolean(pr);
+        return {
+          name: "CircleCI",
+          service: "circleci",
+          build: env.CIRCLE_BUILD_NUM,
+          buildUrl: env.CIRCLE_BUILD_URL,
+          job: `${env.CIRCLE_BUILD_NUM}.${env.CIRCLE_NODE_INDEX}`,
+          commit: env.CIRCLE_SHA1,
+          tag: env.CIRCLE_TAG,
+          branch: isPr ? void 0 : env.CIRCLE_BRANCH,
+          pr,
+          isPr,
+          prBranch: isPr ? env.CIRCLE_BRANCH : void 0,
+          slug: `${env.CIRCLE_PROJECT_USERNAME}/${env.CIRCLE_PROJECT_REPONAME}`
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/cirrus.js
+var CIRRUS_CI_DASHBOARD, cirrus_default;
+var init_cirrus = __esm({
+  "node_modules/env-ci/services/cirrus.js"() {
+    CIRRUS_CI_DASHBOARD = "https://cirrus-ci.com";
+    cirrus_default = {
+      detect({ env }) {
+        return Boolean(env.CIRRUS_CI);
+      },
+      configuration({ env }) {
+        const pr = env.CIRRUS_PR;
+        const isPr = Boolean(pr);
+        return {
+          name: "Cirrus CI",
+          service: "cirrus",
+          commit: env.CIRRUS_CHANGE_IN_REPO,
+          tag: env.CIRRUS_TAG,
+          build: env.CIRRUS_BUILD_ID,
+          buildUrl: `${CIRRUS_CI_DASHBOARD}/build/${env.CIRRUS_BUILD_ID}`,
+          job: env.CIRRUS_TASK_ID,
+          jobUrl: `${CIRRUS_CI_DASHBOARD}/task/${env.CIRRUS_TASK_ID}`,
+          branch: isPr ? env.CIRRUS_BASE_BRANCH : env.CIRRUS_BRANCH,
+          pr,
+          isPr,
+          prBranch: isPr ? env.CIRRUS_BRANCH : void 0,
+          slug: env.CIRRUS_REPO_FULL_NAME,
+          root: env.CIRRUS_WORKING_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/cloudflare-pages.js
+var cloudflare_pages_default;
+var init_cloudflare_pages = __esm({
+  "node_modules/env-ci/services/cloudflare-pages.js"() {
+    cloudflare_pages_default = {
+      detect({ env }) {
+        return env.CF_PAGES === "1";
+      },
+      configuration({ env }) {
+        return {
+          name: "Cloudflare Pages",
+          service: "cloudflarePages",
+          commit: env.CF_PAGES_COMMIT_SHA,
+          branch: env.CF_PAGES_BRANCH,
+          root: env.PWD
+        };
+      }
+    };
+  }
+});
+
+// node_modules/isexe/windows.js
+var require_windows = __commonJS({
+  "node_modules/isexe/windows.js"(exports, module2) {
+    module2.exports = isexe;
+    isexe.sync = sync;
+    var fs = require("fs");
+    function checkPathExt(path3, options) {
+      var pathext = options.pathExt !== void 0 ? options.pathExt : process.env.PATHEXT;
+      if (!pathext) {
+        return true;
+      }
+      pathext = pathext.split(";");
+      if (pathext.indexOf("") !== -1) {
+        return true;
+      }
+      for (var i = 0; i < pathext.length; i++) {
+        var p = pathext[i].toLowerCase();
+        if (p && path3.substr(-p.length).toLowerCase() === p) {
+          return true;
+        }
+      }
+      return false;
+    }
+    function checkStat(stat, path3, options) {
+      if (!stat.isSymbolicLink() && !stat.isFile()) {
+        return false;
+      }
+      return checkPathExt(path3, options);
+    }
+    function isexe(path3, options, cb) {
+      fs.stat(path3, function(er, stat) {
+        cb(er, er ? false : checkStat(stat, path3, options));
+      });
+    }
+    function sync(path3, options) {
+      return checkStat(fs.statSync(path3), path3, options);
+    }
+  }
+});
+
+// node_modules/isexe/mode.js
+var require_mode = __commonJS({
+  "node_modules/isexe/mode.js"(exports, module2) {
+    module2.exports = isexe;
+    isexe.sync = sync;
+    var fs = require("fs");
+    function isexe(path3, options, cb) {
+      fs.stat(path3, function(er, stat) {
+        cb(er, er ? false : checkStat(stat, options));
+      });
+    }
+    function sync(path3, options) {
+      return checkStat(fs.statSync(path3), options);
+    }
+    function checkStat(stat, options) {
+      return stat.isFile() && checkMode(stat, options);
+    }
+    function checkMode(stat, options) {
+      var mod = stat.mode;
+      var uid = stat.uid;
+      var gid = stat.gid;
+      var myUid = options.uid !== void 0 ? options.uid : process.getuid && process.getuid();
+      var myGid = options.gid !== void 0 ? options.gid : process.getgid && process.getgid();
+      var u = parseInt("100", 8);
+      var g = parseInt("010", 8);
+      var o = parseInt("001", 8);
+      var ug = u | g;
+      var ret = mod & o || mod & g && gid === myGid || mod & u && uid === myUid || mod & ug && myUid === 0;
+      return ret;
+    }
+  }
+});
+
+// node_modules/isexe/index.js
+var require_isexe = __commonJS({
+  "node_modules/isexe/index.js"(exports, module2) {
+    var fs = require("fs");
+    var core3;
+    if (process.platform === "win32" || global.TESTING_WINDOWS) {
+      core3 = require_windows();
+    } else {
+      core3 = require_mode();
+    }
+    module2.exports = isexe;
+    isexe.sync = sync;
+    function isexe(path3, options, cb) {
+      if (typeof options === "function") {
+        cb = options;
+        options = {};
+      }
+      if (!cb) {
+        if (typeof Promise !== "function") {
+          throw new TypeError("callback not provided");
+        }
+        return new Promise(function(resolve2, reject) {
+          isexe(path3, options || {}, function(er, is) {
+            if (er) {
+              reject(er);
+            } else {
+              resolve2(is);
+            }
+          });
+        });
+      }
+      core3(path3, options || {}, function(er, is) {
+        if (er) {
+          if (er.code === "EACCES" || options && options.ignoreErrors) {
+            er = null;
+            is = false;
+          }
+        }
+        cb(er, is);
+      });
+    }
+    function sync(path3, options) {
+      try {
+        return core3.sync(path3, options || {});
+      } catch (er) {
+        if (options && options.ignoreErrors || er.code === "EACCES") {
+          return false;
+        } else {
+          throw er;
+        }
+      }
+    }
+  }
+});
+
+// node_modules/which/which.js
+var require_which = __commonJS({
+  "node_modules/which/which.js"(exports, module2) {
+    var isWindows = process.platform === "win32" || process.env.OSTYPE === "cygwin" || process.env.OSTYPE === "msys";
+    var path3 = require("path");
+    var COLON = isWindows ? ";" : ":";
+    var isexe = require_isexe();
+    var getNotFoundError = (cmd) => Object.assign(new Error(`not found: ${cmd}`), { code: "ENOENT" });
+    var getPathInfo = (cmd, opt) => {
+      const colon = opt.colon || COLON;
+      const pathEnv = cmd.match(/\//) || isWindows && cmd.match(/\\/) ? [""] : [
+        // windows always checks the cwd first
+        ...isWindows ? [process.cwd()] : [],
+        ...(opt.path || process.env.PATH || /* istanbul ignore next: very unusual */
+        "").split(colon)
+      ];
+      const pathExtExe = isWindows ? opt.pathExt || process.env.PATHEXT || ".EXE;.CMD;.BAT;.COM" : "";
+      const pathExt = isWindows ? pathExtExe.split(colon) : [""];
+      if (isWindows) {
+        if (cmd.indexOf(".") !== -1 && pathExt[0] !== "")
+          pathExt.unshift("");
+      }
+      return {
+        pathEnv,
+        pathExt,
+        pathExtExe
+      };
+    };
+    var which = (cmd, opt, cb) => {
+      if (typeof opt === "function") {
+        cb = opt;
+        opt = {};
+      }
+      if (!opt)
+        opt = {};
+      const { pathEnv, pathExt, pathExtExe } = getPathInfo(cmd, opt);
+      const found = [];
+      const step = (i) => new Promise((resolve2, reject) => {
+        if (i === pathEnv.length)
+          return opt.all && found.length ? resolve2(found) : reject(getNotFoundError(cmd));
+        const ppRaw = pathEnv[i];
+        const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw;
+        const pCmd = path3.join(pathPart, cmd);
+        const p = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd : pCmd;
+        resolve2(subStep(p, i, 0));
+      });
+      const subStep = (p, i, ii) => new Promise((resolve2, reject) => {
+        if (ii === pathExt.length)
+          return resolve2(step(i + 1));
+        const ext = pathExt[ii];
+        isexe(p + ext, { pathExt: pathExtExe }, (er, is) => {
+          if (!er && is) {
+            if (opt.all)
+              found.push(p + ext);
+            else
+              return resolve2(p + ext);
+          }
+          return resolve2(subStep(p, i, ii + 1));
+        });
+      });
+      return cb ? step(0).then((res) => cb(null, res), cb) : step(0);
+    };
+    var whichSync = (cmd, opt) => {
+      opt = opt || {};
+      const { pathEnv, pathExt, pathExtExe } = getPathInfo(cmd, opt);
+      const found = [];
+      for (let i = 0; i < pathEnv.length; i++) {
+        const ppRaw = pathEnv[i];
+        const pathPart = /^".*"$/.test(ppRaw) ? ppRaw.slice(1, -1) : ppRaw;
+        const pCmd = path3.join(pathPart, cmd);
+        const p = !pathPart && /^\.[\\\/]/.test(cmd) ? cmd.slice(0, 2) + pCmd : pCmd;
+        for (let j = 0; j < pathExt.length; j++) {
+          const cur = p + pathExt[j];
+          try {
+            const is = isexe.sync(cur, { pathExt: pathExtExe });
+            if (is) {
+              if (opt.all)
+                found.push(cur);
+              else
+                return cur;
+            }
+          } catch (ex) {
+          }
+        }
+      }
+      if (opt.all && found.length)
+        return found;
+      if (opt.nothrow)
+        return null;
+      throw getNotFoundError(cmd);
+    };
+    module2.exports = which;
+    which.sync = whichSync;
+  }
+});
+
+// node_modules/path-key/index.js
+var require_path_key = __commonJS({
+  "node_modules/path-key/index.js"(exports, module2) {
+    "use strict";
+    var pathKey2 = (options = {}) => {
+      const environment = options.env || process.env;
+      const platform = options.platform || process.platform;
+      if (platform !== "win32") {
+        return "PATH";
+      }
+      return Object.keys(environment).reverse().find((key) => key.toUpperCase() === "PATH") || "Path";
+    };
+    module2.exports = pathKey2;
+    module2.exports.default = pathKey2;
+  }
+});
+
+// node_modules/cross-spawn/lib/util/resolveCommand.js
+var require_resolveCommand = __commonJS({
+  "node_modules/cross-spawn/lib/util/resolveCommand.js"(exports, module2) {
+    "use strict";
+    var path3 = require("path");
+    var which = require_which();
+    var getPathKey = require_path_key();
+    function resolveCommandAttempt(parsed, withoutPathExt) {
+      const env = parsed.options.env || process.env;
+      const cwd = process.cwd();
+      const hasCustomCwd = parsed.options.cwd != null;
+      const shouldSwitchCwd = hasCustomCwd && process.chdir !== void 0 && !process.chdir.disabled;
+      if (shouldSwitchCwd) {
+        try {
+          process.chdir(parsed.options.cwd);
+        } catch (err) {
+        }
+      }
+      let resolved;
+      try {
+        resolved = which.sync(parsed.command, {
+          path: env[getPathKey({ env })],
+          pathExt: withoutPathExt ? path3.delimiter : void 0
+        });
+      } catch (e) {
+      } finally {
+        if (shouldSwitchCwd) {
+          process.chdir(cwd);
+        }
+      }
+      if (resolved) {
+        resolved = path3.resolve(hasCustomCwd ? parsed.options.cwd : "", resolved);
+      }
+      return resolved;
+    }
+    function resolveCommand(parsed) {
+      return resolveCommandAttempt(parsed) || resolveCommandAttempt(parsed, true);
+    }
+    module2.exports = resolveCommand;
+  }
+});
+
+// node_modules/cross-spawn/lib/util/escape.js
+var require_escape = __commonJS({
+  "node_modules/cross-spawn/lib/util/escape.js"(exports, module2) {
+    "use strict";
+    var metaCharsRegExp = /([()\][%!^"`<>&|;, *?])/g;
+    function escapeCommand(arg) {
+      arg = arg.replace(metaCharsRegExp, "^$1");
+      return arg;
+    }
+    function escapeArgument(arg, doubleEscapeMetaChars) {
+      arg = `${arg}`;
+      arg = arg.replace(/(\\*)"/g, '$1$1\\"');
+      arg = arg.replace(/(\\*)$/, "$1$1");
+      arg = `"${arg}"`;
+      arg = arg.replace(metaCharsRegExp, "^$1");
+      if (doubleEscapeMetaChars) {
+        arg = arg.replace(metaCharsRegExp, "^$1");
+      }
+      return arg;
+    }
+    module2.exports.command = escapeCommand;
+    module2.exports.argument = escapeArgument;
+  }
+});
+
+// node_modules/shebang-regex/index.js
+var require_shebang_regex = __commonJS({
+  "node_modules/shebang-regex/index.js"(exports, module2) {
+    "use strict";
+    module2.exports = /^#!(.*)/;
+  }
+});
+
+// node_modules/shebang-command/index.js
+var require_shebang_command = __commonJS({
+  "node_modules/shebang-command/index.js"(exports, module2) {
+    "use strict";
+    var shebangRegex = require_shebang_regex();
+    module2.exports = (string = "") => {
+      const match = string.match(shebangRegex);
+      if (!match) {
+        return null;
+      }
+      const [path3, argument] = match[0].replace(/#! ?/, "").split(" ");
+      const binary = path3.split("/").pop();
+      if (binary === "env") {
+        return argument;
+      }
+      return argument ? `${binary} ${argument}` : binary;
+    };
+  }
+});
+
+// node_modules/cross-spawn/lib/util/readShebang.js
+var require_readShebang = __commonJS({
+  "node_modules/cross-spawn/lib/util/readShebang.js"(exports, module2) {
+    "use strict";
+    var fs = require("fs");
+    var shebangCommand = require_shebang_command();
+    function readShebang(command) {
+      const size = 150;
+      const buffer = Buffer.alloc(size);
+      let fd;
+      try {
+        fd = fs.openSync(command, "r");
+        fs.readSync(fd, buffer, 0, size, 0);
+        fs.closeSync(fd);
+      } catch (e) {
+      }
+      return shebangCommand(buffer.toString());
+    }
+    module2.exports = readShebang;
+  }
+});
+
+// node_modules/cross-spawn/lib/parse.js
+var require_parse = __commonJS({
+  "node_modules/cross-spawn/lib/parse.js"(exports, module2) {
+    "use strict";
+    var path3 = require("path");
+    var resolveCommand = require_resolveCommand();
+    var escape = require_escape();
+    var readShebang = require_readShebang();
+    var isWin = process.platform === "win32";
+    var isExecutableRegExp = /\.(?:com|exe)$/i;
+    var isCmdShimRegExp = /node_modules[\\/].bin[\\/][^\\/]+\.cmd$/i;
+    function detectShebang(parsed) {
+      parsed.file = resolveCommand(parsed);
+      const shebang = parsed.file && readShebang(parsed.file);
+      if (shebang) {
+        parsed.args.unshift(parsed.file);
+        parsed.command = shebang;
+        return resolveCommand(parsed);
+      }
+      return parsed.file;
+    }
+    function parseNonShell(parsed) {
+      if (!isWin) {
+        return parsed;
+      }
+      const commandFile = detectShebang(parsed);
+      const needsShell = !isExecutableRegExp.test(commandFile);
+      if (parsed.options.forceShell || needsShell) {
+        const needsDoubleEscapeMetaChars = isCmdShimRegExp.test(commandFile);
+        parsed.command = path3.normalize(parsed.command);
+        parsed.command = escape.command(parsed.command);
+        parsed.args = parsed.args.map((arg) => escape.argument(arg, needsDoubleEscapeMetaChars));
+        const shellCommand = [parsed.command].concat(parsed.args).join(" ");
+        parsed.args = ["/d", "/s", "/c", `"${shellCommand}"`];
+        parsed.command = process.env.comspec || "cmd.exe";
+        parsed.options.windowsVerbatimArguments = true;
+      }
+      return parsed;
+    }
+    function parse2(command, args, options) {
+      if (args && !Array.isArray(args)) {
+        options = args;
+        args = null;
+      }
+      args = args ? args.slice(0) : [];
+      options = Object.assign({}, options);
+      const parsed = {
+        command,
+        args,
+        options,
+        file: void 0,
+        original: {
+          command,
+          args
+        }
+      };
+      return options.shell ? parsed : parseNonShell(parsed);
+    }
+    module2.exports = parse2;
+  }
+});
+
+// node_modules/cross-spawn/lib/enoent.js
+var require_enoent = __commonJS({
+  "node_modules/cross-spawn/lib/enoent.js"(exports, module2) {
+    "use strict";
+    var isWin = process.platform === "win32";
+    function notFoundError(original, syscall) {
+      return Object.assign(new Error(`${syscall} ${original.command} ENOENT`), {
+        code: "ENOENT",
+        errno: "ENOENT",
+        syscall: `${syscall} ${original.command}`,
+        path: original.command,
+        spawnargs: original.args
+      });
+    }
+    function hookChildProcess(cp, parsed) {
+      if (!isWin) {
+        return;
+      }
+      const originalEmit = cp.emit;
+      cp.emit = function(name, arg1) {
+        if (name === "exit") {
+          const err = verifyENOENT(arg1, parsed, "spawn");
+          if (err) {
+            return originalEmit.call(cp, "error", err);
+          }
+        }
+        return originalEmit.apply(cp, arguments);
+      };
+    }
+    function verifyENOENT(status, parsed) {
+      if (isWin && status === 1 && !parsed.file) {
+        return notFoundError(parsed.original, "spawn");
+      }
+      return null;
+    }
+    function verifyENOENTSync(status, parsed) {
+      if (isWin && status === 1 && !parsed.file) {
+        return notFoundError(parsed.original, "spawnSync");
+      }
+      return null;
+    }
+    module2.exports = {
+      hookChildProcess,
+      verifyENOENT,
+      verifyENOENTSync,
+      notFoundError
+    };
+  }
+});
+
+// node_modules/cross-spawn/index.js
+var require_cross_spawn = __commonJS({
+  "node_modules/cross-spawn/index.js"(exports, module2) {
+    "use strict";
+    var cp = require("child_process");
+    var parse2 = require_parse();
+    var enoent = require_enoent();
+    function spawn3(command, args, options) {
+      const parsed = parse2(command, args, options);
+      const spawned = cp.spawn(parsed.command, parsed.args, parsed.options);
+      enoent.hookChildProcess(spawned, parsed);
+      return spawned;
+    }
+    function spawnSync(command, args, options) {
+      const parsed = parse2(command, args, options);
+      const result = cp.spawnSync(parsed.command, parsed.args, parsed.options);
+      result.error = result.error || enoent.verifyENOENTSync(result.status, parsed);
+      return result;
+    }
+    module2.exports = spawn3;
+    module2.exports.spawn = spawn3;
+    module2.exports.sync = spawnSync;
+    module2.exports._parse = parse2;
+    module2.exports._enoent = enoent;
+  }
+});
+
+// node_modules/strip-final-newline/index.js
+function stripFinalNewline(input) {
+  const LF = typeof input === "string" ? "\n" : "\n".charCodeAt();
+  const CR = typeof input === "string" ? "\r" : "\r".charCodeAt();
+  if (input[input.length - 1] === LF) {
+    input = input.slice(0, -1);
+  }
+  if (input[input.length - 1] === CR) {
+    input = input.slice(0, -1);
+  }
+  return input;
+}
+var init_strip_final_newline = __esm({
+  "node_modules/strip-final-newline/index.js"() {
+  }
+});
+
+// node_modules/npm-run-path/node_modules/path-key/index.js
+function pathKey(options = {}) {
+  const {
+    env = process.env,
+    platform = process.platform
+  } = options;
+  if (platform !== "win32") {
+    return "PATH";
+  }
+  return Object.keys(env).reverse().find((key) => key.toUpperCase() === "PATH") || "Path";
+}
+var init_path_key = __esm({
+  "node_modules/npm-run-path/node_modules/path-key/index.js"() {
+  }
+});
+
+// node_modules/npm-run-path/index.js
+function npmRunPath(options = {}) {
+  const {
+    cwd = import_node_process.default.cwd(),
+    path: path_ = import_node_process.default.env[pathKey()],
+    execPath = import_node_process.default.execPath
+  } = options;
+  let previous;
+  const cwdString = cwd instanceof URL ? import_node_url.default.fileURLToPath(cwd) : cwd;
+  let cwdPath = import_node_path.default.resolve(cwdString);
+  const result = [];
+  while (previous !== cwdPath) {
+    result.push(import_node_path.default.join(cwdPath, "node_modules/.bin"));
+    previous = cwdPath;
+    cwdPath = import_node_path.default.resolve(cwdPath, "..");
+  }
+  result.push(import_node_path.default.resolve(cwdString, execPath, ".."));
+  return [...result, path_].join(import_node_path.default.delimiter);
+}
+function npmRunPathEnv({ env = import_node_process.default.env, ...options } = {}) {
+  env = { ...env };
+  const path3 = pathKey({ env });
+  options.path = env[path3];
+  env[path3] = npmRunPath(options);
+  return env;
+}
+var import_node_process, import_node_path, import_node_url;
+var init_npm_run_path = __esm({
+  "node_modules/npm-run-path/index.js"() {
+    import_node_process = __toESM(require("node:process"), 1);
+    import_node_path = __toESM(require("node:path"), 1);
+    import_node_url = __toESM(require("node:url"), 1);
+    init_path_key();
+  }
+});
+
+// node_modules/mimic-fn/index.js
+function mimicFunction(to, from, { ignoreNonConfigurable = false } = {}) {
+  const { name } = to;
+  for (const property of Reflect.ownKeys(from)) {
+    copyProperty(to, from, property, ignoreNonConfigurable);
+  }
+  changePrototype(to, from);
+  changeToString(to, from, name);
+  return to;
+}
+var copyProperty, canCopyProperty, changePrototype, wrappedToString, toStringDescriptor, toStringName, changeToString;
+var init_mimic_fn = __esm({
+  "node_modules/mimic-fn/index.js"() {
+    copyProperty = (to, from, property, ignoreNonConfigurable) => {
+      if (property === "length" || property === "prototype") {
+        return;
+      }
+      if (property === "arguments" || property === "caller") {
+        return;
+      }
+      const toDescriptor = Object.getOwnPropertyDescriptor(to, property);
+      const fromDescriptor = Object.getOwnPropertyDescriptor(from, property);
+      if (!canCopyProperty(toDescriptor, fromDescriptor) && ignoreNonConfigurable) {
+        return;
+      }
+      Object.defineProperty(to, property, fromDescriptor);
+    };
+    canCopyProperty = function(toDescriptor, fromDescriptor) {
+      return toDescriptor === void 0 || toDescriptor.configurable || toDescriptor.writable === fromDescriptor.writable && toDescriptor.enumerable === fromDescriptor.enumerable && toDescriptor.configurable === fromDescriptor.configurable && (toDescriptor.writable || toDescriptor.value === fromDescriptor.value);
+    };
+    changePrototype = (to, from) => {
+      const fromPrototype = Object.getPrototypeOf(from);
+      if (fromPrototype === Object.getPrototypeOf(to)) {
+        return;
+      }
+      Object.setPrototypeOf(to, fromPrototype);
+    };
+    wrappedToString = (withName, fromBody) => `/* Wrapped ${withName}*/
+${fromBody}`;
+    toStringDescriptor = Object.getOwnPropertyDescriptor(Function.prototype, "toString");
+    toStringName = Object.getOwnPropertyDescriptor(Function.prototype.toString, "name");
+    changeToString = (to, from, name) => {
+      const withName = name === "" ? "" : `with ${name.trim()}() `;
+      const newToString = wrappedToString.bind(null, withName, from.toString());
+      Object.defineProperty(newToString, "name", toStringName);
+      Object.defineProperty(to, "toString", { ...toStringDescriptor, value: newToString });
+    };
+  }
+});
+
+// node_modules/onetime/index.js
+var calledFunctions, onetime;
+var init_onetime = __esm({
+  "node_modules/onetime/index.js"() {
+    init_mimic_fn();
+    calledFunctions = /* @__PURE__ */ new WeakMap();
+    onetime = (function_, options = {}) => {
+      if (typeof function_ !== "function") {
+        throw new TypeError("Expected a function");
+      }
+      let returnValue;
+      let callCount = 0;
+      const functionName = function_.displayName || function_.name || "<anonymous>";
+      const onetime2 = function(...arguments_) {
+        calledFunctions.set(onetime2, ++callCount);
+        if (callCount === 1) {
+          returnValue = function_.apply(this, arguments_);
+          function_ = null;
+        } else if (options.throw === true) {
+          throw new Error(`Function \`${functionName}\` can only be called once`);
+        }
+        return returnValue;
+      };
+      mimicFunction(onetime2, function_);
+      calledFunctions.set(onetime2, callCount);
+      return onetime2;
+    };
+    onetime.callCount = (function_) => {
+      if (!calledFunctions.has(function_)) {
+        throw new Error(`The given function \`${function_.name}\` is not wrapped by the \`onetime\` package`);
+      }
+      return calledFunctions.get(function_);
+    };
+  }
+});
+
+// node_modules/env-ci/node_modules/human-signals/build/src/realtime.js
+var getRealtimeSignals, getRealtimeSignal, SIGRTMIN, SIGRTMAX;
+var init_realtime = __esm({
+  "node_modules/env-ci/node_modules/human-signals/build/src/realtime.js"() {
+    getRealtimeSignals = function() {
+      const length = SIGRTMAX - SIGRTMIN + 1;
+      return Array.from({ length }, getRealtimeSignal);
+    };
+    getRealtimeSignal = function(value, index) {
+      return {
+        name: `SIGRT${index + 1}`,
+        number: SIGRTMIN + index,
+        action: "terminate",
+        description: "Application-specific signal (realtime)",
+        standard: "posix"
+      };
+    };
+    SIGRTMIN = 34;
+    SIGRTMAX = 64;
+  }
+});
+
+// node_modules/env-ci/node_modules/human-signals/build/src/core.js
+var SIGNALS;
+var init_core = __esm({
+  "node_modules/env-ci/node_modules/human-signals/build/src/core.js"() {
+    SIGNALS = [
+      {
+        name: "SIGHUP",
+        number: 1,
+        action: "terminate",
+        description: "Terminal closed",
+        standard: "posix"
+      },
+      {
+        name: "SIGINT",
+        number: 2,
+        action: "terminate",
+        description: "User interruption with CTRL-C",
+        standard: "ansi"
+      },
+      {
+        name: "SIGQUIT",
+        number: 3,
+        action: "core",
+        description: "User interruption with CTRL-\\",
+        standard: "posix"
+      },
+      {
+        name: "SIGILL",
+        number: 4,
+        action: "core",
+        description: "Invalid machine instruction",
+        standard: "ansi"
+      },
+      {
+        name: "SIGTRAP",
+        number: 5,
+        action: "core",
+        description: "Debugger breakpoint",
+        standard: "posix"
+      },
+      {
+        name: "SIGABRT",
+        number: 6,
+        action: "core",
+        description: "Aborted",
+        standard: "ansi"
+      },
+      {
+        name: "SIGIOT",
+        number: 6,
+        action: "core",
+        description: "Aborted",
+        standard: "bsd"
+      },
+      {
+        name: "SIGBUS",
+        number: 7,
+        action: "core",
+        description: "Bus error due to misaligned, non-existing address or paging error",
+        standard: "bsd"
+      },
+      {
+        name: "SIGEMT",
+        number: 7,
+        action: "terminate",
+        description: "Command should be emulated but is not implemented",
+        standard: "other"
+      },
+      {
+        name: "SIGFPE",
+        number: 8,
+        action: "core",
+        description: "Floating point arithmetic error",
+        standard: "ansi"
+      },
+      {
+        name: "SIGKILL",
+        number: 9,
+        action: "terminate",
+        description: "Forced termination",
+        standard: "posix",
+        forced: true
+      },
+      {
+        name: "SIGUSR1",
+        number: 10,
+        action: "terminate",
+        description: "Application-specific signal",
+        standard: "posix"
+      },
+      {
+        name: "SIGSEGV",
+        number: 11,
+        action: "core",
+        description: "Segmentation fault",
+        standard: "ansi"
+      },
+      {
+        name: "SIGUSR2",
+        number: 12,
+        action: "terminate",
+        description: "Application-specific signal",
+        standard: "posix"
+      },
+      {
+        name: "SIGPIPE",
+        number: 13,
+        action: "terminate",
+        description: "Broken pipe or socket",
+        standard: "posix"
+      },
+      {
+        name: "SIGALRM",
+        number: 14,
+        action: "terminate",
+        description: "Timeout or timer",
+        standard: "posix"
+      },
+      {
+        name: "SIGTERM",
+        number: 15,
+        action: "terminate",
+        description: "Termination",
+        standard: "ansi"
+      },
+      {
+        name: "SIGSTKFLT",
+        number: 16,
+        action: "terminate",
+        description: "Stack is empty or overflowed",
+        standard: "other"
+      },
+      {
+        name: "SIGCHLD",
+        number: 17,
+        action: "ignore",
+        description: "Child process terminated, paused or unpaused",
+        standard: "posix"
+      },
+      {
+        name: "SIGCLD",
+        number: 17,
+        action: "ignore",
+        description: "Child process terminated, paused or unpaused",
+        standard: "other"
+      },
+      {
+        name: "SIGCONT",
+        number: 18,
+        action: "unpause",
+        description: "Unpaused",
+        standard: "posix",
+        forced: true
+      },
+      {
+        name: "SIGSTOP",
+        number: 19,
+        action: "pause",
+        description: "Paused",
+        standard: "posix",
+        forced: true
+      },
+      {
+        name: "SIGTSTP",
+        number: 20,
+        action: "pause",
+        description: 'Paused using CTRL-Z or "suspend"',
+        standard: "posix"
+      },
+      {
+        name: "SIGTTIN",
+        number: 21,
+        action: "pause",
+        description: "Background process cannot read terminal input",
+        standard: "posix"
+      },
+      {
+        name: "SIGBREAK",
+        number: 21,
+        action: "terminate",
+        description: "User interruption with CTRL-BREAK",
+        standard: "other"
+      },
+      {
+        name: "SIGTTOU",
+        number: 22,
+        action: "pause",
+        description: "Background process cannot write to terminal output",
+        standard: "posix"
+      },
+      {
+        name: "SIGURG",
+        number: 23,
+        action: "ignore",
+        description: "Socket received out-of-band data",
+        standard: "bsd"
+      },
+      {
+        name: "SIGXCPU",
+        number: 24,
+        action: "core",
+        description: "Process timed out",
+        standard: "bsd"
+      },
+      {
+        name: "SIGXFSZ",
+        number: 25,
+        action: "core",
+        description: "File too big",
+        standard: "bsd"
+      },
+      {
+        name: "SIGVTALRM",
+        number: 26,
+        action: "terminate",
+        description: "Timeout or timer",
+        standard: "bsd"
+      },
+      {
+        name: "SIGPROF",
+        number: 27,
+        action: "terminate",
+        description: "Timeout or timer",
+        standard: "bsd"
+      },
+      {
+        name: "SIGWINCH",
+        number: 28,
+        action: "ignore",
+        description: "Terminal window size changed",
+        standard: "bsd"
+      },
+      {
+        name: "SIGIO",
+        number: 29,
+        action: "terminate",
+        description: "I/O is available",
+        standard: "other"
+      },
+      {
+        name: "SIGPOLL",
+        number: 29,
+        action: "terminate",
+        description: "Watched event",
+        standard: "other"
+      },
+      {
+        name: "SIGINFO",
+        number: 29,
+        action: "ignore",
+        description: "Request for process information",
+        standard: "other"
+      },
+      {
+        name: "SIGPWR",
+        number: 30,
+        action: "terminate",
+        description: "Device running out of power",
+        standard: "systemv"
+      },
+      {
+        name: "SIGSYS",
+        number: 31,
+        action: "core",
+        description: "Invalid system call",
+        standard: "other"
+      },
+      {
+        name: "SIGUNUSED",
+        number: 31,
+        action: "terminate",
+        description: "Invalid system call",
+        standard: "other"
+      }
+    ];
+  }
+});
+
+// node_modules/env-ci/node_modules/human-signals/build/src/signals.js
+var import_os, getSignals, normalizeSignal;
+var init_signals = __esm({
+  "node_modules/env-ci/node_modules/human-signals/build/src/signals.js"() {
+    import_os = require("os");
+    init_core();
+    init_realtime();
+    getSignals = function() {
+      const realtimeSignals = getRealtimeSignals();
+      const signals = [...SIGNALS, ...realtimeSignals].map(normalizeSignal);
+      return signals;
+    };
+    normalizeSignal = function({
+      name,
+      number: defaultNumber,
+      description,
+      action,
+      forced = false,
+      standard
+    }) {
+      const {
+        signals: { [name]: constantSignal }
+      } = import_os.constants;
+      const supported = constantSignal !== void 0;
+      const number = supported ? constantSignal : defaultNumber;
+      return { name, number, description, supported, action, forced, standard };
+    };
+  }
+});
+
+// node_modules/env-ci/node_modules/human-signals/build/src/main.js
+var import_os2, getSignalsByName, getSignalByName, signalsByName, getSignalsByNumber, getSignalByNumber, findSignalByNumber, signalsByNumber;
+var init_main = __esm({
+  "node_modules/env-ci/node_modules/human-signals/build/src/main.js"() {
+    import_os2 = require("os");
+    init_realtime();
+    init_signals();
+    getSignalsByName = function() {
+      const signals = getSignals();
+      return signals.reduce(getSignalByName, {});
+    };
+    getSignalByName = function(signalByNameMemo, { name, number, description, supported, action, forced, standard }) {
+      return {
+        ...signalByNameMemo,
+        [name]: { name, number, description, supported, action, forced, standard }
+      };
+    };
+    signalsByName = getSignalsByName();
+    getSignalsByNumber = function() {
+      const signals = getSignals();
+      const length = SIGRTMAX + 1;
+      const signalsA = Array.from({ length }, (value, number) => getSignalByNumber(number, signals));
+      return Object.assign({}, ...signalsA);
+    };
+    getSignalByNumber = function(number, signals) {
+      const signal = findSignalByNumber(number, signals);
+      if (signal === void 0) {
+        return {};
+      }
+      const { name, description, supported, action, forced, standard } = signal;
+      return {
+        [number]: {
+          name,
+          number,
+          description,
+          supported,
+          action,
+          forced,
+          standard
+        }
+      };
+    };
+    findSignalByNumber = function(number, signals) {
+      const signal = signals.find(({ name }) => import_os2.constants.signals[name] === number);
+      if (signal !== void 0) {
+        return signal;
+      }
+      return signals.find((signalA) => signalA.number === number);
+    };
+    signalsByNumber = getSignalsByNumber();
+  }
+});
+
+// node_modules/env-ci/node_modules/execa/lib/error.js
+var getErrorPrefix, makeError;
+var init_error = __esm({
+  "node_modules/env-ci/node_modules/execa/lib/error.js"() {
+    init_main();
+    getErrorPrefix = ({ timedOut, timeout, errorCode, signal, signalDescription, exitCode, isCanceled }) => {
+      if (timedOut) {
+        return `timed out after ${timeout} milliseconds`;
+      }
+      if (isCanceled) {
+        return "was canceled";
+      }
+      if (errorCode !== void 0) {
+        return `failed with ${errorCode}`;
+      }
+      if (signal !== void 0) {
+        return `was killed with ${signal} (${signalDescription})`;
+      }
+      if (exitCode !== void 0) {
+        return `failed with exit code ${exitCode}`;
+      }
+      return "failed";
+    };
+    makeError = ({
+      stdout,
+      stderr,
+      all,
+      error,
+      signal,
+      exitCode,
+      command,
+      escapedCommand,
+      timedOut,
+      isCanceled,
+      killed,
+      parsed: { options: { timeout } }
+    }) => {
+      exitCode = exitCode === null ? void 0 : exitCode;
+      signal = signal === null ? void 0 : signal;
+      const signalDescription = signal === void 0 ? void 0 : signalsByName[signal].description;
+      const errorCode = error && error.code;
+      const prefix = getErrorPrefix({ timedOut, timeout, errorCode, signal, signalDescription, exitCode, isCanceled });
+      const execaMessage = `Command ${prefix}: ${command}`;
+      const isError = Object.prototype.toString.call(error) === "[object Error]";
+      const shortMessage = isError ? `${execaMessage}
+${error.message}` : execaMessage;
+      const message = [shortMessage, stderr, stdout].filter(Boolean).join("\n");
+      if (isError) {
+        error.originalMessage = error.message;
+        error.message = message;
+      } else {
+        error = new Error(message);
+      }
+      error.shortMessage = shortMessage;
+      error.command = command;
+      error.escapedCommand = escapedCommand;
+      error.exitCode = exitCode;
+      error.signal = signal;
+      error.signalDescription = signalDescription;
+      error.stdout = stdout;
+      error.stderr = stderr;
+      if (all !== void 0) {
+        error.all = all;
+      }
+      if ("bufferedData" in error) {
+        delete error.bufferedData;
+      }
+      error.failed = true;
+      error.timedOut = Boolean(timedOut);
+      error.isCanceled = isCanceled;
+      error.killed = killed && !timedOut;
+      return error;
+    };
+  }
+});
+
+// node_modules/env-ci/node_modules/execa/lib/stdio.js
+var aliases, hasAlias, normalizeStdio;
+var init_stdio = __esm({
+  "node_modules/env-ci/node_modules/execa/lib/stdio.js"() {
+    aliases = ["stdin", "stdout", "stderr"];
+    hasAlias = (options) => aliases.some((alias) => options[alias] !== void 0);
+    normalizeStdio = (options) => {
+      if (!options) {
+        return;
+      }
+      const { stdio } = options;
+      if (stdio === void 0) {
+        return aliases.map((alias) => options[alias]);
+      }
+      if (hasAlias(options)) {
+        throw new Error(`It's not possible to provide \`stdio\` in combination with one of ${aliases.map((alias) => `\`${alias}\``).join(", ")}`);
+      }
+      if (typeof stdio === "string") {
+        return stdio;
+      }
+      if (!Array.isArray(stdio)) {
+        throw new TypeError(`Expected \`stdio\` to be of type \`string\` or \`Array\`, got \`${typeof stdio}\``);
+      }
+      const length = Math.max(stdio.length, aliases.length);
+      return Array.from({ length }, (value, index) => stdio[index]);
+    };
+  }
+});
+
+// node_modules/signal-exit/signals.js
+var require_signals = __commonJS({
+  "node_modules/signal-exit/signals.js"(exports, module2) {
+    module2.exports = [
+      "SIGABRT",
+      "SIGALRM",
+      "SIGHUP",
+      "SIGINT",
+      "SIGTERM"
+    ];
+    if (process.platform !== "win32") {
+      module2.exports.push(
+        "SIGVTALRM",
+        "SIGXCPU",
+        "SIGXFSZ",
+        "SIGUSR2",
+        "SIGTRAP",
+        "SIGSYS",
+        "SIGQUIT",
+        "SIGIOT"
+        // should detect profiler and enable/disable accordingly.
+        // see #21
+        // 'SIGPROF'
+      );
+    }
+    if (process.platform === "linux") {
+      module2.exports.push(
+        "SIGIO",
+        "SIGPOLL",
+        "SIGPWR",
+        "SIGSTKFLT",
+        "SIGUNUSED"
+      );
+    }
+  }
+});
+
+// node_modules/signal-exit/index.js
+var require_signal_exit = __commonJS({
+  "node_modules/signal-exit/index.js"(exports, module2) {
+    var process4 = global.process;
+    var processOk = function(process5) {
+      return process5 && typeof process5 === "object" && typeof process5.removeListener === "function" && typeof process5.emit === "function" && typeof process5.reallyExit === "function" && typeof process5.listeners === "function" && typeof process5.kill === "function" && typeof process5.pid === "number" && typeof process5.on === "function";
+    };
+    if (!processOk(process4)) {
+      module2.exports = function() {
+        return function() {
+        };
+      };
+    } else {
+      assert = require("assert");
+      signals = require_signals();
+      isWin = /^win/i.test(process4.platform);
+      EE = require("events");
+      if (typeof EE !== "function") {
+        EE = EE.EventEmitter;
+      }
+      if (process4.__signal_exit_emitter__) {
+        emitter = process4.__signal_exit_emitter__;
+      } else {
+        emitter = process4.__signal_exit_emitter__ = new EE();
+        emitter.count = 0;
+        emitter.emitted = {};
+      }
+      if (!emitter.infinite) {
+        emitter.setMaxListeners(Infinity);
+        emitter.infinite = true;
+      }
+      module2.exports = function(cb, opts) {
+        if (!processOk(global.process)) {
+          return function() {
+          };
+        }
+        assert.equal(typeof cb, "function", "a callback must be provided for exit handler");
+        if (loaded === false) {
+          load();
+        }
+        var ev = "exit";
+        if (opts && opts.alwaysLast) {
+          ev = "afterexit";
+        }
+        var remove = function() {
+          emitter.removeListener(ev, cb);
+          if (emitter.listeners("exit").length === 0 && emitter.listeners("afterexit").length === 0) {
+            unload();
+          }
+        };
+        emitter.on(ev, cb);
+        return remove;
+      };
+      unload = function unload2() {
+        if (!loaded || !processOk(global.process)) {
+          return;
+        }
+        loaded = false;
+        signals.forEach(function(sig) {
+          try {
+            process4.removeListener(sig, sigListeners[sig]);
+          } catch (er) {
+          }
+        });
+        process4.emit = originalProcessEmit;
+        process4.reallyExit = originalProcessReallyExit;
+        emitter.count -= 1;
+      };
+      module2.exports.unload = unload;
+      emit = function emit2(event, code, signal) {
+        if (emitter.emitted[event]) {
+          return;
+        }
+        emitter.emitted[event] = true;
+        emitter.emit(event, code, signal);
+      };
+      sigListeners = {};
+      signals.forEach(function(sig) {
+        sigListeners[sig] = function listener() {
+          if (!processOk(global.process)) {
+            return;
+          }
+          var listeners = process4.listeners(sig);
+          if (listeners.length === emitter.count) {
+            unload();
+            emit("exit", null, sig);
+            emit("afterexit", null, sig);
+            if (isWin && sig === "SIGHUP") {
+              sig = "SIGINT";
+            }
+            process4.kill(process4.pid, sig);
+          }
+        };
+      });
+      module2.exports.signals = function() {
+        return signals;
+      };
+      loaded = false;
+      load = function load2() {
+        if (loaded || !processOk(global.process)) {
+          return;
+        }
+        loaded = true;
+        emitter.count += 1;
+        signals = signals.filter(function(sig) {
+          try {
+            process4.on(sig, sigListeners[sig]);
+            return true;
+          } catch (er) {
+            return false;
+          }
+        });
+        process4.emit = processEmit;
+        process4.reallyExit = processReallyExit;
+      };
+      module2.exports.load = load;
+      originalProcessReallyExit = process4.reallyExit;
+      processReallyExit = function processReallyExit2(code) {
+        if (!processOk(global.process)) {
+          return;
+        }
+        process4.exitCode = code || /* istanbul ignore next */
+        0;
+        emit("exit", process4.exitCode, null);
+        emit("afterexit", process4.exitCode, null);
+        originalProcessReallyExit.call(process4, process4.exitCode);
+      };
+      originalProcessEmit = process4.emit;
+      processEmit = function processEmit2(ev, arg) {
+        if (ev === "exit" && processOk(global.process)) {
+          if (arg !== void 0) {
+            process4.exitCode = arg;
+          }
+          var ret = originalProcessEmit.apply(this, arguments);
+          emit("exit", process4.exitCode, null);
+          emit("afterexit", process4.exitCode, null);
+          return ret;
+        } else {
+          return originalProcessEmit.apply(this, arguments);
+        }
+      };
+    }
+    var assert;
+    var signals;
+    var isWin;
+    var EE;
+    var emitter;
+    var unload;
+    var emit;
+    var sigListeners;
+    var loaded;
+    var load;
+    var originalProcessReallyExit;
+    var processReallyExit;
+    var originalProcessEmit;
+    var processEmit;
+  }
+});
+
+// node_modules/env-ci/node_modules/execa/lib/kill.js
+var import_signal_exit, DEFAULT_FORCE_KILL_TIMEOUT;
+var init_kill = __esm({
+  "node_modules/env-ci/node_modules/execa/lib/kill.js"() {
+    import_signal_exit = __toESM(require_signal_exit(), 1);
+    DEFAULT_FORCE_KILL_TIMEOUT = 1e3 * 5;
+  }
+});
+
+// node_modules/env-ci/node_modules/is-stream/index.js
+function isStream(stream) {
+  return stream !== null && typeof stream === "object" && typeof stream.pipe === "function";
+}
+var init_is_stream = __esm({
+  "node_modules/env-ci/node_modules/is-stream/index.js"() {
+  }
+});
+
+// node_modules/get-stream/buffer-stream.js
+var require_buffer_stream = __commonJS({
+  "node_modules/get-stream/buffer-stream.js"(exports, module2) {
+    "use strict";
+    var { PassThrough: PassThroughStream } = require("stream");
+    module2.exports = (options) => {
+      options = { ...options };
+      const { array } = options;
+      let { encoding } = options;
+      const isBuffer = encoding === "buffer";
+      let objectMode = false;
+      if (array) {
+        objectMode = !(encoding || isBuffer);
+      } else {
+        encoding = encoding || "utf8";
+      }
+      if (isBuffer) {
+        encoding = null;
+      }
+      const stream = new PassThroughStream({ objectMode });
+      if (encoding) {
+        stream.setEncoding(encoding);
+      }
+      let length = 0;
+      const chunks = [];
+      stream.on("data", (chunk) => {
+        chunks.push(chunk);
+        if (objectMode) {
+          length = chunks.length;
+        } else {
+          length += chunk.length;
+        }
+      });
+      stream.getBufferedValue = () => {
+        if (array) {
+          return chunks;
+        }
+        return isBuffer ? Buffer.concat(chunks, length) : chunks.join("");
+      };
+      stream.getBufferedLength = () => length;
+      return stream;
+    };
+  }
+});
+
+// node_modules/get-stream/index.js
+var require_get_stream = __commonJS({
+  "node_modules/get-stream/index.js"(exports, module2) {
+    "use strict";
+    var { constants: BufferConstants } = require("buffer");
+    var stream = require("stream");
+    var { promisify } = require("util");
+    var bufferStream = require_buffer_stream();
+    var streamPipelinePromisified = promisify(stream.pipeline);
+    var MaxBufferError = class extends Error {
+      constructor() {
+        super("maxBuffer exceeded");
+        this.name = "MaxBufferError";
+      }
+    };
+    async function getStream2(inputStream, options) {
+      if (!inputStream) {
+        throw new Error("Expected a stream");
+      }
+      options = {
+        maxBuffer: Infinity,
+        ...options
+      };
+      const { maxBuffer } = options;
+      const stream2 = bufferStream(options);
+      await new Promise((resolve2, reject) => {
+        const rejectPromise = (error) => {
+          if (error && stream2.getBufferedLength() <= BufferConstants.MAX_LENGTH) {
+            error.bufferedData = stream2.getBufferedValue();
+          }
+          reject(error);
+        };
+        (async () => {
+          try {
+            await streamPipelinePromisified(inputStream, stream2);
+            resolve2();
+          } catch (error) {
+            rejectPromise(error);
+          }
+        })();
+        stream2.on("data", () => {
+          if (stream2.getBufferedLength() > maxBuffer) {
+            rejectPromise(new MaxBufferError());
+          }
+        });
+      });
+      return stream2.getBufferedValue();
+    }
+    module2.exports = getStream2;
+    module2.exports.buffer = (stream2, options) => getStream2(stream2, { ...options, encoding: "buffer" });
+    module2.exports.array = (stream2, options) => getStream2(stream2, { ...options, array: true });
+    module2.exports.MaxBufferError = MaxBufferError;
+  }
+});
+
+// node_modules/merge-stream/index.js
+var require_merge_stream = __commonJS({
+  "node_modules/merge-stream/index.js"(exports, module2) {
+    "use strict";
+    var { PassThrough } = require("stream");
+    module2.exports = function() {
+      var sources = [];
+      var output = new PassThrough({ objectMode: true });
+      output.setMaxListeners(0);
+      output.add = add;
+      output.isEmpty = isEmpty;
+      output.on("unpipe", remove);
+      Array.prototype.slice.call(arguments).forEach(add);
+      return output;
+      function add(source) {
+        if (Array.isArray(source)) {
+          source.forEach(add);
+          return this;
+        }
+        sources.push(source);
+        source.once("end", remove.bind(null, source));
+        source.once("error", output.emit.bind(output, "error"));
+        source.pipe(output, { end: false });
+        return this;
+      }
+      function isEmpty() {
+        return sources.length == 0;
+      }
+      function remove(source) {
+        sources = sources.filter(function(it) {
+          return it !== source;
+        });
+        if (!sources.length && output.readable) {
+          output.end();
+        }
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/node_modules/execa/lib/stream.js
+var import_get_stream, import_merge_stream, validateInputSync;
+var init_stream = __esm({
+  "node_modules/env-ci/node_modules/execa/lib/stream.js"() {
+    init_is_stream();
+    import_get_stream = __toESM(require_get_stream(), 1);
+    import_merge_stream = __toESM(require_merge_stream(), 1);
+    validateInputSync = ({ input }) => {
+      if (isStream(input)) {
+        throw new TypeError("The `input` option cannot be a stream in sync mode");
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/node_modules/execa/lib/promise.js
+var nativePromisePrototype, descriptors;
+var init_promise = __esm({
+  "node_modules/env-ci/node_modules/execa/lib/promise.js"() {
+    nativePromisePrototype = (async () => {
+    })().constructor.prototype;
+    descriptors = ["then", "catch", "finally"].map((property) => [
+      property,
+      Reflect.getOwnPropertyDescriptor(nativePromisePrototype, property)
+    ]);
+  }
+});
+
+// node_modules/env-ci/node_modules/execa/lib/command.js
+var normalizeArgs, NO_ESCAPE_REGEXP, DOUBLE_QUOTES_REGEXP, escapeArg, joinCommand, getEscapedCommand;
+var init_command = __esm({
+  "node_modules/env-ci/node_modules/execa/lib/command.js"() {
+    normalizeArgs = (file, args = []) => {
+      if (!Array.isArray(args)) {
+        return [file];
+      }
+      return [file, ...args];
+    };
+    NO_ESCAPE_REGEXP = /^[\w.-]+$/;
+    DOUBLE_QUOTES_REGEXP = /"/g;
+    escapeArg = (arg) => {
+      if (typeof arg !== "string" || NO_ESCAPE_REGEXP.test(arg)) {
+        return arg;
+      }
+      return `"${arg.replace(DOUBLE_QUOTES_REGEXP, '\\"')}"`;
+    };
+    joinCommand = (file, args) => normalizeArgs(file, args).join(" ");
+    getEscapedCommand = (file, args) => normalizeArgs(file, args).map((arg) => escapeArg(arg)).join(" ");
+  }
+});
+
+// node_modules/env-ci/node_modules/execa/index.js
+function execaSync(file, args, options) {
+  const parsed = handleArguments(file, args, options);
+  const command = joinCommand(file, args);
+  const escapedCommand = getEscapedCommand(file, args);
+  validateInputSync(parsed.options);
+  let result;
+  try {
+    result = import_node_child_process.default.spawnSync(parsed.file, parsed.args, parsed.options);
+  } catch (error) {
+    throw makeError({
+      error,
+      stdout: "",
+      stderr: "",
+      all: "",
+      command,
+      escapedCommand,
+      parsed,
+      timedOut: false,
+      isCanceled: false,
+      killed: false
+    });
+  }
+  const stdout = handleOutput(parsed.options, result.stdout, result.error);
+  const stderr = handleOutput(parsed.options, result.stderr, result.error);
+  if (result.error || result.status !== 0 || result.signal !== null) {
+    const error = makeError({
+      stdout,
+      stderr,
+      error: result.error,
+      signal: result.signal,
+      exitCode: result.status,
+      command,
+      escapedCommand,
+      parsed,
+      timedOut: result.error && result.error.code === "ETIMEDOUT",
+      isCanceled: false,
+      killed: result.signal !== null
+    });
+    if (!parsed.options.reject) {
+      return error;
+    }
+    throw error;
+  }
+  return {
+    command,
+    escapedCommand,
+    exitCode: 0,
+    stdout,
+    stderr,
+    failed: false,
+    timedOut: false,
+    isCanceled: false,
+    killed: false
+  };
+}
+var import_node_buffer, import_node_path2, import_node_child_process, import_node_process2, import_cross_spawn, DEFAULT_MAX_BUFFER, getEnv, handleArguments, handleOutput;
+var init_execa = __esm({
+  "node_modules/env-ci/node_modules/execa/index.js"() {
+    import_node_buffer = require("node:buffer");
+    import_node_path2 = __toESM(require("node:path"), 1);
+    import_node_child_process = __toESM(require("node:child_process"), 1);
+    import_node_process2 = __toESM(require("node:process"), 1);
+    import_cross_spawn = __toESM(require_cross_spawn(), 1);
+    init_strip_final_newline();
+    init_npm_run_path();
+    init_onetime();
+    init_error();
+    init_stdio();
+    init_kill();
+    init_stream();
+    init_promise();
+    init_command();
+    DEFAULT_MAX_BUFFER = 1e3 * 1e3 * 100;
+    getEnv = ({ env: envOption, extendEnv, preferLocal, localDir, execPath }) => {
+      const env = extendEnv ? { ...import_node_process2.default.env, ...envOption } : envOption;
+      if (preferLocal) {
+        return npmRunPathEnv({ env, cwd: localDir, execPath });
+      }
+      return env;
+    };
+    handleArguments = (file, args, options = {}) => {
+      const parsed = import_cross_spawn.default._parse(file, args, options);
+      file = parsed.command;
+      args = parsed.args;
+      options = parsed.options;
+      options = {
+        maxBuffer: DEFAULT_MAX_BUFFER,
+        buffer: true,
+        stripFinalNewline: true,
+        extendEnv: true,
+        preferLocal: false,
+        localDir: options.cwd || import_node_process2.default.cwd(),
+        execPath: import_node_process2.default.execPath,
+        encoding: "utf8",
+        reject: true,
+        cleanup: true,
+        all: false,
+        windowsHide: true,
+        ...options
+      };
+      options.env = getEnv(options);
+      options.stdio = normalizeStdio(options);
+      if (import_node_process2.default.platform === "win32" && import_node_path2.default.basename(file, ".exe") === "cmd") {
+        args.unshift("/q");
+      }
+      return { file, args, options, parsed };
+    };
+    handleOutput = (options, value, error) => {
+      if (typeof value !== "string" && !import_node_buffer.Buffer.isBuffer(value)) {
+        return error === void 0 ? void 0 : "";
+      }
+      if (options.stripFinalNewline) {
+        return stripFinalNewline(value);
+      }
+      return value;
+    };
+  }
+});
+
+// node_modules/env-ci/lib/git.js
+function head(options) {
+  try {
+    return execaSync("git", ["rev-parse", "HEAD"], options).stdout;
+  } catch {
+    return void 0;
+  }
+}
+function branch(options) {
+  try {
+    const headRef = execaSync(
+      "git",
+      ["rev-parse", "--abbrev-ref", "HEAD"],
+      options
+    ).stdout;
+    if (headRef === "HEAD") {
+      const branch2 = execaSync(
+        "git",
+        ["show", "-s", "--pretty=%d", "HEAD"],
+        options
+      ).stdout.replace(/^\(|\)$/g, "").split(", ").find((branch3) => branch3.startsWith("origin/"));
+      return branch2 ? branch2.match(/^origin\/(?<branch>.+)/)[1] : void 0;
+    }
+    return headRef;
+  } catch {
+    return void 0;
+  }
+}
+var init_git = __esm({
+  "node_modules/env-ci/lib/git.js"() {
+    init_execa();
+  }
+});
+
+// node_modules/env-ci/services/codebuild.js
+var codebuild_default;
+var init_codebuild = __esm({
+  "node_modules/env-ci/services/codebuild.js"() {
+    init_git();
+    codebuild_default = {
+      detect({ env }) {
+        return Boolean(env.CODEBUILD_BUILD_ID);
+      },
+      configuration({ env, cwd }) {
+        return {
+          name: "AWS CodeBuild",
+          service: "codebuild",
+          commit: head({ env, cwd }),
+          build: env.CODEBUILD_BUILD_ID,
+          branch: branch({ env, cwd }),
+          buildUrl: `https://console.aws.amazon.com/codebuild/home?region=${env.AWS_REGION}#/builds/${env.CODEBUILD_BUILD_ID}/view/new`,
+          root: env.PWD
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/codefresh.js
+var codefresh_default;
+var init_codefresh = __esm({
+  "node_modules/env-ci/services/codefresh.js"() {
+    codefresh_default = {
+      detect({ env }) {
+        return Boolean(env.CF_BUILD_ID);
+      },
+      configuration({ env }) {
+        const pr = env.CF_PULL_REQUEST_NUMBER;
+        const isPr = Boolean(pr);
+        return {
+          name: "Codefresh",
+          service: "codefresh",
+          commit: env.CF_REVISION,
+          build: env.CF_BUILD_ID,
+          buildUrl: env.CF_BUILD_URL,
+          branch: isPr ? env.CF_PULL_REQUEST_TARGET : env.CF_BRANCH,
+          pr,
+          isPr,
+          prBranch: isPr ? env.CF_BRANCH : void 0,
+          slug: `${env.CF_REPO_OWNER}/${env.CF_REPO_NAME}`,
+          root: env.CF_VOLUME_PATH
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/codeship.js
+var codeship_default;
+var init_codeship = __esm({
+  "node_modules/env-ci/services/codeship.js"() {
+    codeship_default = {
+      detect({ env }) {
+        return env.CI_NAME && env.CI_NAME === "codeship";
+      },
+      configuration({ env }) {
+        return {
+          name: "Codeship",
+          service: "codeship",
+          build: env.CI_BUILD_NUMBER,
+          buildUrl: env.CI_BUILD_URL,
+          commit: env.CI_COMMIT_ID,
+          branch: env.CI_BRANCH,
+          slug: env.CI_REPO_NAME
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/drone.js
+var drone_default;
+var init_drone = __esm({
+  "node_modules/env-ci/services/drone.js"() {
+    drone_default = {
+      detect({ env }) {
+        return Boolean(env.DRONE);
+      },
+      configuration({ env }) {
+        const isPr = env.DRONE_BUILD_EVENT === "pull_request";
+        return {
+          name: "Drone",
+          service: "drone",
+          commit: env.DRONE_COMMIT_SHA,
+          tag: env.DRONE_TAG,
+          build: env.DRONE_BUILD_NUMBER,
+          buildUrl: env.DRONE_BUILD_LINK,
+          branch: isPr ? env.DRONE_TARGET_BRANCH : env.DRONE_BRANCH,
+          job: env.DRONE_JOB_NUMBER,
+          jobUrl: env.DRONE_BUILD_LINK,
+          pr: env.DRONE_PULL_REQUEST,
+          isPr,
+          prBranch: isPr ? env.DRONE_SOURCE_BRANCH : void 0,
+          slug: `${env.DRONE_REPO_OWNER}/${env.DRONE_REPO_NAME}`,
+          root: env.DRONE_WORKSPACE
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/git.js
+var git_default;
+var init_git2 = __esm({
+  "node_modules/env-ci/services/git.js"() {
+    init_git();
+    git_default = {
+      configuration(options) {
+        return { commit: head(options), branch: branch(options) };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/github.js
+var import_node_fs, getPrEvent, getPrNumber, github_default;
+var init_github = __esm({
+  "node_modules/env-ci/services/github.js"() {
+    import_node_fs = require("node:fs");
+    init_utils();
+    getPrEvent = ({ env }) => {
+      try {
+        const event = env.GITHUB_EVENT_PATH ? JSON.parse((0, import_node_fs.readFileSync)(env.GITHUB_EVENT_PATH, "utf-8")) : void 0;
+        if (event && event.pull_request) {
+          return {
+            branch: event.pull_request.base ? parseBranch(event.pull_request.base.ref) : void 0,
+            pr: event.pull_request.number
+          };
+        }
+      } catch {
+      }
+      return { pr: void 0, branch: void 0 };
+    };
+    getPrNumber = (env) => {
+      const event = env.GITHUB_EVENT_PATH ? JSON.parse((0, import_node_fs.readFileSync)(env.GITHUB_EVENT_PATH, "utf-8")) : void 0;
+      return event && event.pull_request ? event.pull_request.number : void 0;
+    };
+    github_default = {
+      detect({ env }) {
+        return Boolean(env.GITHUB_ACTIONS);
+      },
+      configuration({ env, cwd }) {
+        const isPr = env.GITHUB_EVENT_NAME === "pull_request" || env.GITHUB_EVENT_NAME === "pull_request_target";
+        const branch2 = parseBranch(
+          env.GITHUB_EVENT_NAME === "pull_request_target" ? `refs/pull/${getPrNumber(env)}/merge` : env.GITHUB_REF
+        );
+        return {
+          name: "GitHub Actions",
+          service: "github",
+          commit: env.GITHUB_SHA,
+          build: env.GITHUB_RUN_ID,
+          isPr,
+          branch: branch2,
+          prBranch: isPr ? branch2 : void 0,
+          slug: env.GITHUB_REPOSITORY,
+          root: env.GITHUB_WORKSPACE,
+          ...isPr ? getPrEvent({ env, cwd }) : void 0
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/gitlab.js
+var gitlab_default;
+var init_gitlab = __esm({
+  "node_modules/env-ci/services/gitlab.js"() {
+    gitlab_default = {
+      detect({ env }) {
+        return Boolean(env.GITLAB_CI);
+      },
+      configuration({ env }) {
+        const pr = env.CI_MERGE_REQUEST_ID;
+        const isPr = Boolean(pr);
+        return {
+          name: "GitLab CI/CD",
+          service: "gitlab",
+          commit: env.CI_COMMIT_SHA,
+          tag: env.CI_COMMIT_TAG,
+          build: env.CI_PIPELINE_ID,
+          buildUrl: `${env.CI_PROJECT_URL}/pipelines/${env.CI_PIPELINE_ID}`,
+          job: env.CI_JOB_ID,
+          jobUrl: `${env.CI_PROJECT_URL}/-/jobs/${env.CI_JOB_ID}`,
+          branch: isPr ? env.CI_MERGE_REQUEST_TARGET_BRANCH_NAME : env.CI_COMMIT_REF_NAME,
+          pr,
+          isPr,
+          prBranch: env.CI_MERGE_REQUEST_SOURCE_BRANCH_NAME,
+          slug: env.CI_PROJECT_PATH,
+          root: env.CI_PROJECT_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/jenkins.js
+var jenkins_default;
+var init_jenkins = __esm({
+  "node_modules/env-ci/services/jenkins.js"() {
+    init_git();
+    jenkins_default = {
+      detect({ env }) {
+        return Boolean(env.JENKINS_URL);
+      },
+      configuration({ env, cwd }) {
+        const pr = env.ghprbPullId || env.gitlabMergeRequestId || env.CHANGE_ID;
+        const isPr = Boolean(pr);
+        const localBranch = env.GIT_LOCAL_BRANCH || env.GIT_BRANCH || env.gitlabBranch || env.BRANCH_NAME;
+        return {
+          name: "Jenkins",
+          service: "jenkins",
+          commit: env.ghprbActualCommit || env.GIT_COMMIT || head({ env, cwd }),
+          branch: isPr ? env.ghprbTargetBranch || env.gitlabTargetBranch : localBranch,
+          build: env.BUILD_NUMBER,
+          buildUrl: env.BUILD_URL,
+          root: env.WORKSPACE,
+          pr,
+          isPr,
+          prBranch: isPr ? env.ghprbSourceBranch || env.gitlabSourceBranch || localBranch : void 0
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/netlify.js
+var netlify_default;
+var init_netlify = __esm({
+  "node_modules/env-ci/services/netlify.js"() {
+    netlify_default = {
+      detect({ env }) {
+        return env.NETLIFY === "true";
+      },
+      configuration({ env }) {
+        const isPr = env.PULL_REQUEST === "true";
+        return {
+          name: "Netlify",
+          service: "netlify",
+          commit: env.COMMIT_REF,
+          build: env.DEPLOY_ID,
+          buildUrl: `https://app.netlify.com/sites/${env.SITE_NAME}/deploys/${env.DEPLOY_ID}`,
+          branch: isPr ? void 0 : env.HEAD,
+          pr: env.REVIEW_ID,
+          isPr,
+          prBranch: isPr ? env.HEAD : void 0,
+          slug: env.REPOSITORY_URL.match(/[^/:]+\/[^/]+?$/)[0],
+          root: env.PWD
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/puppet.js
+var puppet_default;
+var init_puppet = __esm({
+  "node_modules/env-ci/services/puppet.js"() {
+    puppet_default = {
+      detect({ env }) {
+        return Boolean(env.DISTELLI_APPNAME);
+      },
+      configuration({ env }) {
+        return {
+          name: "Puppet",
+          service: "puppet",
+          build: env.DISTELLI_BUILDNUM,
+          buildUrl: env.DISTELLI_RELEASE,
+          commit: env.DISTELLI_RELREVISION,
+          branch: env.DISTELLI_RELBRANCH,
+          root: env.DISTELLI_INSTALLHOME
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/sail.js
+var sail_default;
+var init_sail = __esm({
+  "node_modules/env-ci/services/sail.js"() {
+    sail_default = {
+      detect({ env }) {
+        return Boolean(env.SAILCI);
+      },
+      configuration({ env }) {
+        const pr = env.SAIL_PULL_REQUEST_NUMBER;
+        const isPr = Boolean(pr);
+        return {
+          name: "Sail CI",
+          service: "sail",
+          commit: env.SAIL_COMMIT_SHA,
+          branch: isPr ? void 0 : env.SAIL_COMMIT_BRANCH,
+          pr,
+          isPr,
+          slug: `${env.SAIL_REPO_OWNER}/${env.SAIL_REPO_NAME}`,
+          root: env.SAIL_CLONE_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/scrutinizer.js
+var scrutinizer_default;
+var init_scrutinizer = __esm({
+  "node_modules/env-ci/services/scrutinizer.js"() {
+    scrutinizer_default = {
+      detect({ env }) {
+        return Boolean(env.SCRUTINIZER);
+      },
+      configuration({ env }) {
+        const pr = env.SCRUTINIZER_PR_NUMBER;
+        const isPr = Boolean(pr);
+        return {
+          name: "Scrutinizer",
+          service: "scrutinizer",
+          commit: env.SCRUTINIZER_SHA1,
+          build: env.SCRUTINIZER_INSPECTION_UUID,
+          branch: env.SCRUTINIZER_BRANCH,
+          pr,
+          isPr,
+          prBranch: env.SCRUTINIZER_PR_SOURCE_BRANCH
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/semaphore.js
+var semaphore_default;
+var init_semaphore = __esm({
+  "node_modules/env-ci/services/semaphore.js"() {
+    init_git();
+    semaphore_default = {
+      detect({ env }) {
+        return Boolean(env.SEMAPHORE);
+      },
+      configuration({ env, cwd }) {
+        const pr = env.SEMAPHORE_GIT_PR_NUMBER || env.PULL_REQUEST_NUMBER;
+        const isPr = Boolean(pr);
+        return {
+          name: "Semaphore",
+          service: "semaphore",
+          commit: env.SEMAPHORE_GIT_SHA || head({ env, cwd }),
+          tag: env.SEMAPHORE_GIT_TAG_NAME,
+          build: env.SEMAPHORE_JOB_ID || env.SEMAPHORE_BUILD_NUMBER,
+          branch: env.SEMAPHORE_GIT_BRANCH || (isPr ? void 0 : env.BRANCH_NAME),
+          pr,
+          isPr,
+          prBranch: env.SEMAPHORE_GIT_PR_BRANCH || (isPr ? env.BRANCH_NAME : void 0),
+          slug: env.SEMAPHORE_GIT_REPO_SLUG || env.SEMAPHORE_REPO_SLUG,
+          root: env.SEMAPHORE_GIT_DIR || env.SEMAPHORE_PROJECT_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/shippable.js
+var shippable_default;
+var init_shippable = __esm({
+  "node_modules/env-ci/services/shippable.js"() {
+    shippable_default = {
+      detect({ env }) {
+        return Boolean(env.SHIPPABLE);
+      },
+      configuration({ env }) {
+        const pr = env.IS_PULL_REQUEST === "true" ? env.PULL_REQUEST : void 0;
+        const isPr = Boolean(pr);
+        return {
+          name: "Shippable",
+          service: "shippable",
+          commit: env.COMMIT,
+          tag: env.GIT_TAG_NAME,
+          build: env.BUILD_NUMBER,
+          buildUrl: env.BUILD_URL,
+          branch: isPr ? env.BASE_BRANCH : env.BRANCH,
+          job: env.JOB_NUMBER,
+          pr,
+          isPr,
+          prBranch: isPr ? env.HEAD_BRANCH : void 0,
+          slug: env.SHIPPABLE_REPO_SLUG,
+          root: env.SHIPPABLE_BUILD_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/java-properties/dist-node/index.js
+var require_dist_node = __commonJS({
+  "node_modules/java-properties/dist-node/index.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.of = exports.PropertiesFile = void 0;
+    var _fs = _interopRequireDefault(require("fs"));
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : {
+        default: obj
+      };
+    }
+    var PropertiesFile = class {
+      constructor(...args) {
+        this.objs = {};
+        if (args.length) {
+          this.of.apply(this, args);
+        }
+      }
+      makeKeys(line) {
+        if (line && line.indexOf("#") !== 0) {
+          let separatorPositions = ["=", ":"].map((sep) => {
+            return line.indexOf(sep);
+          }).filter((index) => {
+            return index > -1;
+          });
+          let splitIndex = Math.min(...separatorPositions);
+          let key = line.substring(0, splitIndex).trim();
+          let value = line.substring(splitIndex + 1).trim();
+          if (this.objs.hasOwnProperty(key)) {
+            if (Array.isArray(this.objs[key])) {
+              this.objs[key].push(value);
+            } else {
+              let oldValue = this.objs[key];
+              this.objs[key] = [oldValue, value];
+            }
+          } else {
+            const escapedValue = value.replace(/"/g, '\\"').replace(/\\:/g, ":").replace(/\\=/g, "=");
+            this.objs[key] = unescape(JSON.parse('"' + escapedValue + '"'));
+          }
+        }
+      }
+      addFile(file) {
+        let data = _fs.default.readFileSync(file, "utf-8");
+        let items = data.split(/\r?\n/);
+        let me = this;
+        for (let i = 0; i < items.length; i++) {
+          let line = items[i];
+          while (line.substring(line.length - 1) === "\\") {
+            line = line.slice(0, -1);
+            let nextLine = items[i + 1];
+            line = line + nextLine.trim();
+            i++;
+          }
+          me.makeKeys(line);
+        }
+      }
+      of(...args) {
+        for (let i = 0; i < args.length; i++) {
+          this.addFile(args[i]);
+        }
+      }
+      get(key, defaultValue) {
+        if (this.objs.hasOwnProperty(key)) {
+          if (Array.isArray(this.objs[key])) {
+            let ret = [];
+            for (let i = 0; i < this.objs[key].length; i++) {
+              ret[i] = this.interpolate(this.objs[key][i]);
+            }
+            return ret;
+          } else {
+            return typeof this.objs[key] === "undefined" ? "" : this.interpolate(this.objs[key]);
+          }
+        }
+        return defaultValue;
+      }
+      getLast(key, defaultValue) {
+        if (this.objs.hasOwnProperty(key)) {
+          if (Array.isArray(this.objs[key])) {
+            var lg = this.objs[key].length;
+            return this.interpolate(this.objs[key][lg - 1]);
+          } else {
+            return typeof this.objs[key] === "undefined" ? "" : this.interpolate(this.objs[key]);
+          }
+        }
+        return defaultValue;
+      }
+      getFirst(key, defaultValue) {
+        if (this.objs.hasOwnProperty(key)) {
+          if (Array.isArray(this.objs[key])) {
+            return this.interpolate(this.objs[key][0]);
+          } else {
+            return typeof this.objs[key] === "undefined" ? "" : this.interpolate(this.objs[key]);
+          }
+        }
+        return defaultValue;
+      }
+      getInt(key, defaultIntValue) {
+        let val = this.getLast(key);
+        if (!val) {
+          return defaultIntValue;
+        } else {
+          return parseInt(val, 10);
+        }
+      }
+      getFloat(key, defaultFloatValue) {
+        let val = this.getLast(key);
+        if (!val) {
+          return defaultFloatValue;
+        } else {
+          return parseFloat(val);
+        }
+      }
+      getBoolean(key, defaultBooleanValue) {
+        function parseBool(b) {
+          return !/^(false|0)$/i.test(b) && !!b;
+        }
+        let val = this.getLast(key);
+        if (!val) {
+          return defaultBooleanValue || false;
+        } else {
+          return parseBool(val);
+        }
+      }
+      set(key, value) {
+        this.objs[key] = value;
+      }
+      interpolate(s) {
+        let me = this;
+        return s.replace(/\\\\/g, "\\").replace(/\$\{([A-Za-z0-9\.\-\_]*)\}/g, function(match) {
+          return me.getLast(match.substring(2, match.length - 1));
+        });
+      }
+      getKeys() {
+        let keys = [];
+        for (let key in this.objs) {
+          keys.push(key);
+        }
+        return keys;
+      }
+      getMatchingKeys(matchstr) {
+        let keys = [];
+        for (let key in this.objs) {
+          if (key.search(matchstr) !== -1) {
+            keys.push(key);
+          }
+        }
+        return keys;
+      }
+      reset() {
+        this.objs = {};
+      }
+    };
+    exports.PropertiesFile = PropertiesFile;
+    var of = function of2(...args) {
+      let globalFile = new PropertiesFile();
+      globalFile.of.apply(globalFile, args);
+      return globalFile;
+    };
+    exports.of = of;
+  }
+});
+
+// node_modules/env-ci/services/teamcity.js
+var import_java_properties, PROPERTIES_MAPPING, safeReadProperties, getProperties, teamcity_default;
+var init_teamcity = __esm({
+  "node_modules/env-ci/services/teamcity.js"() {
+    import_java_properties = __toESM(require_dist_node(), 1);
+    init_git();
+    PROPERTIES_MAPPING = {
+      root: "teamcity.build.workingDir",
+      branch: "teamcity.build.branch"
+    };
+    safeReadProperties = (filePath) => {
+      try {
+        return import_java_properties.default.of(filePath);
+      } catch {
+        return void 0;
+      }
+    };
+    getProperties = ({ env, cwd }) => {
+      const buildProperties = env.TEAMCITY_BUILD_PROPERTIES_FILE ? safeReadProperties(env.TEAMCITY_BUILD_PROPERTIES_FILE) : void 0;
+      const configFile = buildProperties ? buildProperties.get("teamcity.configuration.properties.file") : void 0;
+      const configProperties = configFile ? safeReadProperties(configFile) : configFile;
+      return Object.fromEntries(
+        Object.keys(PROPERTIES_MAPPING).map((key) => [
+          key,
+          (buildProperties ? buildProperties.get(PROPERTIES_MAPPING[key]) : void 0) || (configProperties ? configProperties.get(PROPERTIES_MAPPING[key]) : void 0) || (key === "branch" ? branch({ env, cwd }) : void 0)
+        ])
+      );
+    };
+    teamcity_default = {
+      detect({ env }) {
+        return Boolean(env.TEAMCITY_VERSION);
+      },
+      configuration({ env, cwd }) {
+        return {
+          name: "TeamCity",
+          service: "teamcity",
+          commit: env.BUILD_VCS_NUMBER,
+          build: env.BUILD_NUMBER,
+          slug: env.TEAMCITY_BUILDCONF_NAME,
+          ...getProperties({ env, cwd })
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/travis.js
+var travis_default;
+var init_travis = __esm({
+  "node_modules/env-ci/services/travis.js"() {
+    travis_default = {
+      detect({ env }) {
+        return Boolean(env.TRAVIS);
+      },
+      configuration({ env }) {
+        const pr = env.TRAVIS_PULL_REQUEST === "false" ? void 0 : env.TRAVIS_PULL_REQUEST;
+        const isPr = Boolean(pr);
+        return {
+          name: "Travis CI",
+          service: "travis",
+          commit: env.TRAVIS_COMMIT,
+          tag: env.TRAVIS_TAG,
+          build: env.TRAVIS_BUILD_NUMBER,
+          buildUrl: env.TRAVIS_BUILD_WEB_URL,
+          branch: env.TRAVIS_BRANCH,
+          job: env.TRAVIS_JOB_NUMBER,
+          jobUrl: env.TRAVIS_JOB_WEB_URL,
+          pr,
+          isPr,
+          prBranch: env.TRAVIS_PULL_REQUEST_BRANCH,
+          slug: env.TRAVIS_REPO_SLUG,
+          root: env.TRAVIS_BUILD_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/vela.js
+var vela_default;
+var init_vela = __esm({
+  "node_modules/env-ci/services/vela.js"() {
+    vela_default = {
+      detect({ env }) {
+        return Boolean(env.VELA);
+      },
+      configuration({ env }) {
+        const isPr = env.VELA_BUILD_EVENT === "pull_request";
+        return {
+          name: "Vela",
+          service: "vela",
+          branch: isPr ? env.VELA_PULL_REQUEST_TARGET : env.VELA_BUILD_BRANCH,
+          commit: env.VELA_BUILD_COMMIT,
+          tag: env.VELA_BUILD_TAG,
+          build: env.VELA_BUILD_NUMBER,
+          buildUrl: env.VELA_BUILD_LINK,
+          job: void 0,
+          jobUrl: void 0,
+          isPr,
+          pr: env.VELA_BUILD_PULL_REQUEST,
+          prBranch: env.VELA_PULL_REQUEST_SOURCE,
+          slug: env.VELA_REPO_FULL_NAME,
+          root: env.VELA_BUILD_WORKSPACE
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/vercel.js
+var vercel_default;
+var init_vercel = __esm({
+  "node_modules/env-ci/services/vercel.js"() {
+    vercel_default = {
+      detect({ env }) {
+        return Boolean(env.VERCEL) || Boolean(env.NOW_GITHUB_DEPLOYMENT);
+      },
+      configuration({ env }) {
+        const name = "Vercel";
+        const service = "vercel";
+        if (env.VERCEL) {
+          return {
+            name,
+            service,
+            commit: env.VERCEL_GIT_COMMIT_SHA,
+            branch: env.VERCEL_GIT_COMMIT_REF,
+            slug: `${env.VERCEL_GIT_REPO_OWNER}/${env.VERCEL_GIT_REPO_SLUG}`
+          };
+        }
+        return {
+          name,
+          service,
+          commit: env.NOW_GITHUB_COMMIT_SHA,
+          branch: env.NOW_GITHUB_COMMIT_REF,
+          slug: `${env.NOW_GITHUB_ORG}/${env.NOW_GITHUB_REPO}`
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/wercker.js
+var wercker_default;
+var init_wercker = __esm({
+  "node_modules/env-ci/services/wercker.js"() {
+    wercker_default = {
+      detect({ env }) {
+        return Boolean(env.WERCKER_MAIN_PIPELINE_STARTED);
+      },
+      configuration({ env }) {
+        return {
+          name: "Wercker",
+          service: "wercker",
+          commit: env.WERCKER_GIT_COMMIT,
+          build: env.WERCKER_MAIN_PIPELINE_STARTED,
+          buildUrl: env.WERCKER_RUN_URL,
+          branch: env.WERCKER_GIT_BRANCH,
+          slug: `${env.WERCKER_GIT_OWNER}/${env.WERCKER_GIT_REPOSITORY}`,
+          root: env.WERCKER_ROOT
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/woodpecker.js
+var woodpecker_default;
+var init_woodpecker = __esm({
+  "node_modules/env-ci/services/woodpecker.js"() {
+    woodpecker_default = {
+      detect({ env }) {
+        return env.CI && env.CI === "woodpecker";
+      },
+      configuration({ env }) {
+        const isPr = env.CI_BUILD_EVENT === "pull_request";
+        return {
+          name: "Woodpecker CI",
+          service: "woodpecker",
+          commit: env.CI_COMMIT_SHA,
+          tag: env.CI_COMMIT_TAG,
+          build: env.CI_BUILD_NUMBER,
+          buildUrl: env.CI_BUILD_LINK,
+          branch: isPr ? env.CI_COMMIT_TARGET_BRANCH : env.CI_COMMIT_BRANCH,
+          job: env.CI_JOB_NUMBER,
+          jobUrl: env.CI_BUILD_LINK,
+          pr: env.CI_COMMIT_PULL_REQUEST,
+          isPr,
+          prBranch: isPr ? env.CI_COMMIT_SOURCE_BRANCH : void 0,
+          slug: `${env.CI_REPO_OWNER}/${env.CI_REPO_NAME}`,
+          root: env.CI_WORKSPACE
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/index.js
+var env_ci_exports = {};
+__export(env_ci_exports, {
+  default: () => env_ci_default
+});
+var services, env_ci_default;
+var init_env_ci = __esm({
+  "node_modules/env-ci/index.js"() {
+    init_appveyor();
+    init_azure_pipelines();
+    init_bamboo();
+    init_bitbucket();
+    init_bitrise();
+    init_buddy();
+    init_buildkite();
+    init_circleci();
+    init_cirrus();
+    init_cloudflare_pages();
+    init_codebuild();
+    init_codefresh();
+    init_codeship();
+    init_drone();
+    init_git2();
+    init_github();
+    init_gitlab();
+    init_jenkins();
+    init_netlify();
+    init_puppet();
+    init_sail();
+    init_scrutinizer();
+    init_semaphore();
+    init_shippable();
+    init_teamcity();
+    init_travis();
+    init_vela();
+    init_vercel();
+    init_wercker();
+    init_woodpecker();
+    services = {
+      appveyor: appveyor_default,
+      azurePipelines: azure_pipelines_default,
+      bamboo: bamboo_default,
+      bitbucket: bitbucket_default,
+      bitrise: bitrise_default,
+      buddy: buddy_default,
+      buildkite: buildkite_default,
+      circleci: circleci_default,
+      cirrus: cirrus_default,
+      cloudflarePages: cloudflare_pages_default,
+      codebuild: codebuild_default,
+      codefresh: codefresh_default,
+      codeship: codeship_default,
+      drone: drone_default,
+      github: github_default,
+      gitlab: gitlab_default,
+      jenkins: jenkins_default,
+      netlify: netlify_default,
+      puppet: puppet_default,
+      sail: sail_default,
+      scrutinizer: scrutinizer_default,
+      semaphore: semaphore_default,
+      shippable: shippable_default,
+      teamcity: teamcity_default,
+      travis: travis_default,
+      vela: vela_default,
+      vercel: vercel_default,
+      wercker: wercker_default,
+      woodpecker: woodpecker_default
+    };
+    env_ci_default = ({ env = process.env, cwd = process.cwd() } = {}) => {
+      for (const name of Object.keys(services)) {
+        if (services[name].detect({ env, cwd })) {
+          return { isCi: true, ...services[name].configuration({ env, cwd }) };
+        }
+      }
+      return { isCi: Boolean(env.CI), ...git_default.configuration({ env, cwd }) };
+    };
   }
 });
 
@@ -2457,6 +5290,7 @@ function run() {
           c.push(`    ${k}:${/token/i.test(k) ? "***" : (_b = env[k]) != null ? _b : ""}`);
         }
         core2.debug(c.join("\n"));
+        packages.push("env-ci");
       }
       const log = debug3 ? core2.info : core2.debug;
       plugins2.forEach((p) => {
@@ -2475,6 +5309,8 @@ function run() {
       if (debug3) {
         const { default: debugLib } = yield import("debug");
         debugLib.enable("semantic-release:*");
+        const { default: envCi } = yield Promise.resolve().then(() => (init_env_ci(), env_ci_exports));
+        core2.debug(`Environment identified by \`env-ci\`: ${JSON.stringify(envCi(), null, 2)}`);
       }
       plugins2.push(forceRelease_exports, initialRelease_exports);
       const { default: semanticRelease } = yield import("semantic-release");
