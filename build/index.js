@@ -136,11 +136,11 @@ var require_command = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.issue = exports.issueCommand = void 0;
-    var os = __importStar(require("os"));
+    var os2 = __importStar(require("os"));
     var utils_1 = require_utils();
     function issueCommand(command, properties, message) {
       const cmd = new Command(command, properties, message);
-      process.stdout.write(cmd.toString() + os.EOL);
+      process.stdout.write(cmd.toString() + os2.EOL);
     }
     exports.issueCommand = issueCommand;
     function issue(name, message = "") {
@@ -557,7 +557,7 @@ var require_file_command = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.prepareKeyValueMessage = exports.issueFileCommand = void 0;
     var fs = __importStar(require("fs"));
-    var os = __importStar(require("os"));
+    var os2 = __importStar(require("os"));
     var uuid_1 = (init_esm_node(), __toCommonJS(esm_node_exports));
     var utils_1 = require_utils();
     function issueFileCommand(command, message) {
@@ -568,7 +568,7 @@ var require_file_command = __commonJS({
       if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os2.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -582,7 +582,7 @@ var require_file_command = __commonJS({
       if (convertedValue.includes(delimiter)) {
         throw new Error(`Unexpected input: value should not contain the delimiter "${delimiter}"`);
       }
-      return `${key}<<${delimiter}${os.EOL}${convertedValue}${os.EOL}${delimiter}`;
+      return `${key}<<${delimiter}${os2.EOL}${convertedValue}${os2.EOL}${delimiter}`;
     }
     exports.prepareKeyValueMessage = prepareKeyValueMessage;
   }
@@ -2071,7 +2071,7 @@ var require_core = __commonJS({
     var command_1 = require_command();
     var file_command_1 = require_file_command();
     var utils_1 = require_utils();
-    var os = __importStar(require("os"));
+    var os2 = __importStar(require("os"));
     var path3 = __importStar(require("path"));
     var oidc_utils_1 = require_oidc_utils();
     var ExitCode;
@@ -2103,7 +2103,7 @@ var require_core = __commonJS({
       process.env["PATH"] = `${inputPath}${path3.delimiter}${process.env["PATH"]}`;
     }
     exports.addPath = addPath;
-    function getInput2(name, options) {
+    function getInput3(name, options) {
       const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
       if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
@@ -2113,9 +2113,9 @@ var require_core = __commonJS({
       }
       return val.trim();
     }
-    exports.getInput = getInput2;
+    exports.getInput = getInput3;
     function getMultilineInput(name, options) {
-      const inputs = getInput2(name, options).split("\n").filter((x) => x !== "");
+      const inputs = getInput3(name, options).split("\n").filter((x) => x !== "");
       if (options && options.trimWhitespace === false) {
         return inputs;
       }
@@ -2125,7 +2125,7 @@ var require_core = __commonJS({
     function getBooleanInput(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
-      const val = getInput2(name, options);
+      const val = getInput3(name, options);
       if (trueValue.includes(val))
         return true;
       if (falseValue.includes(val))
@@ -2139,7 +2139,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       if (filePath) {
         return file_command_1.issueFileCommand("OUTPUT", file_command_1.prepareKeyValueMessage(name, value));
       }
-      process.stdout.write(os.EOL);
+      process.stdout.write(os2.EOL);
       command_1.issueCommand("set-output", { name }, utils_1.toCommandValue(value));
     }
     exports.setOutput = setOutput2;
@@ -2173,7 +2173,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports.notice = notice;
     function info2(message) {
-      process.stdout.write(message + os.EOL);
+      process.stdout.write(message + os2.EOL);
     }
     exports.info = info2;
     function startGroup(name) {
@@ -2351,9 +2351,9 @@ var init_bitbucket = __esm({
           commit: env.BITBUCKET_COMMIT,
           tag: env.BITBUCKET_TAG,
           build: env.BITBUCKET_BUILD_NUMBER,
-          buildUrl: `https://bitbucket.org/${env.BITBUCKET_REPO_SLUG}/addon/pipelines/home#!/results/${env.BITBUCKET_BUILD_NUMBER}`,
+          buildUrl: `https://bitbucket.org/${env.BITBUCKET_REPO_FULL_NAME}/addon/pipelines/home#!/results/${env.BITBUCKET_BUILD_NUMBER}`,
           branch: env.BITBUCKET_BRANCH,
-          slug: env.BITBUCKET_REPO_SLUG,
+          slug: env.BITBUCKET_REPO_FULL_NAME,
           root: env.BITBUCKET_CLONE_DIR
         };
       }
@@ -2409,125 +2409,10 @@ var init_buddy = __esm({
           tag: env.BUDDY_EXECUTION_TAG,
           build: env.BUDDY_EXECUTION_ID,
           buildUrl: env.BUDDY_EXECUTION_URL,
-          branch: isPr ? void 0 : env.BUDDY_EXECUTION_BRANCH,
+          branch: isPr ? env.BUDDY_EXECUTION_PULL_REQUEST_HEAD_BRANCH : env.BUDDY_EXECUTION_BRANCH,
           pr,
           isPr,
           slug: env.BUDDY_REPO_SLUG
-        };
-      }
-    };
-  }
-});
-
-// node_modules/env-ci/services/buildkite.js
-var buildkite_default;
-var init_buildkite = __esm({
-  "node_modules/env-ci/services/buildkite.js"() {
-    buildkite_default = {
-      detect({ env }) {
-        return Boolean(env.BUILDKITE);
-      },
-      configuration({ env }) {
-        const pr = env.BUILDKITE_PULL_REQUEST === "false" ? void 0 : env.BUILDKITE_PULL_REQUEST;
-        const isPr = Boolean(pr);
-        return {
-          name: "Buildkite",
-          service: "buildkite",
-          build: env.BUILDKITE_BUILD_NUMBER,
-          buildUrl: env.BUILDKITE_BUILD_URL,
-          commit: env.BUILDKITE_COMMIT,
-          tag: env.BUILDKITE_TAG,
-          branch: isPr ? env.BUILDKITE_PULL_REQUEST_BASE_BRANCH : env.BUILDKITE_BRANCH,
-          slug: `${env.BUILDKITE_ORGANIZATION_SLUG}/${env.BUILDKITE_PROJECT_SLUG}`,
-          pr,
-          isPr,
-          prBranch: isPr ? env.BUILDKITE_BRANCH : void 0,
-          root: env.BUILDKITE_BUILD_CHECKOUT_PATH
-        };
-      }
-    };
-  }
-});
-
-// node_modules/env-ci/services/circleci.js
-var circleci_default;
-var init_circleci = __esm({
-  "node_modules/env-ci/services/circleci.js"() {
-    init_utils();
-    circleci_default = {
-      detect({ env }) {
-        return Boolean(env.CIRCLECI);
-      },
-      configuration({ env }) {
-        const pr = env.CIRCLE_PR_NUMBER || prNumber(env.CIRCLE_PULL_REQUEST || env.CI_PULL_REQUEST);
-        const isPr = Boolean(pr);
-        return {
-          name: "CircleCI",
-          service: "circleci",
-          build: env.CIRCLE_BUILD_NUM,
-          buildUrl: env.CIRCLE_BUILD_URL,
-          job: `${env.CIRCLE_BUILD_NUM}.${env.CIRCLE_NODE_INDEX}`,
-          commit: env.CIRCLE_SHA1,
-          tag: env.CIRCLE_TAG,
-          branch: isPr ? void 0 : env.CIRCLE_BRANCH,
-          pr,
-          isPr,
-          prBranch: isPr ? env.CIRCLE_BRANCH : void 0,
-          slug: `${env.CIRCLE_PROJECT_USERNAME}/${env.CIRCLE_PROJECT_REPONAME}`
-        };
-      }
-    };
-  }
-});
-
-// node_modules/env-ci/services/cirrus.js
-var CIRRUS_CI_DASHBOARD, cirrus_default;
-var init_cirrus = __esm({
-  "node_modules/env-ci/services/cirrus.js"() {
-    CIRRUS_CI_DASHBOARD = "https://cirrus-ci.com";
-    cirrus_default = {
-      detect({ env }) {
-        return Boolean(env.CIRRUS_CI);
-      },
-      configuration({ env }) {
-        const pr = env.CIRRUS_PR;
-        const isPr = Boolean(pr);
-        return {
-          name: "Cirrus CI",
-          service: "cirrus",
-          commit: env.CIRRUS_CHANGE_IN_REPO,
-          tag: env.CIRRUS_TAG,
-          build: env.CIRRUS_BUILD_ID,
-          buildUrl: `${CIRRUS_CI_DASHBOARD}/build/${env.CIRRUS_BUILD_ID}`,
-          job: env.CIRRUS_TASK_ID,
-          jobUrl: `${CIRRUS_CI_DASHBOARD}/task/${env.CIRRUS_TASK_ID}`,
-          branch: isPr ? env.CIRRUS_BASE_BRANCH : env.CIRRUS_BRANCH,
-          pr,
-          isPr,
-          prBranch: isPr ? env.CIRRUS_BRANCH : void 0,
-          slug: env.CIRRUS_REPO_FULL_NAME,
-          root: env.CIRRUS_WORKING_DIR
-        };
-      }
-    };
-  }
-});
-
-// node_modules/env-ci/services/cloudflare-pages.js
-var cloudflare_pages_default;
-var init_cloudflare_pages = __esm({
-  "node_modules/env-ci/services/cloudflare-pages.js"() {
-    cloudflare_pages_default = {
-      detect({ env }) {
-        return env.CF_PAGES === "1";
-      },
-      configuration({ env }) {
-        return {
-          name: "Cloudflare Pages",
-          service: "cloudflarePages",
-          commit: env.CF_PAGES_COMMIT_SHA,
-          branch: env.CF_PAGES_BRANCH,
-          root: env.PWD
         };
       }
     };
@@ -3151,7 +3036,7 @@ ${fromBody}`;
 });
 
 // node_modules/onetime/index.js
-var calledFunctions, onetime;
+var calledFunctions, onetime, onetime_default;
 var init_onetime = __esm({
   "node_modules/onetime/index.js"() {
     init_mimic_fn();
@@ -3183,6 +3068,7 @@ var init_onetime = __esm({
       }
       return calledFunctions.get(function_);
     };
+    onetime_default = onetime;
   }
 });
 
@@ -3190,19 +3076,17 @@ var init_onetime = __esm({
 var getRealtimeSignals, getRealtimeSignal, SIGRTMIN, SIGRTMAX;
 var init_realtime = __esm({
   "node_modules/env-ci/node_modules/human-signals/build/src/realtime.js"() {
-    getRealtimeSignals = function() {
+    getRealtimeSignals = () => {
       const length = SIGRTMAX - SIGRTMIN + 1;
       return Array.from({ length }, getRealtimeSignal);
     };
-    getRealtimeSignal = function(value, index) {
-      return {
-        name: `SIGRT${index + 1}`,
-        number: SIGRTMIN + index,
-        action: "terminate",
-        description: "Application-specific signal (realtime)",
-        standard: "posix"
-      };
-    };
+    getRealtimeSignal = (value, index) => ({
+      name: `SIGRT${index + 1}`,
+      number: SIGRTMIN + index,
+      action: "terminate",
+      description: "Application-specific signal (realtime)",
+      standard: "posix"
+    });
     SIGRTMIN = 34;
     SIGRTMAX = 64;
   }
@@ -3487,28 +3371,28 @@ var init_core = __esm({
 });
 
 // node_modules/env-ci/node_modules/human-signals/build/src/signals.js
-var import_os, getSignals, normalizeSignal;
+var import_node_os, getSignals, normalizeSignal;
 var init_signals = __esm({
   "node_modules/env-ci/node_modules/human-signals/build/src/signals.js"() {
-    import_os = require("os");
+    import_node_os = require("node:os");
     init_core();
     init_realtime();
-    getSignals = function() {
+    getSignals = () => {
       const realtimeSignals = getRealtimeSignals();
-      const signals = [...SIGNALS, ...realtimeSignals].map(normalizeSignal);
-      return signals;
+      const signals2 = [...SIGNALS, ...realtimeSignals].map(normalizeSignal);
+      return signals2;
     };
-    normalizeSignal = function({
+    normalizeSignal = ({
       name,
       number: defaultNumber,
       description,
       action,
       forced = false,
       standard
-    }) {
+    }) => {
       const {
         signals: { [name]: constantSignal }
-      } = import_os.constants;
+      } = import_node_os.constants;
       const supported = constantSignal !== void 0;
       const number = supported ? constantSignal : defaultNumber;
       return { name, number, description, supported, action, forced, standard };
@@ -3517,31 +3401,37 @@ var init_signals = __esm({
 });
 
 // node_modules/env-ci/node_modules/human-signals/build/src/main.js
-var import_os2, getSignalsByName, getSignalByName, signalsByName, getSignalsByNumber, getSignalByNumber, findSignalByNumber, signalsByNumber;
+var import_node_os2, getSignalsByName, getSignalByName, signalsByName, getSignalsByNumber, getSignalByNumber, findSignalByNumber, signalsByNumber;
 var init_main = __esm({
   "node_modules/env-ci/node_modules/human-signals/build/src/main.js"() {
-    import_os2 = require("os");
+    import_node_os2 = require("node:os");
     init_realtime();
     init_signals();
-    getSignalsByName = function() {
-      const signals = getSignals();
-      return signals.reduce(getSignalByName, {});
+    getSignalsByName = () => {
+      const signals2 = getSignals();
+      return Object.fromEntries(signals2.map(getSignalByName));
     };
-    getSignalByName = function(signalByNameMemo, { name, number, description, supported, action, forced, standard }) {
-      return {
-        ...signalByNameMemo,
-        [name]: { name, number, description, supported, action, forced, standard }
-      };
-    };
+    getSignalByName = ({
+      name,
+      number,
+      description,
+      supported,
+      action,
+      forced,
+      standard
+    }) => [name, { name, number, description, supported, action, forced, standard }];
     signalsByName = getSignalsByName();
-    getSignalsByNumber = function() {
-      const signals = getSignals();
+    getSignalsByNumber = () => {
+      const signals2 = getSignals();
       const length = SIGRTMAX + 1;
-      const signalsA = Array.from({ length }, (value, number) => getSignalByNumber(number, signals));
+      const signalsA = Array.from(
+        { length },
+        (value, number) => getSignalByNumber(number, signals2)
+      );
       return Object.assign({}, ...signalsA);
     };
-    getSignalByNumber = function(number, signals) {
-      const signal = findSignalByNumber(number, signals);
+    getSignalByNumber = (number, signals2) => {
+      const signal = findSignalByNumber(number, signals2);
       if (signal === void 0) {
         return {};
       }
@@ -3558,21 +3448,22 @@ var init_main = __esm({
         }
       };
     };
-    findSignalByNumber = function(number, signals) {
-      const signal = signals.find(({ name }) => import_os2.constants.signals[name] === number);
+    findSignalByNumber = (number, signals2) => {
+      const signal = signals2.find(({ name }) => import_node_os2.constants.signals[name] === number);
       if (signal !== void 0) {
         return signal;
       }
-      return signals.find((signalA) => signalA.number === number);
+      return signals2.find((signalA) => signalA.number === number);
     };
     signalsByNumber = getSignalsByNumber();
   }
 });
 
 // node_modules/env-ci/node_modules/execa/lib/error.js
-var getErrorPrefix, makeError;
+var import_node_process2, getErrorPrefix, makeError;
 var init_error = __esm({
   "node_modules/env-ci/node_modules/execa/lib/error.js"() {
+    import_node_process2 = __toESM(require("node:process"), 1);
     init_main();
     getErrorPrefix = ({ timedOut, timeout, errorCode, signal, signalDescription, exitCode, isCanceled }) => {
       if (timedOut) {
@@ -3604,7 +3495,7 @@ var init_error = __esm({
       timedOut,
       isCanceled,
       killed,
-      parsed: { options: { timeout } }
+      parsed: { options: { timeout, cwd = import_node_process2.default.cwd() } }
     }) => {
       exitCode = exitCode === null ? void 0 : exitCode;
       signal = signal === null ? void 0 : signal;
@@ -3630,6 +3521,7 @@ ${error.message}` : execaMessage;
       error.signalDescription = signalDescription;
       error.stdout = stdout;
       error.stderr = stderr;
+      error.cwd = cwd;
       if (all !== void 0) {
         error.all = all;
       }
@@ -3674,18 +3566,16 @@ var init_stdio = __esm({
   }
 });
 
-// node_modules/signal-exit/signals.js
-var require_signals = __commonJS({
-  "node_modules/signal-exit/signals.js"(exports, module2) {
-    module2.exports = [
-      "SIGABRT",
-      "SIGALRM",
-      "SIGHUP",
-      "SIGINT",
-      "SIGTERM"
-    ];
+// node_modules/env-ci/node_modules/signal-exit/dist/mjs/signals.js
+var signals;
+var init_signals2 = __esm({
+  "node_modules/env-ci/node_modules/signal-exit/dist/mjs/signals.js"() {
+    signals = [];
+    signals.push("SIGHUP", "SIGINT", "SIGTERM");
     if (process.platform !== "win32") {
-      module2.exports.push(
+      signals.push(
+        "SIGALRM",
+        "SIGABRT",
         "SIGVTALRM",
         "SIGXCPU",
         "SIGXFSZ",
@@ -3700,291 +3590,609 @@ var require_signals = __commonJS({
       );
     }
     if (process.platform === "linux") {
-      module2.exports.push(
-        "SIGIO",
-        "SIGPOLL",
-        "SIGPWR",
-        "SIGSTKFLT",
-        "SIGUNUSED"
-      );
+      signals.push("SIGIO", "SIGPOLL", "SIGPWR", "SIGSTKFLT");
     }
   }
 });
 
-// node_modules/signal-exit/index.js
-var require_signal_exit = __commonJS({
-  "node_modules/signal-exit/index.js"(exports, module2) {
-    var process4 = global.process;
-    var processOk = function(process5) {
-      return process5 && typeof process5 === "object" && typeof process5.removeListener === "function" && typeof process5.emit === "function" && typeof process5.reallyExit === "function" && typeof process5.listeners === "function" && typeof process5.kill === "function" && typeof process5.pid === "number" && typeof process5.on === "function";
-    };
-    if (!processOk(process4)) {
-      module2.exports = function() {
-        return function() {
-        };
+// node_modules/env-ci/node_modules/signal-exit/dist/mjs/index.js
+var processOk, kExitEmitter, global2, ObjectDefineProperty, Emitter, SignalExitBase, signalExitWrap, SignalExitFallback, SignalExit, process4, onExit, load, unload;
+var init_mjs = __esm({
+  "node_modules/env-ci/node_modules/signal-exit/dist/mjs/index.js"() {
+    init_signals2();
+    processOk = (process7) => !!process7 && typeof process7 === "object" && typeof process7.removeListener === "function" && typeof process7.emit === "function" && typeof process7.reallyExit === "function" && typeof process7.listeners === "function" && typeof process7.kill === "function" && typeof process7.pid === "number" && typeof process7.on === "function";
+    kExitEmitter = Symbol.for("signal-exit emitter");
+    global2 = globalThis;
+    ObjectDefineProperty = Object.defineProperty.bind(Object);
+    Emitter = class {
+      emitted = {
+        afterExit: false,
+        exit: false
       };
-    } else {
-      assert = require("assert");
-      signals = require_signals();
-      isWin = /^win/i.test(process4.platform);
-      EE = require("events");
-      if (typeof EE !== "function") {
-        EE = EE.EventEmitter;
+      listeners = {
+        afterExit: [],
+        exit: []
+      };
+      count = 0;
+      id = Math.random();
+      constructor() {
+        if (global2[kExitEmitter]) {
+          return global2[kExitEmitter];
+        }
+        ObjectDefineProperty(global2, kExitEmitter, {
+          value: this,
+          writable: false,
+          enumerable: false,
+          configurable: false
+        });
       }
-      if (process4.__signal_exit_emitter__) {
-        emitter = process4.__signal_exit_emitter__;
-      } else {
-        emitter = process4.__signal_exit_emitter__ = new EE();
-        emitter.count = 0;
-        emitter.emitted = {};
+      on(ev, fn) {
+        this.listeners[ev].push(fn);
       }
-      if (!emitter.infinite) {
-        emitter.setMaxListeners(Infinity);
-        emitter.infinite = true;
+      removeListener(ev, fn) {
+        const list = this.listeners[ev];
+        const i = list.indexOf(fn);
+        if (i === -1) {
+          return;
+        }
+        if (i === 0 && list.length === 1) {
+          list.length = 0;
+        } else {
+          list.splice(i, 1);
+        }
       }
-      module2.exports = function(cb, opts) {
-        if (!processOk(global.process)) {
-          return function() {
+      emit(ev, code, signal) {
+        if (this.emitted[ev]) {
+          return false;
+        }
+        this.emitted[ev] = true;
+        let ret = false;
+        for (const fn of this.listeners[ev]) {
+          ret = fn(code, signal) === true || ret;
+        }
+        if (ev === "exit") {
+          ret = this.emit("afterExit", code, signal) || ret;
+        }
+        return ret;
+      }
+    };
+    SignalExitBase = class {
+    };
+    signalExitWrap = (handler) => {
+      return {
+        onExit(cb, opts) {
+          return handler.onExit(cb, opts);
+        },
+        load() {
+          return handler.load();
+        },
+        unload() {
+          return handler.unload();
+        }
+      };
+    };
+    SignalExitFallback = class extends SignalExitBase {
+      onExit() {
+        return () => {
+        };
+      }
+      load() {
+      }
+      unload() {
+      }
+    };
+    SignalExit = class extends SignalExitBase {
+      // "SIGHUP" throws an `ENOSYS` error on Windows,
+      // so use a supported signal instead
+      /* c8 ignore start */
+      #hupSig = process4.platform === "win32" ? "SIGINT" : "SIGHUP";
+      /* c8 ignore stop */
+      #emitter = new Emitter();
+      #process;
+      #originalProcessEmit;
+      #originalProcessReallyExit;
+      #sigListeners = {};
+      #loaded = false;
+      constructor(process7) {
+        super();
+        this.#process = process7;
+        this.#sigListeners = {};
+        for (const sig of signals) {
+          this.#sigListeners[sig] = () => {
+            const listeners = this.#process.listeners(sig);
+            let { count } = this.#emitter;
+            const p = process7;
+            if (typeof p.__signal_exit_emitter__ === "object" && typeof p.__signal_exit_emitter__.count === "number") {
+              count += p.__signal_exit_emitter__.count;
+            }
+            if (listeners.length === count) {
+              this.unload();
+              const ret = this.#emitter.emit("exit", null, sig);
+              const s = sig === "SIGHUP" ? this.#hupSig : sig;
+              if (!ret)
+                process7.kill(process7.pid, s);
+            }
           };
         }
-        assert.equal(typeof cb, "function", "a callback must be provided for exit handler");
-        if (loaded === false) {
-          load();
+        this.#originalProcessReallyExit = process7.reallyExit;
+        this.#originalProcessEmit = process7.emit;
+      }
+      onExit(cb, opts) {
+        if (!processOk(this.#process)) {
+          return () => {
+          };
         }
-        var ev = "exit";
-        if (opts && opts.alwaysLast) {
-          ev = "afterexit";
+        if (this.#loaded === false) {
+          this.load();
         }
-        var remove = function() {
-          emitter.removeListener(ev, cb);
-          if (emitter.listeners("exit").length === 0 && emitter.listeners("afterexit").length === 0) {
-            unload();
+        const ev = opts?.alwaysLast ? "afterExit" : "exit";
+        this.#emitter.on(ev, cb);
+        return () => {
+          this.#emitter.removeListener(ev, cb);
+          if (this.#emitter.listeners["exit"].length === 0 && this.#emitter.listeners["afterExit"].length === 0) {
+            this.unload();
           }
         };
-        emitter.on(ev, cb);
-        return remove;
-      };
-      unload = function unload2() {
-        if (!loaded || !processOk(global.process)) {
+      }
+      load() {
+        if (this.#loaded) {
           return;
         }
-        loaded = false;
-        signals.forEach(function(sig) {
+        this.#loaded = true;
+        this.#emitter.count += 1;
+        for (const sig of signals) {
           try {
-            process4.removeListener(sig, sigListeners[sig]);
-          } catch (er) {
+            const fn = this.#sigListeners[sig];
+            if (fn)
+              this.#process.on(sig, fn);
+          } catch (_) {
           }
-        });
-        process4.emit = originalProcessEmit;
-        process4.reallyExit = originalProcessReallyExit;
-        emitter.count -= 1;
-      };
-      module2.exports.unload = unload;
-      emit = function emit2(event, code, signal) {
-        if (emitter.emitted[event]) {
-          return;
         }
-        emitter.emitted[event] = true;
-        emitter.emit(event, code, signal);
-      };
-      sigListeners = {};
-      signals.forEach(function(sig) {
-        sigListeners[sig] = function listener() {
-          if (!processOk(global.process)) {
-            return;
-          }
-          var listeners = process4.listeners(sig);
-          if (listeners.length === emitter.count) {
-            unload();
-            emit("exit", null, sig);
-            emit("afterexit", null, sig);
-            if (isWin && sig === "SIGHUP") {
-              sig = "SIGINT";
-            }
-            process4.kill(process4.pid, sig);
-          }
+        this.#process.emit = (ev, ...a) => {
+          return this.#processEmit(ev, ...a);
         };
-      });
-      module2.exports.signals = function() {
-        return signals;
-      };
-      loaded = false;
-      load = function load2() {
-        if (loaded || !processOk(global.process)) {
+        this.#process.reallyExit = (code) => {
+          return this.#processReallyExit(code);
+        };
+      }
+      unload() {
+        if (!this.#loaded) {
           return;
         }
-        loaded = true;
-        emitter.count += 1;
-        signals = signals.filter(function(sig) {
+        this.#loaded = false;
+        signals.forEach((sig) => {
+          const listener = this.#sigListeners[sig];
+          if (!listener) {
+            throw new Error("Listener not defined for signal: " + sig);
+          }
           try {
-            process4.on(sig, sigListeners[sig]);
-            return true;
-          } catch (er) {
-            return false;
+            this.#process.removeListener(sig, listener);
+          } catch (_) {
           }
         });
-        process4.emit = processEmit;
-        process4.reallyExit = processReallyExit;
-      };
-      module2.exports.load = load;
-      originalProcessReallyExit = process4.reallyExit;
-      processReallyExit = function processReallyExit2(code) {
-        if (!processOk(global.process)) {
-          return;
+        this.#process.emit = this.#originalProcessEmit;
+        this.#process.reallyExit = this.#originalProcessReallyExit;
+        this.#emitter.count -= 1;
+      }
+      #processReallyExit(code) {
+        if (!processOk(this.#process)) {
+          return 0;
         }
-        process4.exitCode = code || /* istanbul ignore next */
-        0;
-        emit("exit", process4.exitCode, null);
-        emit("afterexit", process4.exitCode, null);
-        originalProcessReallyExit.call(process4, process4.exitCode);
-      };
-      originalProcessEmit = process4.emit;
-      processEmit = function processEmit2(ev, arg) {
-        if (ev === "exit" && processOk(global.process)) {
-          if (arg !== void 0) {
-            process4.exitCode = arg;
+        this.#process.exitCode = code || 0;
+        this.#emitter.emit("exit", this.#process.exitCode, null);
+        return this.#originalProcessReallyExit.call(this.#process, this.#process.exitCode);
+      }
+      #processEmit(ev, ...args) {
+        const og = this.#originalProcessEmit;
+        if (ev === "exit" && processOk(this.#process)) {
+          if (typeof args[0] === "number") {
+            this.#process.exitCode = args[0];
           }
-          var ret = originalProcessEmit.apply(this, arguments);
-          emit("exit", process4.exitCode, null);
-          emit("afterexit", process4.exitCode, null);
+          const ret = og.call(this.#process, ev, ...args);
+          this.#emitter.emit("exit", this.#process.exitCode, null);
           return ret;
         } else {
-          return originalProcessEmit.apply(this, arguments);
+          return og.call(this.#process, ev, ...args);
         }
-      };
-    }
-    var assert;
-    var signals;
-    var isWin;
-    var EE;
-    var emitter;
-    var unload;
-    var emit;
-    var sigListeners;
-    var loaded;
-    var load;
-    var originalProcessReallyExit;
-    var processReallyExit;
-    var originalProcessEmit;
-    var processEmit;
+      }
+    };
+    process4 = globalThis.process;
+    ({
+      onExit: (
+        /**
+         * Called when the process is exiting, whether via signal, explicit
+         * exit, or running out of stuff to do.
+         *
+         * If the global process object is not suitable for instrumentation,
+         * then this will be a no-op.
+         *
+         * Returns a function that may be used to unload signal-exit.
+         */
+        onExit
+      ),
+      load: (
+        /**
+         * Load the listeners.  Likely you never need to call this, unless
+         * doing a rather deep integration with signal-exit functionality.
+         * Mostly exposed for the benefit of testing.
+         *
+         * @internal
+         */
+        load
+      ),
+      unload: (
+        /**
+         * Unload the listeners.  Likely you never need to call this, unless
+         * doing a rather deep integration with signal-exit functionality.
+         * Mostly exposed for the benefit of testing.
+         *
+         * @internal
+         */
+        unload
+      )
+    } = signalExitWrap(processOk(process4) ? new SignalExit(process4) : new SignalExitFallback()));
   }
 });
 
 // node_modules/env-ci/node_modules/execa/lib/kill.js
-var import_signal_exit, DEFAULT_FORCE_KILL_TIMEOUT;
+var import_node_os3, DEFAULT_FORCE_KILL_TIMEOUT, spawnedKill, setKillTimeout, shouldForceKill, isSigterm, getForceKillAfterTimeout, spawnedCancel, timeoutKill, setupTimeout, validateTimeout, setExitHandler;
 var init_kill = __esm({
   "node_modules/env-ci/node_modules/execa/lib/kill.js"() {
-    import_signal_exit = __toESM(require_signal_exit(), 1);
+    import_node_os3 = __toESM(require("node:os"), 1);
+    init_mjs();
     DEFAULT_FORCE_KILL_TIMEOUT = 1e3 * 5;
+    spawnedKill = (kill, signal = "SIGTERM", options = {}) => {
+      const killResult = kill(signal);
+      setKillTimeout(kill, signal, options, killResult);
+      return killResult;
+    };
+    setKillTimeout = (kill, signal, options, killResult) => {
+      if (!shouldForceKill(signal, options, killResult)) {
+        return;
+      }
+      const timeout = getForceKillAfterTimeout(options);
+      const t = setTimeout(() => {
+        kill("SIGKILL");
+      }, timeout);
+      if (t.unref) {
+        t.unref();
+      }
+    };
+    shouldForceKill = (signal, { forceKillAfterTimeout }, killResult) => isSigterm(signal) && forceKillAfterTimeout !== false && killResult;
+    isSigterm = (signal) => signal === import_node_os3.default.constants.signals.SIGTERM || typeof signal === "string" && signal.toUpperCase() === "SIGTERM";
+    getForceKillAfterTimeout = ({ forceKillAfterTimeout = true }) => {
+      if (forceKillAfterTimeout === true) {
+        return DEFAULT_FORCE_KILL_TIMEOUT;
+      }
+      if (!Number.isFinite(forceKillAfterTimeout) || forceKillAfterTimeout < 0) {
+        throw new TypeError(`Expected the \`forceKillAfterTimeout\` option to be a non-negative integer, got \`${forceKillAfterTimeout}\` (${typeof forceKillAfterTimeout})`);
+      }
+      return forceKillAfterTimeout;
+    };
+    spawnedCancel = (spawned, context) => {
+      const killResult = spawned.kill();
+      if (killResult) {
+        context.isCanceled = true;
+      }
+    };
+    timeoutKill = (spawned, signal, reject) => {
+      spawned.kill(signal);
+      reject(Object.assign(new Error("Timed out"), { timedOut: true, signal }));
+    };
+    setupTimeout = (spawned, { timeout, killSignal = "SIGTERM" }, spawnedPromise) => {
+      if (timeout === 0 || timeout === void 0) {
+        return spawnedPromise;
+      }
+      let timeoutId;
+      const timeoutPromise = new Promise((resolve2, reject) => {
+        timeoutId = setTimeout(() => {
+          timeoutKill(spawned, killSignal, reject);
+        }, timeout);
+      });
+      const safeSpawnedPromise = spawnedPromise.finally(() => {
+        clearTimeout(timeoutId);
+      });
+      return Promise.race([timeoutPromise, safeSpawnedPromise]);
+    };
+    validateTimeout = ({ timeout }) => {
+      if (timeout !== void 0 && (!Number.isFinite(timeout) || timeout < 0)) {
+        throw new TypeError(`Expected the \`timeout\` option to be a non-negative integer, got \`${timeout}\` (${typeof timeout})`);
+      }
+    };
+    setExitHandler = async (spawned, { cleanup, detached }, timedPromise) => {
+      if (!cleanup || detached) {
+        return timedPromise;
+      }
+      const removeExitHandler = onExit(() => {
+        spawned.kill();
+      });
+      return timedPromise.finally(() => {
+        removeExitHandler();
+      });
+    };
   }
 });
 
-// node_modules/env-ci/node_modules/is-stream/index.js
+// node_modules/is-stream/index.js
 function isStream(stream) {
   return stream !== null && typeof stream === "object" && typeof stream.pipe === "function";
 }
+function isWritableStream(stream) {
+  return isStream(stream) && stream.writable !== false && typeof stream._write === "function" && typeof stream._writableState === "object";
+}
 var init_is_stream = __esm({
-  "node_modules/env-ci/node_modules/is-stream/index.js"() {
+  "node_modules/is-stream/index.js"() {
   }
 });
 
-// node_modules/get-stream/buffer-stream.js
-var require_buffer_stream = __commonJS({
-  "node_modules/get-stream/buffer-stream.js"(exports, module2) {
-    "use strict";
-    var { PassThrough: PassThroughStream } = require("stream");
-    module2.exports = (options) => {
-      options = { ...options };
-      const { array } = options;
-      let { encoding } = options;
-      const isBuffer = encoding === "buffer";
-      let objectMode = false;
-      if (array) {
-        objectMode = !(encoding || isBuffer);
-      } else {
-        encoding = encoding || "utf8";
+// node_modules/env-ci/node_modules/execa/lib/pipe.js
+var import_node_fs, import_node_child_process, isExecaChildProcess, pipeToTarget, addPipeMethods;
+var init_pipe = __esm({
+  "node_modules/env-ci/node_modules/execa/lib/pipe.js"() {
+    import_node_fs = require("node:fs");
+    import_node_child_process = require("node:child_process");
+    init_is_stream();
+    isExecaChildProcess = (target) => target instanceof import_node_child_process.ChildProcess && typeof target.then === "function";
+    pipeToTarget = (spawned, streamName, target) => {
+      if (typeof target === "string") {
+        spawned[streamName].pipe((0, import_node_fs.createWriteStream)(target));
+        return spawned;
       }
-      if (isBuffer) {
-        encoding = null;
+      if (isWritableStream(target)) {
+        spawned[streamName].pipe(target);
+        return spawned;
       }
-      const stream = new PassThroughStream({ objectMode });
-      if (encoding) {
-        stream.setEncoding(encoding);
+      if (!isExecaChildProcess(target)) {
+        throw new TypeError("The second argument must be a string, a stream or an Execa child process.");
       }
-      let length = 0;
-      const chunks = [];
-      stream.on("data", (chunk) => {
-        chunks.push(chunk);
-        if (objectMode) {
-          length = chunks.length;
-        } else {
-          length += chunk.length;
-        }
-      });
-      stream.getBufferedValue = () => {
-        if (array) {
-          return chunks;
-        }
-        return isBuffer ? Buffer.concat(chunks, length) : chunks.join("");
-      };
-      stream.getBufferedLength = () => length;
-      return stream;
+      if (!isWritableStream(target.stdin)) {
+        throw new TypeError("The target child process's stdin must be available.");
+      }
+      spawned[streamName].pipe(target.stdin);
+      return target;
+    };
+    addPipeMethods = (spawned) => {
+      if (spawned.stdout !== null) {
+        spawned.pipeStdout = pipeToTarget.bind(void 0, spawned, "stdout");
+      }
+      if (spawned.stderr !== null) {
+        spawned.pipeStderr = pipeToTarget.bind(void 0, spawned, "stderr");
+      }
+      if (spawned.all !== void 0) {
+        spawned.pipeAll = pipeToTarget.bind(void 0, spawned, "all");
+      }
     };
   }
 });
 
-// node_modules/get-stream/index.js
-var require_get_stream = __commonJS({
-  "node_modules/get-stream/index.js"(exports, module2) {
-    "use strict";
-    var { constants: BufferConstants } = require("buffer");
-    var stream = require("stream");
-    var { promisify } = require("util");
-    var bufferStream = require_buffer_stream();
-    var streamPipelinePromisified = promisify(stream.pipeline);
-    var MaxBufferError = class extends Error {
+// node_modules/env-ci/node_modules/get-stream/source/contents.js
+var getStreamContents, appendFinalChunk, appendChunk, addNewChunk, isAsyncIterable, getChunkType, objectToString, MaxBufferError;
+var init_contents = __esm({
+  "node_modules/env-ci/node_modules/get-stream/source/contents.js"() {
+    getStreamContents = async (stream, { init, convertChunk, getSize, truncateChunk, addChunk, getFinalChunk, finalize }, { maxBuffer = Number.POSITIVE_INFINITY } = {}) => {
+      if (!isAsyncIterable(stream)) {
+        throw new Error("The first argument must be a Readable, a ReadableStream, or an async iterable.");
+      }
+      const state = init();
+      state.length = 0;
+      try {
+        for await (const chunk of stream) {
+          const chunkType = getChunkType(chunk);
+          const convertedChunk = convertChunk[chunkType](chunk, state);
+          appendChunk({ convertedChunk, state, getSize, truncateChunk, addChunk, maxBuffer });
+        }
+        appendFinalChunk({ state, convertChunk, getSize, truncateChunk, addChunk, getFinalChunk, maxBuffer });
+        return finalize(state);
+      } catch (error) {
+        error.bufferedData = finalize(state);
+        throw error;
+      }
+    };
+    appendFinalChunk = ({ state, getSize, truncateChunk, addChunk, getFinalChunk, maxBuffer }) => {
+      const convertedChunk = getFinalChunk(state);
+      if (convertedChunk !== void 0) {
+        appendChunk({ convertedChunk, state, getSize, truncateChunk, addChunk, maxBuffer });
+      }
+    };
+    appendChunk = ({ convertedChunk, state, getSize, truncateChunk, addChunk, maxBuffer }) => {
+      const chunkSize = getSize(convertedChunk);
+      const newLength = state.length + chunkSize;
+      if (newLength <= maxBuffer) {
+        addNewChunk(convertedChunk, state, addChunk, newLength);
+        return;
+      }
+      const truncatedChunk = truncateChunk(convertedChunk, maxBuffer - state.length);
+      if (truncatedChunk !== void 0) {
+        addNewChunk(truncatedChunk, state, addChunk, maxBuffer);
+      }
+      throw new MaxBufferError();
+    };
+    addNewChunk = (convertedChunk, state, addChunk, newLength) => {
+      state.contents = addChunk(convertedChunk, state, newLength);
+      state.length = newLength;
+    };
+    isAsyncIterable = (stream) => typeof stream === "object" && stream !== null && typeof stream[Symbol.asyncIterator] === "function";
+    getChunkType = (chunk) => {
+      const typeOfChunk = typeof chunk;
+      if (typeOfChunk === "string") {
+        return "string";
+      }
+      if (typeOfChunk !== "object" || chunk === null) {
+        return "others";
+      }
+      if (globalThis.Buffer?.isBuffer(chunk)) {
+        return "buffer";
+      }
+      const prototypeName = objectToString.call(chunk);
+      if (prototypeName === "[object ArrayBuffer]") {
+        return "arrayBuffer";
+      }
+      if (prototypeName === "[object DataView]") {
+        return "dataView";
+      }
+      if (Number.isInteger(chunk.byteLength) && Number.isInteger(chunk.byteOffset) && objectToString.call(chunk.buffer) === "[object ArrayBuffer]") {
+        return "typedArray";
+      }
+      return "others";
+    };
+    ({ toString: objectToString } = Object.prototype);
+    MaxBufferError = class extends Error {
+      name = "MaxBufferError";
       constructor() {
         super("maxBuffer exceeded");
-        this.name = "MaxBufferError";
       }
     };
-    async function getStream2(inputStream, options) {
-      if (!inputStream) {
-        throw new Error("Expected a stream");
+  }
+});
+
+// node_modules/env-ci/node_modules/get-stream/source/utils.js
+var identity, noop, getContentsProp, throwObjectStream, getLengthProp;
+var init_utils2 = __esm({
+  "node_modules/env-ci/node_modules/get-stream/source/utils.js"() {
+    identity = (value) => value;
+    noop = () => void 0;
+    getContentsProp = ({ contents }) => contents;
+    throwObjectStream = (chunk) => {
+      throw new Error(`Streams in object mode are not supported: ${String(chunk)}`);
+    };
+    getLengthProp = (convertedChunk) => convertedChunk.length;
+  }
+});
+
+// node_modules/env-ci/node_modules/get-stream/source/array.js
+var init_array = __esm({
+  "node_modules/env-ci/node_modules/get-stream/source/array.js"() {
+    init_contents();
+    init_utils2();
+  }
+});
+
+// node_modules/env-ci/node_modules/get-stream/source/array-buffer.js
+async function getStreamAsArrayBuffer(stream, options) {
+  return getStreamContents(stream, arrayBufferMethods, options);
+}
+var initArrayBuffer, useTextEncoder, textEncoder, useUint8Array, useUint8ArrayWithOffset, truncateArrayBufferChunk, addArrayBufferChunk, resizeArrayBufferSlow, resizeArrayBuffer, getNewContentsLength, SCALE_FACTOR, finalizeArrayBuffer, hasArrayBufferResize, arrayBufferMethods;
+var init_array_buffer = __esm({
+  "node_modules/env-ci/node_modules/get-stream/source/array-buffer.js"() {
+    init_contents();
+    init_utils2();
+    initArrayBuffer = () => ({ contents: new ArrayBuffer(0) });
+    useTextEncoder = (chunk) => textEncoder.encode(chunk);
+    textEncoder = new TextEncoder();
+    useUint8Array = (chunk) => new Uint8Array(chunk);
+    useUint8ArrayWithOffset = (chunk) => new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength);
+    truncateArrayBufferChunk = (convertedChunk, chunkSize) => convertedChunk.slice(0, chunkSize);
+    addArrayBufferChunk = (convertedChunk, { contents, length: previousLength }, length) => {
+      const newContents = hasArrayBufferResize() ? resizeArrayBuffer(contents, length) : resizeArrayBufferSlow(contents, length);
+      new Uint8Array(newContents).set(convertedChunk, previousLength);
+      return newContents;
+    };
+    resizeArrayBufferSlow = (contents, length) => {
+      if (length <= contents.byteLength) {
+        return contents;
       }
-      options = {
-        maxBuffer: Infinity,
-        ...options
-      };
-      const { maxBuffer } = options;
-      const stream2 = bufferStream(options);
-      await new Promise((resolve2, reject) => {
-        const rejectPromise = (error) => {
-          if (error && stream2.getBufferedLength() <= BufferConstants.MAX_LENGTH) {
-            error.bufferedData = stream2.getBufferedValue();
-          }
-          reject(error);
-        };
-        (async () => {
-          try {
-            await streamPipelinePromisified(inputStream, stream2);
-            resolve2();
-          } catch (error) {
-            rejectPromise(error);
-          }
-        })();
-        stream2.on("data", () => {
-          if (stream2.getBufferedLength() > maxBuffer) {
-            rejectPromise(new MaxBufferError());
-          }
-        });
-      });
-      return stream2.getBufferedValue();
+      const arrayBuffer = new ArrayBuffer(getNewContentsLength(length));
+      new Uint8Array(arrayBuffer).set(new Uint8Array(contents), 0);
+      return arrayBuffer;
+    };
+    resizeArrayBuffer = (contents, length) => {
+      if (length <= contents.maxByteLength) {
+        contents.resize(length);
+        return contents;
+      }
+      const arrayBuffer = new ArrayBuffer(length, { maxByteLength: getNewContentsLength(length) });
+      new Uint8Array(arrayBuffer).set(new Uint8Array(contents), 0);
+      return arrayBuffer;
+    };
+    getNewContentsLength = (length) => SCALE_FACTOR ** Math.ceil(Math.log(length) / Math.log(SCALE_FACTOR));
+    SCALE_FACTOR = 2;
+    finalizeArrayBuffer = ({ contents, length }) => hasArrayBufferResize() ? contents : contents.slice(0, length);
+    hasArrayBufferResize = () => "resize" in ArrayBuffer.prototype;
+    arrayBufferMethods = {
+      init: initArrayBuffer,
+      convertChunk: {
+        string: useTextEncoder,
+        buffer: useUint8Array,
+        arrayBuffer: useUint8Array,
+        dataView: useUint8ArrayWithOffset,
+        typedArray: useUint8ArrayWithOffset,
+        others: throwObjectStream
+      },
+      getSize: getLengthProp,
+      truncateChunk: truncateArrayBufferChunk,
+      addChunk: addArrayBufferChunk,
+      getFinalChunk: noop,
+      finalize: finalizeArrayBuffer
+    };
+  }
+});
+
+// node_modules/env-ci/node_modules/get-stream/source/buffer.js
+async function getStreamAsBuffer(stream, options) {
+  if (!("Buffer" in globalThis)) {
+    throw new Error("getStreamAsBuffer() is only supported in Node.js");
+  }
+  try {
+    return arrayBufferToNodeBuffer(await getStreamAsArrayBuffer(stream, options));
+  } catch (error) {
+    if (error.bufferedData !== void 0) {
+      error.bufferedData = arrayBufferToNodeBuffer(error.bufferedData);
     }
-    module2.exports = getStream2;
-    module2.exports.buffer = (stream2, options) => getStream2(stream2, { ...options, encoding: "buffer" });
-    module2.exports.array = (stream2, options) => getStream2(stream2, { ...options, array: true });
-    module2.exports.MaxBufferError = MaxBufferError;
+    throw error;
+  }
+}
+var arrayBufferToNodeBuffer;
+var init_buffer = __esm({
+  "node_modules/env-ci/node_modules/get-stream/source/buffer.js"() {
+    init_array_buffer();
+    arrayBufferToNodeBuffer = (arrayBuffer) => globalThis.Buffer.from(arrayBuffer);
+  }
+});
+
+// node_modules/env-ci/node_modules/get-stream/source/string.js
+async function getStreamAsString(stream, options) {
+  return getStreamContents(stream, stringMethods, options);
+}
+var initString, useTextDecoder, addStringChunk, truncateStringChunk, getFinalStringChunk, stringMethods;
+var init_string = __esm({
+  "node_modules/env-ci/node_modules/get-stream/source/string.js"() {
+    init_contents();
+    init_utils2();
+    initString = () => ({ contents: "", textDecoder: new TextDecoder() });
+    useTextDecoder = (chunk, { textDecoder }) => textDecoder.decode(chunk, { stream: true });
+    addStringChunk = (convertedChunk, { contents }) => contents + convertedChunk;
+    truncateStringChunk = (convertedChunk, chunkSize) => convertedChunk.slice(0, chunkSize);
+    getFinalStringChunk = ({ textDecoder }) => {
+      const finalChunk = textDecoder.decode();
+      return finalChunk === "" ? void 0 : finalChunk;
+    };
+    stringMethods = {
+      init: initString,
+      convertChunk: {
+        string: identity,
+        buffer: useTextDecoder,
+        arrayBuffer: useTextDecoder,
+        dataView: useTextDecoder,
+        typedArray: useTextDecoder,
+        others: throwObjectStream
+      },
+      getSize: getLengthProp,
+      truncateChunk: truncateStringChunk,
+      addChunk: addStringChunk,
+      getFinalChunk: getFinalStringChunk,
+      finalize: getContentsProp
+    };
+  }
+});
+
+// node_modules/env-ci/node_modules/get-stream/source/index.js
+var init_source = __esm({
+  "node_modules/env-ci/node_modules/get-stream/source/index.js"() {
+    init_array();
+    init_array_buffer();
+    init_buffer();
+    init_string();
+    init_contents();
   }
 });
 
@@ -4029,22 +4237,112 @@ var require_merge_stream = __commonJS({
 });
 
 // node_modules/env-ci/node_modules/execa/lib/stream.js
-var import_get_stream, import_merge_stream, validateInputSync;
+var import_node_fs2, import_promises, import_merge_stream, validateInputOptions, getInputSync, handleInputSync, getInput, handleInput, makeAllStream, getBufferedData, getStreamPromise, applyEncoding, getSpawnedResult;
 var init_stream = __esm({
   "node_modules/env-ci/node_modules/execa/lib/stream.js"() {
+    import_node_fs2 = require("node:fs");
+    import_promises = require("node:timers/promises");
     init_is_stream();
-    import_get_stream = __toESM(require_get_stream(), 1);
+    init_source();
     import_merge_stream = __toESM(require_merge_stream(), 1);
-    validateInputSync = ({ input }) => {
+    validateInputOptions = (input) => {
+      if (input !== void 0) {
+        throw new TypeError("The `input` and `inputFile` options cannot be both set.");
+      }
+    };
+    getInputSync = ({ input, inputFile }) => {
+      if (typeof inputFile !== "string") {
+        return input;
+      }
+      validateInputOptions(input);
+      return (0, import_node_fs2.readFileSync)(inputFile);
+    };
+    handleInputSync = (options) => {
+      const input = getInputSync(options);
       if (isStream(input)) {
         throw new TypeError("The `input` option cannot be a stream in sync mode");
+      }
+      return input;
+    };
+    getInput = ({ input, inputFile }) => {
+      if (typeof inputFile !== "string") {
+        return input;
+      }
+      validateInputOptions(input);
+      return (0, import_node_fs2.createReadStream)(inputFile);
+    };
+    handleInput = (spawned, options) => {
+      const input = getInput(options);
+      if (input === void 0) {
+        return;
+      }
+      if (isStream(input)) {
+        input.pipe(spawned.stdin);
+      } else {
+        spawned.stdin.end(input);
+      }
+    };
+    makeAllStream = (spawned, { all }) => {
+      if (!all || !spawned.stdout && !spawned.stderr) {
+        return;
+      }
+      const mixed = (0, import_merge_stream.default)();
+      if (spawned.stdout) {
+        mixed.add(spawned.stdout);
+      }
+      if (spawned.stderr) {
+        mixed.add(spawned.stderr);
+      }
+      return mixed;
+    };
+    getBufferedData = async (stream, streamPromise) => {
+      if (!stream || streamPromise === void 0) {
+        return;
+      }
+      await (0, import_promises.setTimeout)(0);
+      stream.destroy();
+      try {
+        return await streamPromise;
+      } catch (error) {
+        return error.bufferedData;
+      }
+    };
+    getStreamPromise = (stream, { encoding, buffer, maxBuffer }) => {
+      if (!stream || !buffer) {
+        return;
+      }
+      if (encoding === "utf8" || encoding === "utf-8") {
+        return getStreamAsString(stream, { maxBuffer });
+      }
+      if (encoding === null || encoding === "buffer") {
+        return getStreamAsBuffer(stream, { maxBuffer });
+      }
+      return applyEncoding(stream, maxBuffer, encoding);
+    };
+    applyEncoding = async (stream, maxBuffer, encoding) => {
+      const buffer = await getStreamAsBuffer(stream, { maxBuffer });
+      return buffer.toString(encoding);
+    };
+    getSpawnedResult = async ({ stdout, stderr, all }, { encoding, buffer, maxBuffer }, processDone) => {
+      const stdoutPromise = getStreamPromise(stdout, { encoding, buffer, maxBuffer });
+      const stderrPromise = getStreamPromise(stderr, { encoding, buffer, maxBuffer });
+      const allPromise = getStreamPromise(all, { encoding, buffer, maxBuffer: maxBuffer * 2 });
+      try {
+        return await Promise.all([processDone, stdoutPromise, stderrPromise, allPromise]);
+      } catch (error) {
+        return Promise.all([
+          { error, signal: error.signal, timedOut: error.timedOut },
+          getBufferedData(stdout, stdoutPromise),
+          getBufferedData(stderr, stderrPromise),
+          getBufferedData(all, allPromise)
+        ]);
       }
     };
   }
 });
 
 // node_modules/env-ci/node_modules/execa/lib/promise.js
-var nativePromisePrototype, descriptors;
+var nativePromisePrototype, descriptors, mergePromise, getSpawnedPromise;
 var init_promise = __esm({
   "node_modules/env-ci/node_modules/execa/lib/promise.js"() {
     nativePromisePrototype = (async () => {
@@ -4053,13 +4351,34 @@ var init_promise = __esm({
       property,
       Reflect.getOwnPropertyDescriptor(nativePromisePrototype, property)
     ]);
+    mergePromise = (spawned, promise) => {
+      for (const [property, descriptor] of descriptors) {
+        const value = typeof promise === "function" ? (...args) => Reflect.apply(descriptor.value, promise(), args) : descriptor.value.bind(promise);
+        Reflect.defineProperty(spawned, property, { ...descriptor, value });
+      }
+    };
+    getSpawnedPromise = (spawned) => new Promise((resolve2, reject) => {
+      spawned.on("exit", (exitCode, signal) => {
+        resolve2({ exitCode, signal });
+      });
+      spawned.on("error", (error) => {
+        reject(error);
+      });
+      if (spawned.stdin) {
+        spawned.stdin.on("error", (error) => {
+          reject(error);
+        });
+      }
+    });
   }
 });
 
 // node_modules/env-ci/node_modules/execa/lib/command.js
-var normalizeArgs, NO_ESCAPE_REGEXP, DOUBLE_QUOTES_REGEXP, escapeArg, joinCommand, getEscapedCommand;
+var import_node_buffer, import_node_child_process2, normalizeArgs, NO_ESCAPE_REGEXP, escapeArg, joinCommand, getEscapedCommand, SPACES_REGEXP, parseExpression, concatTokens, parseTemplate, parseTemplates;
 var init_command = __esm({
   "node_modules/env-ci/node_modules/execa/lib/command.js"() {
+    import_node_buffer = require("node:buffer");
+    import_node_child_process2 = require("node:child_process");
     normalizeArgs = (file, args = []) => {
       if (!Array.isArray(args)) {
         return [file];
@@ -4067,27 +4386,178 @@ var init_command = __esm({
       return [file, ...args];
     };
     NO_ESCAPE_REGEXP = /^[\w.-]+$/;
-    DOUBLE_QUOTES_REGEXP = /"/g;
     escapeArg = (arg) => {
       if (typeof arg !== "string" || NO_ESCAPE_REGEXP.test(arg)) {
         return arg;
       }
-      return `"${arg.replace(DOUBLE_QUOTES_REGEXP, '\\"')}"`;
+      return `"${arg.replaceAll('"', '\\"')}"`;
     };
     joinCommand = (file, args) => normalizeArgs(file, args).join(" ");
     getEscapedCommand = (file, args) => normalizeArgs(file, args).map((arg) => escapeArg(arg)).join(" ");
+    SPACES_REGEXP = / +/g;
+    parseExpression = (expression) => {
+      const typeOfExpression = typeof expression;
+      if (typeOfExpression === "string") {
+        return expression;
+      }
+      if (typeOfExpression === "number") {
+        return String(expression);
+      }
+      if (typeOfExpression === "object" && expression !== null && !(expression instanceof import_node_child_process2.ChildProcess) && "stdout" in expression) {
+        const typeOfStdout = typeof expression.stdout;
+        if (typeOfStdout === "string") {
+          return expression.stdout;
+        }
+        if (import_node_buffer.Buffer.isBuffer(expression.stdout)) {
+          return expression.stdout.toString();
+        }
+        throw new TypeError(`Unexpected "${typeOfStdout}" stdout in template expression`);
+      }
+      throw new TypeError(`Unexpected "${typeOfExpression}" in template expression`);
+    };
+    concatTokens = (tokens, nextTokens, isNew) => isNew || tokens.length === 0 || nextTokens.length === 0 ? [...tokens, ...nextTokens] : [
+      ...tokens.slice(0, -1),
+      `${tokens.at(-1)}${nextTokens[0]}`,
+      ...nextTokens.slice(1)
+    ];
+    parseTemplate = ({ templates, expressions, tokens, index, template }) => {
+      const templateString = template ?? templates.raw[index];
+      const templateTokens = templateString.split(SPACES_REGEXP).filter(Boolean);
+      const newTokens = concatTokens(
+        tokens,
+        templateTokens,
+        templateString.startsWith(" ")
+      );
+      if (index === expressions.length) {
+        return newTokens;
+      }
+      const expression = expressions[index];
+      const expressionTokens = Array.isArray(expression) ? expression.map((expression2) => parseExpression(expression2)) : [parseExpression(expression)];
+      return concatTokens(
+        newTokens,
+        expressionTokens,
+        templateString.endsWith(" ")
+      );
+    };
+    parseTemplates = (templates, expressions) => {
+      let tokens = [];
+      for (const [index, template] of templates.entries()) {
+        tokens = parseTemplate({ templates, expressions, tokens, index, template });
+      }
+      return tokens;
+    };
+  }
+});
+
+// node_modules/env-ci/node_modules/execa/lib/verbose.js
+var import_node_util, import_node_process3, verboseDefault, padField, getTimestamp, logCommand;
+var init_verbose = __esm({
+  "node_modules/env-ci/node_modules/execa/lib/verbose.js"() {
+    import_node_util = require("node:util");
+    import_node_process3 = __toESM(require("node:process"), 1);
+    verboseDefault = (0, import_node_util.debuglog)("execa").enabled;
+    padField = (field, padding) => String(field).padStart(padding, "0");
+    getTimestamp = () => {
+      const date = /* @__PURE__ */ new Date();
+      return `${padField(date.getHours(), 2)}:${padField(date.getMinutes(), 2)}:${padField(date.getSeconds(), 2)}.${padField(date.getMilliseconds(), 3)}`;
+    };
+    logCommand = (escapedCommand, { verbose }) => {
+      if (!verbose) {
+        return;
+      }
+      import_node_process3.default.stderr.write(`[${getTimestamp()}] ${escapedCommand}
+`);
+    };
   }
 });
 
 // node_modules/env-ci/node_modules/execa/index.js
+function execa(file, args, options) {
+  const parsed = handleArguments(file, args, options);
+  const command = joinCommand(file, args);
+  const escapedCommand = getEscapedCommand(file, args);
+  logCommand(escapedCommand, parsed.options);
+  validateTimeout(parsed.options);
+  let spawned;
+  try {
+    spawned = import_node_child_process3.default.spawn(parsed.file, parsed.args, parsed.options);
+  } catch (error) {
+    const dummySpawned = new import_node_child_process3.default.ChildProcess();
+    const errorPromise = Promise.reject(makeError({
+      error,
+      stdout: "",
+      stderr: "",
+      all: "",
+      command,
+      escapedCommand,
+      parsed,
+      timedOut: false,
+      isCanceled: false,
+      killed: false
+    }));
+    mergePromise(dummySpawned, errorPromise);
+    return dummySpawned;
+  }
+  const spawnedPromise = getSpawnedPromise(spawned);
+  const timedPromise = setupTimeout(spawned, parsed.options, spawnedPromise);
+  const processDone = setExitHandler(spawned, parsed.options, timedPromise);
+  const context = { isCanceled: false };
+  spawned.kill = spawnedKill.bind(null, spawned.kill.bind(spawned));
+  spawned.cancel = spawnedCancel.bind(null, spawned, context);
+  const handlePromise = async () => {
+    const [{ error, exitCode, signal, timedOut }, stdoutResult, stderrResult, allResult] = await getSpawnedResult(spawned, parsed.options, processDone);
+    const stdout = handleOutput(parsed.options, stdoutResult);
+    const stderr = handleOutput(parsed.options, stderrResult);
+    const all = handleOutput(parsed.options, allResult);
+    if (error || exitCode !== 0 || signal !== null) {
+      const returnedError = makeError({
+        error,
+        exitCode,
+        signal,
+        stdout,
+        stderr,
+        all,
+        command,
+        escapedCommand,
+        parsed,
+        timedOut,
+        isCanceled: context.isCanceled || (parsed.options.signal ? parsed.options.signal.aborted : false),
+        killed: spawned.killed
+      });
+      if (!parsed.options.reject) {
+        return returnedError;
+      }
+      throw returnedError;
+    }
+    return {
+      command,
+      escapedCommand,
+      exitCode: 0,
+      stdout,
+      stderr,
+      all,
+      failed: false,
+      timedOut: false,
+      isCanceled: false,
+      killed: false
+    };
+  };
+  const handlePromiseOnce = onetime_default(handlePromise);
+  handleInput(spawned, parsed.options);
+  spawned.all = makeAllStream(spawned, parsed.options);
+  addPipeMethods(spawned);
+  mergePromise(spawned, handlePromiseOnce);
+  return spawned;
+}
 function execaSync(file, args, options) {
   const parsed = handleArguments(file, args, options);
   const command = joinCommand(file, args);
   const escapedCommand = getEscapedCommand(file, args);
-  validateInputSync(parsed.options);
+  logCommand(escapedCommand, parsed.options);
+  const input = handleInputSync(parsed.options);
   let result;
   try {
-    result = import_node_child_process.default.spawnSync(parsed.file, parsed.args, parsed.options);
+    result = import_node_child_process3.default.spawnSync(parsed.file, parsed.args, { ...parsed.options, input });
   } catch (error) {
     throw makeError({
       error,
@@ -4135,13 +4605,30 @@ function execaSync(file, args, options) {
     killed: false
   };
 }
-var import_node_buffer, import_node_path2, import_node_child_process, import_node_process2, import_cross_spawn, DEFAULT_MAX_BUFFER, getEnv, handleArguments, handleOutput;
+function create$(options) {
+  function $2(templatesOrOptions, ...expressions) {
+    if (!Array.isArray(templatesOrOptions)) {
+      return create$({ ...options, ...templatesOrOptions });
+    }
+    const [file, ...args] = parseTemplates(templatesOrOptions, expressions);
+    return execa(file, args, normalizeScriptOptions(options));
+  }
+  $2.sync = (templates, ...expressions) => {
+    if (!Array.isArray(templates)) {
+      throw new TypeError("Please use $(options).sync`command` instead of $.sync(options)`command`.");
+    }
+    const [file, ...args] = parseTemplates(templates, expressions);
+    return execaSync(file, args, normalizeScriptOptions(options));
+  };
+  return $2;
+}
+var import_node_buffer2, import_node_path2, import_node_child_process3, import_node_process4, import_cross_spawn, DEFAULT_MAX_BUFFER, getEnv, handleArguments, handleOutput, normalizeScriptStdin, normalizeScriptOptions, $;
 var init_execa = __esm({
   "node_modules/env-ci/node_modules/execa/index.js"() {
-    import_node_buffer = require("node:buffer");
+    import_node_buffer2 = require("node:buffer");
     import_node_path2 = __toESM(require("node:path"), 1);
-    import_node_child_process = __toESM(require("node:child_process"), 1);
-    import_node_process2 = __toESM(require("node:process"), 1);
+    import_node_child_process3 = __toESM(require("node:child_process"), 1);
+    import_node_process4 = __toESM(require("node:process"), 1);
     import_cross_spawn = __toESM(require_cross_spawn(), 1);
     init_strip_final_newline();
     init_npm_run_path();
@@ -4149,12 +4636,14 @@ var init_execa = __esm({
     init_error();
     init_stdio();
     init_kill();
+    init_pipe();
     init_stream();
     init_promise();
     init_command();
+    init_verbose();
     DEFAULT_MAX_BUFFER = 1e3 * 1e3 * 100;
     getEnv = ({ env: envOption, extendEnv, preferLocal, localDir, execPath }) => {
-      const env = extendEnv ? { ...import_node_process2.default.env, ...envOption } : envOption;
+      const env = extendEnv ? { ...import_node_process4.default.env, ...envOption } : envOption;
       if (preferLocal) {
         return npmRunPathEnv({ env, cwd: localDir, execPath });
       }
@@ -4171,24 +4660,25 @@ var init_execa = __esm({
         stripFinalNewline: true,
         extendEnv: true,
         preferLocal: false,
-        localDir: options.cwd || import_node_process2.default.cwd(),
-        execPath: import_node_process2.default.execPath,
+        localDir: options.cwd || import_node_process4.default.cwd(),
+        execPath: import_node_process4.default.execPath,
         encoding: "utf8",
         reject: true,
         cleanup: true,
         all: false,
         windowsHide: true,
+        verbose: verboseDefault,
         ...options
       };
       options.env = getEnv(options);
       options.stdio = normalizeStdio(options);
-      if (import_node_process2.default.platform === "win32" && import_node_path2.default.basename(file, ".exe") === "cmd") {
+      if (import_node_process4.default.platform === "win32" && import_node_path2.default.basename(file, ".exe") === "cmd") {
         args.unshift("/q");
       }
       return { file, args, options, parsed };
     };
     handleOutput = (options, value, error) => {
-      if (typeof value !== "string" && !import_node_buffer.Buffer.isBuffer(value)) {
+      if (typeof value !== "string" && !import_node_buffer2.Buffer.isBuffer(value)) {
         return error === void 0 ? void 0 : "";
       }
       if (options.stripFinalNewline) {
@@ -4196,6 +4686,13 @@ var init_execa = __esm({
       }
       return value;
     };
+    normalizeScriptStdin = ({ input, inputFile, stdio }) => input === void 0 && inputFile === void 0 && stdio === void 0 ? { stdin: "inherit" } : {};
+    normalizeScriptOptions = (options = {}) => ({
+      preferLocal: true,
+      ...normalizeScriptStdin(options),
+      ...options
+    });
+    $ = create$();
   }
 });
 
@@ -4227,9 +4724,142 @@ function branch(options) {
     return void 0;
   }
 }
+function getSlugFromGitURL(repositoryURL) {
+  if (!repositoryURL) {
+    return void 0;
+  }
+  if (repositoryURL.match(GIT_SSH_URL_SLUG_PATTERN)) {
+    return repositoryURL.replace(GIT_SSH_URL_SLUG_PATTERN, "$1");
+  }
+  try {
+    const url2 = new URL(repositoryURL);
+    return url2.pathname.replace(GIT_PATHNAME_SLUG_PATTERN, "$1");
+  } catch {
+    return void 0;
+  }
+}
+var GIT_SSH_URL_SLUG_PATTERN, GIT_PATHNAME_SLUG_PATTERN;
 var init_git = __esm({
   "node_modules/env-ci/lib/git.js"() {
     init_execa();
+    GIT_SSH_URL_SLUG_PATTERN = /^(?:.*)@(?:.*):(?:\d+\/)?(.*)\.git$/;
+    GIT_PATHNAME_SLUG_PATTERN = /^\/(.*)\.git$/;
+  }
+});
+
+// node_modules/env-ci/services/buildkite.js
+var buildkite_default;
+var init_buildkite = __esm({
+  "node_modules/env-ci/services/buildkite.js"() {
+    init_git();
+    buildkite_default = {
+      detect({ env }) {
+        return Boolean(env.BUILDKITE);
+      },
+      configuration({ env }) {
+        const pr = env.BUILDKITE_PULL_REQUEST === "false" ? void 0 : env.BUILDKITE_PULL_REQUEST;
+        const isPr = Boolean(pr);
+        return {
+          name: "Buildkite",
+          service: "buildkite",
+          build: env.BUILDKITE_BUILD_NUMBER,
+          buildUrl: env.BUILDKITE_BUILD_URL,
+          commit: env.BUILDKITE_COMMIT,
+          tag: env.BUILDKITE_TAG,
+          branch: isPr ? env.BUILDKITE_PULL_REQUEST_BASE_BRANCH : env.BUILDKITE_BRANCH,
+          slug: getSlugFromGitURL(env.BUILDKITE_REPO),
+          pr,
+          isPr,
+          prBranch: isPr ? env.BUILDKITE_BRANCH : void 0,
+          root: env.BUILDKITE_BUILD_CHECKOUT_PATH
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/circleci.js
+var circleci_default;
+var init_circleci = __esm({
+  "node_modules/env-ci/services/circleci.js"() {
+    init_utils();
+    circleci_default = {
+      detect({ env }) {
+        return Boolean(env.CIRCLECI);
+      },
+      configuration({ env }) {
+        const pr = env.CIRCLE_PR_NUMBER || prNumber(env.CIRCLE_PULL_REQUEST || env.CI_PULL_REQUEST);
+        const isPr = Boolean(pr);
+        return {
+          name: "CircleCI",
+          service: "circleci",
+          build: env.CIRCLE_BUILD_NUM,
+          buildUrl: env.CIRCLE_BUILD_URL,
+          job: `${env.CIRCLE_BUILD_NUM}.${env.CIRCLE_NODE_INDEX}`,
+          commit: env.CIRCLE_SHA1,
+          tag: env.CIRCLE_TAG,
+          branch: isPr ? void 0 : env.CIRCLE_BRANCH,
+          pr,
+          isPr,
+          prBranch: isPr ? env.CIRCLE_BRANCH : void 0,
+          slug: `${env.CIRCLE_PROJECT_USERNAME}/${env.CIRCLE_PROJECT_REPONAME}`
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/cirrus.js
+var CIRRUS_CI_DASHBOARD, cirrus_default;
+var init_cirrus = __esm({
+  "node_modules/env-ci/services/cirrus.js"() {
+    CIRRUS_CI_DASHBOARD = "https://cirrus-ci.com";
+    cirrus_default = {
+      detect({ env }) {
+        return Boolean(env.CIRRUS_CI);
+      },
+      configuration({ env }) {
+        const pr = env.CIRRUS_PR;
+        const isPr = Boolean(pr);
+        return {
+          name: "Cirrus CI",
+          service: "cirrus",
+          commit: env.CIRRUS_CHANGE_IN_REPO,
+          tag: env.CIRRUS_TAG,
+          build: env.CIRRUS_BUILD_ID,
+          buildUrl: `${CIRRUS_CI_DASHBOARD}/build/${env.CIRRUS_BUILD_ID}`,
+          job: env.CIRRUS_TASK_ID,
+          jobUrl: `${CIRRUS_CI_DASHBOARD}/task/${env.CIRRUS_TASK_ID}`,
+          branch: isPr ? env.CIRRUS_BASE_BRANCH : env.CIRRUS_BRANCH,
+          pr,
+          isPr,
+          prBranch: isPr ? env.CIRRUS_BRANCH : void 0,
+          slug: env.CIRRUS_REPO_FULL_NAME,
+          root: env.CIRRUS_WORKING_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/cloudflare-pages.js
+var cloudflare_pages_default;
+var init_cloudflare_pages = __esm({
+  "node_modules/env-ci/services/cloudflare-pages.js"() {
+    cloudflare_pages_default = {
+      detect({ env }) {
+        return env.CF_PAGES === "1";
+      },
+      configuration({ env }) {
+        return {
+          name: "Cloudflare Pages",
+          service: "cloudflarePages",
+          commit: env.CF_PAGES_COMMIT_SHA,
+          branch: env.CF_PAGES_BRANCH,
+          root: env.PWD
+        };
+      }
+    };
   }
 });
 
@@ -4354,14 +4984,14 @@ var init_git2 = __esm({
 });
 
 // node_modules/env-ci/services/github.js
-var import_node_fs, getPrEvent, getPrNumber, github_default;
+var import_node_fs3, getPrEvent, getPrNumber, github_default;
 var init_github = __esm({
   "node_modules/env-ci/services/github.js"() {
-    import_node_fs = require("node:fs");
+    import_node_fs3 = require("node:fs");
     init_utils();
     getPrEvent = ({ env }) => {
       try {
-        const event = env.GITHUB_EVENT_PATH ? JSON.parse((0, import_node_fs.readFileSync)(env.GITHUB_EVENT_PATH, "utf-8")) : void 0;
+        const event = env.GITHUB_EVENT_PATH ? JSON.parse((0, import_node_fs3.readFileSync)(env.GITHUB_EVENT_PATH, "utf-8")) : void 0;
         if (event && event.pull_request) {
           return {
             branch: event.pull_request.base ? parseBranch(event.pull_request.base.ref) : void 0,
@@ -4373,7 +5003,7 @@ var init_github = __esm({
       return { pr: void 0, branch: void 0 };
     };
     getPrNumber = (env) => {
-      const event = env.GITHUB_EVENT_PATH ? JSON.parse((0, import_node_fs.readFileSync)(env.GITHUB_EVENT_PATH, "utf-8")) : void 0;
+      const event = env.GITHUB_EVENT_PATH ? JSON.parse((0, import_node_fs3.readFileSync)(env.GITHUB_EVENT_PATH, "utf-8")) : void 0;
       return event && event.pull_request ? event.pull_request.number : void 0;
     };
     github_default = {
@@ -4390,6 +5020,7 @@ var init_github = __esm({
           service: "github",
           commit: env.GITHUB_SHA,
           build: env.GITHUB_RUN_ID,
+          buildUrl: `${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}`,
           isPr,
           branch: branch2,
           prBranch: isPr ? branch2 : void 0,
@@ -4535,6 +5166,36 @@ var init_sail = __esm({
           isPr,
           slug: `${env.SAIL_REPO_OWNER}/${env.SAIL_REPO_NAME}`,
           root: env.SAIL_CLONE_DIR
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/screwdriver.js
+var screwdriver_default;
+var init_screwdriver = __esm({
+  "node_modules/env-ci/services/screwdriver.js"() {
+    screwdriver_default = {
+      detect({ env }) {
+        return Boolean(env.SCREWDRIVER);
+      },
+      configuration({ env }) {
+        const pr = env.SD_PULL_REQUEST;
+        const isPr = Boolean(pr);
+        return {
+          name: "Screwdriver.cd",
+          service: "screwdriver",
+          branch: isPr ? env.PR_BASE_BRANCH_NAME : env.GIT_BRANCH,
+          prBranch: isPr ? env.PR_BRANCH_NAME : void 0,
+          commit: env.SD_BUILD_SHA,
+          build: env.SD_BUILD_ID,
+          buildUrl: env.SD_UI_BUILD_URL,
+          job: env.SD_JOB_ID,
+          pr,
+          isPr,
+          slug: env.SD_PIPELINE_NAME,
+          root: env.SD_ROOT_DIR
         };
       }
     };
@@ -4967,22 +5628,47 @@ var init_woodpecker = __esm({
         return env.CI && env.CI === "woodpecker";
       },
       configuration({ env }) {
-        const isPr = env.CI_BUILD_EVENT === "pull_request";
+        const isPr = env.CI_PIPELINE_EVENT === "pull_request";
         return {
           name: "Woodpecker CI",
           service: "woodpecker",
           commit: env.CI_COMMIT_SHA,
           tag: env.CI_COMMIT_TAG,
-          build: env.CI_BUILD_NUMBER,
-          buildUrl: env.CI_BUILD_LINK,
+          build: env.CI_PIPELINE_NUMBER,
+          buildUrl: env.CI_PIPELINE_URL,
           branch: isPr ? env.CI_COMMIT_TARGET_BRANCH : env.CI_COMMIT_BRANCH,
-          job: env.CI_JOB_NUMBER,
-          jobUrl: env.CI_BUILD_LINK,
+          job: env.CI_STEP_NUMBER,
+          jobUrl: env.CI_STEP_URL,
           pr: env.CI_COMMIT_PULL_REQUEST,
           isPr,
           prBranch: isPr ? env.CI_COMMIT_SOURCE_BRANCH : void 0,
           slug: `${env.CI_REPO_OWNER}/${env.CI_REPO_NAME}`,
           root: env.CI_WORKSPACE
+        };
+      }
+    };
+  }
+});
+
+// node_modules/env-ci/services/jetbrains-space.js
+var jetbrains_space_default;
+var init_jetbrains_space = __esm({
+  "node_modules/env-ci/services/jetbrains-space.js"() {
+    init_utils();
+    jetbrains_space_default = {
+      detect({ env }) {
+        return Boolean(env.JB_SPACE_EXECUTION_NUMBER);
+      },
+      configuration({ env }) {
+        const projectKey = env.JB_SPACE_PROJECT_KEY;
+        const repositoryName = env.JB_SPACE_GIT_REPOSITORY_NAME;
+        return {
+          name: "JetBrains Space",
+          service: "jetbrainsSpace",
+          commit: env.JB_SPACE_GIT_REVISION,
+          build: env.JB_SPACE_EXECUTION_NUMBER,
+          branch: parseBranch(env.JB_SPACE_GIT_BRANCH),
+          slug: projectKey && repositoryName ? `${projectKey.toLowerCase()}/${repositoryName}` : void 0
         };
       }
     };
@@ -5018,6 +5704,7 @@ var init_env_ci = __esm({
     init_netlify();
     init_puppet();
     init_sail();
+    init_screwdriver();
     init_scrutinizer();
     init_semaphore();
     init_shippable();
@@ -5027,6 +5714,7 @@ var init_env_ci = __esm({
     init_vercel();
     init_wercker();
     init_woodpecker();
+    init_jetbrains_space();
     services = {
       appveyor: appveyor_default,
       azurePipelines: azure_pipelines_default,
@@ -5048,6 +5736,7 @@ var init_env_ci = __esm({
       netlify: netlify_default,
       puppet: puppet_default,
       sail: sail_default,
+      screwdriver: screwdriver_default,
       scrutinizer: scrutinizer_default,
       semaphore: semaphore_default,
       shippable: shippable_default,
@@ -5056,7 +5745,8 @@ var init_env_ci = __esm({
       vela: vela_default,
       vercel: vercel_default,
       wercker: wercker_default,
-      woodpecker: woodpecker_default
+      woodpecker: woodpecker_default,
+      jetbrainsSpace: jetbrains_space_default
     };
     env_ci_default = ({ env = process.env, cwd = process.cwd() } = {}) => {
       for (const name of Object.keys(services)) {
