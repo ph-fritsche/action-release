@@ -1315,6 +1315,11 @@
   dependencies:
     "@types/ms" "*"
 
+"@types/env-ci@^3.1.4":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@types/env-ci/-/env-ci-3.1.4.tgz#2fd9f39b10c8407ebf5887d68398413606ae00f9"
+  integrity sha512-WwSUcrqHNzRz+3nIZYO+p1OxJ/yDNSKFTpor06W+L2ie/K76a/Wb49LxHHiJMH44UeK7GM2kyWpL++e09v4qkA==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.6.tgz#e14b2576a1c25026b7f02ede1de3b84c3a1efeae"

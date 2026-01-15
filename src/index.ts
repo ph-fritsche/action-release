@@ -28,6 +28,9 @@ export default async function run(env = process.env): Promise<void> {
                 c.push(`    ${k}:${/token/i.test(k) ? '***' : env[k] ?? ''}`)
             }
             core.debug(c.join('\n'))
+
+            // env-ci is used by some semantic-release plugins
+            packages.push('env-ci')
         }
 
         const log = debug ? core.info : core.debug
@@ -56,6 +59,9 @@ export default async function run(env = process.env): Promise<void> {
         if (debug) {
             const {default: debugLib} = await import('debug')
             debugLib.enable('semantic-release:*')
+
+            const {default: envCi} = await import('env-ci')
+            core.debug(`Environment identified by \`env-ci\`: ${JSON.stringify(envCi(), null, 2)}`)
         }
 
         plugins.push(forceRelease, initialRelease)
