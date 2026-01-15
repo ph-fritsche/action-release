@@ -1165,12 +1165,12 @@ var require_lib = __commonJS({
             throw new Error("Client has already been disposed.");
           }
           const parsedUrl = new URL(requestUrl);
-          let info3 = this._prepareRequest(verb, parsedUrl, headers);
+          let info2 = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
           let response;
           do {
-            response = yield this.requestRaw(info3, data);
+            response = yield this.requestRaw(info2, data);
             if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
@@ -1180,7 +1180,7 @@ var require_lib = __commonJS({
                 }
               }
               if (authenticationHandler) {
-                return authenticationHandler.handleAuthentication(this, info3, data);
+                return authenticationHandler.handleAuthentication(this, info2, data);
               } else {
                 return response;
               }
@@ -1203,8 +1203,8 @@ var require_lib = __commonJS({
                   }
                 }
               }
-              info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info3, data);
+              info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+              response = yield this.requestRaw(info2, data);
               redirectsRemaining--;
             }
             if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
@@ -1233,7 +1233,7 @@ var require_lib = __commonJS({
        * @param info
        * @param data
        */
-      requestRaw(info3, data) {
+      requestRaw(info2, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve2, reject) => {
             function callbackForResult(err, res) {
@@ -1245,7 +1245,7 @@ var require_lib = __commonJS({
                 resolve2(res);
               }
             }
-            this.requestRawWithCallback(info3, data, callbackForResult);
+            this.requestRawWithCallback(info2, data, callbackForResult);
           });
         });
       }
@@ -1255,12 +1255,12 @@ var require_lib = __commonJS({
        * @param data
        * @param onResult
        */
-      requestRawWithCallback(info3, data, onResult) {
+      requestRawWithCallback(info2, data, onResult) {
         if (typeof data === "string") {
-          if (!info3.options.headers) {
-            info3.options.headers = {};
+          if (!info2.options.headers) {
+            info2.options.headers = {};
           }
-          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         function handleResult(err, res) {
@@ -1269,7 +1269,7 @@ var require_lib = __commonJS({
             onResult(err, res);
           }
         }
-        const req = info3.httpModule.request(info3.options, (msg) => {
+        const req = info2.httpModule.request(info2.options, (msg) => {
           const res = new HttpClientResponse(msg);
           handleResult(void 0, res);
         });
@@ -1281,7 +1281,7 @@ var require_lib = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error(`Request timeout: ${info3.options.path}`));
+          handleResult(new Error(`Request timeout: ${info2.options.path}`));
         });
         req.on("error", function(err) {
           handleResult(err);
@@ -1308,27 +1308,27 @@ var require_lib = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info3 = {};
-        info3.parsedUrl = requestUrl;
-        const usingSsl = info3.parsedUrl.protocol === "https:";
-        info3.httpModule = usingSsl ? https : http;
+        const info2 = {};
+        info2.parsedUrl = requestUrl;
+        const usingSsl = info2.parsedUrl.protocol === "https:";
+        info2.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info3.options = {};
-        info3.options.host = info3.parsedUrl.hostname;
-        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
-        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
-        info3.options.method = method;
-        info3.options.headers = this._mergeHeaders(headers);
+        info2.options = {};
+        info2.options.host = info2.parsedUrl.hostname;
+        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
+        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
+        info2.options.method = method;
+        info2.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info3.options.headers["user-agent"] = this.userAgent;
+          info2.options.headers["user-agent"] = this.userAgent;
         }
-        info3.options.agent = this._getAgent(info3.parsedUrl);
+        info2.options.agent = this._getAgent(info2.parsedUrl);
         if (this.handlers) {
           for (const handler of this.handlers) {
-            handler.prepareRequest(info3.options);
+            handler.prepareRequest(info2.options);
           }
         }
-        return info3;
+        return info2;
       }
       _mergeHeaders(headers) {
         if (this.requestOptions && this.requestOptions.headers) {
@@ -2172,10 +2172,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports.notice = notice;
-    function info3(message) {
+    function info2(message) {
       process.stdout.write(message + os.EOL);
     }
-    exports.info = info3;
+    exports.info = info2;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -2267,9 +2267,6 @@ var defaultConfig_default = {
   ]
 };
 
-// src/util/install.ts
-var import_core = __toESM(require_core(), 1);
-
 // src/util/spawn.ts
 var core = __toESM(require_core(), 1);
 var child_process = __toESM(require("child_process"), 1);
@@ -2323,7 +2320,7 @@ function spawn2(cmd, args = [], options = {}) {
 var resolve = require.resolve;
 
 // src/util/install.ts
-function install(packages, log) {
+function install(packages, log, debug3 = true) {
   const missing = packages.filter((resolvableName) => {
     try {
       const module2 = resolve(resolvableName);
@@ -2335,9 +2332,8 @@ function install(packages, log) {
   });
   if (missing.length) {
     log(`Install ${JSON.stringify(missing)}`);
-    const isDebug2 = log === import_core.info;
     const args = ["install", "--no-save"];
-    if (!isDebug2) {
+    if (!debug3) {
       args.push("--silent");
     }
     args.push("--", ...missing);
@@ -2443,7 +2439,7 @@ function gitConfig(env) {
 // src/index.ts
 function run() {
   return __async(this, arguments, function* (env = process.env) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     try {
       const packages = ["semantic-release", "debug"];
       const config = getConfig(core2.getInput("config", { required: false }), defaultConfig_default, packages);
@@ -2451,6 +2447,17 @@ function run() {
       const dryRun = Boolean(safeParse(core2.getInput("dry", { required: false })));
       const debug3 = Boolean(safeParse(core2.getInput("debug", { required: false }))) || core2.isDebug();
       const force = core2.getInput("force", { required: false });
+      if (debug3) {
+        let c = [
+          `Context:`,
+          `  cwd: ${process.cwd()}`,
+          `  env:`
+        ];
+        for (const k of Object.keys(env)) {
+          c.push(`    ${k}:${/token/i.test(k) ? "***" : (_b = env[k]) != null ? _b : ""}`);
+        }
+        core2.debug(c.join("\n"));
+      }
       const log = debug3 ? core2.info : core2.debug;
       plugins2.forEach((p) => {
         const pDef = Array.isArray(p) ? p[0] : typeof p === "object" ? p.path : p;
@@ -2461,7 +2468,7 @@ function run() {
       if (config.preset) {
         packages.push(`conventional-changelog-${String(config.preset)}`);
       }
-      yield install(packages, log);
+      yield install(packages, log, debug3);
       if (dryRun) {
         log("DRY RUN");
       }
@@ -2493,7 +2500,7 @@ function run() {
       core2.setOutput("version", nextRelease.version);
       core2.setOutput("gitTag", nextRelease.gitTag);
       const versionRegExp = new RegExp("^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:[-](?<revision>(?:(?<revisionType>\\w+)\\.)?\\d+))?");
-      const version2 = (_b = nextRelease.version.match(versionRegExp)) == null ? void 0 : _b.groups;
+      const version2 = (_c = nextRelease.version.match(versionRegExp)) == null ? void 0 : _c.groups;
       Object.entries(version2).forEach(([k, v]) => core2.setOutput(k, v != null ? v : ""));
       core2.setOutput("notes", nextRelease.notes);
       if (!dryRun) {
@@ -2505,7 +2512,7 @@ function run() {
         }
       }
     } catch (e) {
-      core2.setFailed((_c = hasProp(e, "message") ? e.message : void 0) != null ? _c : e);
+      core2.setFailed((_d = hasProp(e, "message") ? e.message : void 0) != null ? _d : e);
     }
   });
 }
