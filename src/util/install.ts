@@ -1,8 +1,11 @@
-import { info } from '@actions/core'
 import { spawn } from './spawn'
 import { resolve } from './resolve'
 
-export function install(packages: string[], log: (msg: string) => void): Promise<string> {
+export function install(
+    packages: string[],
+    log: (msg: string) => void,
+    debug = true,
+): Promise<string> {
     const missing = packages.filter(resolvableName => {
         try {
             const module = resolve(resolvableName)
@@ -16,11 +19,8 @@ export function install(packages: string[], log: (msg: string) => void): Promise
     if (missing.length) {
         log(`Install ${JSON.stringify(missing)}`)
 
-        // if logging function is core.info, we're in debug/test
-        const isDebug = log === info
-
         const args = ['install', '--no-save']
-        if (!isDebug) {
+        if (!debug) {
             args.push('--silent')
         }
         args.push('--', ...missing)

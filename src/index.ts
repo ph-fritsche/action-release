@@ -18,6 +18,18 @@ export default async function run(env = process.env): Promise<void> {
         const debug = Boolean(safeParse(core.getInput('debug', { required: false }))) || core.isDebug()
         const force = core.getInput('force', { required: false })
 
+        if (debug) {
+            let c = [
+                `Context:`,
+                `  cwd: ${process.cwd()}`,
+                `  env:`,
+            ]
+            for (const k of Object.keys(env)) {
+                c.push(`    ${k}:${/token/i.test(k) ? '***' : env[k] ?? ''}`)
+            }
+            core.debug(c.join('\n'))
+        }
+
         const log = debug ? core.info : core.debug
 
         plugins.forEach(p => {
@@ -36,7 +48,7 @@ export default async function run(env = process.env): Promise<void> {
             packages.push(`conventional-changelog-${String(config.preset)}`)
         }
 
-        await install(packages, log)
+        await install(packages, log, debug)
 
         if (dryRun) {
             log('DRY RUN')
