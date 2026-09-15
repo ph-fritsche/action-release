@@ -129,7 +129,7 @@ jobs:
           const gitTag = "${{ steps.release.outputs.gitTag }}"
           const releaseUrl = version ? "https://github.com/${{ github.repository }}/releases/tag/" + gitTag : undefined
           const runUrl = "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          await github.checks.create({
+          await github.rest.checks.create({
             owner,
             repo,
             head_sha: "${{ needs.build.outputs.buildCommit || github.sha }}",
