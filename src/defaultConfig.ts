@@ -1,4 +1,4 @@
-import type { GlobalConfig, PluginSpec } from 'semantic-release'
+import type {GlobalConfig, PluginSpec} from 'semantic-release'
 
 const plugins: PluginSpec[] = [
     '@semantic-release/commit-analyzer',
@@ -26,7 +26,7 @@ export default {
         'master',
         'next',
         'next-major',
-        { name: 'beta', prerelease: true },
-        { name: 'alpha', prerelease: true },
+        {name: 'beta', prerelease: true},
+        {name: 'alpha', prerelease: true},
     ],
 } as Partial<GlobalConfig>

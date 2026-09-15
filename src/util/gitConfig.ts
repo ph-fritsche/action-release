@@ -1,4 +1,4 @@
-import { spawn } from './spawn'
+import {spawn} from './spawn'
 
 export async function gitConfig(env: {[k: string]: string | undefined}): Promise<void> {
     const name = env.GITHUB_ACTOR || 'github-actions[bot]'

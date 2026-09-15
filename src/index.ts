@@ -1,22 +1,22 @@
 import * as core from '@actions/core'
 import type * as SemanticRelease from 'semantic-release'
 import defaultConfig from './defaultConfig'
-import { install } from './util/install'
-import { forceRelease, initialRelease } from './plugin'
-import type { PluginSpec } from './semantic-release'
-import { updateTags } from './util/updateTags'
-import { gitConfig } from './util/gitConfig'
+import {install} from './util/install'
+import {forceRelease, initialRelease} from './plugin'
+import type {PluginSpec} from './semantic-release'
+import {updateTags} from './util/updateTags'
+import {gitConfig} from './util/gitConfig'
 
 export default async function run(env = process.env): Promise<void> {
     try {
         const packages: string[] = ['semantic-release', 'debug']
 
-        const config = getConfig(core.getInput('config', { required: false}), defaultConfig, packages)
+        const config = getConfig(core.getInput('config', {required: false}), defaultConfig, packages)
         const plugins: PluginSpec[] = Array.from(config.plugins ?? [])
 
-        const dryRun = Boolean(safeParse(core.getInput('dry', { required: false })))
-        const debug = Boolean(safeParse(core.getInput('debug', { required: false }))) || core.isDebug()
-        const force = core.getInput('force', { required: false })
+        const dryRun = Boolean(safeParse(core.getInput('dry', {required: false})))
+        const debug = Boolean(safeParse(core.getInput('debug', {required: false}))) || core.isDebug()
+        const force = core.getInput('force', {required: false})
 
         if (debug) {
             let c = [
@@ -83,7 +83,7 @@ export default async function run(env = process.env): Promise<void> {
             return
         }
 
-        const { lastRelease, nextRelease, commits, releases } = result
+        const {lastRelease, nextRelease, commits, releases} = result
 
         core.info('\n')
         core.info(`${nextRelease.type} release: ${lastRelease.version} -> ${nextRelease.version}`)
@@ -99,10 +99,10 @@ export default async function run(env = process.env): Promise<void> {
 
         const versionRegExp = /^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:[-](?<revision>(?:(?<revisionType>\w+)\.)?\d+))?/
         const version = nextRelease.version.match(versionRegExp)?.groups as {
-            major: string,
-            minor: string,
-            patch: string,
-            revision: string | undefined,
+            major: string
+            minor: string
+            patch: string
+            revision: string | undefined
             revisionType: string | undefined
         }
         Object.entries(version).forEach(([k, v]) => core.setOutput(k, v ?? ''))
@@ -117,13 +117,12 @@ export default async function run(env = process.env): Promise<void> {
                 core.info(`Updated tags: ${updatedTags.join(', ')}`)
             }
         }
-
-    } catch(e) {
-        core.setFailed(((hasProp(e, 'message') ? e.message : undefined) ?? e) as Error|string)
+    } catch (e) {
+        core.setFailed(((hasProp(e, 'message') ? e.message : undefined) ?? e) as Error | string)
     }
 }
 
-function hasProp<K extends PropertyKey>(obj: unknown, key: K): obj is { [k in K]: unknown } {
+function hasProp<K extends PropertyKey>(obj: unknown, key: K): obj is {[k in K]: unknown} {
     return Boolean(obj && typeof obj === 'object' && key in obj)
 }
 
@@ -131,7 +130,7 @@ function safeParse(val: string) {
     try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return JSON.parse(val)
-    } catch (e) {
+    } catch {
         return undefined
     }
 }
@@ -152,8 +151,8 @@ function getConfig(
                 ...defaultConfig,
                 ...JSON.parse(configInput) as Partial<SemanticRelease.GlobalConfig>,
             }
-        } catch(e) {
-            throw 'Invalid inline config'
+        } catch {
+            throw new Error('Invalid inline config')
         }
     } else if (configInput !== '') {
         packages.push(configInput)

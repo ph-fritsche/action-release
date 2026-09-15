@@ -9,5 +9,5 @@ export enum releaseTypes {
 }
 
 export function getReleaseType(k: string): releaseTypes | undefined {
-    return Object.keys(releaseTypes).includes(k as releaseTypes) ? releaseTypes[k as releaseTypes] : undefined
+    return Object.keys(releaseTypes).includes(k) ? releaseTypes[k as releaseTypes] : undefined
 }

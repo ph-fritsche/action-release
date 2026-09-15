@@ -6,6 +6,9 @@
 
         "strict": true,
         "esModuleInterop": true,
+        "types": [
+            "node",
+        ],
     },
     "include": [
         "src",

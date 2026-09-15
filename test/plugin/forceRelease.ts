@@ -1,8 +1,8 @@
 import * as forceRelease from '../../src/plugin/forceRelease'
-import { setup } from './_setup'
+import {setup} from './_setup'
 
 it('Return sanitized force release value', async () => {
-    const { exec, logger } = setup(forceRelease.analyzeCommits)
+    const {exec, logger} = setup(forceRelease.analyzeCommits)
 
     expect(await exec({}, {env: {RELEASE_FORCE: 'foo'}})).toBe('patch')
     expect(logger.log).toHaveBeenCalledWith('Force release: %s', 'patch')

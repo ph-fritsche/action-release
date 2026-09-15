@@ -1,4 +1,4 @@
-import { gitConfig } from '../../src/util/gitConfig'
+import {gitConfig} from '../../src/util/gitConfig'
 
 let spawnMock: (...a: unknown[]) => Promise<string>
 jest.mock('../../src/util/spawn', () => ({

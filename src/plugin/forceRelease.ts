@@ -1,13 +1,13 @@
 import type * as SemanticRelease from 'semantic-release'
-import type { PluginConfig } from '../semantic-release'
-import { getReleaseType, releaseTypes } from './shared/releaseTypes'
+import type {PluginConfig} from '../semantic-release'
+import {getReleaseType, releaseTypes} from './shared/releaseTypes'
 
 /**
  * Force release per environment variable
  */
 export async function analyzeCommits(
     config: PluginConfig,
-    context: SemanticRelease.Context,
+    context: SemanticRelease.AnalyzeCommitsContext,
 ): Promise<releaseTypes | null> {
     if (!context.env.RELEASE_FORCE) {
         return null

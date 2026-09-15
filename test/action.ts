@@ -1,4 +1,3 @@
-
 let run: () => Promise<void>
 
 jest.mock('../src/index', () => ({

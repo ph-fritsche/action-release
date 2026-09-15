@@ -1,8 +1,8 @@
-import type { ChildProcess, SpawnOptions, spawn as Spawn } from 'child_process'
-import { EventEmitter } from 'events'
-import { spawn } from '../../src/util/spawn'
+import type {ChildProcess, SpawnOptions, spawn as Spawn} from 'child_process'
+import {EventEmitter} from 'events'
+import {spawn} from '../../src/util/spawn'
 
-const { spawn: realSpawn } = jest.requireActual<{spawn: typeof Spawn}>('child_process')
+const {spawn: realSpawn} = jest.requireActual<{spawn: typeof Spawn}>('child_process')
 let spawnMock: (cmd: string, args: string[], options: SpawnOptions) => ChildProcess
 jest.mock('child_process', () => ({
     spawn: (cmd: string, args: string[], options: SpawnOptions): ChildProcess => spawnMock(cmd, args, options),
@@ -11,10 +11,13 @@ jest.mock('child_process', () => ({
 let coreDebug: string[] = []
 let coreWarning: string[] = []
 jest.mock('@actions/core', () => ({
-    debug: (msg: string) => { coreDebug.push(msg) },
-    warning: (msg: string) => { coreWarning.push(msg) },
+    debug: (msg: string) => {
+        coreDebug.push(msg)
+    },
+    warning: (msg: string) => {
+        coreWarning.push(msg)
+    },
 }))
-
 
 test('defer args and options', () => {
     spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.exit(0)`]))
@@ -37,7 +40,7 @@ test('reject on spawn error', () => {
 
     expect(spawnMock).toHaveBeenCalledWith('foo', ['bar', 'baz'], {uid: 123456})
 
-    return expect(child).rejects.toMatch('ENOSUP')
+    return expect(child).rejects.toThrow('ENOSUP')
 })
 
 test('reject on error', () => {
@@ -45,15 +48,14 @@ test('reject on error', () => {
 
     const child = spawn('foo', ['bar', 'baz'], {uid: 123456})
 
-    return expect(child).rejects.toMatch(': 1')
+    return expect(child).rejects.toThrow(': 1')
 })
-
 
 test('defer stdout to debug', () => {
     coreDebug = []
     spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stdout.write('foo\\nbar')`]))
 
-    return spawn('foo', ['bar', 'baz'], { uid: 123456 }).finally(() => {
+    return spawn('foo', ['bar', 'baz'], {uid: 123456}).finally(() => {
         expect(coreDebug).toEqual(['foo', 'bar'])
     })
 })
@@ -62,7 +64,7 @@ test('resolve to stdout', () => {
     coreDebug = []
     spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stdout.write('some output')`]))
 
-    const child = spawn('foo', ['bar', 'baz'], { uid: 123456 })
+    const child = spawn('foo', ['bar', 'baz'], {uid: 123456})
 
     return expect(child).resolves.toBe('some output')
 })
@@ -71,7 +73,7 @@ test('defer stderr to warning', () => {
     coreWarning = []
     spawnMock = jest.fn(() => realSpawn(process.execPath, ['-e', `process.stderr.write('foo\\nbar')`]))
 
-    return spawn('foo', ['bar', 'baz'], { uid: 123456 }).finally(() => {
+    return spawn('foo', ['bar', 'baz'], {uid: 123456}).finally(() => {
         expect(coreWarning).toEqual(['foo', 'bar'])
     })
 })

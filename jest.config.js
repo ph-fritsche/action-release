@@ -11,7 +11,9 @@ export default {
         '/_.*(?<!.test.[jt]sx?)$',
     ],
     transform: {
-        '\\.([tj]sx?)$': 'ts-jest',
+        '\\.([tj]sx?)$': ['ts-jest', {
+            tsconfig: 'test/tsconfig.json',
+        }],
     },
     transformIgnorePatterns: [
         '/node_modules/',

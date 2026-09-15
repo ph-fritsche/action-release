@@ -1,4 +1,4 @@
-import { updateTags } from '../../src/util/updateTags'
+import {updateTags} from '../../src/util/updateTags'
 
 let spawnMock: (...a: unknown[]) => Promise<string>
 jest.mock('../../src/util/spawn', () => ({
@@ -37,5 +37,3 @@ test('set tag for prerelease', async () => {
     expect(spawnMock).toHaveBeenNthCalledWith(2, 'git', ['push', '-f', 'origin', 'refs/tags/v1.2.3-foo:refs/tags/v1.2.3-foo'])
     expect(spawnMock).toHaveBeenCalledTimes(2)
 })
-
-

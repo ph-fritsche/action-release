@@ -1,14 +1,14 @@
-import { spawn } from './spawn'
+import {spawn} from './spawn'
 
 export async function updateTags(
     ref: string,
     versionString: string,
     version: {
-        major: string,
-        minor: string,
-        patch: string,
-        revision: string | undefined,
-        revisionType: string | undefined,
+        major: string
+        minor: string
+        patch: string
+        revision: string | undefined
+        revisionType: string | undefined
     },
     tagPrefix = '',
 ): Promise<string[]> {

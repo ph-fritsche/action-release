@@ -1,13 +1,13 @@
 import type * as SemanticRelease from 'semantic-release'
-import type { PluginConfig } from '../semantic-release'
-import { releaseTypes } from './shared/releaseTypes'
+import type {PluginConfig} from '../semantic-release'
+import {releaseTypes} from './shared/releaseTypes'
 
 /**
  * Trigger initial release
  */
 export async function analyzeCommits(
     config: PluginConfig,
-    context: SemanticRelease.Context,
+    context: SemanticRelease.AnalyzeCommitsContext,
 ): Promise<releaseTypes.patch | null> {
     if (!context.lastRelease?.gitHead) {
         context.logger.log('Initial release')

@@ -4,20 +4,20 @@ export type PluginConfig = {
     [k: string]: unknown,
 }
 
-interface pluginFunc {
-    (config: PluginConfig, context: SemanticRelease.Context): Promise<unknown>
+interface pluginFunc<Context extends SemanticRelease.BaseContext = SemanticRelease.BaseContext> {
+    (config: PluginConfig, context: Context): Promise<unknown>
 }
 
 export type Plugin = {
-    verifyConditions?: pluginFunc,
-    analyzeCommits?: (config: PluginConfig, context: SemanticRelease.Context) => Promise<string | null>,
-    verifyRelease?: pluginFunc,
-    generateNotes?: pluginFunc,
-    prepare?: pluginFunc,
-    publish?: pluginFunc,
-    addChannel?: pluginFunc,
-    success?: pluginFunc,
-    fail?: pluginFunc,
+    verifyConditions?: pluginFunc<SemanticRelease.VerifyConditionsContext>,
+    analyzeCommits?: (config: PluginConfig, context: SemanticRelease.AnalyzeCommitsContext) => Promise<string | null>,
+    verifyRelease?: pluginFunc<SemanticRelease.VerifyReleaseContext>,
+    generateNotes?: pluginFunc<SemanticRelease.GenerateNotesContext>,
+    prepare?: pluginFunc<SemanticRelease.PrepareContext>,
+    publish?: pluginFunc<SemanticRelease.PublishContext>,
+    addChannel?: pluginFunc<SemanticRelease.AddChannelContext>,
+    success?: pluginFunc<SemanticRelease.SuccessContext>,
+    fail?: pluginFunc<SemanticRelease.FailContext>,
     [k: string]: unknown
 }
 

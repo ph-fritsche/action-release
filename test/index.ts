@@ -1,8 +1,8 @@
 import type * as SemanticRelease from 'semantic-release'
 import run from '../src/index'
-import { forceRelease, initialRelease } from '../src/plugin'
+import {forceRelease, initialRelease} from '../src/plugin'
 import defaultResult from './_releaseResult'
-import type { updateTags as realUpdateTags } from '../src/util/updateTags'
+import type {updateTags as realUpdateTags} from '../src/util/updateTags'
 
 const releaseResult = defaultResult as SemanticRelease.Result
 
@@ -14,7 +14,7 @@ let setFailed: (msg: string) => void
 jest.mock('@actions/core', () => ({
     getInput(k: string, {required}: {required: boolean}) {
         if (required && !coreInput[k]) {
-            throw `Missing input`
+            throw new Error(`Missing input`)
         }
         return coreInput[k] ?? ''
     },
@@ -22,10 +22,16 @@ jest.mock('@actions/core', () => ({
         coreOutput[k] = v
     },
     isDebug: () => false,
-    debug: (msg: string) => { coreDebug.push(msg) },
-    info: (msg: string) => { coreInfo.push(msg) },
+    debug: (msg: string) => {
+        coreDebug.push(msg)
+    },
+    info: (msg: string) => {
+        coreInfo.push(msg)
+    },
     setFailed: (msg: string) => setFailed(msg),
 }))
+
+jest.mock('env-ci', () => () => undefined)
 
 let release: jest.MockedFunction<(options: SemanticRelease.Options, config: SemanticRelease.Config) => SemanticRelease.Result>
 jest.mock('semantic-release', () => (options: SemanticRelease.Options, config: SemanticRelease.Config) => release(options, config))
@@ -51,7 +57,9 @@ jest.mock('../src/util/updateTags', () => ({
 }))
 
 jest.mock('../src/util/spawn', () => ({
-    spawn: () => { throw 'this should not have been called - every helper should be mocked' },
+    spawn: () => {
+        throw new Error('this should not have been called - every helper should be mocked')
+    },
 }))
 
 function setup() {
@@ -71,11 +79,11 @@ function setup() {
         return run(env)
     }
 
-    return { exec }
+    return {exec}
 }
 
 it('run skipped release', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
     const run = exec()
 
@@ -86,7 +94,7 @@ it('run skipped release', () => {
 })
 
 it('run with dry run option', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
     const run = exec({dry: 'true'})
 
@@ -98,7 +106,7 @@ it('run with dry run option', () => {
 })
 
 it('run with debug option', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
     const run = exec({debug: 'true'})
 
@@ -109,7 +117,7 @@ it('run with debug option', () => {
 })
 
 it('output release informations', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
     const run = exec(undefined, releaseResult)
 
@@ -130,7 +138,7 @@ it('output release informations', () => {
 })
 
 it('setup forceRelease plugin', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
     const run = exec({force: 'foobar'})
 
@@ -148,7 +156,7 @@ it('setup forceRelease plugin', () => {
 })
 
 it('setup initialRelease plugin', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
     const run = exec()
 
@@ -161,7 +169,7 @@ it('setup initialRelease plugin', () => {
 })
 
 it('run with extended config', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
     const run = exec({config: '@my-namespace/my-shared-config'})
 
@@ -174,9 +182,9 @@ it('run with extended config', () => {
 })
 
 it('run with local extended config', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
-    const run = exec({ config: './my-local-config' })
+    const run = exec({config: './my-local-config'})
 
     return run.finally(() => {
         expect(install).toHaveBeenCalledWith(expect.not.arrayContaining(['./my-local-config']))
@@ -187,9 +195,9 @@ it('run with local extended config', () => {
 })
 
 it('run with inline config', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
-    const run = exec({ config: '{"preset":"angular"}' })
+    const run = exec({config: '{"preset":"angular"}'})
 
     return run.finally(() => {
         expect(install).toHaveBeenCalledWith(expect.arrayContaining(['conventional-changelog-angular']))
@@ -200,15 +208,19 @@ it('run with inline config', () => {
 })
 
 it('call updateTag', () => {
-    const { exec } = setup()
+    const {exec} = setup()
 
-    const run = exec(undefined, {...defaultResult, nextRelease: {
-        gitHead: 'abc',
-        gitTag: 'v1.2.3-foo.1',
-        notes: 'some notes...',
-        type: 'major',
-        version: '1.2.3-foo.1',
-    }})
+    const run = exec(undefined, {
+        ...defaultResult, nextRelease: {
+            gitHead: 'abc',
+            gitTag: 'v1.2.3-foo.1',
+            notes: 'some notes...',
+            type: 'major',
+            version: '1.2.3-foo.1',
+            channel: '',
+            name: '',
+        },
+    })
 
     return run.finally(() => {
         expect(gitConfig).toHaveBeenCalled()

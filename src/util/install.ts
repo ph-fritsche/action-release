@@ -1,5 +1,5 @@
-import { spawn } from './spawn'
-import { resolve } from './resolve'
+import {spawn} from './spawn'
+import {resolve} from './resolve'
 
 export function install(
     packages: string[],
@@ -11,7 +11,7 @@ export function install(
             const module = resolve(resolvableName)
             log(`"${resolvableName}" resolved to "${module}"`)
             return false
-        } catch (e) {
+        } catch {
             return true
         }
     })

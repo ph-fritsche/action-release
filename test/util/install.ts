@@ -1,6 +1,6 @@
-import { SpawnOptions } from 'child_process'
+import {SpawnOptions} from 'child_process'
 import path from 'path'
-import { install } from '../../src/util/install'
+import {install} from '../../src/util/install'
 
 let resolveMock: jest.MockedFunction<(name: string) => string>
 jest.mock('../../src/util/resolve', () => ({
@@ -31,7 +31,9 @@ test('skip present modules', async () => {
 test('install missing modules', async () => {
     const log: string[] = []
     spawnMock = jest.fn()
-    resolveMock = jest.fn().mockImplementation(() => { throw 'doesNotExist' })
+    resolveMock = jest.fn().mockImplementation(() => {
+        throw new Error('doesNotExist')
+    })
 
     await install(['foo', 'bar'], (m) => log.push(m))
 
