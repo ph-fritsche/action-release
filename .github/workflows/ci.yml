@@ -1,29 +1,60 @@
-name: Build
+name: CI
 
 on:
   push:
+  pull_request:
 
 jobs:
-
-  build: # to work as an action out of the box the ncc-build must be committed
+  check: # test the code
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: bahmutov/npm-install@v1
-    - run: yarn build
+    -
+      name: Checkout repo
+      uses: actions/checkout@v7
+    -
+      name: Enable Corepack
+      run: corepack enable
+    -
+      name: Install deps
+      run: yarn install --frozen-lockfile
+    -
+      name: Lint
+      run: yarn lint
+    -
+      name: Test
+      run: yarn test
 
-    - run: git add -f build
-
-    - name: Commit build if it changed
+  build: # to work as an action out of the box the build must be committed
+    if: github.event_name == 'push'
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+    -
+      name: Checkout repo
+      uses: actions/checkout@v7
+    -
+      name: Enable Corepack
+      run: corepack enable
+    -
+      name: Install deps
+      run: yarn install --frozen-lockfile
+    -
+      name: Build
+      run: yarn build
+    -
+      name: Stage changes
+      run: git add -f build
+    -
+      name: Commit build if it changed
       run: >
         git diff --staged --quiet
         || (git config user.name "github-actions"
         && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         && git commit -m "build: autoupdate"
         && echo "buildCommit=$(git rev-parse HEAD)" >>$GITHUB_ENV)
-
-    - if: env.buildCommit # skip if the build adds nothing new
+    -
       name: Push build branch
+      if: env.buildCommit # skip if the build adds nothing new
       run: git push -f origin HEAD:build
 
     outputs:
@@ -33,7 +64,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    -
+      name: Checkout build commit
+      uses: actions/checkout@v7
       with:
         ref: ${{ needs.build.outputs.buildCommit }} # if there is no buildCommit, checkout HEAD
     - name: Dry-run
@@ -43,11 +76,14 @@ jobs:
         debug: true
 
     # if there is a buildCommit, push it back onto the branch that triggered the workflow
-    - if: needs.build.outputs.buildCommit
+    -
+      name: Get infos about branch
+      if: needs.build.outputs.buildCommit
       id: helper
       uses: ph-fritsche/action-helper@master
-    - if: needs.build.outputs.buildCommit
+    -
       name: Push back to original branch
+      if: needs.build.outputs.buildCommit
       run: |
         git fetch --depth=2 origin ${{ needs.build.outputs.buildCommit }}
         git log --format=oneline -n2 ${{ needs.build.outputs.buildCommit }}
@@ -55,15 +91,20 @@ jobs:
 
   release:
     needs: [build, verify]
-    if: contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref)
+    if: github.event_name == 'push' && contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref)
     runs-on: ubuntu-latest
     steps:
-    - id: helper
+    -
+      name: Get infos about branch
+      id: helper
       uses: ph-fritsche/action-helper@master
-    - uses: actions/checkout@v2
+    -
+      name: Checkout build commit
+      uses: actions/checkout@v7
       with:
         ref: ${{ steps.helper.outputs.branchName }}
-    - name: Ensure branch HEAD did not move
+    -
+      name: Ensure branch HEAD did not move
       run: |
         EXPECTED="${{ needs.build.outputs.buildCommit || github.sha }}"
         ACTUAL="$(git rev-parse HEAD)"
@@ -71,13 +112,15 @@ jobs:
           echo "::error ::HEAD moved to ${ACTUAL} - expected ${EXPECTED}"
           exit 1
         fi
-    - id: release
+    -
       name: Dogfooding release
+      id: release
       uses: ./
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Add check to the build
-      uses: actions/github-script@v3
+    -
+      name: Add check to the build
+      uses: actions/github-script@v9
       with:
         script: |
           const [owner, repo] = "${{ github.repository }}".split('/')
